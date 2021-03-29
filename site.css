@@ -1,0 +1,79 @@
+@import url(fonts/iosevka-term.css);
+
+body {
+  background-color: #282828;
+  color: #ebdbb2;
+  font-family: 'Iosevka Term Web';
+}
+
+::selection {
+  background-color: #504945;
+  color: none;
+}
+
+h2 {
+  color: #fabd2f;
+}
+
+h3 {
+  color: #8ec07c;
+}
+
+h4 {
+  color: #cc241d;
+}
+
+p.author, p.date, p.creator {
+  color: #fe8019;
+}
+
+.title {
+  font-style: italic;
+  color: #fe8019;
+}
+
+.subtitle {
+  font-style: normal;
+}
+
+a:link {
+  color: #fabd2f;
+}
+
+a:visited {
+  color: violet;
+}
+
+a:hover {
+  color: #282828;
+  background-color: #fabd2f;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #282828;
+  background-color: #fabd2f;
+  text-decoration: none;
+}
+
+pre.src-clojurescript:before {
+  content: 'ClojureScript';
+}
+
+pre.src:hover:before {
+  display: inline;
+  background-color: #282828;
+  margin-top: 14px;
+  border: none;
+}
+
+pre.src {
+  background-color: #3c3836;
+}
+
+pre {
+  top: 0;
+  right: 0;
+  box-shadow: none;
+  border: none;
+}
