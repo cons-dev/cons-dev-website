@@ -1,5 +1,13 @@
 @import url(fonts/iosevka-term.css);
 
+.todo {
+  color: #fabd2f;
+}
+
+.done {
+  color: #7c6f64;
+}
+
 body {
   background-color: #282828;
   color: #ebdbb2;

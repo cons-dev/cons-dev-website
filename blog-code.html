@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-03-28 Sun 23:59 -->
+<!-- 2021-03-29 Mon 00:31 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Blog Source Code</title>
@@ -240,16 +240,17 @@
 <li><a href="#orgaff00f4">4.1. Emacs Configuration</a></li>
 <li><a href="#orgdfe0390">4.2. Create CSS File</a></li>
 <li><a href="#org7660146">4.3. Default Background and Foreground</a></li>
-<li><a href="#orgd23bc75">4.4. Selected Text</a></li>
-<li><a href="#org954ae39">4.5. Headlines</a></li>
-<li><a href="#org21b581a">4.6. Author and Title Information</a>
+<li><a href="#orgda5903e">4.4. <span class="todo TODO">TODO</span> Items</a></li>
+<li><a href="#orgd23bc75">4.5. Selected Text</a></li>
+<li><a href="#org954ae39">4.6. Headlines</a></li>
+<li><a href="#org21b581a">4.7. Author and Title Information</a>
 <ul>
-<li><a href="#orgbec229d">4.6.1. Blocks</a></li>
-<li><a href="#org11b59f8">4.6.2. Hover Info</a></li>
+<li><a href="#orgbec229d">4.7.1. Blocks</a></li>
+<li><a href="#org11b59f8">4.7.2. Hover Info</a></li>
 </ul>
 </li>
-<li><a href="#orgaae3a4f">4.7. Links</a></li>
-<li><a href="#org595a765">4.8. Helper Code Blocks</a></li>
+<li><a href="#orgaae3a4f">4.8. Links</a></li>
+<li><a href="#org595a765">4.9. Helper Code Blocks</a></li>
 </ul>
 </li>
 </ul>
@@ -419,6 +420,7 @@ This creates the CSS file in my public directory. It is automatically called eve
 <span style="color: #fb4934;">(</span>spit <span style="color: #b8bb26;">"./public/site.css"</span>
       <span style="color: #fabd2f;">(</span>css
        <span style="color: #8ec07c;">(</span>at-import <span style="color: #fb4934;">(</span>url <span style="color: #b8bb26;">"fonts/iosevka-term.css"</span><span style="color: #fb4934;">)</span><span style="color: #8ec07c;">)</span>
+       &lt;&lt;stylesheet-todo&gt;&gt;
        &lt;&lt;stylesheet-font-face&gt;&gt;
        &lt;&lt;stylesheet-default&gt;&gt;
        &lt;&lt;stylesheet-selection&gt;&gt;
@@ -451,9 +453,23 @@ This keeps the default background and foreground in sync with the rest of the sy
 </div>
 </div>
 
-<div id="outline-container-orgd23bc75" class="outline-3">
-<h3 id="orgd23bc75"><span class="section-number-3">4.4</span> Selected Text</h3>
+<div id="outline-container-orgda5903e" class="outline-3">
+<h3 id="orgda5903e"><span class="section-number-3">4.4</span> <span class="todo TODO">TODO</span> Items</h3>
 <div class="outline-text-3" id="text-4-4">
+<p>
+This fixes the coloration of TODO keywords in headers.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="org15c1827"><span style="color: #fb4934;">[</span><span style="color: #d3869b;">:.todo</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:color</span> &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"org-todo"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
+<span style="color: #fb4934;">[</span><span style="color: #d3869b;">:.done</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:color</span> &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"org-headline-done"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd23bc75" class="outline-3">
+<h3 id="orgd23bc75"><span class="section-number-3">4.5</span> Selected Text</h3>
+<div class="outline-text-3" id="text-4-5">
 <p>
 This makes the text selection look good.
 </p>
@@ -466,8 +482,8 @@ This makes the text selection look good.
 </div>
 
 <div id="outline-container-org954ae39" class="outline-3">
-<h3 id="org954ae39"><span class="section-number-3">4.5</span> Headlines</h3>
-<div class="outline-text-3" id="text-4-5">
+<h3 id="org954ae39"><span class="section-number-3">4.6</span> Headlines</h3>
+<div class="outline-text-3" id="text-4-6">
 <p>
 Here I restyle the headlines using the style I currently use in Emacs. These code blocks automatically fetch them through doom-colors and return a string that can be inserted.
 </p>
@@ -481,8 +497,8 @@ Here I restyle the headlines using the style I currently use in Emacs. These cod
 </div>
 
 <div id="outline-container-org21b581a" class="outline-3">
-<h3 id="org21b581a"><span class="section-number-3">4.6</span> Author and Title Information</h3>
-<div class="outline-text-3" id="text-4-6">
+<h3 id="org21b581a"><span class="section-number-3">4.7</span> Author and Title Information</h3>
+<div class="outline-text-3" id="text-4-7">
 <p>
 The title, date, and author information in Emacs are usually the same color. So I set them here.
 </p>
@@ -497,8 +513,8 @@ The title, date, and author information in Emacs are usually the same color. So 
 </div>
 
 <div id="outline-container-orgbec229d" class="outline-4">
-<h4 id="orgbec229d"><span class="section-number-4">4.6.1</span> Blocks</h4>
-<div class="outline-text-4" id="text-4-6-1">
+<h4 id="orgbec229d"><span class="section-number-4">4.7.1</span> Blocks</h4>
+<div class="outline-text-4" id="text-4-7-1">
 <div class="org-src-container">
 <pre class="src src-clojure" id="org5a6ebec"><span style="color: #fb4934;">[</span><span style="color: #d3869b;">:pre.src</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:background-color</span> &lt;&lt;face-bg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"org-block"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
 <span style="color: #fb4934;">[</span><span style="color: #d3869b;">:pre</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:top</span>        0
@@ -511,8 +527,8 @@ The title, date, and author information in Emacs are usually the same color. So 
 </div>
 
 <div id="outline-container-org11b59f8" class="outline-4">
-<h4 id="org11b59f8"><span class="section-number-4">4.6.2</span> Hover Info</h4>
-<div class="outline-text-4" id="text-4-6-2">
+<h4 id="org11b59f8"><span class="section-number-4">4.7.2</span> Hover Info</h4>
+<div class="outline-text-4" id="text-4-7-2">
 <p>
 This adds the hover info to ClojureScript, which was not included by default.
 </p>
@@ -531,8 +547,8 @@ This adds the hover info to ClojureScript, which was not included by default.
 </div>
 
 <div id="outline-container-orgaae3a4f" class="outline-3">
-<h3 id="orgaae3a4f"><span class="section-number-3">4.7</span> Links</h3>
-<div class="outline-text-3" id="text-4-7">
+<h3 id="orgaae3a4f"><span class="section-number-3">4.8</span> Links</h3>
+<div class="outline-text-3" id="text-4-8">
 <p>
 This stylizes links to match the links in Emacs org-mode buffers.
 </p>
@@ -553,8 +569,8 @@ This stylizes links to match the links in Emacs org-mode buffers.
 </div>
 
 <div id="outline-container-org595a765" class="outline-3">
-<h3 id="org595a765"><span class="section-number-3">4.8</span> Helper Code Blocks</h3>
-<div class="outline-text-3" id="text-4-8">
+<h3 id="org595a765"><span class="section-number-3">4.9</span> Helper Code Blocks</h3>
+<div class="outline-text-3" id="text-4-9">
 <p>
 These are little helper code blocks that fetch the face attributes I want automatically from emacs every time I regenerate the file. This ensures that my code remains in-sync with my Emacs configuration style.
 </p>
@@ -580,7 +596,7 @@ This finds the background color of a face. Mostly this just extracts colors for 
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Inanna</p>
-<p class="date">Created: 2021-03-28 Sun 23:59</p>
+<p class="date">Created: 2021-03-29 Mon 00:31</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
