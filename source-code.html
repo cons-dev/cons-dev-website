@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W13-1 14:10 -->
+<!-- 2021-W13-1 14:40 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Website Source Code</title>
@@ -220,7 +220,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<a href="index.html">HOME</a> | <a href="sitemap.html">SITEMAP</a> | <a href="https://github.com/cons-dev/website-src">SOURCE CODE (git)</a>
+<a href="index.html">MAIN INDEX</a> | <a href="sitemap.html">SITEMAP</a> | <a href="https://github.com/cons-dev/website-src">SOURCE CODE (git)</a>
 </div>
 <div id="content">
 <h1 class="title">Website Source Code</h1>
@@ -352,7 +352,7 @@ This adds the CNAME data to the file.
 This configures the sitemap title. It is automatically generated for all pages to make my life easier. Currently I use a flat layout for my website, so it is simply a list of all nodes. Eventually I want it to be displayed as a graph of links.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #fe8019;">:sitemap-title</span> <span style="color: #b8bb26;">"(cons dev 'sitemap)"</span>
+<pre class="src src-emacs-lisp" id="orga16a649"><span style="color: #fe8019;">:sitemap-title</span> <span style="color: #b8bb26;">"Sitemap"</span>
 <span style="color: #fe8019;">:auto-sitemap</span> t
 </pre>
 </div>
@@ -371,6 +371,7 @@ This is the setup of the dir locals for the blog.
              org-publish-project-alist
              `<span style="color: #8ec07c;">(</span><span style="color: #fb4934;">(</span>
                 &lt;&lt;emacs-site-info&gt;&gt;
+                &lt;&lt;emacs-sitemap&gt;&gt;
                 &lt;&lt;emacs-preamble&gt;&gt;
                 &lt;&lt;emacs-postamble&gt;&gt;
                 &lt;&lt;emacs-idx-sitemap&gt;&gt;
@@ -451,7 +452,7 @@ This adds a few links to the beginning of the document to aid with navigation.
 </p>
 <div class="org-src-container">
 <pre class="src src-clojure" id="orgf3ef768"><span style="color: #fb4934;">(</span>use 'hiccup.core<span style="color: #fb4934;">)</span>
-<span style="color: #fb4934;">(</span>html <span style="color: #fabd2f;">[</span><span style="color: #d3869b;">:a</span> <span style="color: #8ec07c;">{</span><span style="color: #d3869b;">:href</span> <span style="color: #b8bb26;">"index.html"</span><span style="color: #8ec07c;">}</span> <span style="color: #b8bb26;">"HOME"</span><span style="color: #fabd2f;">]</span>
+<span style="color: #fb4934;">(</span>html <span style="color: #fabd2f;">[</span><span style="color: #d3869b;">:a</span> <span style="color: #8ec07c;">{</span><span style="color: #d3869b;">:href</span> <span style="color: #b8bb26;">"index.html"</span><span style="color: #8ec07c;">}</span> <span style="color: #b8bb26;">"MAIN INDEX"</span><span style="color: #fabd2f;">]</span>
       <span style="color: #b8bb26;">" | "</span>
       <span style="color: #fabd2f;">[</span><span style="color: #d3869b;">:a</span> <span style="color: #8ec07c;">{</span><span style="color: #d3869b;">:href</span> <span style="color: #b8bb26;">"sitemap.html"</span><span style="color: #8ec07c;">}</span> <span style="color: #b8bb26;">"SITEMAP"</span><span style="color: #fabd2f;">]</span>
       <span style="color: #b8bb26;">" | "</span>
@@ -723,7 +724,7 @@ This finds the background color of a face. Mostly this just extracts colors for 
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W13-1 14:10</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.4.4)</p><p class="license"><a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a></p>
+<p class="date">Last Modified: 2021-W13-1 14:40</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.4.4)</p><p class="license"><a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a></p>
 </div>
 </body>
 </html>
