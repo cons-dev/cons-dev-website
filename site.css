@@ -31,7 +31,7 @@ h4 {
   color: #cc241d;
 }
 
-p.author, p.date, p.creator {
+p.author, p.date, p.creator, p.license {
   color: #fe8019;
 }
 
