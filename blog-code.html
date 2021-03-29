@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-03-29 Mon 00:31 -->
+<!-- 2021-03-29 Mon 01:01 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Blog Source Code</title>
@@ -230,9 +230,10 @@
 <li><a href="#org9afb899">3. Project Setup</a>
 <ul>
 <li><a href="#org38b0007">3.1. Project Info</a></li>
-<li><a href="#org843052b">3.2. Index and Sitemap</a></li>
-<li><a href="#orgf8a7079">3.3. Directory Local Variables</a></li>
-<li><a href="#orge79958c">3.4. Git Setup</a></li>
+<li><a href="#org78ad05e">3.2. Domain Data</a></li>
+<li><a href="#org843052b">3.3. Index and Sitemap</a></li>
+<li><a href="#orgf8a7079">3.4. Directory Local Variables</a></li>
+<li><a href="#orge79958c">3.5. Git Setup</a></li>
 </ul>
 </li>
 <li><a href="#org388da51">4. Stylesheets</a>
@@ -287,7 +288,7 @@ This sets up the Clojure project. Right now I don't actually really use the proj
 <h2 id="org9afb899"><span class="section-number-2">3</span> Project Setup</h2>
 <div class="outline-text-2" id="text-3">
 <p>
-This is the Emacs Lisp code used to define the project. I use the <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html">per-directory local variable</a> functionality to set the org-html-publish settings.
+This is the Emacs Lisp code used to define the project. I use the <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html">per-directory local variable</a> functionality to set the <code>org-html-publish</code> settings.
 </p>
 </div>
 <div id="outline-container-org38b0007" class="outline-3">
@@ -309,9 +310,22 @@ This gets the blog info and sets the directories relative to the current one. It
 </div>
 </div>
 
-<div id="outline-container-org843052b" class="outline-3">
-<h3 id="org843052b"><span class="section-number-3">3.2</span> Index and Sitemap</h3>
+<div id="outline-container-org78ad05e" class="outline-3">
+<h3 id="org78ad05e"><span class="section-number-3">3.2</span> Domain Data</h3>
 <div class="outline-text-3" id="text-3-2">
+<p>
+This adds the CNAME data to the file.
+</p>
+<div class="org-src-container">
+<pre class="src src-text">cons.dev
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org843052b" class="outline-3">
+<h3 id="org843052b"><span class="section-number-3">3.3</span> Index and Sitemap</h3>
+<div class="outline-text-3" id="text-3-3">
 <p>
 To create the index and sitemap I first define the HTML used to display the links. I prefer the retro all-caps style, so I go with that.
 </p>
@@ -339,8 +353,8 @@ Then I add them to the association-list in the Emacs configuration. Here the HTM
 </div>
 
 <div id="outline-container-orgf8a7079" class="outline-3">
-<h3 id="orgf8a7079"><span class="section-number-3">3.3</span> Directory Local Variables</h3>
-<div class="outline-text-3" id="text-3-3">
+<h3 id="orgf8a7079"><span class="section-number-3">3.4</span> Directory Local Variables</h3>
+<div class="outline-text-3" id="text-3-4">
 <p>
 This is the setup of the dir locals for the blog.
 </p>
@@ -358,8 +372,8 @@ This is the setup of the dir locals for the blog.
 </div>
 
 <div id="outline-container-orge79958c" class="outline-3">
-<h3 id="orge79958c"><span class="section-number-3">3.4</span> Git Setup</h3>
-<div class="outline-text-3" id="text-3-4">
+<h3 id="orge79958c"><span class="section-number-3">3.5</span> Git Setup</h3>
+<div class="outline-text-3" id="text-3-5">
 <p>
 This is basically the (rather small) amount of setup used to ensure that generated files are not included in the git repository.
 </p>
@@ -596,7 +610,7 @@ This finds the background color of a face. Mostly this just extracts colors for 
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Inanna</p>
-<p class="date">Created: 2021-03-29 Mon 00:31</p>
+<p class="date">Created: 2021-03-29 Mon 01:01</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
