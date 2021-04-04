@@ -1,0 +1,887 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-W13-4 22:03 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Iosevka Term CSS</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="The source code for the Iosevka Term Web fonts collection. Provided in a org mode file for easy veiwing." />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link href="site.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="preamble" class="status">
+<a href="index.html">MAIN INDEX</a> | <a href="sitemap.html">SITEMAP</a> | <a href="https://github.com/cons-dev/website-src">SOURCE CODE (git)</a>
+</div>
+<div id="content">
+<h1 class="title">Iosevka Term CSS</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org4781dfc">1. Introduction</a></li>
+<li><a href="#org3064aeb">2. Code</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org4781dfc" class="outline-2">
+<h2 id="org4781dfc"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+This is the source code for the Iosevka Term Web font collection in a org-mode file so it can be easily viewed and linked to. It was originally included with the downloaded package.
+</p>
+</div>
+</div>
+<div id="outline-container-org3064aeb" class="outline-2">
+<h2 id="org3064aeb"><span class="section-number-2">2</span> Code</h2>
+<div class="outline-text-2" id="text-2">
+<div class="org-src-container">
+<pre class="src src-css"><span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 100;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-thin.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-thin.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 100;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedthin.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedthin.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 100;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: oblique;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-thinoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-thinoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web Oblique'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 100;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-thinoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-thinoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 100;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: oblique;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedthinoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedthinoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web Oblique'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 100;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedthinoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedthinoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 100;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: italic;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-thinitalic.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-thinitalic.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 100;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: italic;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedthinitalic.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedthinitalic.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 200;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extralight.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extralight.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 200;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedextralight.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedextralight.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 200;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: oblique;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extralightoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extralightoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web Oblique'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 200;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extralightoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extralightoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 200;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: oblique;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedextralightoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedextralightoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web Oblique'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 200;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedextralightoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedextralightoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 200;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: italic;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extralightitalic.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extralightitalic.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 200;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: italic;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedextralightitalic.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedextralightitalic.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 300;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-light.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-light.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 300;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedlight.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedlight.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 300;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: oblique;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-lightoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-lightoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web Oblique'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 300;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-lightoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-lightoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 300;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: oblique;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedlightoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedlightoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web Oblique'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 300;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedlightoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedlightoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 300;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: italic;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-lightitalic.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-lightitalic.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 300;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: italic;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedlightitalic.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedlightitalic.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 400;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-regular.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-regular.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 400;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extended.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extended.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 400;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: oblique;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-oblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-oblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web Oblique'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 400;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-oblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-oblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 400;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: oblique;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web Oblique'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 400;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 400;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: italic;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-italic.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-italic.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 400;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: italic;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendeditalic.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendeditalic.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 500;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-medium.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-medium.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 500;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedmedium.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedmedium.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 500;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: oblique;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-mediumoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-mediumoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web Oblique'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 500;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-mediumoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-mediumoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 500;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: oblique;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedmediumoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedmediumoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web Oblique'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 500;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedmediumoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedmediumoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 500;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: italic;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-mediumitalic.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-mediumitalic.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 500;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: italic;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedmediumitalic.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedmediumitalic.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 600;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-semibold.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-semibold.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 600;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedsemibold.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedsemibold.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 600;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: oblique;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-semiboldoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-semiboldoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web Oblique'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 600;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-semiboldoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-semiboldoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 600;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: oblique;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedsemiboldoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedsemiboldoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web Oblique'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 600;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedsemiboldoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedsemiboldoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 600;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: italic;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-semibolditalic.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-semibolditalic.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 600;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: italic;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedsemibolditalic.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedsemibolditalic.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 700;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-bold.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-bold.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 700;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedbold.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedbold.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 700;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: oblique;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-boldoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-boldoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web Oblique'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 700;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-boldoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-boldoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 700;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: oblique;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedboldoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedboldoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web Oblique'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 700;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedboldoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedboldoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 700;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: italic;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-bolditalic.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-bolditalic.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 700;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: italic;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedbolditalic.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedbolditalic.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 800;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extrabold.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extrabold.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 800;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedextrabold.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedextrabold.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 800;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: oblique;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extraboldoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extraboldoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web Oblique'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 800;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extraboldoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extraboldoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 800;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: oblique;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedextraboldoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedextraboldoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web Oblique'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 800;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedextraboldoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedextraboldoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 800;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: italic;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extrabolditalic.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extrabolditalic.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 800;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: italic;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedextrabolditalic.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedextrabolditalic.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 900;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-heavy.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-heavy.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 900;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedheavy.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedheavy.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 900;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: oblique;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-heavyoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-heavyoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web Oblique'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 900;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-heavyoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-heavyoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 900;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: oblique;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedheavyoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedheavyoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web Oblique'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 900;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedheavyoblique.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedheavyoblique.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 900;
+        <span style="color: #fb4934;">font-stretch</span>: normal;
+        <span style="color: #fb4934;">font-style</span>: italic;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-heavyitalic.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-heavyitalic.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+
+<span style="color: #fe8019;">@font-face</span> <span style="color: #fb4934;">{</span>
+        <span style="color: #fb4934;">font-family</span>: <span style="color: #b8bb26;">'Iosevka Term Web'</span>;
+        <span style="color: #fb4934;">font-display</span>: swap;
+        <span style="color: #fb4934;">font-weight</span>: 900;
+        <span style="color: #fb4934;">font-stretch</span>: expanded;
+        <span style="color: #fb4934;">font-style</span>: italic;
+        <span style="color: #fb4934;">src</span>: url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2/iosevka-term-extendedheavyitalic.woff2'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'woff2'</span><span style="color: #fabd2f;">)</span>, url<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'ttf/iosevka-term-extendedheavyitalic.ttf'</span><span style="color: #fabd2f;">)</span> format<span style="color: #fabd2f;">(</span><span style="color: #b8bb26;">'truetype'</span><span style="color: #fabd2f;">)</span>;
+<span style="color: #fb4934;">}</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2021-W13-1 23:49</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.4)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>

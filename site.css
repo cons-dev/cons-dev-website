@@ -1,17 +1,21 @@
 @import url(fonts/iosevka-term.css);
 
+body {
+  background-color: #282828;
+  color: #ebdbb2;
+  font-family: 'Iosevka Term Web';
+}
+
+code {
+  color: #fe8019;
+}
+
 .todo {
   color: #fabd2f;
 }
 
 .done {
   color: #7c6f64;
-}
-
-body {
-  background-color: #282828;
-  color: #ebdbb2;
-  font-family: 'Iosevka Term Web';
 }
 
 ::selection {
@@ -49,7 +53,7 @@ a:link {
 }
 
 a:visited {
-  color: violet;
+  color: #d3869b;
 }
 
 a:hover {
@@ -58,7 +62,7 @@ a:hover {
   text-decoration: none;
 }
 
-a:hover {
+a:active {
   color: #282828;
   background-color: #fabd2f;
   text-decoration: none;

@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W13-1 14:40 -->
+<!-- 2021-W13-6 21:53 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Website Source Code</title>
@@ -228,66 +228,107 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org5f52c62">1. Introduction</a></li>
-<li><a href="#org29ab386">2. Lein Setup</a></li>
-<li><a href="#org86b6027">3. Project Setup</a>
+<li><a href="#org7d855a4">1. Introduction</a>
 <ul>
-<li><a href="#org65990dc">3.1. Site Info</a></li>
-<li><a href="#orgffa02dd">3.2. Domain Data</a></li>
-<li><a href="#org209b34d">3.3. Index and Sitemap</a></li>
-<li><a href="#orgf9972c5">3.4. Directory Local Variables</a></li>
-<li><a href="#orga2e9435">3.5. Git Setup</a></li>
+<li><a href="#org2b5c019">1.1. Some History</a></li>
+<li><a href="#org96ac371">1.2. Implementation Concept</a></li>
 </ul>
 </li>
-<li><a href="#orgfefcffe">4. HTML</a>
+<li><a href="#org54300dd">2. Lein Setup</a></li>
+<li><a href="#org9b461c6">3. Website Setup</a>
 <ul>
-<li><a href="#org44a1743">4.1. Dependencies</a></li>
-<li><a href="#org0f496d1">4.2. Preamble and Postamble</a>
+<li><a href="#org65389af">3.1. Website Info</a></li>
+<li><a href="#org2127bb8">3.2. Source Directories</a></li>
+<li><a href="#orge844a8a">3.3. Domain Data</a></li>
+<li><a href="#org101b5b6">3.4. Sitemap</a></li>
+<li><a href="#org693aae0">3.5. <span class="todo TODO">TODO</span> Automatic Publishing Function</a></li>
+<li><a href="#orgc8c3319">3.6. Directory Local Variables</a></li>
+<li><a href="#org1ed9d77">3.7. Git Setup</a></li>
+</ul>
+</li>
+<li><a href="#org12d11b9">4. HTML</a>
 <ul>
-<li><a href="#org1790c58">4.2.1. License Info</a></li>
-<li><a href="#org6fad6c2">4.2.2. Preamble</a></li>
-<li><a href="#org154edb8">4.2.3. Postamble</a></li>
+<li><a href="#org7ab45f5">4.1. Dependencies</a></li>
+<li><a href="#org776b4b5">4.2. Preamble and Postamble</a>
+<ul>
+<li><a href="#org02910e7">4.2.1. License Info</a></li>
+<li><a href="#orgf6ac274">4.2.2. Preamble</a></li>
+<li><a href="#org81b4a75">4.2.3. Postamble</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgb05d129">5. Stylesheets</a>
+<li><a href="#orgc1ce8bb">5. Stylesheets</a>
 <ul>
-<li><a href="#orgcb9f01f">5.1. Emacs Configuration</a></li>
-<li><a href="#orge76666a">5.2. Create CSS File</a></li>
-<li><a href="#org825339a">5.3. Default Background and Foreground</a></li>
-<li><a href="#orgfa55d28">5.4. <span class="todo TODO">TODO</span> Items</a></li>
-<li><a href="#org70409ab">5.5. Selected Text</a></li>
-<li><a href="#orgd752afc">5.6. Headlines</a></li>
-<li><a href="#orga5cdb5a">5.7. Author and Title Information</a>
+<li><a href="#org129ba31">5.1. Emacs Configuration</a></li>
+<li><a href="#orgf62a485">5.2. Create CSS File</a></li>
+<li><a href="#orged65789">5.3. Default Background and Foreground</a></li>
+<li><a href="#orgdb263d6">5.4. Todo Items</a></li>
+<li><a href="#orgb6fc7d4">5.5. Selected Text</a></li>
+<li><a href="#org2711314">5.6. Headlines</a></li>
+<li><a href="#orgf8cf018">5.7. Author and Title Information</a>
 <ul>
-<li><a href="#orgd48a7c5">5.7.1. Blocks</a></li>
-<li><a href="#org2259ee1">5.7.2. Hover Info</a></li>
+<li><a href="#org3a75d3c">5.7.1. Blocks</a></li>
+<li><a href="#org100326a">5.7.2. Hover Info</a></li>
 </ul>
 </li>
-<li><a href="#orgece4062">5.8. Links</a></li>
-<li><a href="#orgf3f4509">5.9. Helper Code Blocks</a></li>
+<li><a href="#orgf057943">5.8. Links</a></li>
+<li><a href="#org91adde7">5.9. Helper Code Blocks</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org5f52c62" class="outline-2">
-<h2 id="org5f52c62"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org7d855a4" class="outline-2">
+<h2 id="org7d855a4"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-This is my the source code for my website. Currently it's only CSS, some emacs config, and a bit of HTML, but eventually I intend to add features for running ClojureScript in source code blocks among other things. Changes to this file will be noted in the <a href=changelog.html?token=myqrww9ojok9q1bmec3yc2lbh7ezqgwex6albagnvypd9jwttwm8e0o3wa57cxun>changelog</a>.
+This is my the source code for my website. Currently it's only CSS, some emacs config, and a bit of HTML, but eventually I intend to add features for running ClojureScript in source code blocks among other things. Changes to this file will be noted in the <a href="changelog.html">changelog</a>.
 </p>
 
 <p>
-The entire document is done in a nonlinear format, so each section does not exactly relate to an individual file, but rather combines the various files used into one.
+The entire document is done in a nonlinear format, so each section does not exactly relate to an individual file, but rather combines the various files used into one. If you want to get to the code, just skip the intro and go straight to <a href="#org54300dd">Lein Setup</a>.
+</p>
+</div>
+
+<div id="outline-container-org2b5c019" class="outline-3">
+<h3 id="org2b5c019"><span class="section-number-3">1.1</span> Some History</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+I have been blogging (and attempting to make websites) for a few years, however with each website I built I would run into a number of issues.
+</p>
+
+<p>
+In the beginning my issue was HTML, CSS, and JavaScript. All of them sucked quite a bit.
+</p>
+
+<p>
+Initially it was just that the blog was in markdown and had a somewhat messy system to generate it from the markdown files using ruby.
+</p>
+
+<p>
+I have also recently been organizing my OS and system configuration into a giant wiki, so compatibility with that was also a necessary feature. I had attempted to do blogging in org mode before as well, though the <a href="https://github.com/kaushalmodi/ox-hugo">ox-hugo</a> option both lacked some features I wanted and left me with a somewhat lackluster experience when it came to linking files together. I probably was simply inexperienced, but it still left a bad taste in my mouth and didn't make me optimistic about the idea of having a public section to my personal wiki.
+</p>
+
+<p>
+However, when I read about the org-publish feature, I was very interested in writing my own website with it. So far the simple export feature has been all that it was advertised to be and seems to be more than sufficient to make a good blog.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org29ab386" class="outline-2">
-<h2 id="org29ab386"><span class="section-number-2">2</span> Lein Setup</h2>
+<div id="outline-container-org96ac371" class="outline-3">
+<h3 id="org96ac371"><span class="section-number-3">1.2</span> Implementation Concept</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+The implementation itself is designed to be entirely local to this directory. So providing the org files should be roughly equivalent to providing the site itself (minus the color scheme of my Emacs configuration). It also adds free content if you will to the site.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org54300dd" class="outline-2">
+<h2 id="org54300dd"><span class="section-number-2">2</span> Lein Setup</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 This sets up the Clojure project. Right now I don't actually really use the project per-se, but rather use it to generate CSS and HTML code from code blocks. Eventually I intend to add the ability to run ClojureScript in code blocks, but for now this works.
@@ -303,27 +344,26 @@ This sets up the Clojure project. Right now I don't actually really use the proj
 </div>
 </div>
 
-<div id="outline-container-org86b6027" class="outline-2">
-<h2 id="org86b6027"><span class="section-number-2">3</span> Project Setup</h2>
+
+<div id="outline-container-org9b461c6" class="outline-2">
+<h2 id="org9b461c6"><span class="section-number-2">3</span> Website Setup</h2>
 <div class="outline-text-2" id="text-3">
 <p>
-This is the Emacs Lisp code used to define the project. I use the <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html">per-directory local variable</a> functionality to set the <code>org-html-publish</code> settings.
+This is the Emacs Lisp code used to define the website. I use the <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html">per-directory local variable</a> functionality to set the <code>org-html-publish</code> settings.
 </p>
 </div>
-<div id="outline-container-org65990dc" class="outline-3">
-<h3 id="org65990dc"><span class="section-number-3">3.1</span> Site Info</h3>
+<div id="outline-container-org65389af" class="outline-3">
+<h3 id="org65389af"><span class="section-number-3">3.1</span> Website Info</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
-This gets the blog info and sets the directories relative to the current one. It also sets the website name, adds the basic HTML publish / indent features, and excludes drafts from the project. (idea taken from <a href="https://www.john2x.com/blog/blogging-with-orgmode.html">John Louis Del Rosario</a>).
+This gets the website info and sets the directories relative to the current one. It also sets the website name, adds the basic HTML publish / indent features, and excludes drafts from the project. (idea taken from <a href="https://www.john2x.com/blog/blogging-with-orgmode.html">John Louis Del Rosario</a>).
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="org630622c"><span style="color: #b8bb26;">"(cons dev nil)"</span>
+<pre class="src src-emacs-lisp" id="orgf75d158"><span style="color: #b8bb26;">"(cons dev nil)"</span>
 <span style="color: #fe8019;">:language</span> <span style="color: #b8bb26;">"en"</span>
 <span style="color: #fe8019;">:author</span> <span style="color: #b8bb26;">"Inanna"</span>
 <span style="color: #fe8019;">:exclude</span> <span style="color: #b8bb26;">"level-.*</span><span style="color: #8ec07c; font-weight: bold;">\\</span><span style="color: #8ec07c; font-weight: bold;">|</span><span style="color: #b8bb26;">.*</span><span style="color: #fabd2f;">\</span><span style="color: #b8bb26;">.draft</span><span style="color: #fabd2f;">\</span><span style="color: #b8bb26;">.org"</span>
 <span style="color: #fe8019;">:html-metadata-timestamp-format</span> <span style="color: #b8bb26;">"%G-W%V-%u %H:%M"</span>
-<span style="color: #fe8019;">:base-directory</span> ,<span style="color: #fb4934;">(</span>f-expand <span style="color: #fabd2f;">(</span>concat default-directory <span style="color: #b8bb26;">"../src"</span><span style="color: #fabd2f;">)</span><span style="color: #fb4934;">)</span>
-<span style="color: #fe8019;">:publishing-directory</span> ,<span style="color: #fb4934;">(</span>f-expand <span style="color: #fabd2f;">(</span>concat default-directory <span style="color: #b8bb26;">"../public"</span><span style="color: #fabd2f;">)</span><span style="color: #fb4934;">)</span>
 <span style="color: #fe8019;">:publishing-function</span> org-html-publish-to-html
 <span style="color: #fe8019;">:html-html5-fancy</span> t
 <span style="color: #fe8019;">:html-indent</span> nil
@@ -332,11 +372,50 @@ This gets the blog info and sets the directories relative to the current one. It
 </div>
 </div>
 
-<div id="outline-container-orgffa02dd" class="outline-3">
-<h3 id="orgffa02dd"><span class="section-number-3">3.2</span> Domain Data</h3>
+<div id="outline-container-org2127bb8" class="outline-3">
+<h3 id="org2127bb8"><span class="section-number-3">3.2</span> Source Directories</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
-This adds the CNAME data to the file.
+As of generating this file, thce directory above it contains the following files. 
+</p>
+<pre class="example" id="org988affe">
+total 36
+-rw-r--r-- 1 1000 998  114 Mar 30 16:31 .cider-repl-history
+-rw-r--r-- 1 1000 998 1752 Apr  3 20:57 dir-locals.el
+drwxr-xr-x 8 1000 998 4096 Apr  3 21:53 .git
+-rw-r--r-- 1 1000 998  240 Apr  3 20:57 .gitignore
+-rw-r--r-- 1 1000 998    5 Apr  3 20:57 .nrepl-port
+-rw-r--r-- 1 1000 998  209 Mar 28 22:16 project.clj
+drwxr-xr-x 4 1000 998 4096 Apr  3 21:39 public
+drwxr-xr-x 2 1000 998 4096 Apr  3 21:39 src
+drwxr-xr-x 4 1000 998 4096 Apr  3 20:57 target
+</pre>
+
+<p>
+The <code>project.clj</code> and <code>target</code> directories are automatically generated as are the dotfiles, while the <code>src</code> and <code>public</code> directories are not generated by any code. The <code>src</code> directory of course contains the org files while the <code>public</code> contains exported HTML. We set variables for these since the <a href="#org693aae0">automatic publishing function</a> (WIP) also needs to know the directories. To find the location of the project itself I use <a href="https://github.com/bbatsov/projectile">projectile</a>.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org00ecc7a"><span style="color: #fb4934;">(</span>cd-source-dir <span style="color: #fabd2f;">(</span>concat <span style="color: #8ec07c;">(</span>projectile-project-root<span style="color: #8ec07c;">)</span> <span style="color: #b8bb26;">"src/"</span><span style="color: #fabd2f;">)</span><span style="color: #fb4934;">)</span>
+<span style="color: #fb4934;">(</span>cd-publish-dir <span style="color: #fabd2f;">(</span>concat <span style="color: #8ec07c;">(</span>projectile-project-root<span style="color: #8ec07c;">)</span> <span style="color: #b8bb26;">"public/"</span><span style="color: #fabd2f;">)</span><span style="color: #fb4934;">)</span>
+</pre>
+</div>
+
+<p>
+Here we add them to the project configuration. The <code>:base-directory</code> property is source for the project and the <code>:publishing-directory</code> is where the results of exporting are to be placed.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org5a06900"><span style="color: #fe8019;">:base-directory</span> ,cd-source-dir
+<span style="color: #fe8019;">:publishing-directory</span> ,cd-publish-dir
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge844a8a" class="outline-3">
+<h3 id="orge844a8a"><span class="section-number-3">3.3</span> Domain Data</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+This adds the CNAME data to the file. This is required for the site to serve properly under the A record I set up for it.
 </p>
 <div class="org-src-container">
 <pre class="src src-text">cons.dev
@@ -345,113 +424,163 @@ This adds the CNAME data to the file.
 </div>
 </div>
 
-<div id="outline-container-org209b34d" class="outline-3">
-<h3 id="org209b34d"><span class="section-number-3">3.3</span> Index and Sitemap</h3>
-<div class="outline-text-3" id="text-3-3">
+<div id="outline-container-org101b5b6" class="outline-3">
+<h3 id="org101b5b6"><span class="section-number-3">3.4</span> Sitemap</h3>
+<div class="outline-text-3" id="text-3-4">
 <p>
-This configures the sitemap title. It is automatically generated for all pages to make my life easier. Currently I use a flat layout for my website, so it is simply a list of all nodes. Eventually I want it to be displayed as a graph of links.
+This configures the sitemap title and name. It is automatically generated for all pages to make my life easier. Currently I use a flat layout for my website, so it is simply a list of all nodes. Eventually I want it to be displayed as a graph of links.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="orga16a649"><span style="color: #fe8019;">:sitemap-title</span> <span style="color: #b8bb26;">"Sitemap"</span>
+<pre class="src src-emacs-lisp" id="org82f93ba"><span style="color: #fe8019;">:sitemap-title</span> <span style="color: #b8bb26;">"Sitemap"</span>
 <span style="color: #fe8019;">:auto-sitemap</span> t
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgf9972c5" class="outline-3">
-<h3 id="orgf9972c5"><span class="section-number-3">3.4</span> Directory Local Variables</h3>
-<div class="outline-text-3" id="text-3-4">
+<div id="outline-container-org693aae0" class="outline-3">
+<h3 id="org693aae0"><span class="section-number-3">3.5</span> <span class="todo TODO">TODO</span> Automatic Publishing Function</h3>
+<div class="outline-text-3" id="text-3-5">
 <p>
-This is the setup of the dir locals for the blog.
+This will eventually automatically publish files. Currently it is WIP and is published primarily because it realtes to my <a href="namespace-el.html">emacs namespacing adventures</a>.
+</p>
+
+<p>
+The assumption in the design is that I only really need to see the diff on the org files and the HTML files will sort themselves out. Therefore I just create a magit commit and do the job from there. The only issue is that the magit functions simply create buffers. I think the solution is to create a function to temporarily modify the hooks run after some of the functions.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fabd2f;">(</span>nil . <span style="color: #8ec07c;">(</span><span style="color: #fb4934;">(</span>eval
-          . <span style="color: #fabd2f;">(</span><span style="color: #fb4934;">setq</span>
-             org-publish-project-alist
-             `<span style="color: #8ec07c;">(</span><span style="color: #fb4934;">(</span>
-                &lt;&lt;emacs-site-info&gt;&gt;
-                &lt;&lt;emacs-sitemap&gt;&gt;
-                &lt;&lt;emacs-preamble&gt;&gt;
-                &lt;&lt;emacs-postamble&gt;&gt;
-                &lt;&lt;emacs-idx-sitemap&gt;&gt;
-                &lt;&lt;emacs-stylesheet&gt;&gt;<span style="color: #fb4934;">)</span><span style="color: #8ec07c;">)</span><span style="color: #fabd2f;">)</span><span style="color: #fb4934;">)</span><span style="color: #8ec07c;">)</span><span style="color: #fabd2f;">)</span><span style="color: #fb4934;">)</span>
+<pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">defun</span> <span style="color: #8ec07c;">cd-publish-files</span> <span style="color: #fabd2f;">()</span>
+  <span style="color: #fabd2f;">(</span><span style="color: #fb4934;">interactive</span><span style="color: #fabd2f;">)</span>
+  <span style="color: #fabd2f;">(</span>org-publish <span style="color: #b8bb26;">"(cons dev nil)"</span><span style="color: #fabd2f;">)</span>
+  <span style="color: #fabd2f;">(</span>cd cd-source-dir<span style="color: #fabd2f;">)</span>
+  <span style="color: #fabd2f;">(</span>shell-command-to-string <span style="color: #8ec07c;">(</span>format <span style="color: #b8bb26;">"git add '%s'"</span> cd-source-dir<span style="color: #8ec07c;">)</span><span style="color: #fabd2f;">)</span>
+  <span style="color: #fabd2f;">(</span>magit-commit-create<span style="color: #fabd2f;">)</span>
+  <span style="color: #928374; font-style: italic;">;</span><span style="color: #928374; font-style: italic;">(magit-git-push "main" "origin" "origin")</span>
+  <span style="color: #fabd2f;">(</span>cd cd-publish-dir<span style="color: #fabd2f;">)</span>
+  <span style="color: #fabd2f;">(</span>shell-command-to-string <span style="color: #8ec07c;">(</span>format <span style="color: #b8bb26;">"git add '%s'"</span> cd-publish-dir<span style="color: #8ec07c;">)</span><span style="color: #fabd2f;">)</span>
+  <span style="color: #fabd2f;">(</span>shell-command-to-string <span style="color: #b8bb26;">"git commit -m 'Automatically published, check website-src for details.'"</span><span style="color: #fabd2f;">)</span>
+  <span style="color: #fabd2f;">(</span>magit-git-push <span style="color: #b8bb26;">"main"</span> <span style="color: #b8bb26;">"origin"</span> <span style="color: #b8bb26;">"origin"</span><span style="color: #fabd2f;">)</span><span style="color: #fb4934;">)</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orga2e9435" class="outline-3">
-<h3 id="orga2e9435"><span class="section-number-3">3.5</span> Git Setup</h3>
-<div class="outline-text-3" id="text-3-5">
+<div id="outline-container-orgc8c3319" class="outline-3">
+<h3 id="orgc8c3319"><span class="section-number-3">3.6</span> Directory Local Variables</h3>
+<div class="outline-text-3" id="text-3-6">
 <p>
-This is basically the (rather small) amount of setup used to ensure that generated files are not included in the git repository.
+This is the setup of the dir locals for the blog. They are used to keep the entire project local to the current directory.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fabd2f;">(</span>nil . <span style="color: #8ec07c;">(</span><span style="color: #fb4934;">(</span>eval
+          . <span style="color: #fabd2f;">(</span><span style="color: #fb4934;">progn</span>
+              <span style="color: #8ec07c;">(</span><span style="color: #fb4934;">setq</span> lexical-binding t<span style="color: #8ec07c;">)</span>
+              <span style="color: #8ec07c;">(</span><span style="color: #fb4934;">lexical-let</span> <span style="color: #fb4934;">(</span>
+                    &lt;&lt;emacs-directories&gt;&gt;<span style="color: #fb4934;">)</span>
+                &lt;&lt;auto-publish-command&gt;&gt;
+                <span style="color: #fb4934;">(</span><span style="color: #fb4934;">setq</span>
+                 org-publish-project-alist
+                 `<span style="color: #a2b6da;">(</span><span style="color: #9cb6ad;">(</span>
+                    &lt;&lt;emacs-site-info&gt;&gt;
+                    &lt;&lt;emacs-sitemap&gt;&gt;
+                    &lt;&lt;emacs-site-files&gt;&gt;
+                    &lt;&lt;emacs-preamble&gt;&gt;
+                    &lt;&lt;emacs-postamble&gt;&gt;
+                    &lt;&lt;emacs-idx-sitemap&gt;&gt;
+                    &lt;&lt;emacs-stylesheet&gt;&gt;<span style="color: #9cb6ad;">)</span><span style="color: #a2b6da;">)</span><span style="color: #fb4934;">)</span><span style="color: #8ec07c;">)</span><span style="color: #fabd2f;">)</span><span style="color: #fb4934;">)</span><span style="color: #8ec07c;">)</span><span style="color: #fabd2f;">)</span><span style="color: #fb4934;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1ed9d77" class="outline-3">
+<h3 id="org1ed9d77"><span class="section-number-3">3.7</span> Git Setup</h3>
+<div class="outline-text-3" id="text-3-7">
+<p>
+This is basically the (rather small) amount of setup used to ensure that generated files are not included in the git repository. It also ignores draft files.
 </p>
 <div class="org-src-container">
 <pre class="src src-gitignore">.dir-locals.el
 .gitignore
+project.clj
+public
+.cider-repl-history        
+<span style="color: #fb4934;">*</span>.draft.org
+
+<span style="color: #928374; font-style: italic;"># Lein related stuff                       </span>
+<span style="color: #d3869b;">/</span>target
+<span style="color: #d3869b;">/</span>classes
+<span style="color: #d3869b;">/</span>checkouts
+profiles.clj
+pom.xml
+pom.xml.asc
+<span style="color: #fb4934;">*</span>.jar
+<span style="color: #fb4934;">*</span>.class
+<span style="color: #d3869b;">/</span>.lein-<span style="color: #fb4934;">*</span>
+<span style="color: #d3869b;">/</span>.nrepl-port
+<span style="color: #d3869b;">/</span>.prepl-port
 </pre>
 </div>
 </div>
 </div>
 </div>
 
-
-<div id="outline-container-orgfefcffe" class="outline-2">
-<h2 id="orgfefcffe"><span class="section-number-2">4</span> HTML</h2>
+<div id="outline-container-org12d11b9" class="outline-2">
+<h2 id="org12d11b9"><span class="section-number-2">4</span> HTML</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 This is where I configure the HTML displayed by the system.
 </p>
 </div>
 
-<div id="outline-container-org44a1743" class="outline-3">
-<h3 id="org44a1743"><span class="section-number-3">4.1</span> Dependencies</h3>
+<div id="outline-container-org7ab45f5" class="outline-3">
+<h3 id="org7ab45f5"><span class="section-number-3">4.1</span> Dependencies</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
-Here
+Here we import hiccup so we can write our HTML in Clojure.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="orge1b6f2a"><span style="color: #fb4934;">[</span>hiccup <span style="color: #b8bb26;">"1.0.5"</span><span style="color: #fb4934;">]</span>
+<pre class="src src-clojure" id="orgf740922"><span style="color: #fb4934;">[</span>hiccup <span style="color: #b8bb26;">"1.0.5"</span><span style="color: #fb4934;">]</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org0f496d1" class="outline-3">
-<h3 id="org0f496d1"><span class="section-number-3">4.2</span> Preamble and Postamble</h3>
+<div id="outline-container-org776b4b5" class="outline-3">
+<h3 id="org776b4b5"><span class="section-number-3">4.2</span> Preamble and Postamble</h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
 This is the first section of the program and the
 </p>
 </div>
 
-<div id="outline-container-org1790c58" class="outline-4">
-<h4 id="org1790c58"><span class="section-number-4">4.2.1</span> License Info</h4>
+<div id="outline-container-org02910e7" class="outline-4">
+<h4 id="org02910e7"><span class="section-number-4">4.2.1</span> License Info</h4>
 <div class="outline-text-4" id="text-4-2-1">
 <p>
 This is the license info for my website. I selected the license because it provides one-way compatibility with the GPL-3.0 license. Thus I can license my code under the GPL, while licensing most of the text of the site under the <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0 license</a>. Currently it is displayed in the postamble on all pages, though I might want to alter that someday.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-clojure" id="org9ca8951"><span style="color: #fb4934;">[</span><span style="color: #d3869b;">:p</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:class</span> <span style="color: #b8bb26;">"license"</span><span style="color: #fabd2f;">}</span>
+<pre class="src src-clojure" id="org6c0c09b"><span style="color: #fb4934;">[</span><span style="color: #d3869b;">:p</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:class</span> <span style="color: #b8bb26;">"license"</span><span style="color: #fabd2f;">}</span>
+ <span style="color: #b8bb26;">"Except where otherwise noted content on "</span>
  <span style="color: #fabd2f;">[</span><span style="color: #d3869b;">:a</span> <span style="color: #8ec07c;">{</span><span style="color: #d3869b;">:href</span> <span style="color: #b8bb26;">"https://cons.dev"</span><span style="color: #8ec07c;">}</span> <span style="color: #b8bb26;">"cons.dev"</span><span style="color: #fabd2f;">]</span>
  <span style="color: #b8bb26;">" is licensed under a "</span>
  <span style="color: #fabd2f;">[</span><span style="color: #d3869b;">:a</span> <span style="color: #8ec07c;">{</span><span style="color: #d3869b;">:rel</span> <span style="color: #b8bb26;">"license"</span> <span style="color: #d3869b;">:href</span> <span style="color: #b8bb26;">"https://creativecommons.org/licenses/by-sa/4.0/"</span><span style="color: #8ec07c;">}</span>
-  <span style="color: #b8bb26;">"Creative Commons Attribution-ShareAlike 4.0 International License"</span><span style="color: #fabd2f;">]</span><span style="color: #fb4934;">]</span>
+  <span style="color: #b8bb26;">"Creative Commons Attribution-ShareAlike 4.0 International License"</span><span style="color: #fabd2f;">]</span> <span style="color: #b8bb26;">"."</span><span style="color: #fb4934;">]</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org6fad6c2" class="outline-4">
-<h4 id="org6fad6c2"><span class="section-number-4">4.2.2</span> Preamble</h4>
+<div id="outline-container-orgf6ac274" class="outline-4">
+<h4 id="orgf6ac274"><span class="section-number-4">4.2.2</span> Preamble</h4>
 <div class="outline-text-4" id="text-4-2-2">
 <p>
 This adds a few links to the beginning of the document to aid with navigation.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="orgf3ef768"><span style="color: #fb4934;">(</span>use 'hiccup.core<span style="color: #fb4934;">)</span>
+<pre class="src src-clojure" id="org1212f70"><span style="color: #fb4934;">(</span>use 'hiccup.core<span style="color: #fb4934;">)</span>
 <span style="color: #fb4934;">(</span>html <span style="color: #fabd2f;">[</span><span style="color: #d3869b;">:a</span> <span style="color: #8ec07c;">{</span><span style="color: #d3869b;">:href</span> <span style="color: #b8bb26;">"index.html"</span><span style="color: #8ec07c;">}</span> <span style="color: #b8bb26;">"MAIN INDEX"</span><span style="color: #fabd2f;">]</span>
       <span style="color: #b8bb26;">" | "</span>
       <span style="color: #fabd2f;">[</span><span style="color: #d3869b;">:a</span> <span style="color: #8ec07c;">{</span><span style="color: #d3869b;">:href</span> <span style="color: #b8bb26;">"sitemap.html"</span><span style="color: #8ec07c;">}</span> <span style="color: #b8bb26;">"SITEMAP"</span><span style="color: #fabd2f;">]</span>
@@ -464,21 +593,21 @@ This adds a few links to the beginning of the document to aid with navigation.
 This is the Emacs code that sets the preamble
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="org28330f8"><span style="color: #fe8019;">:html-preamble</span> t
+<pre class="src src-emacs-lisp" id="org9959944"><span style="color: #fe8019;">:html-preamble</span> t
 <span style="color: #fe8019;">:html-preamble-format</span> '<span style="color: #fb4934;">(</span><span style="color: #b8bb26;">"en"</span> &lt;&lt;emacs-html-preamble<span style="color: #fabd2f;">()</span>&gt;&gt;<span style="color: #fb4934;">)</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org154edb8" class="outline-4">
-<h4 id="org154edb8"><span class="section-number-4">4.2.3</span> Postamble</h4>
+<div id="outline-container-org81b4a75" class="outline-4">
+<h4 id="org81b4a75"><span class="section-number-4">4.2.3</span> Postamble</h4>
 <div class="outline-text-4" id="text-4-2-3">
 <p>
 The end of each document this adds a little bit of text containing the info about the program that created it, the date the file was modified, and licensing information
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org722ebfe"><span style="color: #fb4934;">(</span>use 'hiccup.core<span style="color: #fb4934;">)</span>
+<pre class="src src-clojure" id="orga7fcaf4"><span style="color: #fb4934;">(</span>use 'hiccup.core<span style="color: #fb4934;">)</span>
 <span style="color: #fb4934;">(</span>html <span style="color: #fabd2f;">[</span><span style="color: #d3869b;">:p</span> <span style="color: #8ec07c;">{</span><span style="color: #d3869b;">:class</span> <span style="color: #b8bb26;">"date"</span><span style="color: #8ec07c;">}</span> <span style="color: #b8bb26;">"Last Modified: %C"</span><span style="color: #fabd2f;">]</span>
       <span style="color: #fabd2f;">[</span><span style="color: #d3869b;">:p</span> <span style="color: #8ec07c;">{</span><span style="color: #d3869b;">:class</span> <span style="color: #b8bb26;">"creator"</span><span style="color: #8ec07c;">}</span> <span style="color: #b8bb26;">"Generated Using: %c"</span><span style="color: #fabd2f;">]</span>
        &lt;&lt;license-info&gt;&gt;<span style="color: #fb4934;">)</span>
@@ -489,7 +618,7 @@ The end of each document this adds a little bit of text containing the info abou
 This code sets the postamble.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="orgfa04563"><span style="color: #fe8019;">:html-postamble</span> t
+<pre class="src src-emacs-lisp" id="orga557f37"><span style="color: #fe8019;">:html-postamble</span> t
 <span style="color: #fe8019;">:html-postamble-format</span> '<span style="color: #fb4934;">(</span><span style="color: #b8bb26;">"en"</span> &lt;&lt;emacs-html-postamble<span style="color: #fabd2f;">()</span>&gt;&gt;<span style="color: #fb4934;">)</span>
 </pre>
 </div>
@@ -499,56 +628,65 @@ This code sets the postamble.
 </div>
 
 
-<div id="outline-container-orgb05d129" class="outline-2">
-<h2 id="orgb05d129"><span class="section-number-2">5</span> Stylesheets</h2>
+<div id="outline-container-orgc1ce8bb" class="outline-2">
+<h2 id="orgc1ce8bb"><span class="section-number-2">5</span> Stylesheets</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 While <a href="https://orgmode.org/manual/HTML-Export.html#HTML-Export">org-html-export</a> does an admirable job at exporting code in my preferred syntax highlighting style, it unfortunately does not replicate the other features of my org-mode buffers. To do that I use <a href="https://github.com/noprompt/garden">Garden</a>, a Clojure library for rendering CSS.
 </p>
+
+<p>
+The reason I use garden is mostly because I dislike using CSS directly or.
+</p>
 </div>
 
-<div id="outline-container-orgcb9f01f" class="outline-3">
-<h3 id="orgcb9f01f"><span class="section-number-3">5.1</span> Emacs Configuration</h3>
+<div id="outline-container-org129ba31" class="outline-3">
+<h3 id="org129ba31"><span class="section-number-3">5.1</span> Emacs Configuration</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 This adds the Emacs configuration for the stylesheets in the blog. It also adds a link to the fonts stylesheet.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org74fcc41"><span style="color: #fb4934;">(</span>use 'hiccup.core<span style="color: #fb4934;">)</span>
+<pre class="src src-clojure" id="org0a133d3"><span style="color: #fb4934;">(</span>use 'hiccup.core<span style="color: #fb4934;">)</span>
 <span style="color: #fb4934;">(</span>html <span style="color: #fabd2f;">[</span><span style="color: #d3869b;">:link</span> <span style="color: #8ec07c;">{</span><span style="color: #d3869b;">:rel</span> <span style="color: #b8bb26;">"stylesheet"</span> <span style="color: #d3869b;">:type</span> <span style="color: #b8bb26;">"text/css"</span> <span style="color: #d3869b;">:href</span> <span style="color: #b8bb26;">"site.css"</span><span style="color: #8ec07c;">}</span><span style="color: #fabd2f;">]</span><span style="color: #fb4934;">)</span>
 </pre>
 </div>
 <p>
-This code then generates the HTML head used.
+This property then sets the HTML head on every file to be the HTML generated by that.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="orgc3d0c82"><span style="color: #fe8019;">:html-head</span> &lt;&lt;stylesheet-html<span style="color: #fb4934;">()</span>&gt;&gt;
+<pre class="src src-emacs-lisp" id="org7bbe43c"><span style="color: #fe8019;">:html-head</span> &lt;&lt;stylesheet-html<span style="color: #fb4934;">()</span>&gt;&gt;
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orge76666a" class="outline-3">
-<h3 id="orge76666a"><span class="section-number-3">5.2</span> Create CSS File</h3>
+<div id="outline-container-orgf62a485" class="outline-3">
+<h3 id="orgf62a485"><span class="section-number-3">5.2</span> Create CSS File</h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
-This creates the CSS file in my public directory. It is automatically called every time the project is updated (thus generating the CSS file).
+This creates the CSS file in my public directory. It is automatically called every time the project is updated (thus generating the CSS file). This ensures that the state of this file is kept in sync with the actual state of the project itself.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org65ed6fb"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">ns</span> <span style="color: #fabd2f;">stylesheets</span>
+<pre class="src src-clojure" id="orga16d9c8"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">ns</span> <span style="color: #fabd2f;">stylesheets</span>
   <span style="color: #dfd2b8; font-style: italic;">"A namespace for stylesheets"</span>
   <span style="color: #fabd2f;">(</span><span style="color: #d3869b;">:require</span> <span style="color: #8ec07c;">[</span>garden.core <span style="color: #d3869b;">:refer</span> <span style="color: #fb4934;">[</span>css<span style="color: #fb4934;">]</span><span style="color: #8ec07c;">]</span>
             <span style="color: #8ec07c;">[</span>garden.def <span style="color: #d3869b;">:refer</span> <span style="color: #fb4934;">[</span>defcssfn<span style="color: #fb4934;">]</span><span style="color: #8ec07c;">]</span>
+            <span style="color: #8ec07c;">[</span>garden.selectors <span style="color: #d3869b;">:refer</span> <span style="color: #fb4934;">[</span>defpseudoelement
+                                      defselector<span style="color: #fb4934;">]</span><span style="color: #8ec07c;">]</span>
             <span style="color: #8ec07c;">[</span>garden.stylesheet <span style="color: #d3869b;">:refer</span> <span style="color: #fb4934;">[</span>at-import<span style="color: #fb4934;">]</span><span style="color: #8ec07c;">]</span><span style="color: #fabd2f;">)</span><span style="color: #fb4934;">)</span>
 
 <span style="color: #fb4934;">(</span><span style="color: #fb4934;">defcssfn</span> <span style="color: #8ec07c;">url</span><span style="color: #fb4934;">)</span>
+<span style="color: #fb4934;">(</span><span style="color: #fb4934;">defpseudoelement</span> <span style="color: #8ec07c;">selection</span><span style="color: #fb4934;">)</span>
+<span style="color: #fb4934;">(</span><span style="color: #fb4934;">defselector</span> <span style="color: #8ec07c;">pre</span><span style="color: #fb4934;">)</span>
+<span style="color: #fb4934;">(</span><span style="color: #fb4934;">defselector</span> <span style="color: #8ec07c;">p</span><span style="color: #fb4934;">)</span>
+<span style="color: #fb4934;">(</span><span style="color: #fb4934;">defselector</span> <span style="color: #8ec07c;">a</span><span style="color: #fb4934;">)</span>
 
 <span style="color: #fb4934;">(</span>spit <span style="color: #b8bb26;">"./public/site.css"</span>
       <span style="color: #fabd2f;">(</span>css
-       <span style="color: #8ec07c;">(</span>at-import <span style="color: #fb4934;">(</span>url <span style="color: #b8bb26;">"fonts/iosevka-term.css"</span><span style="color: #fb4934;">)</span><span style="color: #8ec07c;">)</span>
-       &lt;&lt;stylesheet-todo&gt;&gt;
        &lt;&lt;stylesheet-font-face&gt;&gt;
        &lt;&lt;stylesheet-default&gt;&gt;
+       &lt;&lt;stylesheet-todo&gt;&gt;
        &lt;&lt;stylesheet-selection&gt;&gt;
        &lt;&lt;stylesheet-headlines&gt;&gt;
        &lt;&lt;stylesheet-info&gt;&gt;
@@ -558,63 +696,94 @@ This creates the CSS file in my public directory. It is automatically called eve
 </pre>
 </div>
 
-<pre class="example">
-#'stylesheets/url
-</pre>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">#'stylesheets/url</td>
+</tr>
+
+<tr>
+<td class="org-left">#'stylesheets/selection</td>
+</tr>
+
+<tr>
+<td class="org-left">#'stylesheets/pre</td>
+</tr>
+
+<tr>
+<td class="org-left">#'stylesheets/p</td>
+</tr>
+
+<tr>
+<td class="org-left">#'stylesheets/a</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
-<div id="outline-container-org825339a" class="outline-3">
-<h3 id="org825339a"><span class="section-number-3">5.3</span> Default Background and Foreground</h3>
+<div id="outline-container-orged65789" class="outline-3">
+<h3 id="orged65789"><span class="section-number-3">5.3</span> Default Background and Foreground</h3>
 <div class="outline-text-3" id="text-5-3">
 <p>
-This keeps the default background and foreground in sync with the rest of the system. To see the code blocks being called, view the <a href="#orgf3f4509">helper blocks</a> section. I also set up the font I use here, in this case <code>Iosevka Term Web</code>, a pleasing DIN-like font that is entirely fixed-width for use in terminals.
+This keeps the default background and foreground in sync with the rest of the system. To see the code blocks being called, view the <a href="#org91adde7">helper blocks</a> section. I also set up the font I use here, in this case <a href="https://typeof.net/Iosevka/">Iosevka</a>, a pleasing DIN-like font that is entirely fixed-width for use in terminals.
+</p>
+
+<p>
+The Iosevka Term Web font itself provides a <a href="iosevka-term-css.html">css file</a> that works rather well. 
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="orge3d040d"><span style="color: #fb4934;">[</span><span style="color: #d3869b;">:body</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:background-color</span> &lt;&lt;face-bg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"default"</span><span style="color: #8ec07c;">)</span>&gt;&gt;
+<pre class="src src-clojure" id="orgbf73775"><span style="color: #fb4934;">(</span>at-import <span style="color: #fabd2f;">(</span>url <span style="color: #b8bb26;">"fonts/iosevka-term.css"</span><span style="color: #fabd2f;">)</span><span style="color: #fb4934;">)</span>
+<span style="color: #fb4934;">[</span><span style="color: #d3869b;">:body</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:background-color</span> &lt;&lt;face-bg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"default"</span><span style="color: #8ec07c;">)</span>&gt;&gt;
         <span style="color: #d3869b;">:color</span>            &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"default"</span><span style="color: #8ec07c;">)</span>&gt;&gt;
         <span style="color: #d3869b;">:font-family</span>      <span style="color: #b8bb26;">"'Iosevka Term Web'"</span><span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
+<span style="color: #fb4934;">[</span><span style="color: #d3869b;">:code</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:color</span> &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"org-code"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgfa55d28" class="outline-3">
-<h3 id="orgfa55d28"><span class="section-number-3">5.4</span> <span class="todo TODO">TODO</span> Items</h3>
+<div id="outline-container-orgdb263d6" class="outline-3">
+<h3 id="orgdb263d6"><span class="section-number-3">5.4</span> Todo Items</h3>
 <div class="outline-text-3" id="text-5-4">
 <p>
-This fixes the coloration of TODO keywords in headers.
+This fixes the coloration of TODO keywords in headers. Initally they are a somewhat ugly red color.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="orgc68fc99"><span style="color: #fb4934;">[</span><span style="color: #d3869b;">:.todo</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:color</span> &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"org-todo"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
+<pre class="src src-clojure" id="org29b7414"><span style="color: #fb4934;">[</span><span style="color: #d3869b;">:.todo</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:color</span> &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"org-todo"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
 <span style="color: #fb4934;">[</span><span style="color: #d3869b;">:.done</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:color</span> &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"org-headline-done"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org70409ab" class="outline-3">
-<h3 id="org70409ab"><span class="section-number-3">5.5</span> Selected Text</h3>
+<div id="outline-container-orgb6fc7d4" class="outline-3">
+<h3 id="orgb6fc7d4"><span class="section-number-3">5.5</span> Selected Text</h3>
 <div class="outline-text-3" id="text-5-5">
 <p>
-This makes the text selection look good.
+This makes the text selection look good using the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/::selection">selection</a> pseudo-element.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org81404f9"><span style="color: #fb4934;">[</span><span style="color: #b8bb26;">"::selection"</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:background-color</span> &lt;&lt;face-bg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"region"</span><span style="color: #8ec07c;">)</span>&gt;&gt;
-                <span style="color: #d3869b;">:color</span>            'none<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
+<pre class="src src-clojure" id="orgd390b2f"><span style="color: #fb4934;">[</span><span style="color: #fabd2f;">(</span>selection<span style="color: #fabd2f;">)</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:background-color</span> &lt;&lt;face-bg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"region"</span><span style="color: #8ec07c;">)</span>&gt;&gt;
+              <span style="color: #d3869b;">:color</span>            'none<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgd752afc" class="outline-3">
-<h3 id="orgd752afc"><span class="section-number-3">5.6</span> Headlines</h3>
+<div id="outline-container-org2711314" class="outline-3">
+<h3 id="org2711314"><span class="section-number-3">5.6</span> Headlines</h3>
 <div class="outline-text-3" id="text-5-6">
 <p>
-Here I restyle the headlines using the style I currently use in Emacs. These code blocks automatically fetch them through doom-colors and return a string that can be inserted.
+Here I restyle the headlines using the style I currently use in Emacs. These code blocks automatically fetch them and return a string that can be inserted.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojurescript" id="org5332799"><span style="color: #fb4934;">[</span><span style="color: #d3869b;">:h2</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:color</span> &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"outline-1"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
+<pre class="src src-clojurescript" id="org39d0ccc"><span style="color: #fb4934;">[</span><span style="color: #d3869b;">:h2</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:color</span> &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"outline-1"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
 <span style="color: #fb4934;">[</span><span style="color: #d3869b;">:h3</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:color</span> &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"outline-2"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
 <span style="color: #fb4934;">[</span><span style="color: #d3869b;">:h4</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:color</span> &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"outline-3"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
 </pre>
@@ -622,15 +791,15 @@ Here I restyle the headlines using the style I currently use in Emacs. These cod
 </div>
 </div>
 
-<div id="outline-container-orga5cdb5a" class="outline-3">
-<h3 id="orga5cdb5a"><span class="section-number-3">5.7</span> Author and Title Information</h3>
+<div id="outline-container-orgf8cf018" class="outline-3">
+<h3 id="orgf8cf018"><span class="section-number-3">5.7</span> Author and Title Information</h3>
 <div class="outline-text-3" id="text-5-7">
 <p>
 The title, date, and author information in Emacs are usually the same color. So I set them here.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org9a171dc"><span style="color: #fb4934;">[</span><span style="color: #d3869b;">:p.author</span> <span style="color: #d3869b;">:p.date</span> <span style="color: #d3869b;">:p.creator</span> <span style="color: #d3869b;">:p.license</span>
- <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:color</span> &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"org-document-info"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
+<pre class="src src-clojure" id="org114ce71">`<span style="color: #fb4934;">[</span>~@<span style="color: #fabd2f;">(</span>map p <span style="color: #8ec07c;">[</span><span style="color: #b8bb26;">".author"</span> <span style="color: #b8bb26;">".date"</span> <span style="color: #b8bb26;">".creator"</span> <span style="color: #b8bb26;">".license"</span><span style="color: #8ec07c;">]</span><span style="color: #fabd2f;">)</span>
+  <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:color</span> &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"org-document-info"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
 <span style="color: #fb4934;">[</span><span style="color: #d3869b;">:.title</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:font-style</span> 'italic
           <span style="color: #d3869b;">:color</span>      &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"org-document-title"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
 <span style="color: #fb4934;">[</span><span style="color: #d3869b;">:.subtitle</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:font-style</span> 'normal<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
@@ -638,14 +807,15 @@ The title, date, and author information in Emacs are usually the same color. So 
 </div>
 </div>
 
-<div id="outline-container-orgd48a7c5" class="outline-4">
-<h4 id="orgd48a7c5"><span class="section-number-4">5.7.1</span> Blocks</h4>
+
+<div id="outline-container-org3a75d3c" class="outline-4">
+<h4 id="org3a75d3c"><span class="section-number-4">5.7.1</span> Blocks</h4>
 <div class="outline-text-4" id="text-5-7-1">
 <p>
 This removes the irritating border and shadow from the code blocks.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org6e0ba8b"><span style="color: #fb4934;">[</span><span style="color: #d3869b;">:pre.src</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:background-color</span> &lt;&lt;face-bg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"org-block"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
+<pre class="src src-clojure" id="org9a99ee2"><span style="color: #fb4934;">[</span><span style="color: #fabd2f;">(</span>pre <span style="color: #b8bb26;">".src"</span><span style="color: #fabd2f;">)</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:background-color</span> &lt;&lt;face-bg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"org-block"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
 <span style="color: #fb4934;">[</span><span style="color: #d3869b;">:pre</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:top</span>        0
        <span style="color: #d3869b;">:right</span>      0
        <span style="color: #d3869b;">:box-shadow</span> 'none
@@ -655,16 +825,16 @@ This removes the irritating border and shadow from the code blocks.
 </div>
 </div>
 
-<div id="outline-container-org2259ee1" class="outline-4">
-<h4 id="org2259ee1"><span class="section-number-4">5.7.2</span> Hover Info</h4>
+<div id="outline-container-org100326a" class="outline-4">
+<h4 id="org100326a"><span class="section-number-4">5.7.2</span> Hover Info</h4>
 <div class="outline-text-4" id="text-5-7-2">
 <p>
 This adds the hover info to ClojureScript, which was not included by default.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org936c7c7"><span style="color: #fb4934;">[</span><span style="color: #d3869b;">:pre.src-clojurescript:before</span>
+<pre class="src src-clojure" id="org5e333c3"><span style="color: #fb4934;">[</span><span style="color: #fabd2f;">(</span>pre <span style="color: #b8bb26;">".src-clojurescript"</span> <span style="color: #b8bb26;">":before"</span><span style="color: #fabd2f;">)</span>
  <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:content</span> <span style="color: #b8bb26;">"'ClojureScript'"</span><span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
-<span style="color: #fb4934;">[</span><span style="color: #d3869b;">:pre.src:hover:before</span>
+<span style="color: #fb4934;">[</span><span style="color: #fabd2f;">(</span>pre <span style="color: #b8bb26;">".src"</span> <span style="color: #b8bb26;">":hover"</span> <span style="color: #b8bb26;">":before"</span><span style="color: #fabd2f;">)</span>
  <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:display</span>    'inline
   <span style="color: #d3869b;">:background-color</span> &lt;&lt;face-bg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"default"</span><span style="color: #8ec07c;">)</span>&gt;&gt;
   <span style="color: #d3869b;">:margin-top</span>       <span style="color: #b8bb26;">"14px"</span>
@@ -675,20 +845,20 @@ This adds the hover info to ClojureScript, which was not included by default.
 </div>
 </div>
 
-<div id="outline-container-orgece4062" class="outline-3">
-<h3 id="orgece4062"><span class="section-number-3">5.8</span> Links</h3>
+<div id="outline-container-orgf057943" class="outline-3">
+<h3 id="orgf057943"><span class="section-number-3">5.8</span> Links</h3>
 <div class="outline-text-3" id="text-5-8">
 <p>
 This stylizes links to match the links in Emacs org-mode buffers.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org87ddeb2"><span style="color: #fb4934;">[</span><span style="color: #d3869b;">:a:link</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:color</span> &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"link"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
-<span style="color: #fb4934;">[</span><span style="color: #d3869b;">:a:visited</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:color</span> &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"link-visited"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
-<span style="color: #fb4934;">[</span><span style="color: #d3869b;">:a:hover</span>
+<pre class="src src-clojure" id="org0f7a1e0"><span style="color: #fb4934;">[</span><span style="color: #fabd2f;">(</span>a <span style="color: #b8bb26;">":link"</span><span style="color: #fabd2f;">)</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:color</span> &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"link"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
+<span style="color: #fb4934;">[</span><span style="color: #fabd2f;">(</span>a <span style="color: #b8bb26;">":visited"</span><span style="color: #fabd2f;">)</span> <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:color</span> &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"link-visited"</span><span style="color: #8ec07c;">)</span>&gt;&gt;<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
+<span style="color: #fb4934;">[</span><span style="color: #fabd2f;">(</span>a <span style="color: #b8bb26;">":hover"</span><span style="color: #fabd2f;">)</span>
  <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:color</span>            &lt;&lt;face-bg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"default"</span><span style="color: #8ec07c;">)</span>&gt;&gt;
   <span style="color: #d3869b;">:background-color</span> &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"link"</span><span style="color: #8ec07c;">)</span>&gt;&gt;
   <span style="color: #d3869b;">:text-decoration</span>  'none<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
-<span style="color: #fb4934;">[</span><span style="color: #d3869b;">:a:hover</span>
+<span style="color: #fb4934;">[</span><span style="color: #fabd2f;">(</span>a <span style="color: #b8bb26;">":active"</span><span style="color: #fabd2f;">)</span>
  <span style="color: #fabd2f;">{</span><span style="color: #d3869b;">:color</span>            &lt;&lt;face-bg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"default"</span><span style="color: #8ec07c;">)</span>&gt;&gt;
   <span style="color: #d3869b;">:background-color</span> &lt;&lt;face-fg<span style="color: #8ec07c;">(</span>face=<span style="color: #b8bb26;">"link"</span><span style="color: #8ec07c;">)</span>&gt;&gt;
   <span style="color: #d3869b;">:text-decoration</span>  'none<span style="color: #fabd2f;">}</span><span style="color: #fb4934;">]</span>
@@ -697,8 +867,8 @@ This stylizes links to match the links in Emacs org-mode buffers.
 </div>
 </div>
 
-<div id="outline-container-orgf3f4509" class="outline-3">
-<h3 id="orgf3f4509"><span class="section-number-3">5.9</span> Helper Code Blocks</h3>
+<div id="outline-container-org91adde7" class="outline-3">
+<h3 id="org91adde7"><span class="section-number-3">5.9</span> Helper Code Blocks</h3>
 <div class="outline-text-3" id="text-5-9">
 <p>
 These are little helper code blocks that fetch the face attributes I want automatically from emacs every time I regenerate the file. This ensures that my code remains in-sync with my Emacs configuration style.
@@ -708,7 +878,7 @@ These are little helper code blocks that fetch the face attributes I want automa
 This code block simply extracts the foreground color. Mostly used for headlines, but also for text in general.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="org862f3a0"><span style="color: #fb4934;">(</span>face-attribute <span style="color: #fabd2f;">(</span>intern face<span style="color: #fabd2f;">)</span> <span style="color: #fe8019;">:foreground</span><span style="color: #fb4934;">)</span>
+<pre class="src src-emacs-lisp" id="org8c04ea9"><span style="color: #fb4934;">(</span>face-attribute <span style="color: #fabd2f;">(</span>intern face<span style="color: #fabd2f;">)</span> <span style="color: #fe8019;">:foreground</span><span style="color: #fb4934;">)</span>
 </pre>
 </div>
 
@@ -716,7 +886,7 @@ This code block simply extracts the foreground color. Mostly used for headlines,
 This finds the background color of a face. Mostly this just extracts colors for source code block backgrounds and the backgrounds for the main text documents.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="orgb272331"><span style="color: #fb4934;">(</span>face-attribute <span style="color: #fabd2f;">(</span>intern face<span style="color: #fabd2f;">)</span> <span style="color: #fe8019;">:background</span><span style="color: #fb4934;">)</span>
+<pre class="src src-emacs-lisp" id="org62ce19a"><span style="color: #fb4934;">(</span>face-attribute <span style="color: #fabd2f;">(</span>intern face<span style="color: #fabd2f;">)</span> <span style="color: #fe8019;">:background</span><span style="color: #fb4934;">)</span>
 </pre>
 </div>
 </div>
@@ -724,7 +894,7 @@ This finds the background color of a face. Mostly this just extracts colors for 
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W13-1 14:40</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.4.4)</p><p class="license"><a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a></p>
+<p class="date">Last Modified: 2021-W13-6 21:53</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.4)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>
