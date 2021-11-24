@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-W47-2 18:38 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rotating Letters</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="Svaqvat gur ybatrfg jbeq jura ebg13'q vf nyfb n jbeq." />
+<meta name="generator" content="Org Mode" />
+<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="index.html"><img class="site-nav" src="images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">Rotating Letters
+<br />
+<span class="subtitle">Svaqvat gur ybatrfg jbeq jura ebg13'q vf nyfb n jbeq.</span>
+</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgda1e3c4">Idea</a>
+<ul>
+<li><a href="#orgf34bfb8">What Do I Mean By "Rotating Letters"?</a></li>
+<li><a href="#org604b142">A Digression on XOR Ciphers</a></li>
+<li><a href="#orgfd7f29f">The <code>rot-n</code> Function</a></li>
+</ul>
+</li>
+<li><a href="#orgabb6766">English Words</a>
+<ul>
+<li><a href="#orgc13dbda">Rot 13</a></li>
+<li><a href="#org170f278">Generalized Rotation</a>
+<ul>
+<li><a href="#org3dce59f">Rot Cycles</a></li>
+<li><a href="#orgc04fc8e">Simple Rotation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orga064dd1">Other Languages</a>
+<ul>
+<li><a href="#org5013e0a">German</a></li>
+<li><a href="#orgd1ff844">Hindi</a></li>
+</ul>
+</li>
+<li><a href="#org4996a6e">Encrypting Words</a>
+<ul>
+<li><a href="#org28b9d62">The Encryption Algorithm</a>
+<ul>
+<li><a href="#orgd042f54">Implementation</a></li>
+<li><a href="#org40928e2">Other Possible Algorithms</a></li>
+</ul>
+</li>
+<li><a href="#org2ab4864">Backwards Chaining</a></li>
+</ul>
+</li>
+<li><a href="#org27806fe">Stegnography</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgda1e3c4" class="outline-2">
+<h2 id="orgda1e3c4">Idea</h2>
+<div class="outline-text-2" id="text-orgda1e3c4">
+<p>
+When viewing Greg Egan's twitter he <a href="https://twitter.com/gregeganSF/status/1369228278599278599">mentioned</a> words that were the Rot-13 of each other and.
+</p>
+
+<p>
+Now I have a much more comprehensive list of words (obtained when looking for long wordlists for XKCD style password generation) so I think I could solve this problem, create new problems, and look at various fun patterns in English words using programming. To do this I will use Clojure.
+</p>
+</div>
+
+<div id="outline-container-orgf34bfb8" class="outline-3">
+<h3 id="orgf34bfb8">What Do I Mean By "Rotating Letters"?</h3>
+<div class="outline-text-3" id="text-orgf34bfb8">
+<p>
+When I say "rotating words" I simply mean.
+</p>
+
+<p>
+If you are used to modular arithmetic you could imagine it as simply adding 13 to each letter.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org604b142" class="outline-3">
+<h3 id="org604b142">A Digression on XOR Ciphers</h3>
+<div class="outline-text-3" id="text-org604b142">
+<p>
+Another interesting way to do this with actual encryption is the <code>XOR</code> cipher with a key. That will be <a href="#org4996a6e">demonstrated later</a>, but it is fairly trivial to make keys that both look random <i>and</i> produce valid words given the correct (rather weak) encryption algorithm. The rot-13 system is also in essence <code>XOR</code> though without any key.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgfd7f29f" class="outline-3">
+<h3 id="orgfd7f29f">The <code>rot-n</code> Function</h3>
+<div class="outline-text-3" id="text-orgfd7f29f">
+<p>
+This shifts a word n letter to the right (or left) through modular addition and subtraction.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="org5b18e38"><span style="color: #212121;">(</span><span style="color: #E64A19;">defn</span> <span style="color: #E53935;">rot-n</span>
+  <span style="color: #a4a4a4;">"Rotate or shift a word `</span><span style="color: #a4a4a4;">n</span><span style="color: #a4a4a4;">` letters."</span>
+  <span style="color: #a4a4a4;">[</span>word shift<span style="color: #a4a4a4;">]</span>
+  <span style="color: #a4a4a4;">(</span><span style="color: #E64A19;">def</span> <span style="color: #E53935;">shift</span> 10<span style="color: #a4a4a4;">)</span>
+  <span style="color: #a4a4a4;">(</span><span style="color: #E64A19;">-&gt;&gt;</span> word
+       <span style="color: #494949;">(</span>map <span style="color: #a4a4a4;">(</span><span style="color: #E64A19;">fn</span> <span style="color: #512DA8;">[</span>character<span style="color: #512DA8;">]</span>
+              <span style="color: #512DA8;">(</span><span style="color: #E64A19;">let</span> <span style="color: #f57f17;">[</span>lowercase-offset 97
+                    char-num         <span style="color: #00796B;">(</span>- <span style="color: #80a880;">(</span>int character<span style="color: #80a880;">)</span> lowercase-offset<span style="color: #00796B;">)</span>
+                    english-chars    <span style="color: #00796B;">(</span>inc <span style="color: #80a880;">(</span>- <span style="color: #887070;">(</span>int <span style="color: #494949;">\z</span><span style="color: #887070;">)</span> <span style="color: #887070;">(</span>int <span style="color: #494949;">\a</span><span style="color: #887070;">)</span><span style="color: #80a880;">)</span><span style="color: #00796B;">)</span><span style="color: #f57f17;">]</span>
+                <span style="color: #f57f17;">(</span>char <span style="color: #00796B;">(</span>+ lowercase-offset <span style="color: #80a880;">(</span>mod <span style="color: #887070;">(</span>+ char-num shift<span style="color: #887070;">)</span> english-chars<span style="color: #80a880;">)</span><span style="color: #00796B;">)</span><span style="color: #f57f17;">)</span><span style="color: #512DA8;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #494949;">)</span>
+       <span style="color: #E64A19;">str</span>/join<span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgabb6766" class="outline-2">
+<h2 id="orgabb6766">English Words</h2>
+<div class="outline-text-2" id="text-orgabb6766">
+</div>
+<div id="outline-container-orgc13dbda" class="outline-3">
+<h3 id="orgc13dbda">Rot 13</h3>
+<div class="outline-text-3" id="text-orgc13dbda">
+<p>
+Rot-13 is a classic example of english.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #212121;">(</span><span style="color: #E64A19;">ns</span> <span style="color: #E64A19;">rot-13</span>
+  <span style="color: #a4a4a4;">(</span><span style="color: #a4a4a4;">:require</span> <span style="color: #494949;">[</span>clojure.string <span style="color: #a4a4a4;">:as</span> str<span style="color: #494949;">]</span><span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
+&lt;&lt;rot-n&gt;&gt;
+
+<span style="color: #a4a4a4;">;; </span><span style="color: #a4a4a4;">Load the words into a set</span>
+<span style="color: #212121;">(</span><span style="color: #E64A19;">let</span> <span style="color: #a4a4a4;">[</span>words    <span style="color: #494949;">(</span><span style="color: #E64A19;">-&gt;</span> <span style="color: #494949;">"./words_alpha.txt"</span> slurp <span style="color: #E64A19;">str</span>/lower-case <span style="color: #E64A19;">str</span>/split-lines<span style="color: #494949;">)</span>
+      word-set <span style="color: #494949;">(</span>set words<span style="color: #494949;">)</span><span style="color: #a4a4a4;">]</span>
+  <span style="color: #a4a4a4;">(</span><span style="color: #E64A19;">-&gt;&gt;</span> words
+       <span style="color: #494949;">(</span>filter <span style="color: #a4a4a4;">(</span><span style="color: #E64A19;">fn</span> <span style="color: #512DA8;">[</span>word<span style="color: #512DA8;">]</span>
+                 <span style="color: #512DA8;">(</span><span style="color: #E64A19;">let</span> <span style="color: #f57f17;">[</span>rot-word <span style="color: #00796B;">(</span>rot-n word 13<span style="color: #00796B;">)</span><span style="color: #f57f17;">]</span>
+                   <span style="color: #f57f17;">(</span>contains? word-set rot-word<span style="color: #f57f17;">)</span><span style="color: #512DA8;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #494949;">)</span>
+       <span style="color: #494949;">(</span>sort #<span style="color: #a4a4a4;">(</span>&gt; <span style="color: #512DA8;">(</span>count <span style="color: #E53935;">%1</span><span style="color: #512DA8;">)</span> <span style="color: #512DA8;">(</span>count <span style="color: #E53935;">%2</span><span style="color: #512DA8;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #494949;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
+</pre>
+</div>
+
+<p>
+So we get two pairs, for a total four answers, which I will call pair g and pair c. The first was found by Greg Egan, <a href="https://twitter.com/gregeganSF/status/1369228278599278599">here</a>, while the second was found by me, while running my program.
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">pair g</th>
+<th scope="col" class="org-left">pair c</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">abjurer</td>
+<td class="org-left">chechen</td>
+</tr>
+
+<tr>
+<td class="org-left">nowhere</td>
+<td class="org-left">purpura</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+This is fun, though not terribly interesting.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org170f278" class="outline-3">
+<h3 id="org170f278">Generalized Rotation</h3>
+<div class="outline-text-3" id="text-org170f278">
+<p>
+Rot 13 is a rather elegant because it, as mentioned before, allows you to return to the original value rather quickly. But now we may begin to wonder what we were evaluating there.
+</p>
+
+<p>
+What if we allowed for other values like rot-2 or rot-5? What would that look like?
+</p>
+</div>
+
+<div id="outline-container-org3dce59f" class="outline-4">
+<h4 id="org3dce59f">Rot Cycles</h4>
+<div class="outline-text-4" id="text-org3dce59f">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-right">26</td>
+<td class="org-right">13</td>
+<td class="org-left">26/3</td>
+<td class="org-left">13/2</td>
+<td class="org-left">26/5</td>
+<td class="org-left">13/3</td>
+<td class="org-left">26/7</td>
+<td class="org-left">13/4</td>
+<td class="org-left">26/9</td>
+<td class="org-left">13/5</td>
+<td class="org-left">26/11</td>
+<td class="org-left">13/6</td>
+</tr>
+</tbody>
+</table>
+<p>
+So we are left rather sadly with this series of patterns.
+</p>
+
+<p>
+So what do we get? Well sadly not much. I ran the code below and only two-letter words were found, mostly acronyms and other similar things.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #212121;">(</span><span style="color: #E64A19;">ns</span> <span style="color: #E64A19;">rot-4</span>
+  <span style="color: #a4a4a4;">(</span><span style="color: #a4a4a4;">:require</span> <span style="color: #494949;">[</span>clojure.string <span style="color: #a4a4a4;">:as</span> str<span style="color: #494949;">]</span><span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
+
+&lt;&lt;rot-n&gt;&gt;
+
+<span style="color: #212121;">(</span><span style="color: #E64A19;">defn</span> <span style="color: #E53935;">rot-cycle?</span>
+  <span style="color: #a4a4a4;">"Check if there is a rotation cycle.</span>
+
+<span style="color: #a4a4a4;">  Orig is the original word (used to evaluate the cycle), word is the</span>
+<span style="color: #a4a4a4;">  last word, shift is the rotation applied, and words is a set of all</span>
+<span style="color: #a4a4a4;">  words being evaluated."</span>
+  <span style="color: #a4a4a4;">[</span>shift words orig word<span style="color: #a4a4a4;">]</span>
+  <span style="color: #a4a4a4;">(</span><span style="color: #E64A19;">let</span> <span style="color: #494949;">[</span>rot-word <span style="color: #a4a4a4;">(</span>rot-n word shift<span style="color: #a4a4a4;">)</span><span style="color: #494949;">]</span>
+    <span style="color: #494949;">(</span><span style="color: #E64A19;">cond</span> <span style="color: #a4a4a4;">(</span>= rot-word orig<span style="color: #a4a4a4;">)</span>                <span style="color: #a4a4a4;">true</span>
+          <span style="color: #a4a4a4;">(</span>not <span style="color: #512DA8;">(</span>contains? words rot-word<span style="color: #512DA8;">)</span><span style="color: #a4a4a4;">)</span> <span style="color: #a4a4a4;">false</span>
+          <span style="color: #a4a4a4;">:else</span>                            <span style="color: #a4a4a4;">(</span>rot-cycle? shift words orig rot-word<span style="color: #a4a4a4;">)</span><span style="color: #494949;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
+<span style="color: #212121;">(</span><span style="color: #E64A19;">def</span> <span style="color: #E53935;">word-set</span> <span style="color: #a4a4a4;">(</span><span style="color: #E64A19;">-&gt;</span> <span style="color: #494949;">"/home/inanna/Memex/cons-site/src/words_alpha.txt"</span> slurp <span style="color: #E64A19;">str</span>/lower-case <span style="color: #E64A19;">str</span>/split-lines set<span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
+
+<span style="color: #a4a4a4;">;; </span><span style="color: #a4a4a4;">Load the words into a set</span>
+<span style="color: #212121;">(</span><span style="color: #E64A19;">let</span> <span style="color: #a4a4a4;">[</span>words    <span style="color: #494949;">(</span><span style="color: #E64A19;">-&gt;</span> <span style="color: #494949;">"/home/inanna/Memex/cons-site/src/words_alpha.txt"</span> slurp <span style="color: #E64A19;">str</span>/lower-case <span style="color: #E64A19;">str</span>/split-lines<span style="color: #494949;">)</span>
+      word-set <span style="color: #494949;">(</span>set words<span style="color: #494949;">)</span><span style="color: #a4a4a4;">]</span>
+  <span style="color: #a4a4a4;">(</span><span style="color: #E64A19;">-&gt;&gt;</span> words
+       <span style="color: #494949;">(</span>filter <span style="color: #a4a4a4;">(</span><span style="color: #E64A19;">fn</span> <span style="color: #512DA8;">[</span>word<span style="color: #512DA8;">]</span>
+                 <span style="color: #512DA8;">(</span>rot-cycle? 13 word-set word word<span style="color: #512DA8;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #494949;">)</span>
+       <span style="color: #494949;">(</span>sort #<span style="color: #a4a4a4;">(</span>&gt; <span style="color: #512DA8;">(</span>count <span style="color: #E53935;">%1</span><span style="color: #512DA8;">)</span> <span style="color: #512DA8;">(</span>count <span style="color: #E53935;">%2</span><span style="color: #512DA8;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #494949;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc04fc8e" class="outline-4">
+<h4 id="orgc04fc8e">Simple Rotation</h4>
+<div class="outline-text-4" id="text-orgc04fc8e">
+<p>
+In contrast to our generalization of "rot cycles" we could instead decide to give up on the idea of the function being it's own inverse after some number of applications and decide that any word that shifts n to another word is all we want.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orga064dd1" class="outline-2">
+<h2 id="orga064dd1">Other Languages</h2>
+<div class="outline-text-2" id="text-orga064dd1">
+<p>
+We have produced nonsense connections in english, so we may be inclined to ask if we can do better (worse) by adding more languages to it.
+</p>
+
+<p>
+The answer, of course, is yes.
+</p>
+</div>
+
+<div id="outline-container-org5013e0a" class="outline-3">
+<h3 id="org5013e0a">German</h3>
+</div>
+
+<div id="outline-container-orgd1ff844" class="outline-3">
+<h3 id="orgd1ff844">Hindi</h3>
+<div class="outline-text-3" id="text-orgd1ff844">
+<p>
+I chose Hindi because, just like German, it is an infamously agglutinative language. However, it has some more exciting properties.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4996a6e" class="outline-2">
+<h2 id="org4996a6e">Encrypting Words</h2>
+<div class="outline-text-2" id="text-org4996a6e">
+<p>
+Rotating words is cool, but what if we could <i>encrypt</i> them with a key that would lead to two valid words, or hell, even phrases? This should be entirely possible given a random key, and it should be possible to yield any set of two phrases! This should also take a silly amount of time given the number of permutations in even a short word or phrase.
+</p>
+
+<p>
+So it is impractical in practice while not impossible in theory. Q.E.D.
+</p>
+
+<p>
+Or is it?
+</p>
+
+<p>
+Well if we permit ourselves to make a bad algorithm we can do it!
+</p>
+</div>
+
+<div id="outline-container-org28b9d62" class="outline-3">
+<h3 id="org28b9d62">The Encryption Algorithm</h3>
+<div class="outline-text-3" id="text-org28b9d62">
+<p>
+Why is this bad? Well because we can determine how close we are to the answer we want by looking at.
+</p>
+</div>
+<div id="outline-container-orgd042f54" class="outline-4">
+<h4 id="orgd042f54">Implementation</h4>
+<div class="outline-text-4" id="text-orgd042f54">
+<p>
+So we just need to implement this horrible, horrible encryption algorithm and it should work easily.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org40928e2" class="outline-4">
+<h4 id="org40928e2">Other Possible Algorithms</h4>
+<div class="outline-text-4" id="text-org40928e2">
+<p>
+There are many other possible algorithms for this.
+</p>
+
+<p>
+Here (if you have been working on deciphering the title) is also your first clue as to what encryption system was used for it [clue]. It really uses almost all the encryption possible in the book, though all you need is this document. So anyways, I hope you have had fun. If you have figured out what the answer to the puzzle is (and know me) send me a DM with the answer.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2ab4864" class="outline-3">
+<h3 id="org2ab4864">Backwards Chaining</h3>
+<div class="outline-text-3" id="text-org2ab4864">
+<p>
+Now that we have our algorithm, you may still wonder how we solve it. Well the answer is also really simple: gradient descent by backwards chaining rule engine.
+</p>
+
+<p>
+We can see that this is more efficient than the naive approach by considering the function of the rule engine:.
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org27806fe" class="outline-2">
+<h2 id="org27806fe">Stegnography</h2>
+<div class="outline-text-2" id="text-org27806fe">
+<p>
+So.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojurescript"><span style="color: #212121;">(</span><span style="color: #E64A19;">def</span> <span style="color: #E53935;">upper-case-offset</span> 10<span style="color: #212121;">)</span>
+<span style="color: #212121;">(</span><span style="color: #E64A19;">def</span> <span style="color: #E53935;">lower-case-offset</span> 33<span style="color: #212121;">)</span>
+
+<span style="color: #212121;">(</span><span style="color: #E64A19;">defn</span> <span style="color: #E53935;">rotate-char</span> <span style="color: #a4a4a4;">[</span>char amount<span style="color: #a4a4a4;">]</span>
+  <span style="color: #a4a4a4;">(</span>ord<span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
+</pre>
+</div>
+
+<p>
+When we rotate letters words we can envision these letters as being numbers, rather than the sounds they usually represent. This is interesting because it shows that these letters are really symbols we arbitrarily assign sound to. In fact the things letters make up are also symbols that encode information, as are their shapes and the paragraphs themselves.
+</p>
+
+<p>
+In fact almost everything encodes information, and does so regardless of if it really means to or not. This information is almost always random and meaningless so we ignore it. Who cares what the starting letter of every paragraph in a document is? But it is information that can be encoded.
+</p>
+
+<p>
+Calling stegnography "encryption through obscurity" is therefore wrong. Stegnography, when well done, is not merely encryption through obscurity but encryption where the key is where to look in the random noise of everyda
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2021-W29-7 12:51</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>

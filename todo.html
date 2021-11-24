@@ -3,326 +3,218 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W13-4 22:03 -->
+<!-- 2021-W47-2 18:38 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>TODO Items</title>
 <meta name="author" content="Inanna" />
 <meta name="description" content="A list of plans, projects, and other similar things on the blog." />
 <meta name="generator" content="Org Mode" />
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
-  .title  { text-align: center;
-             margin-bottom: .2em; }
-  .subtitle { text-align: center;
-              font-size: medium;
-              font-weight: bold;
-              margin-top:0; }
-  .todo   { font-family: monospace; color: red; }
-  .done   { font-family: monospace; color: green; }
-  .priority { font-family: monospace; color: orange; }
-  .tag    { background-color: #eee; font-family: monospace;
-            padding: 2px; font-size: 80%; font-weight: normal; }
-  .timestamp { color: #bebebe; }
-  .timestamp-kwd { color: #5f9ea0; }
-  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
-  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
-  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
-  .underline { text-decoration: underline; }
-  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
-  p.verse { margin-left: 3%; }
-  pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
-    padding: 8pt;
-    font-family: monospace;
-    overflow: auto;
-    margin: 1.2em;
-  }
-  pre.src {
-    position: relative;
-    overflow: auto;
-    padding-top: 1.2em;
-  }
-  pre.src:before {
-    display: none;
-    position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
-    padding: 3px;
-    border: 1px solid black;
-  }
-  pre.src:hover:before { display: inline; margin-top: 14px;}
-  /* Languages per Org manual */
-  pre.src-asymptote:before { content: 'Asymptote'; }
-  pre.src-awk:before { content: 'Awk'; }
-  pre.src-C:before { content: 'C'; }
-  /* pre.src-C++ doesn't work in CSS */
-  pre.src-clojure:before { content: 'Clojure'; }
-  pre.src-css:before { content: 'CSS'; }
-  pre.src-D:before { content: 'D'; }
-  pre.src-ditaa:before { content: 'ditaa'; }
-  pre.src-dot:before { content: 'Graphviz'; }
-  pre.src-calc:before { content: 'Emacs Calc'; }
-  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
-  pre.src-fortran:before { content: 'Fortran'; }
-  pre.src-gnuplot:before { content: 'gnuplot'; }
-  pre.src-haskell:before { content: 'Haskell'; }
-  pre.src-hledger:before { content: 'hledger'; }
-  pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
-  pre.src-latex:before { content: 'LaTeX'; }
-  pre.src-ledger:before { content: 'Ledger'; }
-  pre.src-lisp:before { content: 'Lisp'; }
-  pre.src-lilypond:before { content: 'Lilypond'; }
-  pre.src-lua:before { content: 'Lua'; }
-  pre.src-matlab:before { content: 'MATLAB'; }
-  pre.src-mscgen:before { content: 'Mscgen'; }
-  pre.src-ocaml:before { content: 'Objective Caml'; }
-  pre.src-octave:before { content: 'Octave'; }
-  pre.src-org:before { content: 'Org mode'; }
-  pre.src-oz:before { content: 'OZ'; }
-  pre.src-plantuml:before { content: 'Plantuml'; }
-  pre.src-processing:before { content: 'Processing.js'; }
-  pre.src-python:before { content: 'Python'; }
-  pre.src-R:before { content: 'R'; }
-  pre.src-ruby:before { content: 'Ruby'; }
-  pre.src-sass:before { content: 'Sass'; }
-  pre.src-scheme:before { content: 'Scheme'; }
-  pre.src-screen:before { content: 'Gnu Screen'; }
-  pre.src-sed:before { content: 'Sed'; }
-  pre.src-sh:before { content: 'shell'; }
-  pre.src-sql:before { content: 'SQL'; }
-  pre.src-sqlite:before { content: 'SQLite'; }
-  /* additional languages in org.el's org-babel-load-languages alist */
-  pre.src-forth:before { content: 'Forth'; }
-  pre.src-io:before { content: 'IO'; }
-  pre.src-J:before { content: 'J'; }
-  pre.src-makefile:before { content: 'Makefile'; }
-  pre.src-maxima:before { content: 'Maxima'; }
-  pre.src-perl:before { content: 'Perl'; }
-  pre.src-picolisp:before { content: 'Pico Lisp'; }
-  pre.src-scala:before { content: 'Scala'; }
-  pre.src-shell:before { content: 'Shell Script'; }
-  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
-  /* additional language identifiers per "defun org-babel-execute"
-       in ob-*.el */
-  pre.src-cpp:before  { content: 'C++'; }
-  pre.src-abc:before  { content: 'ABC'; }
-  pre.src-coq:before  { content: 'Coq'; }
-  pre.src-groovy:before  { content: 'Groovy'; }
-  /* additional language identifiers from org-babel-shell-names in
-     ob-shell.el: ob-shell is the only babel language using a lambda to put
-     the execution function name together. */
-  pre.src-bash:before  { content: 'bash'; }
-  pre.src-csh:before  { content: 'csh'; }
-  pre.src-ash:before  { content: 'ash'; }
-  pre.src-dash:before  { content: 'dash'; }
-  pre.src-ksh:before  { content: 'ksh'; }
-  pre.src-mksh:before  { content: 'mksh'; }
-  pre.src-posh:before  { content: 'posh'; }
-  /* Additional Emacs modes also supported by the LaTeX listings package */
-  pre.src-ada:before { content: 'Ada'; }
-  pre.src-asm:before { content: 'Assembler'; }
-  pre.src-caml:before { content: 'Caml'; }
-  pre.src-delphi:before { content: 'Delphi'; }
-  pre.src-html:before { content: 'HTML'; }
-  pre.src-idl:before { content: 'IDL'; }
-  pre.src-mercury:before { content: 'Mercury'; }
-  pre.src-metapost:before { content: 'MetaPost'; }
-  pre.src-modula-2:before { content: 'Modula-2'; }
-  pre.src-pascal:before { content: 'Pascal'; }
-  pre.src-ps:before { content: 'PostScript'; }
-  pre.src-prolog:before { content: 'Prolog'; }
-  pre.src-simula:before { content: 'Simula'; }
-  pre.src-tcl:before { content: 'tcl'; }
-  pre.src-tex:before { content: 'TeX'; }
-  pre.src-plain-tex:before { content: 'Plain TeX'; }
-  pre.src-verilog:before { content: 'Verilog'; }
-  pre.src-vhdl:before { content: 'VHDL'; }
-  pre.src-xml:before { content: 'XML'; }
-  pre.src-nxml:before { content: 'XML'; }
-  /* add a generic configuration mode; LaTeX export needs an additional
-     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
-  pre.src-conf:before { content: 'Configuration File'; }
-
-  table { border-collapse:collapse; }
-  caption.t-above { caption-side: top; }
-  caption.t-bottom { caption-side: bottom; }
-  td, th { vertical-align:top;  }
-  th.org-right  { text-align: center;  }
-  th.org-left   { text-align: center;   }
-  th.org-center { text-align: center; }
-  td.org-right  { text-align: right;  }
-  td.org-left   { text-align: left;   }
-  td.org-center { text-align: center; }
-  dt { font-weight: bold; }
-  .footpara { display: inline; }
-  .footdef  { margin-bottom: 1em; }
-  .figure { padding: 1em; }
-  .figure p { text-align: center; }
-  .equation-container {
-    display: table;
-    text-align: center;
-    width: 100%;
-  }
-  .equation {
-    vertical-align: middle;
-  }
-  .equation-label {
-    display: table-cell;
-    text-align: right;
-    vertical-align: middle;
-  }
-  .inlinetask {
-    padding: 10px;
-    border: 2px solid gray;
-    margin: 10px;
-    background: #ffffcc;
-  }
-  #org-div-home-and-up
-   { text-align: right; font-size: 70%; white-space: nowrap; }
-  textarea { overflow-x: auto; }
-  .linenr { font-size: smaller }
-  .code-highlighted { background-color: #ffff00; }
-  .org-info-js_info-navigation { border-style: none; }
-  #org-info-js_console-label
-    { font-size: 10px; font-weight: bold; white-space: nowrap; }
-  .org-info-js_search-highlight
-    { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
-  /*]]>*/-->
-</style>
-<link href="site.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
+<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
 </head>
 <body>
 <div id="preamble" class="status">
-<a href="index.html">MAIN INDEX</a> | <a href="sitemap.html">SITEMAP</a> | <a href="https://github.com/cons-dev/website-src">SOURCE CODE (git)</a>
+<div><a href="index.html"><img class="site-nav" src="images/website-logo.png" /></a></div>
 </div>
-<div id="content">
+<div id="content" class="content">
 <h1 class="title">TODO Items</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org915070f">Intro</a></li>
+<li><a href="#org5f61e53">Code</a>
+<ul>
+<li><a href="#orgb98cf62">Add</a></li>
+</ul>
+</li>
+<li><a href="#orgfa07286">Content</a>
+<ul>
+<li><a href="#org90d9c96">Programming</a></li>
+<li><a href="#org17520c7">Creative Writing</a></li>
+<li><a href="#orgb9f94cc">Mathematics</a></li>
+<li><a href="#org5242496">General</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
 
-<div id="outline-container-org271ed95" class="outline-2">
-<h2 id="org271ed95"><span class="section-number-2">1</span> Intro</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-org915070f" class="outline-2">
+<h2 id="org915070f">Intro</h2>
+<div class="outline-text-2" id="text-org915070f">
 <p>
 This is a list of projects, plans, and other similar things for the blog.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgb407afc" class="outline-2">
-<h2 id="orgb407afc"><span class="section-number-2">2</span> Code</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-org5f61e53" class="outline-2">
+<h2 id="org5f61e53">Code</h2>
+<div class="outline-text-2" id="text-org5f61e53">
 </div>
-<div id="outline-container-org4b03ca0" class="outline-3">
-<h3 id="org4b03ca0"><span class="section-number-3">2.1</span> Add</h3>
-<div class="outline-text-3" id="text-2-1">
+<div id="outline-container-orgb98cf62" class="outline-3">
+<h3 id="orgb98cf62">Add</h3>
+<div class="outline-text-3" id="text-orgb98cf62">
 </div>
-<div id="outline-container-orgdd4e15d" class="outline-4">
-<h4 id="orgdd4e15d"><span class="section-number-4">2.1.1</span> <span class="done DONE">DONE</span> <a href=source-code.html?token=3fgdvc2jko3p2qwx98x81xkt36j6xpk6csvlhoe32fhy5ceu5uaudo69x3fm6c4a>preamble/postamble</a> section</h4>
+<div id="outline-container-org98cefb8" class="outline-4">
+<h4 id="org98cefb8"><span class="done DONE">DONE</span> <a href="source-code.html#ID-9ccab188-125e-49b3-986c-6ef55285989f">preamble/postamble</a> section</h4>
 </div>
-<div id="outline-container-orgabfbdb3" class="outline-4">
-<h4 id="orgabfbdb3"><span class="section-number-4">2.1.2</span> <span class="todo TODO">TODO</span> fully custom CSS</h4>
+<div id="outline-container-org502282c" class="outline-4">
+<h4 id="org502282c"><span class="done DONE">DONE</span> fully custom CSS</h4>
+<div class="outline-text-4" id="text-org502282c">
+<p>
+completed on <span class="timestamp-wrapper"><span class="timestamp">&lt;2021-W47-1&gt;</span></span>
+</p>
 </div>
-<div id="outline-container-orgde95cac" class="outline-4">
-<h4 id="orgde95cac"><span class="section-number-4">2.1.3</span> <span class="todo TODO">TODO</span> ClojureScript execution in source code blocks</h4>
 </div>
-<div id="outline-container-org6b6909c" class="outline-4">
-<h4 id="org6b6909c"><span class="section-number-4">2.1.4</span> <span class="todo TODO">TODO</span> floating preamble section</h4>
+<div id="outline-container-org9b9703a" class="outline-4">
+<h4 id="org9b9703a"><span class="todo TODO">TODO</span> ClojureScript execution in source code blocks</h4>
 </div>
-<div id="outline-container-orgbfecae9" class="outline-4">
-<h4 id="orgbfecae9"><span class="section-number-4">2.1.5</span> <span class="todo TODO">TODO</span> automatically generate HTML for linked manual pages / help entries</h4>
-<div class="outline-text-4" id="text-2-1-5">
+<div id="outline-container-org259a109" class="outline-4">
+<h4 id="org259a109"><span class="done DONE">DONE</span> floating preamble section</h4>
+<div class="outline-text-4" id="text-org259a109">
+<p>
+completed on <span class="timestamp-wrapper"><span class="timestamp">&lt;2021-W47-1&gt;</span></span>
+</p>
+</div>
+</div>
+<div id="outline-container-orgbef7240" class="outline-4">
+<h4 id="orgbef7240"><span class="todo TODO">TODO</span> automatically generate HTML for linked manual pages / help entries</h4>
+<div class="outline-text-4" id="text-orgbef7240">
 <p>
 This presumably would be done through <a href="https://github.com/hniksic/emacs-htmlize">htmlize</a> and a modification to the system for creating the links.
 </p>
 </div>
 </div>
-<div id="outline-container-org0389ee2" class="outline-4">
-<h4 id="org0389ee2"><span class="section-number-4">2.1.6</span> <span class="todo TODO">TODO</span> remove broken internal links from pages (with warning)</h4>
-</div>
-<div id="outline-container-org7d5d3af" class="outline-4">
-<h4 id="org7d5d3af"><span class="section-number-4">2.1.7</span> <span class="todo TODO">TODO</span> make site-internal links a different color than external ones</h4>
-<div class="outline-text-4" id="text-2-1-7">
+<div id="outline-container-org8629c90" class="outline-4">
+<h4 id="org8629c90"><span class="todo TODO">TODO</span> make site-internal links a different color than external ones</h4>
+<div class="outline-text-4" id="text-org8629c90">
 <p>
-This way each link has it's own.
+This way each link has it's own clear differentiation between other links.
 </p>
 </div>
 </div>
-<div id="outline-container-org33c1dc4" class="outline-4">
-<h4 id="org33c1dc4"><span class="section-number-4">2.1.8</span> <span class="todo TODO">TODO</span> add on-hover popups for site-internal links</h4>
-<div class="outline-text-4" id="text-2-1-8">
+<div id="outline-container-orgd04d91b" class="outline-4">
+<h4 id="orgd04d91b"><span class="todo TODO">TODO</span> add on-hover popups for site-internal links</h4>
+<div class="outline-text-4" id="text-orgd04d91b">
 <p>
 Have the description of the link (along with title of link) pop up when the user hovers over an internal link.
 </p>
 </div>
 </div>
-<div id="outline-container-orgb315d17" class="outline-4">
-<h4 id="orgb315d17"><span class="section-number-4">2.1.9</span> <span class="todo TODO">TODO</span> automatically generate page descriptions</h4>
+<div id="outline-container-org9565692" class="outline-4">
+<h4 id="org9565692"><span class="todo TODO">TODO</span> automatically generate page descriptions</h4>
+</div>
+<div id="outline-container-org83206e6" class="outline-4">
+<h4 id="org83206e6"><span class="todo TODO">TODO</span> Refactor website layout.</h4>
+<div class="outline-text-4" id="text-org83206e6">
+<p>
+Refactor the website so that it has a more flat layout with less indicies (for now).
+</p>
 </div>
 </div>
-<div id="outline-container-org433f5ae" class="outline-3">
-<h3 id="org433f5ae"><span class="section-number-3">2.2</span> Remove</h3>
-</div>
-<div id="outline-container-orged14c55" class="outline-3">
-<h3 id="orged14c55"><span class="section-number-3">2.3</span> Fix</h3>
 </div>
 </div>
 
-<div id="outline-container-org5c5e9d3" class="outline-2">
-<h2 id="org5c5e9d3"><span class="section-number-2">3</span> Content</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-orgfa07286" class="outline-2">
+<h2 id="orgfa07286">Content</h2>
+<div class="outline-text-2" id="text-orgfa07286">
 </div>
-<div id="outline-container-org2256b8b" class="outline-3">
-<h3 id="org2256b8b"><span class="section-number-3">3.1</span> Programming</h3>
-<div class="outline-text-3" id="text-3-1">
+<div id="outline-container-org90d9c96" class="outline-3">
+<h3 id="org90d9c96">Programming</h3>
+<div class="outline-text-3" id="text-org90d9c96">
 </div>
-<div id="outline-container-orgfaef013" class="outline-4">
-<h4 id="orgfaef013"><span class="section-number-4">3.1.1</span> <span class="todo TODO">TODO</span> Add a ClojureScript tutorial.</h4>
+<div id="outline-container-orgd01ece4" class="outline-4">
+<h4 id="orgd01ece4"><span class="todo TODO">TODO</span> Add a ClojureScript tutorial</h4>
+<div class="outline-text-4" id="text-orgd01ece4">
+<p>
+Basically a fun little tutorial on how to code in clojurescript.
+</p>
 </div>
-<div id="outline-container-org0b57df0" class="outline-4">
-<h4 id="org0b57df0"><span class="section-number-4">3.1.2</span> <span class="todo TODO">TODO</span> Create a tutorial on literate programming.</h4>
+</div>
+<div id="outline-container-org8af556c" class="outline-4">
+<h4 id="org8af556c"><span class="todo TODO">TODO</span> Create a tutorial on literate programming in org mode</h4>
+<div class="outline-text-4" id="text-org8af556c">
+<p>
+A basic tutorial on how to do literate programming in emacs, tangle files, and some tips on how to use it.
+</p>
 </div>
 </div>
-<div id="outline-container-orgc6d7656" class="outline-3">
-<h3 id="orgc6d7656"><span class="section-number-3">3.2</span> Creative Writing</h3>
-<div class="outline-text-3" id="text-3-2">
+<div id="outline-container-org0b32967" class="outline-4">
+<h4 id="org0b32967"><span class="todo TODO">TODO</span> Add a logic programming / UI with logic programming tutorial.</h4>
+<div class="outline-text-4" id="text-org0b32967">
+<p>
+A basic tutorial on rule based programming with clojurescript, clara-rules, and of course reagent to create a rule programming oriented game.
+</p>
 </div>
-<div id="outline-container-org7cc0349" class="outline-4">
-<h4 id="org7cc0349"><span class="section-number-4">3.2.1</span> <span class="todo TODO">TODO</span> Add the various things I have written.</h4>
 </div>
-<div id="outline-container-org6b59c0f" class="outline-4">
-<h4 id="org6b59c0f"><span class="section-number-4">3.2.2</span> <span class="todo TODO">TODO</span> Clean up worldbuilding docs for publishing.</h4>
+</div>
+<div id="outline-container-org17520c7" class="outline-3">
+<h3 id="org17520c7">Creative Writing</h3>
+<div class="outline-text-3" id="text-org17520c7">
+</div>
+<div id="outline-container-orga1ac038" class="outline-4">
+<h4 id="orga1ac038"><span class="todo TODO">TODO</span> Add the various things I have written</h4>
+<div class="outline-text-4" id="text-orga1ac038">
+<p>
+Mostly just clean up short stories and make them presentable.
+</p>
+</div>
+</div>
+<div id="outline-container-org1b8453f" class="outline-4">
+<h4 id="org1b8453f"><span class="todo TODO">TODO</span> Clean up worldbuilding docs for publishing</h4>
+<div class="outline-text-4" id="text-org1b8453f">
+<p>
+I have worldbuilding docs that probably should be organized.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb9f94cc" class="outline-3">
+<h3 id="orgb9f94cc">Mathematics</h3>
+<div class="outline-text-3" id="text-orgb9f94cc">
+</div>
+<div id="outline-container-orgb40ce12" class="outline-4">
+<h4 id="orgb40ce12"><span class="todo TODO">TODO</span> Introduction to automated theorem provers</h4>
+</div>
+<div id="outline-container-orga762888" class="outline-4">
+<h4 id="orga762888"><span class="todo TODO">TODO</span> Automatic symbolization assistant</h4>
+<div class="outline-text-4" id="text-orga762888">
+<p>
+A simple program to parse sentences and perform a very basic analysis that spits out a (crude and preliminary) symbolization.
+</p>
+</div>
+</div>
+<div id="outline-container-org140c46f" class="outline-4">
+<h4 id="org140c46f"><span class="todo TODO">TODO</span> Project Euler Problems</h4>
+</div>
+</div>
+<div id="outline-container-org5242496" class="outline-3">
+<h3 id="org5242496">General</h3>
+<div class="outline-text-3" id="text-org5242496">
+</div>
+<div id="outline-container-org7a4a90a" class="outline-4">
+<h4 id="org7a4a90a"><span class="todo TODO">TODO</span> Add a discussion about wiki software / techniques / applications</h4>
+<div class="outline-text-4" id="text-org7a4a90a">
+<p>
+A short discussion about wiki software, how to use it, and the benefits of having a personal wiki.
+</p>
+</div>
+</div>
+<div id="outline-container-orgb6213a1" class="outline-4">
+<h4 id="orgb6213a1"><span class="todo TODO">TODO</span> Collection of industrial photos</h4>
+<div class="outline-text-4" id="text-orgb6213a1">
+<p>
+A small collection of photos of various industrial sites, shipping, and other such things.
+</p>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W13-4 10:14</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.4)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W47-2 00:45</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>
