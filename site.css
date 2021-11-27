@@ -78,7 +78,7 @@ code {
     max-width: min(60em, 50%);
   }
   
-  .site-logo {
+  #site-logo {
     position: fixed;
     width: 15em;
     z-index: 1;
@@ -102,7 +102,7 @@ code {
     max-width: 100%;
   }
   
-  .site-logo {
+  #site-logo {
     max-width: min(100%, 30em);
     display: block;
     margin-left: auto;
