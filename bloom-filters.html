@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-W47-6 02:20 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Implementing Bloom Filters</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="A short introduction to bloom filters, how they work, and a short implementation thereof." />
+<meta name="generator" content="Org Mode" />
+<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="index.html"><img class="site-logo" src="images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">Implementing Bloom Filters</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org4c685ab">Introduction</a></li>
+<li><a href="#org71f58e9">Algorithm</a>
+<ul>
+<li><a href="#orgb9a684b">Example</a></li>
+<li><a href="#org013eef9">Hash Function</a>
+<ul>
+<li><a href="#orgb939eca">pads</a></li>
+<li><a href="#org2ebb4b5">hash-obj</a></li>
+<li><a href="#orgfa4daeb">bloom-hash</a></li>
+</ul>
+</li>
+<li><a href="#org63857ef">optimal-k</a></li>
+<li><a href="#org2a8f461">Bloom Filter Objects</a>
+<ul>
+<li><a href="#orgc01cbaf">Bloom Filter Methods</a></li>
+<li><a href="#org61271f2">The BasicBloomFilter Record</a></li>
+<li><a href="#orgfd358ec">The CountingBloomFilter Record</a></li>
+</ul>
+</li>
+<li><a href="#orgdff16c2">Tangled Code Block</a></li>
+</ul>
+</li>
+<li><a href="#orgb696486">Conclusion</a></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-org4c685ab" class="outline-2">
+<h2 id="org4c685ab">Introduction</h2>
+<div class="outline-text-2" id="text-org4c685ab">
+<p>
+This will be the first post in my "Implementing" series of tutorials, where I implement a common (or not so common) algorithm and describe how to use it. Bloom filters quickly give you an answer of if something is probably in a set, or definitely not in a set. This can be used to reduce search times for high volume but low access speed media.<label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> A good example would be a collection of backup disk or (gasp) tape drives.</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org71f58e9" class="outline-2">
+<h2 id="org71f58e9">Algorithm</h2>
+<div class="outline-text-2" id="text-org71f58e9">
+<p>
+Bloom filters are really simple if you know how hash functions work. You create a series of \(k\) hash functions who output numbers from \(0\) to \(m\), the size of the filter array. To insert items into the filter you hash the item with the functions and set the indices provided to true<label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> Or 1, or incrementing a number.</span>. To check that an element is probably contained in the set or definitely not contained in the set you simply check that all the indices are set to a truth-y value.
+</p>
+</div>
+
+<div id="outline-container-orgb9a684b" class="outline-3">
+<h3 id="orgb9a684b">Example</h3>
+<div class="outline-text-3" id="text-orgb9a684b">
+<p>
+The string <code>"Bloom filters are awesome!"</code> is hashed and converted into a list of indicies who are set to the value.
+</p>
+
+<div id="org07fc558" class="figure">
+<p><img src="./images/bloom-filter-add-1_6a931db0-db9f-4ea8-8f88-7fba73d52576.png" alt="bloom-filter-add-1_6a931db0-db9f-4ea8-8f88-7fba73d52576.png" />
+</p>
+</div>
+
+<p>
+Next we might add the string <code>"Hello World."</code> to our bloom filter.
+</p>
+
+<div id="orgac14468" class="figure">
+<p><img src="./images/bloom-filter-add-2_6a931db0-db9f-4ea8-8f88-7fba73d52576.png" alt="bloom-filter-add-2_6a931db0-db9f-4ea8-8f88-7fba73d52576.png" />
+</p>
+</div>
+
+<p>
+To determine if something is in the set we can check the indices output by our hash functions are set to 1 when we hash an object.
+</p>
+
+<div id="orgbb2e995" class="figure">
+<p><img src="./images/bloom-filter-add-3_6a931db0-db9f-4ea8-8f88-7fba73d52576.png" alt="bloom-filter-add-3_6a931db0-db9f-4ea8-8f88-7fba73d52576.png" />
+</p>
+</div>
+
+<p>
+And now we can clearly see that <code>27</code> is in the bloom fitler&#x2026; oh, wait&#x2026;
+</p>
+</div>
+</div>
+
+<div id="outline-container-org013eef9" class="outline-3">
+<h3 id="org013eef9">Hash Function</h3>
+<div class="outline-text-3" id="text-org013eef9">
+<p>
+Here we implement a simple folding hash function that takes arguments and then folds them over a list.
+</p>
+</div>
+<div id="outline-container-orgb939eca" class="outline-4">
+<h4 id="orgb939eca">pads</h4>
+<div class="outline-text-4" id="text-orgb939eca">
+<p>
+The bloom filter requires a series of different hash functions. To generate them we simply use a list of large prime number <code>pads</code> that produce hash functions that yield wildly different outputs.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="org9dae0b8"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> ^<span style="color: #E53935;">:private</span> <span style="font-style: italic;">pads</span> <span style="color: #bbb;">[</span>3484115242153581271N
+                     8024590393702697081N
+                     4268910574050118391N
+                     5802681426294560369N
+                     5506370764815358409N
+                     8992090933206599789N
+                     4276741680929616149N
+                     2280789073680025603N<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2ebb4b5" class="outline-4">
+<h4 id="org2ebb4b5">hash-obj</h4>
+<div class="outline-text-4" id="text-org2ebb4b5">
+<p>
+Now here's the simple hash function that I was talking about earlier. As you can see it simply converts the object into a string, the string into a series of numbers, and then folds the string over itself with modular multiplication, basically ignoring overflows.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="orge08ed18"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">hash-obj</span> <span style="color: #bbb;">[</span>obj pad<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">(</span>str obj<span style="color: #494949;">)</span>
+       <span style="color: #494949;">(</span>map int<span style="color: #494949;">)</span>
+       <span style="color: #494949;">(</span>apply <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #494949;">[</span>x &amp; xs<span style="color: #494949;">]</span>
+                <span style="color: #494949;">(</span>cons <span style="color: #bbb;">(</span>mod <span style="color: #494949;">(</span>*' x pad<span style="color: #494949;">)</span> <span style="color: #E53935;">Long</span>/MAX_VALUE<span style="color: #bbb;">)</span> xs<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+       <span style="color: #494949;">(</span>reduce #<span style="color: #bbb;">(</span>mod <span style="color: #494949;">(</span>*' <span style="font-style: italic;">%1</span> <span style="font-style: italic;">%2</span> pad<span style="color: #494949;">)</span> <span style="color: #E53935;">Long</span>/MAX_VALUE<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+       long<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfa4daeb" class="outline-4">
+<h4 id="orgfa4daeb">bloom-hash</h4>
+<div class="outline-text-4" id="text-orgfa4daeb">
+<p>
+The <code>bloom-hash</code> function is trivial and <del>is left as an exercise to the reader</del> simply generates a hash function using the prime numbers and then hashes the object for each one. Following that it takes the modulus of \(m\) to produce the index. There are up to 7 pads that may be used for the number, meaning the maximum value of \(k\) is 7.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="org4b4dbe7"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">bloom-hash</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>obj<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>bloom-hash obj 1000<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>obj m<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>bloom-hash obj m 4<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>obj m k<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>map #<span style="color: #bbb;">(</span>mod <span style="color: #494949;">(</span>hash-obj obj <span style="font-style: italic;">%</span><span style="color: #494949;">)</span> m<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>take k pads<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org63857ef" class="outline-3">
+<h3 id="org63857ef">optimal-k</h3>
+<div class="outline-text-3" id="text-org63857ef">
+<p>
+To find the optimal \(k\) we use the following equation
+</p>
+
+
+<p>
+\(\displaystyle k = \frac{m}{n}ln2\)
+</p>
+
+<p>
+Where \(k\) is the number of hash functions, \(m\) is the size of the filter, and \(n\) is the number items that are expected to be added to the filter. This must be computed before the filter is used, and therefore likely will be slightly inaccurate.<label class="sidenote-number" for="3"><sup>3</sup></label><input checked="checked" id="3" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 3</span> I think that you probably could use some sort of very simple adaptive control system to minimize the error over many uses. (yes, I am intentionally avoiding saying "AI".)</span> This may be a problem should the sets be an unexpected size.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="org89ae7e3"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">optimal-k</span>
+  <span style="color: #bbb;">[</span>m n<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #494949;">(</span>/ m n<span style="color: #494949;">)</span>
+      <span style="color: #494949;">(</span>* <span style="color: #bbb;">(</span><span style="color: #E53935;">Math</span>/log 2.0<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+      long<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2a8f461" class="outline-3">
+<h3 id="org2a8f461">Bloom Filter Objects</h3>
+<div class="outline-text-3" id="text-org2a8f461">
+</div>
+<div id="outline-container-orgc01cbaf" class="outline-4">
+<h4 id="orgc01cbaf">Bloom Filter Methods</h4>
+<div class="outline-text-4" id="text-orgc01cbaf">
+<p>
+To start out we define some basic methods for our interfaces. <label class="sidenote-number" for="4"><sup>4</sup></label><input checked="checked" id="4" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 4</span> Yes, this does overload the <code>contains?</code> function. I probably should look into making the multimethods default to the usual <code>contains?</code> function.</span>
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="orgc55dc24"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defmulti</span> <span style="font-weight: bold; font-style: italic;">add</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defmulti</span> <span style="font-weight: bold; font-style: italic;">contains?</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defmulti</span> <span style="font-weight: bold; font-style: italic;">del</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org61271f2" class="outline-4">
+<h4 id="org61271f2">The BasicBloomFilter Record</h4>
+<div class="outline-text-4" id="text-org61271f2">
+<p>
+And now the <code>BasicBloomFilter</code> type, our solution is fairly simple, we use a boolean array and check if the values in the array are true.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="org07b0819">
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">BasicBloomFilter</span> <span style="color: #bbb;">[</span>m k filter<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defmethod</span> <span style="font-weight: bold; font-style: italic;">contains?</span> BasicBloomFilter <span style="color: #bbb;">[</span>this obj<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">(</span>bloom-hash obj <span style="color: #bbb;">(</span><span style="color: #E53935;">:m</span> this<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">:k</span> this<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+       <span style="color: #494949;">(</span>map #<span style="color: #bbb;">(</span>get-in this <span style="color: #494949;">[</span><span style="color: #E53935;">:filter</span> <span style="font-style: italic;">%</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+       <span style="color: #494949;">(</span>reduce #<span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">and</span> <span style="font-style: italic;">%1</span> <span style="font-style: italic;">%2</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defmethod</span> <span style="font-weight: bold; font-style: italic;">add</span> BasicBloomFilter <span style="color: #bbb;">[</span>this obj<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">(</span>bloom-hash obj <span style="color: #bbb;">(</span><span style="color: #E53935;">:m</span> this<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">:k</span> this<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+       <span style="color: #494949;">(</span>reduce #<span style="color: #bbb;">(</span>assoc-in <span style="font-style: italic;">%1</span> <span style="color: #494949;">[</span><span style="color: #E53935;">:filter</span> <span style="font-style: italic;">%2</span><span style="color: #494949;">]</span> <span style="color: #E53935;">true</span><span style="color: #bbb;">)</span> this<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">new-bloom-filter</span> <span style="color: #bbb;">[</span>m n<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span>-&gt;BasicBloomFilter m <span style="color: #494949;">(</span>optimal-k m n<span style="color: #494949;">)</span> <span style="color: #494949;">(</span>vec <span style="color: #bbb;">(</span>repeat m <span style="color: #E53935;">false</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+The drawback to this basic bloom filter is that you can't delete items from it. It's very space efficient, but to delete a single item you have to rebuild the entire bloom fliter, hashing all the objects you want to add. To solve this problem, at the cost of some space efficiency<label class="sidenote-number" for="5"><sup>5</sup></label><input checked="checked" id="5" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 5</span> Clojure booleans use a whole byte for each value, a better approach would be to use numbers and then extract the bits from there using some tricks with bit-shifting. But this is a toy example and bit-shifting would be both a longer post and less clear.</span>, we can move on to using integers or even longs.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgfd358ec" class="outline-4">
+<h4 id="orgfd358ec">The CountingBloomFilter Record</h4>
+<div class="outline-text-4" id="text-orgfd358ec">
+<p>
+The counting bloom filter extends the <code>BasicBloomFilter</code> with the <code>delete</code> operation by using numbers instead of boolean values. This is basically the same as storing
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="org5bff217">
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">CountingBloomFilter</span> <span style="color: #bbb;">[</span>m k filter<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defmethod</span> <span style="font-weight: bold; font-style: italic;">contains?</span> CountingBloomFilter <span style="color: #bbb;">[</span>this obj<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">(</span>bloom-hash obj <span style="color: #bbb;">(</span><span style="color: #E53935;">:m</span> this<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">:k</span> this<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+       <span style="color: #494949;">(</span>map #<span style="color: #bbb;">(</span>get-in this <span style="color: #494949;">[</span><span style="color: #E53935;">:filter</span> <span style="font-style: italic;">%</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+       <span style="color: #494949;">(</span>reduce #<span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">and</span> <span style="font-style: italic;">%1</span> <span style="font-style: italic;">%2</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defmethod</span> <span style="font-weight: bold; font-style: italic;">add</span> CountingBloomFilter <span style="color: #bbb;">[</span>this obj<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">(</span>bloom-hash obj <span style="color: #bbb;">(</span><span style="color: #E53935;">:m</span> this<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">:k</span> this<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+       <span style="color: #494949;">(</span>reduce #<span style="color: #bbb;">(</span>update-in <span style="font-style: italic;">%1</span> <span style="color: #494949;">[</span><span style="color: #E53935;">:filter</span> <span style="font-style: italic;">%2</span><span style="color: #494949;">]</span> inc<span style="color: #bbb;">)</span> this<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defmethod</span> <span style="font-weight: bold; font-style: italic;">del</span> CountingBloomFilter <span style="color: #bbb;">[</span>this obj<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">(</span>bloom-hash obj <span style="color: #bbb;">(</span><span style="color: #E53935;">:m</span> this<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">:k</span> this<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+       <span style="color: #494949;">(</span>reduce #<span style="color: #bbb;">(</span>update-in <span style="font-style: italic;">%1</span> <span style="color: #494949;">[</span><span style="color: #E53935;">:filter</span> <span style="font-style: italic;">%2</span><span style="color: #494949;">]</span> dec<span style="color: #bbb;">)</span> this<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">new-counting-bloom-filter</span> <span style="color: #bbb;">[</span>m n<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span>-&gt;CountingBloomFilter m <span style="color: #494949;">(</span>optimal-k m n<span style="color: #494949;">)</span> <span style="color: #494949;">(</span>vec <span style="color: #bbb;">(</span>repeat m 0<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgdff16c2" class="outline-3">
+<h3 id="orgdff16c2">Tangled Code Block</h3>
+<div class="outline-text-3" id="text-orgdff16c2">
+<p>
+Here is where the code is tangled, producing a single file.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">bloom-filter</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935;">:require</span> <span style="color: #494949;">[</span>clojure.math.numeric-tower <span style="color: #E53935;">:refer</span> <span style="color: #bbb;">[</span>expt<span style="color: #bbb;">]</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+&lt;&lt;pads&gt;&gt;
+&lt;&lt;hash-obj&gt;&gt;
+&lt;&lt;bloom-hash&gt;&gt;
+&lt;&lt;optimal-k&gt;&gt;
+&lt;&lt;multi-methods&gt;&gt;
+&lt;&lt;basic-bloom-filter-record&gt;&gt;
+&lt;&lt;counting-bloom-filter-record&gt;&gt;
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgb696486" class="outline-2">
+<h2 id="orgb696486">Conclusion</h2>
+<div class="outline-text-2" id="text-orgb696486">
+<p>
+Now you should have a rough idea on how a bloom filter works and how to implement one. It also should.
+</p>
+</div>
+</div>
+<!-- Footnotes --><!-- 
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">A good example would be a collection of backup disk or (gasp) tape drives.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Or 1, or incrementing a number.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">I think that you probably could use some sort of very simple adaptive control system to minimize the error over many uses. (yes, I am intentionally avoiding saying "AI".)</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Yes, this does overload the <code>contains?</code> function. I probably should look into making the multimethods default to the usual <code>contains?</code> function.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Clojure booleans use a whole byte for each value, a better approach would be to use numbers and then extract the bits from there using some tricks with bit-shifting. But this is a toy example and bit-shifting would be both a longer post and less clear.</p></div></div>
+
+ --></div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2021-W47-6 02:00</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>

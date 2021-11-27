@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W47-2 18:38 -->
+<!-- 2021-W47-5 19:27 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Project Euler Answers</title>
@@ -11,10 +11,31 @@
 <meta name="description" content="Answers to project euler problems." />
 <meta name="generator" content="Org Mode" />
 <link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img class="site-nav" src="images/website-logo.png" /></a></div>
+<div><a href="index.html"><img class="site-logo" src="images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Project Euler Answers</h1>
@@ -25,17 +46,17 @@
 <li><a href="#org85b1f1d">Summary</a></li>
 <li><a href="#orgf1ff83b">Multiples of 3 or 5</a>
 <ul>
-<li><a href="#org0419225">Brute Force Answer</a></li>
+<li><a href="#org4a2963b">Brute Force Answer</a></li>
 <li><a href="#org8ff9945">Optimized Answer</a></li>
 </ul>
 </li>
 <li><a href="#org9660e2f">Even Fibonacci Numbers</a></li>
 <li><a href="#org0612575">Largest Prime Factor</a>
 <ul>
-<li><a href="#org7c4ef94">Brute Force Answer</a></li>
+<li><a href="#org45703f0">Testing For Divisibility</a></li>
+<li><a href="#orgc84d529">Finding Prime Numbers</a></li>
 </ul>
 </li>
-<li><a href="#org14f7ee1">Palindromic Numbers</a></li>
 </ul>
 </div>
 </div>
@@ -56,17 +77,17 @@ My answers to various project Euler problems. I occasionally will be doing these
 <div class="outline-text-2" id="text-orgf1ff83b">
 </div>
 
-<div id="outline-container-org0419225" class="outline-3">
-<h3 id="org0419225">Brute Force Answer</h3>
-<div class="outline-text-3" id="text-org0419225">
+<div id="outline-container-org4a2963b" class="outline-3">
+<h3 id="org4a2963b">Brute Force Answer</h3>
+<div class="outline-text-3" id="text-org4a2963b">
 <p>
 Here I use the simple brute force answer, which is to generate a list to 1000 and then get the multiples of three and five in that list using the modulus operator. It's pretty short but I probably can code golf-it and optimize it quite a bit.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure"><span style="color: #212121;">(</span><span style="color: #E64A19;">letfn</span> <span style="color: #a4a4a4;">[</span><span style="color: #494949;">(</span>divisible? <span style="color: #a4a4a4;">[</span>n div<span style="color: #a4a4a4;">]</span> <span style="color: #a4a4a4;">(</span>zero? <span style="color: #512DA8;">(</span>mod n div<span style="color: #512DA8;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #494949;">)</span><span style="color: #a4a4a4;">]</span>
-  <span style="color: #a4a4a4;">(</span><span style="color: #E64A19;">-&gt;&gt;</span> <span style="color: #494949;">(</span>range 1000<span style="color: #494949;">)</span>
-       <span style="color: #494949;">(</span>filter #<span style="color: #a4a4a4;">(</span><span style="color: #E64A19;">or</span> <span style="color: #512DA8;">(</span>divisible? <span style="color: #E53935;">%</span> 3<span style="color: #512DA8;">)</span> <span style="color: #512DA8;">(</span>divisible? <span style="color: #E53935;">%</span> 5<span style="color: #512DA8;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #494949;">)</span>
-       <span style="color: #494949;">(</span>apply +<span style="color: #494949;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">letfn</span> <span style="color: #bbb;">[</span><span style="color: #494949;">(</span>divisible? <span style="color: #bbb;">[</span>n div<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span>zero? <span style="color: #494949;">(</span>mod n div<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">(</span>range 1000<span style="color: #494949;">)</span>
+       <span style="color: #494949;">(</span>filter #<span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">or</span> <span style="color: #494949;">(</span>divisible? <span style="font-style: italic;">%</span> 3<span style="color: #494949;">)</span> <span style="color: #494949;">(</span>divisible? <span style="font-style: italic;">%</span> 5<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+       <span style="color: #494949;">(</span>apply +<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 </div>
@@ -80,15 +101,15 @@ So instead of that approach there's a much faster one using recursion.<label cla
 </p>
 
 <div class="org-src-container">
-<pre class="src src-clojure"><span style="color: #212121;">(</span><span style="color: #E64A19;">letfn</span> <span style="color: #a4a4a4;">[</span><span style="color: #494949;">(</span>multiples-to
-          <span style="color: #a4a4a4;">(</span><span style="color: #512DA8;">[</span>n mul<span style="color: #512DA8;">]</span> <span style="color: #512DA8;">(</span>multiples-to n mul <span style="color: #f57f17;">[]</span> 1<span style="color: #512DA8;">)</span><span style="color: #a4a4a4;">)</span>
-          <span style="color: #a4a4a4;">(</span><span style="color: #512DA8;">[</span>n mul l i<span style="color: #512DA8;">]</span>
-           <span style="color: #512DA8;">(</span><span style="color: #E64A19;">let</span> <span style="color: #f57f17;">[</span>multiple <span style="color: #00796B;">(</span>* i mul<span style="color: #00796B;">)</span><span style="color: #f57f17;">]</span>
-             <span style="color: #f57f17;">(</span><span style="color: #E64A19;">if</span> <span style="color: #00796B;">(</span>&gt; multiple n<span style="color: #00796B;">)</span> l <span style="color: #00796B;">(</span><span style="color: #E64A19;">recur</span> n mul <span style="color: #80a880;">(</span>conj l multiple<span style="color: #80a880;">)</span> <span style="color: #80a880;">(</span>inc i<span style="color: #80a880;">)</span><span style="color: #00796B;">)</span><span style="color: #f57f17;">)</span><span style="color: #512DA8;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #494949;">)</span><span style="color: #a4a4a4;">]</span>
-  <span style="color: #a4a4a4;">(</span><span style="color: #E64A19;">-&gt;&gt;</span> <span style="color: #494949;">(</span>concat <span style="color: #a4a4a4;">(</span>multiples-to 1000 3<span style="color: #a4a4a4;">)</span>
-               <span style="color: #a4a4a4;">(</span>multiples-to 1000 5<span style="color: #a4a4a4;">)</span><span style="color: #494949;">)</span>
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">letfn</span> <span style="color: #bbb;">[</span><span style="color: #494949;">(</span>multiples-to
+          <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>n mul<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>multiples-to n mul <span style="color: #bbb;">[]</span> 1<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>n mul l i<span style="color: #494949;">]</span>
+           <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>multiple <span style="color: #494949;">(</span>* i mul<span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
+             <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>&gt; multiple n<span style="color: #494949;">)</span> l <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">recur</span> n mul <span style="color: #bbb;">(</span>conj l multiple<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>inc i<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">(</span>concat <span style="color: #bbb;">(</span>multiples-to 1000 3<span style="color: #bbb;">)</span>
+               <span style="color: #bbb;">(</span>multiples-to 1000 5<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
        distinct
-       <span style="color: #494949;">(</span>apply +<span style="color: #494949;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
+       <span style="color: #494949;">(</span>apply +<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 
@@ -107,17 +128,17 @@ This just gets even fib numbers. There's not much to optimize here because the p
 </p>
 
 <div class="org-src-container">
-<pre class="src src-clojure"><span style="color: #212121;">(</span><span style="color: #E64A19;">letfn</span> <span style="color: #a4a4a4;">[</span><span style="color: #494949;">(</span>fib
-          <span style="color: #a4a4a4;">(</span><span style="color: #512DA8;">[</span>max-num<span style="color: #512DA8;">]</span> <span style="color: #512DA8;">(</span>fib max-num <span style="color: #f57f17;">[</span>1 2<span style="color: #f57f17;">]</span><span style="color: #512DA8;">)</span><span style="color: #a4a4a4;">)</span>
-          <span style="color: #a4a4a4;">(</span><span style="color: #512DA8;">[</span>max-num lst<span style="color: #512DA8;">]</span>
-           <span style="color: #512DA8;">(</span><span style="color: #E64A19;">let</span> <span style="color: #f57f17;">[</span>next <span style="color: #00796B;">(</span>apply + <span style="color: #80a880;">(</span>take 2 lst<span style="color: #80a880;">)</span><span style="color: #00796B;">)</span><span style="color: #f57f17;">]</span>
-             <span style="color: #f57f17;">(</span><span style="color: #E64A19;">if</span> <span style="color: #00796B;">(</span>&gt; next max-num<span style="color: #00796B;">)</span>
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">letfn</span> <span style="color: #bbb;">[</span><span style="color: #494949;">(</span>fib
+          <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>max-num<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>fib max-num <span style="color: #bbb;">[</span>1 2<span style="color: #bbb;">]</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>max-num lst<span style="color: #494949;">]</span>
+           <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>next <span style="color: #494949;">(</span>apply + <span style="color: #bbb;">(</span>take 2 lst<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
+             <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>&gt; next max-num<span style="color: #494949;">)</span>
                lst
-               <span style="color: #00796B;">(</span>fib max-num <span style="color: #80a880;">(</span>cons next  lst<span style="color: #80a880;">)</span><span style="color: #00796B;">)</span><span style="color: #f57f17;">)</span><span style="color: #512DA8;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #494949;">)</span><span style="color: #a4a4a4;">]</span>
+               <span style="color: #494949;">(</span>fib max-num <span style="color: #bbb;">(</span>cons next  lst<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
   
-  <span style="color: #a4a4a4;">(</span><span style="color: #E64A19;">-&gt;&gt;</span> <span style="color: #494949;">(</span>fib 4000000<span style="color: #494949;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">(</span>fib 4000000<span style="color: #494949;">)</span>
        <span style="color: #494949;">(</span>filter even?<span style="color: #494949;">)</span>
-       <span style="color: #494949;">(</span>apply +<span style="color: #494949;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
+       <span style="color: #494949;">(</span>apply +<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 </div>
@@ -128,68 +149,95 @@ This just gets even fib numbers. There's not much to optimize here because the p
 <h2 id="org0612575">Largest Prime Factor</h2>
 <div class="outline-text-2" id="text-org0612575">
 <p>
-The goal is to find the largest prime factor of a number. To start we will first begin by creating a function that finds a number of primes up to the square-root of the 
+The goal is to find the largest prime factor of a number. To start we will first begin by creating a function that finds a number of primes up to the target value divided by 2. This is because the target value will, ultimately, be at most \(n \times 2\).
 </p>
 </div>
 
-<div id="outline-container-org7c4ef94" class="outline-3">
-<h3 id="org7c4ef94">Brute Force Answer</h3>
-<div class="outline-text-3" id="text-org7c4ef94">
+<div id="outline-container-org45703f0" class="outline-3">
+<h3 id="org45703f0">Testing For Divisibility</h3>
+<div class="outline-text-3" id="text-org45703f0">
+<p>
+Here we just use the usual function for testing for divisibility.
+</p>
 <div class="org-src-container">
-<pre class="src src-clojure"><span style="color: #212121;">(</span><span style="color: #E64A19;">ns</span> <span style="color: #E64A19;">prime-fac</span>
-  <span style="color: #a4a4a4;">(</span><span style="color: #a4a4a4;">:require</span> <span style="color: #494949;">[</span>clojure.math.numeric-tower <span style="color: #a4a4a4;">:refer</span> <span style="color: #a4a4a4;">[</span>sqrt<span style="color: #a4a4a4;">]</span><span style="color: #494949;">]</span><span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">prime-fac</span><span style="color: #494949;">)</span>
 
-<span style="color: #212121;">(</span><span style="color: #E64A19;">def</span> <span style="color: #E53935;">found-primes</span>
-  <span style="color: #a4a4a4;">"A map of all primes that have been found thus far by the system"</span>
-  <span style="color: #a4a4a4;">(</span>atom #<span style="color: #494949;">{</span>2<span style="color: #494949;">}</span><span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">divisible?</span> <span style="color: #bbb;">[</span>num div<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span>zero? <span style="color: #494949;">(</span>mod num div<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
 
-<span style="color: #212121;">(</span><span style="color: #E64A19;">defn</span> <span style="color: #E53935;">divisible?</span> <span style="color: #a4a4a4;">[</span>num div<span style="color: #a4a4a4;">]</span> <span style="color: #a4a4a4;">(</span>zero? <span style="color: #494949;">(</span>mod num div<span style="color: #494949;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
-<span style="color: #212121;">(</span><span style="color: #E64A19;">defn</span> <span style="color: #E53935;">is-prime?</span> <span style="color: #a4a4a4;">[</span>num<span style="color: #a4a4a4;">]</span>
-  <span style="color: #a4a4a4;">(</span><span style="color: #E64A19;">cond</span> <span style="color: #494949;">(</span>contains? <span style="color: #a4a4a4;">(</span>deref found-primes<span style="color: #a4a4a4;">)</span> num<span style="color: #494949;">)</span>
+<div id="outline-container-orgc84d529" class="outline-3">
+<h3 id="orgc84d529">Finding Prime Numbers</h3>
+<div class="outline-text-3" id="text-orgc84d529">
+<p>
+To start out we find a list of prime numbers. A neat feature of prime numbers is that to test a list for primality you both only need to
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">prime-fac</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935;">:require</span> <span style="color: #494949;">[</span>clojure.math.numeric-tower <span style="color: #E53935;">:refer</span> <span style="color: #bbb;">[</span>sqrt<span style="color: #bbb;">]</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">found-primes</span>
+  <span style="color: #a4a4a4; font-style: italic;">"A map of all primes that have been found thus far by the system"</span>
+  <span style="color: #bbb;">(</span>atom #<span style="color: #494949;">{</span>2<span style="color: #494949;">}</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">is-prime?</span> <span style="color: #bbb;">[</span>num<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">cond</span> <span style="color: #494949;">(</span>contains? <span style="color: #bbb;">(</span>deref found-primes<span style="color: #bbb;">)</span> num<span style="color: #494949;">)</span>
         num
 
-        <span style="color: #494949;">(</span><span style="color: #E64A19;">-&gt;&gt;</span> found-primes deref <span style="color: #a4a4a4;">(</span>some #<span style="color: #512DA8;">(</span>divisible? num <span style="color: #E53935;">%</span><span style="color: #512DA8;">)</span><span style="color: #a4a4a4;">)</span> not<span style="color: #494949;">)</span>
+        <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> found-primes
+             deref
+             <span style="color: #bbb;">(</span>some #<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">or</span> <span style="color: #bbb;">(</span>divisible? num <span style="font-style: italic;">%</span><span style="color: #bbb;">)</span>
+                        <span style="color: #bbb;">(</span>&gt; <span style="font-style: italic;">%</span> <span style="color: #494949;">(</span>sqrt num<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+             not<span style="color: #494949;">)</span>
         <span style="color: #494949;">(</span>swap! found-primes conj num<span style="color: #494949;">)</span>
 
-        <span style="color: #a4a4a4;">:else</span>
-        <span style="color: #a4a4a4;">false</span><span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
+        <span style="color: #E53935;">:else</span>
+        <span style="color: #E53935;">false</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 
-<span style="color: #212121;">(</span><span style="color: #E64A19;">defn</span> <span style="color: #E53935;">prime-range</span>
-  <span style="color: #a4a4a4;">(</span><span style="color: #494949;">[</span>end<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>prime-range 2 end<span style="color: #494949;">)</span><span style="color: #a4a4a4;">)</span>
-  <span style="color: #a4a4a4;">(</span><span style="color: #494949;">[</span>start end<span style="color: #494949;">]</span>
-   <span style="color: #494949;">(</span><span style="color: #E64A19;">-&gt;&gt;</span> <span style="color: #a4a4a4;">(</span>range start end<span style="color: #a4a4a4;">)</span>
-        <span style="color: #a4a4a4;">(</span>filter is-prime?<span style="color: #a4a4a4;">)</span><span style="color: #494949;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
-
-<span style="color: #212121;">(</span><span style="color: #E64A19;">defn</span> <span style="color: #E53935;">prime-factors</span> <span style="color: #a4a4a4;">[</span>x<span style="color: #a4a4a4;">]</span>
-  <span style="color: #a4a4a4;">(</span><span style="color: #E64A19;">-&gt;&gt;</span> <span style="color: #494949;">(</span>prime-range <span style="color: #a4a4a4;">(</span>inc <span style="color: #512DA8;">(</span>/ x 2<span style="color: #512DA8;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #494949;">)</span>
-       <span style="color: #494949;">(</span>filter #<span style="color: #a4a4a4;">(</span>divisible? x <span style="color: #E53935;">%</span><span style="color: #a4a4a4;">)</span><span style="color: #494949;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
-
-
-<span style="color: #212121;">(</span>last <span style="color: #a4a4a4;">(</span>prime-factors 600851475143<span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
 </pre>
 </div>
-</div>
-</div>
-</div>
 
-
-<div id="outline-container-org14f7ee1" class="outline-2">
-<h2 id="org14f7ee1">Palindromic Numbers</h2>
-<div class="outline-text-2" id="text-org14f7ee1">
 <div class="org-src-container">
-<pre class="src src-clojure"><span style="color: #212121;">(</span><span style="color: #E64A19;">ns</span> <span style="color: #E64A19;">palindrome</span>
-  <span style="color: #a4a4a4;">(</span><span style="color: #a4a4a4;">:require</span> <span style="color: #494949;">[</span>clojure.math.combinatorics <span style="color: #a4a4a4;">:as</span> combo<span style="color: #494949;">]</span><span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">prime-fac</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935;">:require</span> <span style="color: #494949;">[</span>clojure.math.numeric-tower <span style="color: #E53935;">:refer</span> <span style="color: #bbb;">[</span>sqrt<span style="color: #bbb;">]</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 
-<span style="color: #212121;">(</span><span style="color: #E64A19;">defn</span> <span style="color: #E53935;">largest-pdrome</span> <span style="color: #a4a4a4;">[</span>len<span style="color: #a4a4a4;">]</span>
-  <span style="color: #a4a4a4;">(</span><span style="color: #E64A19;">let</span> <span style="color: #494949;">[</span>nums <span style="color: #a4a4a4;">(</span>range <span style="color: #512DA8;">(</span>int <span style="color: #f57f17;">(</span><span style="color: #E64A19;">Math</span>/pow 10 <span style="color: #00796B;">(</span>dec len<span style="color: #00796B;">)</span><span style="color: #f57f17;">)</span><span style="color: #512DA8;">)</span> <span style="color: #512DA8;">(</span>int <span style="color: #f57f17;">(</span><span style="color: #E64A19;">Math</span>/pow 10 len<span style="color: #f57f17;">)</span><span style="color: #512DA8;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #494949;">]</span>
-    <span style="color: #494949;">(</span><span style="color: #E64A19;">-&gt;&gt;</span> <span style="color: #a4a4a4;">(</span><span style="color: #E64A19;">combo</span>/combinations <span style="color: #512DA8;">(</span>concat nums nums<span style="color: #512DA8;">)</span> 2<span style="color: #a4a4a4;">)</span>
-         <span style="color: #a4a4a4;">(</span>map #<span style="color: #512DA8;">(</span>int <span style="color: #f57f17;">(</span>apply * <span style="color: #E53935;">%</span><span style="color: #f57f17;">)</span><span style="color: #512DA8;">)</span><span style="color: #a4a4a4;">)</span>
-         <span style="color: #a4a4a4;">(</span>filter #<span style="color: #512DA8;">(</span>= <span style="color: #f57f17;">(</span>apply str <span style="color: #00796B;">(</span>reverse <span style="color: #80a880;">(</span>str <span style="color: #E53935;">%</span><span style="color: #80a880;">)</span><span style="color: #00796B;">)</span><span style="color: #f57f17;">)</span>
-                     <span style="color: #f57f17;">(</span>str <span style="color: #E53935;">%</span><span style="color: #f57f17;">)</span><span style="color: #512DA8;">)</span><span style="color: #a4a4a4;">)</span>
-         last<span style="color: #494949;">)</span><span style="color: #a4a4a4;">)</span><span style="color: #212121;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">found-primes</span>
+  <span style="color: #a4a4a4; font-style: italic;">"A map of all primes that have been found thus far by the system"</span>
+  <span style="color: #bbb;">(</span>atom #<span style="color: #494949;">{</span>2<span style="color: #494949;">}</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 
-<span style="color: #212121;">(</span>largest-pdrome 3<span style="color: #212121;">)</span> 
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">divisible?</span> <span style="color: #bbb;">[</span>num div<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span>zero? <span style="color: #494949;">(</span>mod num div<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">is-prime?</span> <span style="color: #bbb;">[</span>num<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">cond</span> <span style="color: #494949;">(</span>contains? <span style="color: #bbb;">(</span>deref found-primes<span style="color: #bbb;">)</span> num<span style="color: #494949;">)</span>
+        num
+
+        <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> found-primes
+             deref
+             <span style="color: #bbb;">(</span>some #<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">or</span> <span style="color: #bbb;">(</span>divisible? num <span style="font-style: italic;">%</span><span style="color: #bbb;">)</span>
+                        <span style="color: #bbb;">(</span>&gt; <span style="font-style: italic;">%</span> <span style="color: #494949;">(</span>sqrt num<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+             not<span style="color: #494949;">)</span>
+        <span style="color: #494949;">(</span>swap! found-primes conj num<span style="color: #494949;">)</span>
+
+        <span style="color: #E53935;">:else</span>
+        <span style="color: #E53935;">false</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">prime-range</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>end<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>prime-range 2 end<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>start end<span style="color: #494949;">]</span>
+   <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #bbb;">(</span>range start end<span style="color: #bbb;">)</span>
+        <span style="color: #bbb;">(</span>filter is-prime?<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">prime-factors</span> <span style="color: #bbb;">[</span>x<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">(</span>prime-range <span style="color: #bbb;">(</span>inc <span style="color: #494949;">(</span>/ x 2<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+       <span style="color: #494949;">(</span>filter #<span style="color: #bbb;">(</span>divisible? x <span style="font-style: italic;">%</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+
+<span style="color: #494949;">(</span>last <span style="color: #bbb;">(</span>prime-factors 600851475143<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
+</div>
 </div>
 </div>
 </div>
@@ -198,7 +246,7 @@ The goal is to find the largest prime factor of a number. To start we will first
 
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W47-2 12:08</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W47-3 14:55</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>
