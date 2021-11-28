@@ -1,5 +1,7 @@
 @import url(fonts/iosevka-term.css);
 
+@import url(fonts/iosevka-aile.css);
+
 @font-face {
   font-family: 'Jura';
   src: url(fonts/ttf/Jura-VariableFont_wght.ttf);
