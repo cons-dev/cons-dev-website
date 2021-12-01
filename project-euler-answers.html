@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W47-6 02:36 -->
+<!-- 2021-W48-2 22:07 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Project Euler Answers</title>
@@ -54,7 +54,13 @@
 <li><a href="#org0612575">Largest Prime Factor</a>
 <ul>
 <li><a href="#org45703f0">Testing For Divisibility</a></li>
-<li><a href="#orgc84d529">Finding Prime Numbers</a></li>
+<li><a href="#orgc84d529">Finding Prime Numbers</a>
+<ul>
+<li><a href="#org95739a5">Checking for Divisibility</a></li>
+<li><a href="#org2d7abe0">Sieve of Aristophanes</a></li>
+<li><a href="#orga0b5f24">A More Ugly Approach</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -172,44 +178,117 @@ Here we just use the usual function for testing for divisibility.
 <h3 id="orgc84d529">Finding Prime Numbers</h3>
 <div class="outline-text-3" id="text-orgc84d529">
 <p>
-To start out we find a list of prime numbers. A neat feature of prime numbers is that to test a list for primality you both only need to
+To start out we find a list of prime numbers. A neat feature of prime numbers is that to test a list for primality you both only need to test for the division of a number by other prime numbers. Only one prime number will do as well, therefore we can discard any number.
+</p>
+</div>
+
+
+<div id="outline-container-org95739a5" class="outline-4">
+<h4 id="org95739a5">Checking for Divisibility</h4>
+<div class="outline-text-4" id="text-org95739a5">
+<p>
+To start off, and to make our code more clear, we define a small predicate called <code>divisible?</code> which checks if a number is divisible by some other number. While it doesn't really shorten the code all that much, it adds clarity to the code
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="org9a417ef"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">divisible?</span> <span style="color: #bbb;">[</span>num div<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span>zero? <span style="color: #494949;">(</span>mod num div<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2d7abe0" class="outline-4">
+<h4 id="org2d7abe0">Sieve of Aristophanes</h4>
+<div class="outline-text-4" id="text-org2d7abe0">
+<p>
+The most elegant solution would be the sieve of Aristophanes. The logic behind it is fairly simple:
+</p>
+<ol class="org-ol">
+<li>all natural numbers are either primes or a composite of a number of primes</li>
+<li>the primes which they are the composite of must by nature be below</li>
+<li>the second</li>
+</ol>
+
+<p>
+As you can see, it follows that the list generated will be entirely comprised of prime numbers.
+</p>
+
+<p>
+To solve this we can implement a lazy sieve of Aristophanes. Lazy in that the resulting sequence will be infinite.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="org788e97b">&lt;&lt;divisible&gt;&gt;
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">divisible?</span> <span style="color: #bbb;">[</span>num div<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span>zero? <span style="color: #494949;">(</span>mod num div<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">seive</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[]</span> <span style="color: #494949;">(</span>seive <span style="color: #bbb;">(</span>drop 2 <span style="color: #494949;">(</span>range<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>l<span style="color: #494949;">]</span>
+   <span style="color: #494949;">(</span>lazy-seq
+    <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">[</span><span style="color: #bbb;">[</span>x &amp; xs<span style="color: #bbb;">]</span> l<span style="color: #494949;">]</span>
+      <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>empty? xs<span style="color: #bbb;">)</span>
+        <span style="color: #bbb;">[</span>x<span style="color: #bbb;">]</span>
+        <span style="color: #bbb;">(</span>cons x <span style="color: #494949;">(</span>seive <span style="color: #bbb;">(</span>filter <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #bbb;">[</span>e<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span>not <span style="color: #494949;">(</span>divisible? e x<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> xs<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">primes</span> <span style="color: #bbb;">(</span>seive<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span>take 10 primes<span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">class clojure.lang.Compiler$CompilerException</td>
+</tr>
+
+<tr>
+<td class="org-left">#'stylesheets/divisible?</td>
+</tr>
+
+<tr>
+<td class="org-left">#'stylesheets/seive</td>
+</tr>
+
+<tr>
+<td class="org-left">#'stylesheets/primes</td>
+</tr>
+
+<tr>
+<td class="org-left">(2 3 5 7 11 13 17 19 23 29)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Unfortunately this does not work. It is very beautiful, and I wish it did work, but because of the specific features of TCO in Clojure <label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> Even with the <code>recur</code> special form.</span> it doesn't work.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga0b5f24" class="outline-4">
+<h4 id="orga0b5f24">A More Ugly Approach</h4>
+<div class="outline-text-4" id="text-orga0b5f24">
+<p>
+So in order to solve this we can rewrite 
 </p>
 
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">prime-fac</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935;">:require</span> <span style="color: #494949;">[</span>clojure.math.numeric-tower <span style="color: #E53935;">:refer</span> <span style="color: #bbb;">[</span>sqrt<span style="color: #bbb;">]</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">found-primes</span>
-  <span style="color: #a4a4a4; font-style: italic;">"A map of all primes that have been found thus far by the system"</span>
-  <span style="color: #bbb;">(</span>atom #<span style="color: #494949;">{</span>2<span style="color: #494949;">}</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-
-
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">is-prime?</span> <span style="color: #bbb;">[</span>num<span style="color: #bbb;">]</span>
-  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">cond</span> <span style="color: #494949;">(</span>contains? <span style="color: #bbb;">(</span>deref found-primes<span style="color: #bbb;">)</span> num<span style="color: #494949;">)</span>
-        num
-
-        <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> found-primes
-             deref
-             <span style="color: #bbb;">(</span>some #<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">or</span> <span style="color: #bbb;">(</span>divisible? num <span style="font-style: italic;">%</span><span style="color: #bbb;">)</span>
-                        <span style="color: #bbb;">(</span>&gt; <span style="font-style: italic;">%</span> <span style="color: #494949;">(</span>sqrt num<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-             not<span style="color: #494949;">)</span>
-        <span style="color: #494949;">(</span>swap! found-primes conj num<span style="color: #494949;">)</span>
-
-        <span style="color: #E53935;">:else</span>
-        <span style="color: #E53935;">false</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-
-</pre>
-</div>
-
-<div class="org-src-container">
-<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">prime-fac</span>
-  <span style="color: #bbb;">(</span><span style="color: #E53935;">:require</span> <span style="color: #494949;">[</span>clojure.math.numeric-tower <span style="color: #E53935;">:refer</span> <span style="color: #bbb;">[</span>sqrt<span style="color: #bbb;">]</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+&lt;&lt;divisible?&gt;&gt;
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">found-primes</span>
   <span style="color: #a4a4a4; font-style: italic;">"A map of all primes that have been found thus far by the system"</span>
   <span style="color: #bbb;">(</span>atom #<span style="color: #494949;">{</span>2<span style="color: #494949;">}</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">divisible?</span> <span style="color: #bbb;">[</span>num div<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span>zero? <span style="color: #494949;">(</span>mod num div<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">is-prime?</span> <span style="color: #bbb;">[</span>num<span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">cond</span> <span style="color: #494949;">(</span>contains? <span style="color: #bbb;">(</span>deref found-primes<span style="color: #bbb;">)</span> num<span style="color: #494949;">)</span>
         num
@@ -241,12 +320,15 @@ To start out we find a list of prime numbers. A neat feature of prime numbers is
 </div>
 </div>
 </div>
+</div>
 <!-- Footnotes --><!-- 
 <div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">the n-ary function syntax for Clojure is really nice here, allowing me to use default arguments.</p></div></div>
 
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Even with the <code>recur</code> special form.</p></div></div>
+
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W47-3 14:55</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W48-2 19:36</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

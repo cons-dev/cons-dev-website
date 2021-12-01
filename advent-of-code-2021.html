@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-W48-2 22:07 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Advent Of Code 2021</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="A series of fun problems that I have solved for the 2021 advent of code." />
+<meta name="generator" content="Org Mode" />
+<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">Advent Of Code 2021</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orga238638"><span class="timestamp-wrapper"><span class="timestamp">&lt;2021-W48-2&gt;</span></span> Sonar Sweep</a>
+<ul>
+<li><a href="#org50fa993">Part 1</a></li>
+<li><a href="#orgccd98b5">Part 2</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orga238638" class="outline-2">
+<h2 id="orga238638"><span class="timestamp-wrapper"><span class="timestamp">&lt;2021-W48-2&gt;</span></span> Sonar Sweep</h2>
+<div class="outline-text-2" id="text-orga238638">
+<p>
+The first problem is fairly simple. We are to take a list of numbers and compare each pair within the list, producing.
+</p>
+</div>
+<div id="outline-container-org50fa993" class="outline-3">
+<h3 id="org50fa993">Part 1</h3>
+<div class="outline-text-3" id="text-org50fa993">
+<p>
+Once that is done we are to add up the total number of increases. This is fairly simple, and the following code does that through a simple recursive function and list destructing.<label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> List destructuring is really one of my favorite bits of Clojure's syntax. Yes, it's common, but it's also really useful.</span> We take the first two elements of the list, and compare them to check if they have increased, returning 1 if they have, 0 if they have not. Then we check if the list is empty, if it is we simply return, but if it is not we sum with the rest of the list.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">count-increases</span>
+  <span style="color: #bbb;">[</span><span style="color: #494949;">[</span>a b &amp; rst<span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">[</span>rval <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>&lt; a b<span style="color: #494949;">)</span> 1 0<span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>empty? xs<span style="color: #bbb;">)</span>
+      rval
+      <span style="color: #bbb;">(</span>+ rval <span style="color: #494949;">(</span>count-increases <span style="color: #bbb;">(</span>cons b rst<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">"/home/inanna/Memex/cons-site/src/other/advent-of-code-2021-01_input.edn"</span>
+     slurp
+     read-string
+     count-increases<span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgccd98b5" class="outline-3">
+<h3 id="orgccd98b5">Part 2</h3>
+<div class="outline-text-3" id="text-orgccd98b5">
+<p>
+The second problem is the generation of a three measurement sliding window. To solve this we make a slight modification by adding some further elements in the destructuring bind. Once that is done it's smooth sailing.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">count-average-increases</span>
+  <span style="color: #bbb;">[</span><span style="color: #494949;">[</span>a b c d &amp; rst<span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">[</span>rval <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>&lt; <span style="color: #bbb;">(</span>+ a b c<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>+ b c d<span style="color: #bbb;">)</span><span style="color: #494949;">)</span> 1 0<span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>empty? rst<span style="color: #bbb;">)</span>
+      rval
+      <span style="color: #bbb;">(</span>+ rval <span style="color: #494949;">(</span>count-increases <span style="color: #bbb;">(</span>concat <span style="color: #494949;">[</span>b c d<span style="color: #494949;">]</span> rst<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">"/home/inanna/Memex/cons-site/src/other/advent-of-code-2021-01_input.edn"</span>
+     slurp
+     read-string
+     count-average-increases<span style="color: #494949;">)</span>
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+<!-- Footnotes --><!-- 
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">List destructuring is really one of my favorite bits of Clojure's syntax. Yes, it's common, but it's also really useful.</p></div></div>
+
+ --></div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2021-W48-2 22:05</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>
