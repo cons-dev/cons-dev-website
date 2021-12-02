@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W48-2 22:07 -->
+<!-- 2021-W48-3 21:04 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Rotating Letters</title>
@@ -120,7 +120,7 @@ Rot-13 is a classic example of english.
 &lt;&lt;rot-n&gt;&gt;
 
 <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Load the words into a set</span>
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>words    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #494949;">"./words_alpha.txt"</span> slurp <span style="color: #E53935;">str</span>/lower-case <span style="color: #E53935;">str</span>/split-lines<span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>words    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #494949;">"words_alpha.txt"</span> slurp <span style="color: #E53935;">str</span>/lower-case <span style="color: #E53935;">str</span>/split-lines<span style="color: #494949;">)</span>
       word-set <span style="color: #494949;">(</span>set words<span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> words
        <span style="color: #494949;">(</span>filter <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #494949;">[</span>word<span style="color: #494949;">]</span>
@@ -133,6 +133,7 @@ Rot-13 is a classic example of english.
 <p>
 So we get two pairs, for a total four answers, which I will call pair g and pair c. The first was found by Greg Egan, <a href="https://twitter.com/gregeganSF/status/1369228278599278599">here</a>, while the second was found by me, while running my program.
 </p>
+
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -161,7 +162,7 @@ So we get two pairs, for a total four answers, which I will call pair g and pair
 </table>
 
 <p>
-This is fun, though not terribly interesting.
+This is fun, though not terribly interesting, to try to make it fun I will genralize it.
 </p>
 </div>
 </div>
@@ -251,10 +252,10 @@ So what do we get? Well sadly not much. I ran the code below and only two-letter
     <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">cond</span> <span style="color: #bbb;">(</span>= rot-word orig<span style="color: #bbb;">)</span>                <span style="color: #E53935;">true</span>
           <span style="color: #bbb;">(</span>not <span style="color: #494949;">(</span>contains? words rot-word<span style="color: #494949;">)</span><span style="color: #bbb;">)</span> <span style="color: #E53935;">false</span>
           <span style="color: #E53935;">:else</span>                            <span style="color: #bbb;">(</span>rot-cycle? shift words orig rot-word<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">word-set</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #494949;">"/home/inanna/Memex/cons-site/src/words_alpha.txt"</span> slurp <span style="color: #E53935;">str</span>/lower-case <span style="color: #E53935;">str</span>/split-lines set<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">word-set</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #494949;">"words_alpha.txt"</span> slurp <span style="color: #E53935;">str</span>/lower-case <span style="color: #E53935;">str</span>/split-lines set<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 
 <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Load the words into a set</span>
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>words    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #494949;">"/home/inanna/Memex/cons-site/src/words_alpha.txt"</span> slurp <span style="color: #E53935;">str</span>/lower-case <span style="color: #E53935;">str</span>/split-lines<span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>words    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #494949;">"words_alpha.txt"</span> slurp <span style="color: #E53935;">str</span>/lower-case <span style="color: #E53935;">str</span>/split-lines<span style="color: #494949;">)</span>
       word-set <span style="color: #494949;">(</span>set words<span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> words
        <span style="color: #494949;">(</span>filter <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #494949;">[</span>word<span style="color: #494949;">]</span>
@@ -268,7 +269,7 @@ So what do we get? Well sadly not much. I ran the code below and only two-letter
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W47-6 02:21</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W48-3 17:56</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

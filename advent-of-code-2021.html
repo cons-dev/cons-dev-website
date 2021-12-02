@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W48-2 22:07 -->
+<!-- 2021-W48-3 22:06 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Advent Of Code 2021</title>
@@ -11,6 +11,27 @@
 <meta name="description" content="A series of fun problems that I have solved for the 2021 advent of code." />
 <meta name="generator" content="Org Mode" />
 <link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="preamble" class="status">
@@ -22,13 +43,41 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
+<li><a href="#org29a6411">Introduction</a></li>
+<li><a href="#org016765f">Utility Functions</a></li>
 <li><a href="#orga238638"><span class="timestamp-wrapper"><span class="timestamp">&lt;2021-W48-2&gt;</span></span> Sonar Sweep</a>
 <ul>
-<li><a href="#org50fa993">Part 1</a></li>
-<li><a href="#orgccd98b5">Part 2</a></li>
+<li><a href="#orgca9fdfa">Part 1</a></li>
+<li><a href="#org2af8512">Part 2</a></li>
+</ul>
+</li>
+<li><a href="#org7c39ba7"><span class="timestamp-wrapper"><span class="timestamp">&lt;2021-W48-3&gt;</span></span></a>
+<ul>
+<li><a href="#org20f4a01">Part 1</a></li>
+<li><a href="#orgdb4d7cc">Part 2</a></li>
 </ul>
 </li>
 </ul>
+</div>
+</div>
+
+
+<div id="outline-container-org29a6411" class="outline-2">
+<h2 id="org29a6411">Introduction</h2>
+</div>
+
+<div id="outline-container-org016765f" class="outline-2">
+<h2 id="org016765f">Utility Functions</h2>
+<div class="outline-text-2" id="text-org016765f">
+<p>
+To start out I will define a utility function to make reading EDN files easier. Because Clojure uses the JVM it usually just assumes you want paths from the project root, whereas in this case I want paths coming from this directory.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span>require '<span style="color: #bbb;">[</span>clojure.java.io <span style="color: #E53935;">:as</span> io<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">read-edn</span> <span style="color: #bbb;">[</span>f<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> f <span style="color: #E53935;">io</span>/resource slurp read-string<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
 </div>
 </div>
 
@@ -39,35 +88,33 @@
 The first problem is fairly simple. We are to take a list of numbers and compare each pair within the list, producing.
 </p>
 </div>
-<div id="outline-container-org50fa993" class="outline-3">
-<h3 id="org50fa993">Part 1</h3>
-<div class="outline-text-3" id="text-org50fa993">
+<div id="outline-container-orgca9fdfa" class="outline-3">
+<h3 id="orgca9fdfa">Part 1</h3>
+<div class="outline-text-3" id="text-orgca9fdfa">
 <p>
-Once that is done we are to add up the total number of increases. This is fairly simple, and the following code does that through a simple recursive function and list destructing.<label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> List destructuring is really one of my favorite bits of Clojure's syntax. Yes, it's common, but it's also really useful.</span> We take the first two elements of the list, and compare them to check if they have increased, returning 1 if they have, 0 if they have not. Then we check if the list is empty, if it is we simply return, but if it is not we sum with the rest of the list.
+Once that is done we are to add up the total number of increases. This is fairly simple, and the following code does that through a simple recursive function and list destructing.<label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> List destructuring is really one of my favorite bits of Clojure's syntax. Yes, it's common, but it's also really useful.</span> We take the first two elements of the list, and compare them to check if they have increased, returning 1 if they have, 0 if they have not. Then we check if the list is empty, if it is we simply return, but if it is not we sum with the function applied to the rest of the list minus the first element.
 </p>
-
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">count-increases</span>
   <span style="color: #bbb;">[</span><span style="color: #494949;">[</span>a b &amp; rst<span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">[</span>rval <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>&lt; a b<span style="color: #494949;">)</span> 1 0<span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
-    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>empty? xs<span style="color: #bbb;">)</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>empty? rst<span style="color: #bbb;">)</span>
       rval
       <span style="color: #bbb;">(</span>+ rval <span style="color: #494949;">(</span>count-increases <span style="color: #bbb;">(</span>cons b rst<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">"/home/inanna/Memex/cons-site/src/other/advent-of-code-2021-01_input.edn"</span>
-     slurp
-     read-string
-     count-increases<span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span>count-increases <span style="color: #bbb;">(</span>read-edn <span style="color: #494949;">"./other/advent-of-code-2021-01_input.edn"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgccd98b5" class="outline-3">
-<h3 id="orgccd98b5">Part 2</h3>
-<div class="outline-text-3" id="text-orgccd98b5">
+<div id="outline-container-org2af8512" class="outline-3">
+<h3 id="org2af8512">Part 2</h3>
+<div class="outline-text-3" id="text-org2af8512">
 <p>
-The second problem is the generation of a three measurement sliding window. To solve this we make a slight modification by adding some further elements in the destructuring bind. Once that is done it's smooth sailing.
+The second problem is the generation of a three measurement sliding window. To solve this we make a slight modification, adding some further elements in the destructuring bind. Once that is done it's smooth sailing.
 </p>
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">count-average-increases</span>
@@ -75,13 +122,65 @@ The second problem is the generation of a three measurement sliding window. To s
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">[</span>rval <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>&lt; <span style="color: #bbb;">(</span>+ a b c<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>+ b c d<span style="color: #bbb;">)</span><span style="color: #494949;">)</span> 1 0<span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
     <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>empty? rst<span style="color: #bbb;">)</span>
       rval
-      <span style="color: #bbb;">(</span>+ rval <span style="color: #494949;">(</span>count-increases <span style="color: #bbb;">(</span>concat <span style="color: #494949;">[</span>b c d<span style="color: #494949;">]</span> rst<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+      <span style="color: #bbb;">(</span>+ rval <span style="color: #494949;">(</span>count-average-increases <span style="color: #bbb;">(</span>concat <span style="color: #494949;">[</span>b c d<span style="color: #494949;">]</span> rst<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">"/home/inanna/Memex/cons-site/src/other/advent-of-code-2021-01_input.edn"</span>
-     slurp
-     read-string
-     count-average-increases<span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span>count-average-increases <span style="color: #bbb;">(</span>read-edn <span style="color: #494949;">"./other/advent-of-code-2021-01_input.edn"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
 
+
+<div id="outline-container-org7c39ba7" class="outline-2">
+<h2 id="org7c39ba7"><span class="timestamp-wrapper"><span class="timestamp">&lt;2021-W48-3&gt;</span></span></h2>
+<div class="outline-text-2" id="text-org7c39ba7">
+<p>
+In both cases it was possible to solve the problems in \(O(n)\) time. However, unfortunately, unlike the last one this probably could not be parallelized for matrix math, like I have seen with some of my friends.
+</p>
+</div>
+<div id="outline-container-org20f4a01" class="outline-3">
+<h3 id="org20f4a01">Part 1</h3>
+<div class="outline-text-3" id="text-org20f4a01">
+<p>
+Here we write a simple bit of code to calculate the position of the craft. Here we simply have the string representing the file pre-converted into an EDN.<label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> I think this is reasonably within the rules. The lists are basically structured so that I only have to add an extra pair of square brackets to make it a vector.</span> Then we read it in, partition it into a series of 2-tuples, use some destructuring to conduct math to add it to a vector (\(i\) represents the horizontal, \(j\) the vertical) and then we multiply our values together.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">"./other/advent-of-code-2021-02_input.edn"</span>
+     read-edn
+     <span style="color: #bbb;">(</span>partition 2<span style="color: #bbb;">)</span>
+     <span style="color: #bbb;">(</span>reduce <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span>i j<span style="color: #494949;">]</span> <span style="color: #494949;">[</span>dir val<span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+               <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">case</span> dir
+                 forward <span style="color: #494949;">[</span><span style="color: #bbb;">(</span>+ i val<span style="color: #bbb;">)</span> j<span style="color: #494949;">]</span>
+                 up      <span style="color: #494949;">[</span>i <span style="color: #bbb;">(</span>- j val<span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
+                 down    <span style="color: #494949;">[</span>i <span style="color: #bbb;">(</span>+ j val<span style="color: #bbb;">)</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+             <span style="color: #494949;">[</span>0 0<span style="color: #494949;">]</span><span style="color: #bbb;">)</span>
+     <span style="color: #bbb;">(</span>apply *<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdb4d7cc" class="outline-3">
+<h3 id="orgdb4d7cc">Part 2</h3>
+<div class="outline-text-3" id="text-orgdb4d7cc">
+<p>
+To solve part two we now need to treat the <code>up</code> and <code>down</code> pairs as representing changes to the slope of the list. To do so we simply add a new value representing the slope to the accumulator, known as <code>aim</code>. We then, when looping over it, modify the aim value for up and down commands, and modify the depth during forward commands.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span>require '<span style="color: #bbb;">[</span>clojure.java.io <span style="color: #E53935;">:as</span> io<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">"./other/advent-of-code-2021-02_input.edn"</span>
+     read-edn
+     <span style="color: #bbb;">(</span>partition 2<span style="color: #bbb;">)</span>
+     <span style="color: #bbb;">(</span>reduce <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span>i j aim<span style="color: #494949;">]</span> <span style="color: #494949;">[</span>dir val<span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+               <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">case</span> dir
+                 forward <span style="color: #494949;">[</span><span style="color: #bbb;">(</span>+ i val<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>+ j <span style="color: #494949;">(</span>* val aim<span style="color: #494949;">)</span><span style="color: #bbb;">)</span> aim<span style="color: #494949;">]</span>
+                 up      <span style="color: #494949;">[</span>i j <span style="color: #bbb;">(</span>- aim val<span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
+                 down    <span style="color: #494949;">[</span>i j <span style="color: #bbb;">(</span>+ aim val<span style="color: #bbb;">)</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+             <span style="color: #494949;">[</span>0 0 0<span style="color: #494949;">]</span><span style="color: #bbb;">)</span>
+     <span style="color: #bbb;">(</span>take 2<span style="color: #bbb;">)</span>
+     <span style="color: #bbb;">(</span>apply *<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 </div>
@@ -90,9 +189,11 @@ The second problem is the generation of a three measurement sliding window. To s
 <!-- Footnotes --><!-- 
 <div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">List destructuring is really one of my favorite bits of Clojure's syntax. Yes, it's common, but it's also really useful.</p></div></div>
 
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">I think this is reasonably within the rules. The lists are basically structured so that I only have to add an extra pair of square brackets to make it a vector.</p></div></div>
+
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W48-2 22:05</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W48-3 22:06</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

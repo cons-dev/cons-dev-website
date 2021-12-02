@@ -93,6 +93,7 @@ code {
     position: absolute;
     margin-left: calc(50% + 2em);
     margin-right: 0.5em;
+    margin-top: -1.8em;
     max-width: 30em;
   }
 
