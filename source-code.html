@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W48-3 22:12 -->
+<!-- 2021-W48-5 02:35 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Website Source Code</title>
@@ -43,7 +43,7 @@
 </li>
 <li><a href="#org83c7408">HTML</a>
 <ul>
-<li><a href="#org83bb8ac">Dependencies</a></li>
+<li><a href="#org8df4942">Dependencies</a></li>
 <li><a href="#org5f148ce">Preamble and Postamble</a>
 <ul>
 <li><a href="#org9ca9c27">License Info</a></li>
@@ -55,13 +55,17 @@
 </li>
 <li><a href="#org0ed59e9">Stylesheets</a>
 <ul>
-<li><a href="#org7704a83">Dependencies</a></li>
+<li><a href="#orgb4d4808">Dependencies</a></li>
 <li><a href="#org5a18095">Emacs Configuration</a></li>
 <li><a href="#orgc74d02c">Create CSS File</a></li>
 <li><a href="#org70c42e7">Background and Foreground</a></li>
-<li><a href="#org65f9802">Table of Contents</a></li>
+<li><a href="#org76b0b09">Tables</a></li>
+<li><a href="#org3400629">Lists</a></li>
+<li><a href="#org8dcbe9b">Verses and Quotes</a></li>
+<li><a href="#orgfb73f61">Embedded Content</a></li>
 <li><a href="#org6979091">Dynamic Size Switching</a>
 <ul>
+<li><a href="#orgb6e1e23">Non Dynamic Style</a></li>
 <li><a href="#orga802eb6">Wide Screen</a></li>
 <li><a href="#org9189f76">Narrow Screen</a></li>
 </ul>
@@ -82,6 +86,15 @@
 </ul>
 </div>
 </div>
+<blockquote>
+<p>
+Programs must be written for people to read, and only incidentally for machines to execute.
+</p>
+
+<p>
+&#x2013; Harld Abelson, The Structure and Interpretation of Computer Programs
+</p>
+</blockquote>
 
 <div id="outline-container-org68e5a09" class="outline-2">
 <h2 id="org68e5a09">Introduction</h2>
@@ -185,17 +198,18 @@ This gets the website info and sets the directories relative to the current one.
 <p>
 As of generating this file, thce directory above it contains the following files. 
 </p>
-<pre class="example" id="orgdd5d32f">
-total 48
+<pre class="example" id="org58ffe1a">
+total 52
 -rw-r--r-- 1 1000 998 8905 Dec  1 09:35 .cider-repl-history
--rw-r--r-- 1 1000 998 4935 Nov 30 22:00 .dir-locals.el
+-rw-r--r-- 1 1000 998 4935 Dec  2 21:42 .dir-locals.el
 -rw-r--r-- 1 1000 998   34 Jul 29 12:02 .git
--rw-r--r-- 1 1000 998  240 Nov 30 22:00 .gitignore
+-rw-r--r-- 1 1000 998  240 Dec  2 21:42 .gitignore
 -rw-r--r-- 1 1000 998    5 Dec  1 21:22 .nrepl-port
--rw-r--r-- 1 1000 998  381 Nov 30 22:00 project.clj
-drwxr-xr-x 6 1000 998 4096 Dec  1 22:06 public
-drwxr-xr-x 5 1000 998 4096 Dec  1 22:06 src
+-rw-r--r-- 1 1000 998  381 Dec  2 21:42 project.clj
+drwxr-xr-x 6 1000 998 4096 Dec  2 22:24 public
+drwxr-xr-x 6 1000 998 4096 Dec  2 21:42 src
 drwxr-xr-x 4 1000 998 4096 Dec  1 21:22 target
+-rw-r--r-- 1 1000 998 4050 Dec  2 14:01 test.css
 </pre>
 
 <p>
@@ -418,9 +432,9 @@ This is where I configure the HTML displayed by the system, for th emost part.
 </p>
 </div>
 
-<div id="outline-container-org83bb8ac" class="outline-3">
-<h3 id="org83bb8ac">Dependencies</h3>
-<div class="outline-text-3" id="text-org83bb8ac">
+<div id="outline-container-org8df4942" class="outline-3">
+<h3 id="org8df4942">Dependencies</h3>
+<div class="outline-text-3" id="text-org8df4942">
 <p>
 Here we import hiccup so we can write our HTML in Clojure. You may have noticed that I am slightly allergic to HTML. This is partially because I like to do 
 </p>
@@ -518,9 +532,9 @@ While <a href="https://orgmode.org/manual/HTML-Export.html#HTML-Export">org-html
 </p>
 </div>
 
-<div id="outline-container-org7704a83" class="outline-3">
-<h3 id="org7704a83">Dependencies</h3>
-<div class="outline-text-3" id="text-org7704a83">
+<div id="outline-container-orgb4d4808" class="outline-3">
+<h3 id="orgb4d4808">Dependencies</h3>
+<div class="outline-text-3" id="text-orgb4d4808">
 <div class="org-src-container">
 <pre class="src src-clojure" id="orge5fbe3c"><span style="color: #494949;">[</span>garden <span style="color: #494949;">"1.3.10"</span><span style="color: #494949;">]</span>
 </pre>
@@ -561,7 +575,7 @@ This creates the CSS file in my public directory. It is automatically called eve
   <span style="color: #bbb;">(</span><span style="color: #E53935;">:require</span> <span style="color: #494949;">[</span>garden.core <span style="color: #E53935;">:refer</span> <span style="color: #bbb;">[</span>css<span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
             <span style="color: #494949;">[</span>garden.def <span style="color: #E53935;">:refer</span> <span style="color: #bbb;">[</span>defcssfn<span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
             <span style="color: #494949;">[</span>garden.units <span style="color: #E53935;">:refer</span> <span style="color: #bbb;">[</span>em px percent vw<span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
-            <span style="color: #494949;">[</span>garden.selectors <span style="color: #E53935;">:refer</span> <span style="color: #bbb;">[</span>defpseudoelement defselector defclass &gt; pre p a +<span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
+            <span style="color: #494949;">[</span>garden.selectors <span style="color: #E53935;">:refer</span> <span style="color: #bbb;">[</span>defpseudoelement &gt; pre p a +<span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
             <span style="color: #494949;">[</span>garden.stylesheet <span style="color: #E53935;">:refer</span> <span style="color: #bbb;">[</span>at-import at-media at-font-face<span style="color: #bbb;">]</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defcssfn</span> <span style="font-weight: bold; font-style: italic;">url</span><span style="color: #494949;">)</span>
@@ -569,16 +583,20 @@ This creates the CSS file in my public directory. It is automatically called eve
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">red</span> <span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #e53935;">#e53935</span><span style="color: #494949;">"</span><span style="color: #494949;">)</span>
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">fg</span> <span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #000;">#000</span><span style="color: #494949;">"</span><span style="color: #494949;">)</span>
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">fg-alt</span> <span style="color: #494949;">"</span><span style="color: #000000; background-color: #a4a4a4;">#a4a4a4</span><span style="color: #494949;">"</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">light-red</span> <span style="color: #494949;">"</span><span style="color: #000000; background-color: #ff6d60;">#ff6d60</span><span style="color: #494949;">"</span><span style="color: #494949;">)</span>
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">bg</span> <span style="color: #494949;">"</span><span style="color: #000000; background-color: #fff;">#fff</span><span style="color: #494949;">"</span><span style="color: #494949;">)</span>
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">bg-alt</span> <span style="color: #494949;">"</span><span style="color: #000000; background-color: #f5f5f5;">#f5f5f5</span><span style="color: #494949;">"</span><span style="color: #494949;">)</span>
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">mono-font</span> <span style="color: #494949;">"'Iosevka Term Web'"</span><span style="color: #494949;">)</span>
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">title-font</span> <span style="color: #494949;">"Jura"</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">title-font</span> <span style="color: #494949;">"'Jura'"</span><span style="color: #494949;">)</span>
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">proportional-font</span> <span style="color: #494949;">"'Iosevka Aile Web'"</span><span style="color: #494949;">)</span>
 
 <span style="color: #494949;">(</span>spit <span style="color: #494949;">"./public/site.css"</span>
       <span style="color: #bbb;">(</span>css
        &lt;&lt;stylesheet-default&gt;&gt;
+       &lt;&lt;stylesheet-tables&gt;&gt;
+       &lt;&lt;stylesheet-lists&gt;&gt;
+       &lt;&lt;stylesheet-verses-and-quotes&gt;&gt;
        &lt;&lt;stylsheet-unchanging&gt;&gt;
        &lt;&lt;stylesheet-wide-screen&gt;&gt;
        &lt;&lt;stylesheet-narrow-screen&gt;&gt;
@@ -608,58 +626,315 @@ The Iosevka Term Web font itself provides a <a href="iosevka-term-css.html#ID-48
 <div class="org-src-container">
 <pre class="src src-clojure" id="org2c82e61"><span style="color: #494949;">(</span>at-import <span style="color: #bbb;">(</span>url <span style="color: #494949;">"fonts/iosevka-term.css"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 <span style="color: #494949;">(</span>at-import <span style="color: #bbb;">(</span>url <span style="color: #494949;">"fonts/iosevka-aile.css"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-<span style="color: #494949;">(</span>at-font-face <span style="color: #bbb;">{</span><span style="color: #E53935;">:font-family</span> <span style="color: #494949;">"'Jura'"</span>
+<span style="color: #494949;">(</span>at-font-face <span style="color: #bbb;">{</span><span style="color: #E53935;">:font-family</span> title-font
                <span style="color: #E53935;">:src</span>         <span style="color: #494949;">(</span>url <span style="color: #494949;">"fonts/ttf/Jura-VariableFont_wght.ttf"</span><span style="color: #494949;">)</span><span style="color: #bbb;">}</span><span style="color: #494949;">)</span>
 <span style="color: #494949;">[</span><span style="color: #E53935;">:body</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:background-color</span>   bg
         <span style="color: #E53935;">:color</span>              fg
         <span style="color: #E53935;">:font-family</span>        proportional-font
         <span style="color: #E53935;">:-ms-overflow-style</span> 'none
+        <span style="color: #E53935;">:line-height</span>        1.3
         <span style="color: #E53935;">:scrollbar-width</span>    'none<span style="color: #bbb;">}</span>
  <span style="color: #bbb;">[</span><span style="color: #494949;">":-webkit-scrollbar"</span> <span style="color: #494949;">{</span><span style="color: #E53935;">:display</span> 'none<span style="color: #494949;">}</span><span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
-<span style="color: #494949;">[</span><span style="color: #E53935;">:code</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:color</span> fg <span style="color: #E53935;">:background-color</span> bg-alt <span style="color: #E53935;">:font-weight</span> 'light <span style="color: #E53935;">:font-family</span> mono-font<span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org65f9802" class="outline-3">
-<h3 id="org65f9802">Table of Contents</h3>
-<div class="outline-text-3" id="text-org65f9802">
+<div id="outline-container-org76b0b09" class="outline-3">
+<h3 id="org76b0b09">Tables</h3>
+<div class="outline-text-3" id="text-org76b0b09">
 <p>
-The table of contents is another neat dynamic feature of the stylesheet. I basically.
+Tables are also nice to style, and I want them to have a subtle color scheme to make them more readable, center them in the body, and a system to automatically highlight the rows of the table. <label class="sidenote-number" for="7"><sup>7</sup></label><input checked="checked" id="7" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 7</span> Example table from the org-mode manual.</span>
 </p>
-<div class="org-src-container">
-<pre class="src src-clojure" id="org4d1eafb"><span style="color: #494949;">[</span><span style="color: #E53935;">:#table-of-contents</span>
- <span style="color: #bbb;">{</span><span style="color: #E53935;">:background-color</span> bg-alt<span style="color: #bbb;">}</span>
- <span style="color: #bbb;">[</span><span style="color: #E53935;">:ul</span> <span style="color: #494949;">{</span><span style="color: #E53935;">:list-style-type</span> 'none
-       <span style="color: #E53935;">:padding-left</span>    <span style="color: #bbb;">(</span>em 0.5<span style="color: #bbb;">)</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
 
-<span style="color: #494949;">[</span><span style="color: #E53935;">:.sidenote</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:background-color</span> bg-alt
-             <span style="color: #E53935;">:padding</span>          <span style="color: #494949;">(</span>em 0.5<span style="color: #494949;">)</span>
-             <span style="color: #E53935;">:display</span>          'block<span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
-<span style="color: #494949;">[</span><span style="color: #E53935;">:.sidenote-number</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:color</span> red<span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Func</th>
+<th scope="col" class="org-right">n</th>
+<th scope="col" class="org-left">x</th>
+<th scope="col" class="org-left">Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">exp(x)</td>
+<td class="org-right">1</td>
+<td class="org-left">x</td>
+<td class="org-left">1 + x</td>
+</tr>
+
+<tr>
+<td class="org-left">exp(x)</td>
+<td class="org-right">2</td>
+<td class="org-left">x</td>
+<td class="org-left">1 + x + x<sup>2</sup> / 2</td>
+</tr>
+
+<tr>
+<td class="org-left">exp(x)</td>
+<td class="org-right">3</td>
+<td class="org-left">x</td>
+<td class="org-left">1 + x + x<sup>2</sup> / 2 + x<sup>3</sup> / 6</td>
+</tr>
+
+<tr>
+<td class="org-left">x<sup>2</sup>+sqrt(x)</td>
+<td class="org-right">2</td>
+<td class="org-left">x=0</td>
+<td class="org-left">x*(0.5 / 0) + x<sup>2</sup> (2 - 0.25 / 0) / 2</td>
+</tr>
+
+<tr>
+<td class="org-left">x<sup>2</sup>+sqrt(x)</td>
+<td class="org-right">2</td>
+<td class="org-left">x=1</td>
+<td class="org-left">2 + 2.5 x - 2.5 + 0.875 (x - 1)<sup>2</sup></td>
+</tr>
+
+<tr>
+<td class="org-left">tan(x)</td>
+<td class="org-right">3</td>
+<td class="org-left">x</td>
+<td class="org-left">x pi / 180 + 5.72e-8 x<sup>3</sup> pi<sup>3</sup></td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-clojure" id="orgbab6275"><span style="color: #494949;">[</span><span style="color: #E53935;">:table</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:margin-left</span>  'auto
+         <span style="color: #E53935;">:margin-right</span> 'auto<span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
+<span style="color: #494949;">[</span><span style="color: #E53935;">:table</span> <span style="color: #E53935;">:tr</span> <span style="color: #E53935;">:td</span> <span style="color: #E53935;">:thead</span> <span style="color: #E53935;">:tbody</span>
+ <span style="color: #bbb;">{</span><span style="color: #E53935;">:border-width</span> 0<span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
+<span style="color: #494949;">[</span><span style="color: #E53935;">:thead</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:background-color</span> red
+         <span style="color: #E53935;">:font-weight</span>      'bold
+         <span style="color: #E53935;">:color</span>            bg
+         <span style="color: #E53935;">:font-family</span>      title-font<span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
+<span style="color: #494949;">[</span><span style="color: #E53935;">:th</span> <span style="color: #E53935;">:td</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:text-align</span>     'left
+          <span style="color: #E53935;">:padding-bottom</span> <span style="color: #494949;">(</span>em 0.25<span style="color: #494949;">)</span>
+          <span style="color: #E53935;">:padding-top</span>    <span style="color: #494949;">(</span>em 0.25<span style="color: #494949;">)</span>
+          <span style="color: #E53935;">:padding-left</span>   <span style="color: #494949;">(</span>em 0.5<span style="color: #494949;">)</span>
+          <span style="color: #E53935;">:padding-right</span>  <span style="color: #494949;">(</span>em 0.5<span style="color: #494949;">)</span><span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
+<span style="color: #494949;">[</span><span style="color: #E53935;">:tbody</span> <span style="color: #bbb;">[</span><span style="color: #494949;">"tr:hover"</span> <span style="color: #494949;">{</span><span style="color: #E53935;">:background-color</span> bg-alt<span style="color: #494949;">}</span><span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
 </pre>
 </div>
 </div>
+</div>
+
+<div id="outline-container-org3400629" class="outline-3">
+<h3 id="org3400629">Lists</h3>
+<div class="outline-text-3" id="text-org3400629">
+<p>
+Here the lists are styled so I can make them look better and more interesting. List bullets are colored red <label class="sidenote-number" for="8"><sup>8</sup></label><input checked="checked" id="8" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 8</span> Implementation stolen from <a href="https://www.w3.org/Style/Examples/007/color-bullets.en.html">here</a>.</span> and the description lists also have their first elements colored red.
+</p>
+
+<p>
+Example <code>ul</code>:
+</p>
+<ul class="org-ul">
+<li>This</li>
+<li>is</li>
+<li>a</li>
+<li>list</li>
+</ul>
+
+<p>
+Example <code>ol</code>:
+</p>
+<ol class="org-ol">
+<li>A</li>
+<li>simple</li>
+<li>list</li>
+</ol>
+
+<p>
+Example <code>dl</code>:
+</p>
+<dl class="org-dl">
+<dt>some</dt><dd>descriptions</dd>
+<dt>of</dt><dd>objects</dd>
+</dl>
+
+<div class="org-src-container">
+<pre class="src src-clojure" id="org5bdb468"><span style="color: #494949;">[</span><span style="color: #E53935;">:dt</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:color</span> red<span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
+<span style="color: #494949;">[</span><span style="color: #E53935;">:ol</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:list-style</span>    'none
+      <span style="color: #E53935;">:counter-reset</span> 'li<span style="color: #bbb;">}</span>
+ <span style="color: #bbb;">[</span>li <span style="color: #494949;">{</span><span style="color: #E53935;">:counter-increment</span> 'li<span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
+ <span style="color: #bbb;">[</span><span style="color: #494949;">"li::before"</span> <span style="color: #494949;">{</span><span style="color: #E53935;">:content</span>      <span style="color: #494949;">"counter(li)"</span>
+                <span style="color: #E53935;">:color</span>        red
+                <span style="color: #E53935;">:display</span>      'block
+                <span style="color: #E53935;">:width</span>        <span style="color: #bbb;">(</span>em 1<span style="color: #bbb;">)</span>
+                <span style="color: #E53935;">:margin-right</span> <span style="color: #bbb;">(</span>em 0.5<span style="color: #bbb;">)</span>
+                <span style="color: #E53935;">:text-align</span>   'right
+                <span style="color: #E53935;">:direction</span>    'rtl
+                <span style="color: #E53935;">:margin-left</span>  <span style="color: #bbb;">(</span>em -1.5<span style="color: #bbb;">)</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
+<span style="color: #494949;">[</span><span style="color: #E53935;">:ul</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:list-style</span> 'none<span style="color: #bbb;">}</span>
+ <span style="color: #bbb;">[</span><span style="color: #494949;">"li::before"</span> <span style="color: #494949;">{</span><span style="color: #E53935;">:content</span>     <span style="color: #494949;">"'&#8226;'"</span>
+                <span style="color: #E53935;">:color</span>       red
+                <span style="color: #E53935;">:display</span>     'inline-block
+                <span style="color: #E53935;">:width</span>       <span style="color: #bbb;">(</span>em 1<span style="color: #bbb;">)</span>
+                <span style="color: #E53935;">:margin-left</span> <span style="color: #bbb;">(</span>em -1<span style="color: #bbb;">)</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8dcbe9b" class="outline-3">
+<h3 id="org8dcbe9b">Verses and Quotes</h3>
+<div class="outline-text-3" id="text-org8dcbe9b">
+<p>
+I decided that verses should be indented, but given minimal styling, while quotes should be indented, italicized, and have a quotation mark superimposed on them.
+</p>
+
+<blockquote>
+<p>
+There is nothing quite like writing a long string of code.
+</p>
+
+<p>
+&#x2013; nil
+</p>
+</blockquote>
+
+<dl class="org-dl">
+<dt>The Eternal Flame by Julia Ecklar</dt><dd></dd>
+</dl>
+<p class="verse">
+I was taught Assembler in my second year of school<br />
+It's kinda like construction work &#x2013;<br />
+With a toothpick for a tool<br />
+So when I made my senior year<br />
+I threw my code away<br />
+And learned the way to program<br />
+That I still prefer today<br />
+<br />
+Now, some folks on the Internet<br />
+Put their faith in C++<br />
+They swear that it's so powerful<br />
+It's what God used for us<br />
+And maybe He lets mortals dredge<br />
+Their objects from the C<br />
+But I think that explains<br />
+Why only God can make a tree<br />
+<br />
+For God wrote in Lisp code<br />
+When he filled the leaves with green<br />
+The fractal flowers and recursive roots:<br />
+The most lovely hack I've seen<br />
+And when I ponder snowflakes<br />
+Never finding two the same<br />
+I know God likes a language<br />
+With its own four-letter name<br />
+Now, I've used a SUN under Unix<br />
+So I've seen what C can hold<br />
+I've surfed for Perls, found what Fortran's for<br />
+Got that Java stuff down cold<br />
+Though the chance that I'd write COBOL code<br />
+Is a SNOBOL's chance in Hell<br />
+And I basically hate hieroglyphs<br />
+So I won't use APL<br />
+<br />
+Now, God must know all these languages<br />
+And a few I haven't named<br />
+But the Lord made sure, when each sparrow falls<br />
+That its flesh will be reclaimed<br />
+And the Lord could not count grains of sand<br />
+With a 32-bit word<br />
+Who knows where we would go to<br />
+If Lisp weren't what he preferred?<br />
+<br />
+And God wrote in Lisp code<br />
+Every creature great and small<br />
+Don't search the disk drive for man.c<br />
+When the listing's on the wall<br />
+And when I watch the lightning burn<br />
+Unbelievers to a crisp<br />
+I know God had six days to work<br />
+So he wrote it all in Lisp<br />
+Yes, God had a deadline<br />
+So he wrote it all in Lisp<br />
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure" id="org1ec8792"><span style="color: #494949;">[</span><span style="color: #E53935;">:blockquote</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:font-style</span>       'italic
+              <span style="color: #E53935;">:background-color</span> bg-alt
+              <span style="color: #E53935;">:padding</span>          <span style="color: #494949;">(</span>em 0.5<span style="color: #494949;">)</span><span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
+<span style="color: #494949;">[</span><span style="color: #494949;">"blockquote::before"</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:content</span>     <span style="color: #494949;">"'</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">'"</span>
+                       <span style="color: #E53935;">:font-size</span>   <span style="color: #494949;">(</span>em 5<span style="color: #494949;">)</span>
+                       <span style="color: #E53935;">:color</span>       <span style="color: #494949;">"rgba(0,0,0,0.1)"</span> <span style="color: #a4a4a4; font-style: italic;">; semi-transparent quote</span>
+                       <span style="color: #E53935;">:margin-left</span> <span style="color: #494949;">(</span>em -0.15<span style="color: #494949;">)</span>
+                       <span style="color: #E53935;">:margin-top</span>  <span style="color: #494949;">(</span>em -0.15<span style="color: #494949;">)</span>
+                       <span style="color: #E53935;">:height</span>      <span style="color: #494949;">(</span>em 0<span style="color: #494949;">)</span>
+                       <span style="color: #E53935;">:display</span>     'block<span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
+<span style="color: #494949;">[</span><span style="color: #E53935;">:.verse</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:margin-left</span> <span style="color: #494949;">(</span>em 3<span style="color: #494949;">)</span><span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgfb73f61" class="outline-3">
+<h3 id="orgfb73f61">Embedded Content</h3>
 </div>
 
 <div id="outline-container-org6979091" class="outline-3">
 <h3 id="org6979091">Dynamic Size Switching</h3>
 <div class="outline-text-3" id="text-org6979091">
 <p>
-To ensure that the website looks good regardless of what you use <label class="sidenote-number" for="7"><sup>7</sup></label><input checked="checked" id="7" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 7</span> And I do mean regardless, I have put in some effort to ensure that it looks good even in a terminal browser, mostly by avoiding modifications to the org-exported HTML.</span> I switch a large portion of the style of the website between two modes, a small single-column version for <code>&lt; 60em</code> screens (phones and the like), and a large fully expanded one for <code>&gt; 60em</code> screens (desktops, people with big browsing areas).
+To ensure that the website looks good regardless of what you use <label class="sidenote-number" for="9"><sup>9</sup></label><input checked="checked" id="9" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 9</span> And I do mean regardless, I have put in some effort to ensure that it looks good even in a terminal browser, mostly by avoiding modifications to the org-exported HTML.</span> I switch a large portion of the style of the website between two modes, a small single-column version for <code>&lt; 60em</code> screens (phones and the like), and a large fully expanded one for <code>&gt; 60em</code> screens (desktops, people with big browsing areas).
 </p>
+</div>
+
+<div id="outline-container-orgb6e1e23" class="outline-4">
+<h4 id="orgb6e1e23">Non Dynamic Style</h4>
+<div class="outline-text-4" id="text-orgb6e1e23">
+<p>
+To start out some non-dynamic things need to be styled.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="org4d1eafb"><span style="color: #494949;">[</span><span style="color: #E53935;">:#table-of-contents</span>
+ <span style="color: #bbb;">{</span><span style="color: #E53935;">:background-color</span> bg-alt<span style="color: #bbb;">}</span>
+ <span style="color: #bbb;">[</span><span style="color: #E53935;">:ul</span> <span style="color: #494949;">{</span><span style="color: #E53935;">:list-style-type</span> 'none
+       <span style="color: #E53935;">:padding-left</span>    <span style="color: #bbb;">(</span>em 0.5<span style="color: #bbb;">)</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
+ <span style="color: #bbb;">[</span><span style="color: #494949;">"li::before"</span> <span style="color: #494949;">{</span><span style="color: #E53935;">:content</span> 'none<span style="color: #494949;">}</span><span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
+
+<span style="color: #494949;">[</span><span style="color: #E53935;">:.sidenote</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:background-color</span> bg-alt
+             <span style="color: #E53935;">:padding</span>          <span style="color: #494949;">(</span>em 0.5<span style="color: #494949;">)</span>
+             <span style="color: #E53935;">:display</span>          'block<span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
+<span style="color: #494949;">[</span><span style="color: #E53935;">:.sidenote-number</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:color</span> red<span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
+<span style="color: #494949;">[</span><span style="color: #E53935;">:#postamble</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:color</span>            fg-alt
+              <span style="color: #E53935;">:background-color</span> bg-alt
+              <span style="color: #E53935;">:padding-left</span>     <span style="color: #494949;">(</span>em 0.5<span style="color: #494949;">)</span>
+              <span style="color: #E53935;">:padding-top</span>      <span style="color: #494949;">(</span>em 0.5<span style="color: #494949;">)</span>
+              <span style="color: #E53935;">:padding-bottom</span>   <span style="color: #494949;">(</span>em 0.5<span style="color: #494949;">)</span>
+              <span style="color: #E53935;">:marign-right</span>     <span style="color: #494949;">(</span>em 1<span style="color: #494949;">)</span><span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
+</pre>
+</div>
+</div>
 </div>
 
 <div id="outline-container-orga802eb6" class="outline-4">
 <h4 id="orga802eb6">Wide Screen</h4>
 <div class="outline-text-4" id="text-orga802eb6">
 <p>
-The wide screen layout splits the website into three separate columns without changing the single-column HTML using some trickery with the margins and positioning. The leftmost column contains the table of contents, the next the document text, and the rightmost the sidenotes <label class="sidenote-number" for="8"><sup>8</sup></label><input checked="checked" id="8" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 8</span> Like this one!</span>.
+The wide screen layout splits the website into three separate columns without changing the single-column HTML using some trickery with the margins and positioning. The leftmost column contains the table of contents, the next the document text, and the rightmost the sidenotes <label class="sidenote-number" for="10"><sup>10</sup></label><input checked="checked" id="10" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 10</span> Like this one!</span>.
 </p>
 <div class="org-src-container">
 <pre class="src src-clojure" id="orgd504dd5"><span style="color: #494949;">(</span>at-media <span style="color: #bbb;">{</span><span style="color: #E53935;">:screen</span> <span style="color: #E53935;">true</span> <span style="color: #E53935;">:min-width</span> <span style="color: #494949;">(</span>em 60<span style="color: #494949;">)</span><span style="color: #bbb;">}</span>
           <span style="color: #bbb;">[</span><span style="color: #E53935;">:.title</span>  <span style="color: #494949;">{</span><span style="color: #E53935;">:width</span> <span style="color: #494949;">"calc(100vw - 9.15em)"</span> <span style="color: #E53935;">:margin-right</span> <span style="color: #bbb;">(</span>em 0.5<span style="color: #bbb;">)</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
+          <span style="color: #bbb;">[</span><span style="color: #E53935;">:#postamble</span> <span style="color: #494949;">{</span><span style="color: #E53935;">:width</span> <span style="color: #494949;">"calc(100vw - 19.15em)"</span> <span style="color: #E53935;">:margin-right</span> <span style="color: #bbb;">(</span>em 0.5<span style="color: #bbb;">)</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
           <span style="color: #bbb;">[</span><span style="color: #E53935;">:#table-of-contents</span> <span style="color: #494949;">{</span><span style="color: #E53935;">:height</span>        <span style="color: #bbb;">(</span>percent 100<span style="color: #bbb;">)</span>
                                 <span style="color: #E53935;">:width</span>         <span style="color: #bbb;">(</span>em 15<span style="color: #bbb;">)</span>
                                 <span style="color: #E53935;">:padding-right</span> <span style="color: #bbb;">(</span>em 0.5<span style="color: #bbb;">)</span>
@@ -699,7 +974,7 @@ The wide screen layout splits the website into three separate columns without ch
 <h4 id="org9189f76">Narrow Screen</h4>
 <div class="outline-text-4" id="text-org9189f76">
 <p>
-For narrow screens I inline everything and also do some trickery with the sidenotes by having them hidden but toggle-able with CSS buttons. This means that the page uses no JavaScript to display or hide them, keeping it NoScript friendly!<label class="sidenote-number" for="9"><sup>9</sup></label><input checked="checked" id="9" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 9</span> It's also kind of a fun <a href="https://en.wikipedia.org/wiki/Turing_tarpit">Turing tarpit</a>.</span> Basically it's a phone-friendly UI that hopefully maintains most of the flare of the full layout.
+For narrow screens I inline everything and also do some trickery with the sidenotes by having them hidden but toggle-able with CSS buttons. This means that the page uses no JavaScript to display or hide them, keeping it NoScript friendly!<label class="sidenote-number" for="11"><sup>11</sup></label><input checked="checked" id="11" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 11</span> It's also kind of a fun <a href="https://en.wikipedia.org/wiki/Turing_tarpit">Turing tarpit</a>.</span> Basically it's a phone-friendly UI that hopefully maintains most of the flare of the full layout.
 </p>
 <div class="org-src-container">
 <pre class="src src-clojure" id="orgbad82db"><span style="color: #494949;">(</span>at-media <span style="color: #bbb;">{</span><span style="color: #E53935;">:screen</span> <span style="color: #E53935;">true</span> <span style="color: #E53935;">:max-width</span> <span style="color: #494949;">(</span>em 60<span style="color: #494949;">)</span><span style="color: #bbb;">}</span>
@@ -761,18 +1036,20 @@ Here I restyle the headlines using the style I currently use in Emacs. These cod
 The title, date, and author information in Emacs are usually the same color. So I set them here.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org2633806">`<span style="color: #494949;">[</span>~@<span style="color: #bbb;">(</span>map p <span style="color: #494949;">[</span><span style="color: #494949;">".author"</span> <span style="color: #494949;">".date"</span> <span style="color: #494949;">".creator"</span> <span style="color: #494949;">".license"</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span>
-  <span style="color: #bbb;">{</span><span style="color: #E53935;">:color</span> ~fg-alt<span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
-<span style="color: #494949;">[</span><span style="color: #E53935;">:.title</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:font-style</span> 'italic
-          <span style="color: #E53935;">:font-size</span> <span style="color: #494949;">(</span>em 2<span style="color: #494949;">)</span>
-          <span style="color: #E53935;">:padding-top</span> <span style="color: #494949;">(</span>em 0.5<span style="color: #494949;">)</span>
-          <span style="color: #E53935;">:padding-bottom</span> <span style="color: #494949;">(</span>em 0.5<span style="color: #494949;">)</span>
+<pre class="src src-clojure" id="org2633806">
+<span style="color: #494949;">[</span><span style="color: #E53935;">:.title</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:font-style</span>       'italic
+          <span style="color: #E53935;">:font-size</span>        <span style="color: #494949;">(</span>em 2<span style="color: #494949;">)</span>
+          <span style="color: #E53935;">:padding-top</span>      <span style="color: #494949;">(</span>em 0.5<span style="color: #494949;">)</span>
+          <span style="color: #E53935;">:padding-bottom</span>   <span style="color: #494949;">(</span>em 0.5<span style="color: #494949;">)</span>
           <span style="color: #E53935;">:font-family</span>      title-font
-          <span style="color: #E53935;">:font-weight</span> 'bold
-          <span style="color: #E53935;">:color</span>      bg
-          <span style="color: #E53935;">:text-align</span> 'center
+          <span style="color: #E53935;">:font-weight</span>      'bold
+          <span style="color: #E53935;">:color</span>            bg
+          <span style="color: #E53935;">:text-align</span>       'center
           <span style="color: #E53935;">:background-color</span> red<span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
-<span style="color: #494949;">[</span><span style="color: #E53935;">:.subtitle</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:font-style</span> 'normal <span style="color: #E53935;">:font-size</span> <span style="color: #494949;">(</span>em 0.5<span style="color: #494949;">)</span> <span style="color: #E53935;">:line-height</span> 0<span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
+<span style="color: #494949;">[</span><span style="color: #E53935;">:.subtitle</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:font-style</span>  'normal
+             <span style="color: #E53935;">:font-size</span>   <span style="color: #494949;">(</span>em 0.5<span style="color: #494949;">)</span>
+             <span style="color: #E53935;">:line-height</span> 1
+             <span style="color: #E53935;">:padding</span>     0<span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
 </pre>
 </div>
 </div>
@@ -789,7 +1066,11 @@ The title, date, and author information in Emacs are usually the same color. So 
 This sets the background color and ensures that it is displayed with the standard monospace font.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org22b4305"><span style="color: #494949;">[</span><span style="color: #bbb;">(</span>pre <span style="color: #E53935;">:.src</span><span style="color: #bbb;">)</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:background-color</span> bg-alt
+<pre class="src src-clojure" id="org22b4305"><span style="color: #494949;">[</span><span style="color: #E53935;">:code</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:color</span>            fg
+        <span style="color: #E53935;">:background-color</span> bg-alt
+        <span style="color: #E53935;">:font-weight</span>      'light
+        <span style="color: #E53935;">:font-family</span>      mono-font<span style="color: #bbb;">}</span><span style="color: #494949;">]</span>
+<span style="color: #494949;">[</span><span style="color: #bbb;">(</span>pre <span style="color: #E53935;">:.src</span><span style="color: #bbb;">)</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:background-color</span> bg-alt
               <span style="color: #E53935;">:padding</span>          <span style="color: #494949;">(</span>em 0.5<span style="color: #494949;">)</span>
               <span style="color: #E53935;">:overflow</span>         'auto
               <span style="color: #E53935;">:font-family</span>      mono-font
@@ -891,15 +1172,19 @@ This finds the background color of a face. Mostly this just extracts colors for 
 
 <div class="footdef"><sup><a id="fn.6" class="footnum" href="#fnr.6" role="doc-backlink">6</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">How else am I to make my website as compliant with as many meaningless standards as possible? It's ISO-8601 compliant, DIN-1451 compliant (almost), RFC-791 compliant, and probably quite a few more.</p></div></div>
 
-<div class="footdef"><sup><a id="fn.7" class="footnum" href="#fnr.7" role="doc-backlink">7</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">And I do mean regardless, I have put in some effort to ensure that it looks good even in a terminal browser, mostly by avoiding modifications to the org-exported HTML.</p></div></div>
+<div class="footdef"><sup><a id="fn.7" class="footnum" href="#fnr.7" role="doc-backlink">7</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Example table from the org-mode manual.</p></div></div>
 
-<div class="footdef"><sup><a id="fn.8" class="footnum" href="#fnr.8" role="doc-backlink">8</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Like this one!</p></div></div>
+<div class="footdef"><sup><a id="fn.8" class="footnum" href="#fnr.8" role="doc-backlink">8</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Implementation stolen from <a href="https://www.w3.org/Style/Examples/007/color-bullets.en.html">here</a>.</p></div></div>
 
-<div class="footdef"><sup><a id="fn.9" class="footnum" href="#fnr.9" role="doc-backlink">9</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">It's also kind of a fun <a href="https://en.wikipedia.org/wiki/Turing_tarpit">Turing tarpit</a>.</p></div></div>
+<div class="footdef"><sup><a id="fn.9" class="footnum" href="#fnr.9" role="doc-backlink">9</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">And I do mean regardless, I have put in some effort to ensure that it looks good even in a terminal browser, mostly by avoiding modifications to the org-exported HTML.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.10" class="footnum" href="#fnr.10" role="doc-backlink">10</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Like this one!</p></div></div>
+
+<div class="footdef"><sup><a id="fn.11" class="footnum" href="#fnr.11" role="doc-backlink">11</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">It's also kind of a fun <a href="https://en.wikipedia.org/wiki/Turing_tarpit">Turing tarpit</a>.</p></div></div>
 
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W48-3 22:11</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W48-4 22:26</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

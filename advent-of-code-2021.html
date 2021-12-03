@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W48-3 22:06 -->
+<!-- 2021-W48-5 02:35 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Advent Of Code 2021</title>
@@ -45,16 +45,22 @@
 <ul>
 <li><a href="#org29a6411">Introduction</a></li>
 <li><a href="#org016765f">Utility Functions</a></li>
-<li><a href="#orga238638"><span class="timestamp-wrapper"><span class="timestamp">&lt;2021-W48-2&gt;</span></span> Sonar Sweep</a>
+<li><a href="#orgbebdb0c"><span class="timestamp-wrapper"><span class="timestamp">&lt;2021-W48-2&gt;</span></span> Sonar Sweep</a>
 <ul>
-<li><a href="#orgca9fdfa">Part 1</a></li>
-<li><a href="#org2af8512">Part 2</a></li>
+<li><a href="#orgb8650c4">Part 1</a></li>
+<li><a href="#orgc4380d4">Part 2</a></li>
 </ul>
 </li>
-<li><a href="#org7c39ba7"><span class="timestamp-wrapper"><span class="timestamp">&lt;2021-W48-3&gt;</span></span></a>
+<li><a href="#orgced000b"><span class="timestamp-wrapper"><span class="timestamp">&lt;2021-W48-3&gt;</span></span> Dive!</a>
 <ul>
-<li><a href="#org20f4a01">Part 1</a></li>
-<li><a href="#orgdb4d7cc">Part 2</a></li>
+<li><a href="#org5644d30">Part 1</a></li>
+<li><a href="#orge3beb4d">Part 2</a></li>
+</ul>
+</li>
+<li><a href="#org3160e4d"><span class="timestamp-wrapper"><span class="timestamp">&lt;2021-W48-4&gt;</span></span> Binary Diagnostic</a>
+<ul>
+<li><a href="#orgf15c204">Part 1</a></li>
+<li><a href="#orga737c87">Part 2</a></li>
 </ul>
 </li>
 </ul>
@@ -76,21 +82,22 @@ To start out I will define a utility function to make reading EDN files easier. 
 <pre class="src src-clojure"><span style="color: #494949;">(</span>require '<span style="color: #bbb;">[</span>clojure.java.io <span style="color: #E53935;">:as</span> io<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">read-edn</span> <span style="color: #bbb;">[</span>f<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> f <span style="color: #E53935;">io</span>/resource slurp read-string<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">read-file</span> <span style="color: #bbb;">[</span>f<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> f <span style="color: #E53935;">io</span>/resource slurp<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orga238638" class="outline-2">
-<h2 id="orga238638"><span class="timestamp-wrapper"><span class="timestamp">&lt;2021-W48-2&gt;</span></span> Sonar Sweep</h2>
-<div class="outline-text-2" id="text-orga238638">
+<div id="outline-container-orgbebdb0c" class="outline-2">
+<h2 id="orgbebdb0c"><span class="timestamp-wrapper"><span class="timestamp">&lt;2021-W48-2&gt;</span></span> Sonar Sweep</h2>
+<div class="outline-text-2" id="text-orgbebdb0c">
 <p>
 The first problem is fairly simple. We are to take a list of numbers and compare each pair within the list, producing.
 </p>
 </div>
-<div id="outline-container-orgca9fdfa" class="outline-3">
-<h3 id="orgca9fdfa">Part 1</h3>
-<div class="outline-text-3" id="text-orgca9fdfa">
+<div id="outline-container-orgb8650c4" class="outline-3">
+<h3 id="orgb8650c4">Part 1</h3>
+<div class="outline-text-3" id="text-orgb8650c4">
 <p>
 Once that is done we are to add up the total number of increases. This is fairly simple, and the following code does that through a simple recursive function and list destructing.<label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> List destructuring is really one of my favorite bits of Clojure's syntax. Yes, it's common, but it's also really useful.</span> We take the first two elements of the list, and compare them to check if they have increased, returning 1 if they have, 0 if they have not. Then we check if the list is empty, if it is we simply return, but if it is not we sum with the function applied to the rest of the list minus the first element.
 </p>
@@ -110,9 +117,9 @@ Once that is done we are to add up the total number of increases. This is fairly
 </div>
 </div>
 
-<div id="outline-container-org2af8512" class="outline-3">
-<h3 id="org2af8512">Part 2</h3>
-<div class="outline-text-3" id="text-org2af8512">
+<div id="outline-container-orgc4380d4" class="outline-3">
+<h3 id="orgc4380d4">Part 2</h3>
+<div class="outline-text-3" id="text-orgc4380d4">
 <p>
 The second problem is the generation of a three measurement sliding window. To solve this we make a slight modification, adding some further elements in the destructuring bind. Once that is done it's smooth sailing.
 </p>
@@ -132,16 +139,16 @@ The second problem is the generation of a three measurement sliding window. To s
 </div>
 
 
-<div id="outline-container-org7c39ba7" class="outline-2">
-<h2 id="org7c39ba7"><span class="timestamp-wrapper"><span class="timestamp">&lt;2021-W48-3&gt;</span></span></h2>
-<div class="outline-text-2" id="text-org7c39ba7">
+<div id="outline-container-orgced000b" class="outline-2">
+<h2 id="orgced000b"><span class="timestamp-wrapper"><span class="timestamp">&lt;2021-W48-3&gt;</span></span> Dive!</h2>
+<div class="outline-text-2" id="text-orgced000b">
 <p>
 In both cases it was possible to solve the problems in \(O(n)\) time. However, unfortunately, unlike the last one this probably could not be parallelized for matrix math, like I have seen with some of my friends.
 </p>
 </div>
-<div id="outline-container-org20f4a01" class="outline-3">
-<h3 id="org20f4a01">Part 1</h3>
-<div class="outline-text-3" id="text-org20f4a01">
+<div id="outline-container-org5644d30" class="outline-3">
+<h3 id="org5644d30">Part 1</h3>
+<div class="outline-text-3" id="text-org5644d30">
 <p>
 Here we write a simple bit of code to calculate the position of the craft. Here we simply have the string representing the file pre-converted into an EDN.<label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> I think this is reasonably within the rules. The lists are basically structured so that I only have to add an extra pair of square brackets to make it a vector.</span> Then we read it in, partition it into a series of 2-tuples, use some destructuring to conduct math to add it to a vector (\(i\) represents the horizontal, \(j\) the vertical) and then we multiply our values together.
 </p>
@@ -161,16 +168,14 @@ Here we write a simple bit of code to calculate the position of the craft. Here 
 </div>
 </div>
 
-<div id="outline-container-orgdb4d7cc" class="outline-3">
-<h3 id="orgdb4d7cc">Part 2</h3>
-<div class="outline-text-3" id="text-orgdb4d7cc">
+<div id="outline-container-orge3beb4d" class="outline-3">
+<h3 id="orge3beb4d">Part 2</h3>
+<div class="outline-text-3" id="text-orge3beb4d">
 <p>
 To solve part two we now need to treat the <code>up</code> and <code>down</code> pairs as representing changes to the slope of the list. To do so we simply add a new value representing the slope to the accumulator, known as <code>aim</code>. We then, when looping over it, modify the aim value for up and down commands, and modify the depth during forward commands.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure"><span style="color: #494949;">(</span>require '<span style="color: #bbb;">[</span>clojure.java.io <span style="color: #E53935;">:as</span> io<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
-
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">"./other/advent-of-code-2021-02_input.edn"</span>
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">"./other/advent-of-code-2021-02_input.edn"</span>
      read-edn
      <span style="color: #bbb;">(</span>partition 2<span style="color: #bbb;">)</span>
      <span style="color: #bbb;">(</span>reduce <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span>i j aim<span style="color: #494949;">]</span> <span style="color: #494949;">[</span>dir val<span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
@@ -186,14 +191,114 @@ To solve part two we now need to treat the <code>up</code> and <code>down</code>
 </div>
 </div>
 </div>
+<div id="outline-container-org3160e4d" class="outline-2">
+<h2 id="org3160e4d"><span class="timestamp-wrapper"><span class="timestamp">&lt;2021-W48-4&gt;</span></span> Binary Diagnostic</h2>
+<div class="outline-text-2" id="text-org3160e4d">
+<p>
+Whew, these solutions took longer. I think part of what shot me in the foot here was that my solutions were too cute in many ways, unnecessarily using map / reduce functions to process the data, making it harder to read and work with than needed, and as it has been said,
+</p>
+<blockquote>
+<p>
+Programs must be written for people to read, and only incidentally for machines to execute.
+</p>
+
+<p>
+&#x2013; Harld Abelson, The Structure and Interpretation of Computer Programs
+</p>
+</blockquote>
+</div>
+<div id="outline-container-orgf15c204" class="outline-3">
+<h3 id="orgf15c204">Part 1</h3>
+<div class="outline-text-3" id="text-orgf15c204">
+<p>
+Here in our first binary diagnostic we write a rather simple bit of code, really not much more than we would normally do, though the program logic is a bit twistier than the usual.
+</p>
+
+<p>
+Basically we take the list, reducing over each element with a function that maps over each character. We add the numeric value of the character, taken by subtracting 48 from it, the ASCII value of the character 0, to the accumulator at the index. Following this we map over our list, selecting the largest values, smoosh it together into a string, and convert it to an integer by parsing the list from binary, which gives us gamma.
+</p>
+
+<p>
+Next we simply do a bitwise xor with 12 bits of 1, giving us epsilon.
+</p>
+
+<p>
+After this we can just multiply them togetehr.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">advent-of-code.day3.1</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935;">:require</span> <span style="color: #494949;">[</span>clojure.string <span style="color: #E53935;">:as</span> str<span style="color: #494949;">]</span>
+            <span style="color: #494949;">[</span>clojure.java.io <span style="color: #E53935;">:as</span> io<span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>bin <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">"./other/advent-of-code-2021-03_input.txt"</span>
+               <span style="color: #bbb;">(</span><span style="color: #E53935;">io</span>/resource<span style="color: #bbb;">)</span>
+               <span style="color: #bbb;">(</span>slurp<span style="color: #bbb;">)</span>
+               <span style="color: #bbb;">(</span><span style="color: #E53935;">str</span>/split-lines<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+      &#611;   <span style="color: #494949;">(</span><span style="color: #E53935;">Integer</span>/parseInt
+           <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">(</span>reduce <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #494949;">[</span>acc e<span style="color: #494949;">]</span>
+                          <span style="color: #494949;">(</span>map #<span style="color: #bbb;">(</span>+ <span style="color: #494949;">(</span>- <span style="color: #bbb;">(</span>int <span style="font-style: italic;">%1</span><span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>int <span style="color: #494949;">\0</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> <span style="font-style: italic;">%2</span><span style="color: #bbb;">)</span>
+                               e acc<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+                        <span style="color: #bbb;">(</span>repeat 12 0<span style="color: #bbb;">)</span> bin<span style="color: #494949;">)</span>
+                <span style="color: #494949;">(</span>map #<span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>&lt; <span style="color: #bbb;">(</span>/ <span style="color: #494949;">(</span>count bin<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span> <span style="font-style: italic;">%</span><span style="color: #494949;">)</span> 1 0<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                <span style="color: #494949;">(</span>apply str<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+           2<span style="color: #494949;">)</span>
+      &#603;   <span style="color: #494949;">(</span>bit-xor &#611; 0xfff<span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span>* &#611; &#603;<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orga737c87" class="outline-3">
+<h3 id="orga737c87">Part 2</h3>
+<div class="outline-text-3" id="text-orga737c87">
+<p>
+Here is the fun part, and the part where we apply recursion<label class="sidenote-number" for="3"><sup>3</sup></label><input checked="checked" id="3" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 3</span> See recursion.</span> to solve the problem, and also put ourselves in a somewhat strange world of program logic.
+</p>
+
+<p>
+Here we basically define a function that conducts a binary search through the
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">advent-of-code.day3.1</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935;">:require</span> <span style="color: #494949;">[</span>clojure.string <span style="color: #E53935;">:as</span> str<span style="color: #494949;">]</span>
+            <span style="color: #494949;">[</span>clojure.java.io <span style="color: #E53935;">:as</span> io<span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">bit-filter</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>lst comp<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>bit-filter lst comp 0<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>lst comp pos<span style="color: #494949;">]</span>
+   <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>&gt; <span style="color: #494949;">(</span>count lst<span style="color: #494949;">)</span> 1<span style="color: #bbb;">)</span>
+     <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">[</span>fval <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>comp
+                     <span style="color: #bbb;">(</span>reduce <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #bbb;">[</span>acc e<span style="color: #bbb;">]</span>
+                               <span style="color: #bbb;">(</span>+ <span style="color: #494949;">(</span>- <span style="color: #bbb;">(</span>int <span style="color: #494949;">(</span>nth e pos<span style="color: #494949;">)</span><span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>int <span style="color: #494949;">\0</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> acc<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                             0 lst<span style="color: #bbb;">)</span>
+                     <span style="color: #bbb;">(</span>/ <span style="color: #494949;">(</span>count lst<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                  <span style="color: #494949;">\1</span>
+                  <span style="color: #494949;">\0</span><span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
+       <span style="color: #494949;">(</span>bit-filter <span style="color: #bbb;">(</span>filter #<span style="color: #494949;">(</span>= <span style="color: #bbb;">(</span>nth <span style="font-style: italic;">%</span> pos<span style="color: #bbb;">)</span> fval<span style="color: #494949;">)</span> lst<span style="color: #bbb;">)</span> comp <span style="color: #bbb;">(</span>inc pos<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+     <span style="color: #bbb;">(</span><span style="color: #E53935;">Integer</span>/parseInt <span style="color: #494949;">(</span>first lst<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>bin           <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">"./other/advent-of-code-2021-03_input.txt"</span>
+                         <span style="color: #bbb;">(</span><span style="color: #E53935;">io</span>/resource<span style="color: #bbb;">)</span>
+                         <span style="color: #bbb;">(</span>slurp<span style="color: #bbb;">)</span>
+                         <span style="color: #bbb;">(</span><span style="color: #E53935;">str</span>/split-lines<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+      oxygen-rating <span style="color: #494949;">(</span>bit-filter bin &gt;=<span style="color: #494949;">)</span>
+      co2-rating    <span style="color: #494949;">(</span>bit-filter bin &lt;<span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span>* co2-rating oxygen-rating<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
 <!-- Footnotes --><!-- 
 <div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">List destructuring is really one of my favorite bits of Clojure's syntax. Yes, it's common, but it's also really useful.</p></div></div>
 
 <div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">I think this is reasonably within the rules. The lists are basically structured so that I only have to add an extra pair of square brackets to make it a vector.</p></div></div>
 
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">See recursion.</p></div></div>
+
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W48-3 22:06</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W48-5 01:27</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>
