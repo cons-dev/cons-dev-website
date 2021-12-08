@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W48-5 02:35 -->
+<!-- 2021-W49-2 22:10 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Making Control Block Diagrams in DOT</title>
@@ -59,11 +59,13 @@ Control diagrams are vitally important for modeling the interaction of various c
 </div>
 </div>
 
+
+
 <div id="outline-container-org41d0dad" class="outline-2">
 <h2 id="org41d0dad">Styling Setup</h2>
 <div class="outline-text-2" id="text-org41d0dad">
 <p>
-This is styled according to the color schemes in my <a href="control-block-diagram-syntax.html#ID-10ab774d-3761-42ee-ba74-1bbaab82e9a2">Control Block Diagram Syntax</a> document. There is no official standard for control block diagram syntax coloring (or, indeed, much of the design of control diagrams), so I decided to create my own little approach for this blog. If you want to use it, feel free to do so.
+This is styled according to the color schemes in my <a href="control-block-diagram-syntax.html#ID-f33796f7-2cdb-4110-81ee-be035021659b">Control Block Diagram Syntax</a> document. There is no official standard for control block diagram syntax coloring (or, indeed, much of the design of control diagrams), so I decided to create my own little approach for this blog. If you want to use it, feel free to do so.
 </p>
 </div>
 </div>
@@ -104,7 +106,7 @@ A basic control diagram representing the output of a system might be drawn as fo
 Which will output:
 </p>
 
-<div id="org490508c" class="figure">
+<div id="org1c34a34" class="figure">
 <p><img src="images/feedforward-diagram_bafbaf01-494c-453d-9a3b-819dcc678a14.png" alt="feedforward-diagram_bafbaf01-494c-453d-9a3b-819dcc678a14.png" />
 </p>
 </div>
@@ -122,6 +124,7 @@ A more complex system might look like this:
         <span style="font-style: italic;">splines=</span>ortho;
         <span style="font-style: italic;">size=</span><span style="color: #494949;">"15,15!"</span>;
         <span style="font-style: italic;">fontpath=</span><span style="color: #494949;">"~/.local/share/fonts"</span>;
+        <span style="font-style: italic;">labeldistance=</span>2;
         <span style="color: #E53935; font-style: italic;">node</span><span style="color: #bbb;">[</span><span style="font-style: italic;">shape=</span><span style="color: #E53935;">record</span>,
              <span style="font-style: italic;">fontname=</span><span style="color: #494949;">"Jura Bold"</span>
              <span style="font-style: italic;">penwidth=</span>0,
@@ -138,24 +141,24 @@ A more complex system might look like this:
         conn<span style="color: #bbb;">[</span><span style="font-style: italic;">shape=</span><span style="color: #E53935;">point</span>, <span style="font-style: italic;">fillcolor=</span><span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #000000;">#000000</span><span style="color: #494949;">"</span> <span style="font-style: italic;">penwidth=</span>3<span style="color: #bbb;">]</span>;
         comp<span style="color: #bbb;">[</span><span style="font-style: italic;">shape=</span><span style="color: #E53935;">circle</span>,<span style="font-style: italic;">label=</span><span style="color: #494949;">"&#931;"</span><span style="color: #bbb;">]</span>;
         actuator<span style="color: #bbb;">[</span><span style="font-style: italic;">fillcolor=</span><span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #e53935;">#e53935</span><span style="color: #494949;">"</span>, <span style="font-style: italic;">fontcolor=</span><span style="color: #494949;">white</span><span style="color: #bbb;">]</span>;
+        <span style="color: #bbb;">{</span> <span style="font-style: italic;">rank=</span><span style="color: #E53935;">min</span>; disturbances<span style="color: #bbb;">}</span>
         <span style="color: #bbb;">{</span>
-                <span style="font-style: italic;">rank=</span><span style="color: #E53935;">min</span>;
-                disturbances<span style="color: #bbb;">}</span>
-        <span style="color: #bbb;">{</span>
+                <span style="color: #E53935; font-style: italic;">edge</span><span style="color: #494949;">[</span><span style="font-style: italic;">minlen=</span>2<span style="color: #494949;">]</span>
                 <span style="font-style: italic;">rank=</span><span style="color: #E53935;">same</span>;
-                sp-&gt;comp<span style="color: #494949;">[</span><span style="font-style: italic;">color=</span><span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #E53935;">#E53935</span><span style="color: #494949;">"</span><span style="color: #494949;">]</span>
+                sp-&gt;comp<span style="color: #494949;">[</span><span style="font-style: italic;">color=</span><span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #E53935;">#E53935</span><span style="color: #494949;">"</span>,xlabel=<span style="color: #494949;">"+"</span>,<span style="font-style: italic;">fontcolor=</span><span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #e53935;">#e53935</span><span style="color: #494949;">"</span><span style="color: #494949;">]</span>
                 comp-&gt;controller
                 controller-&gt;actuator
                 actuator-&gt;process<span style="color: #494949;">[</span><span style="font-style: italic;">color=</span><span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #e53935;">#e53935</span><span style="color: #494949;">"</span><span style="color: #494949;">]</span>
                 process -&gt; conn <span style="color: #494949;">[</span><span style="font-style: italic;">arrowhead=</span><span style="color: #E53935;">none</span><span style="color: #494949;">]</span>
                 conn -&gt; out
         <span style="color: #bbb;">}</span>
-        <span style="color: #bbb;">{</span> <span style="font-style: italic;">rank=</span><span style="color: #E53935;">max</span>; sensor;
-        <span style="color: #bbb;">}</span>
+        <span style="color: #bbb;">{</span> <span style="font-style: italic;">rank=</span><span style="color: #E53935;">max</span>; sensor; <span style="color: #bbb;">}</span>
+        forcelabels=<span style="color: #E53935;">true</span>;
         disturbances-&gt; process<span style="color: #bbb;">[</span><span style="font-style: italic;">color=</span><span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #e53935;">#e53935</span><span style="color: #494949;">"</span><span style="color: #bbb;">]</span>
         conn-&gt;sensor
-        sensor-&gt;comp
+        sensor-&gt;comp<span style="color: #bbb;">[</span>xlabel=<span style="color: #494949;">"-"</span>,<span style="font-style: italic;">fontsize=</span><span style="color: #494949;">"20pt"</span><span style="color: #bbb;">]</span>
 <span style="color: #494949;">}</span>
+
 </pre>
 </div>
 
@@ -164,7 +167,7 @@ Which outputs this:
 </p>
 
 
-<div id="org1b44eef" class="figure">
+<div id="org3103966" class="figure">
 <p><img src="images/feedback-diagram_b0c03ade-86fa-4c4f-999e-de13476ee1db.png" alt="feedback-diagram_b0c03ade-86fa-4c4f-999e-de13476ee1db.png" />
 </p>
 </div>
@@ -220,11 +223,12 @@ We can also draw a simple multi-loop control model as follows:
         <span style="color: #bbb;">{</span><span style="font-style: italic;">rank=</span><span style="color: #E53935;">min</span>; a; disturbances<span style="color: #bbb;">}</span>
         
         <span style="color: #bbb;">{</span>
+                <span style="color: #E53935; font-style: italic;">edge</span><span style="color: #494949;">[</span><span style="font-style: italic;">minlen=</span>2<span style="color: #494949;">]</span>
                 <span style="font-style: italic;">rank=</span><span style="color: #E53935;">same</span>;
                 b;
-                sp-&gt;comp<span style="color: #494949;">[</span><span style="font-style: italic;">color=</span><span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #E53935;">#E53935</span><span style="color: #494949;">"</span><span style="color: #494949;">]</span>
+                sp-&gt;comp<span style="color: #494949;">[</span><span style="font-style: italic;">color=</span><span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #E53935;">#E53935</span><span style="color: #494949;">"</span>,xlabel=<span style="color: #494949;">"+"</span>,<span style="font-style: italic;">fontcolor=</span><span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #E53935;">#E53935</span><span style="color: #494949;">"</span><span style="color: #494949;">]</span>
                 comp-&gt;controller
-                controller -&gt; comp2
+                controller -&gt; comp2<span style="color: #494949;">[</span>xlabel=<span style="color: #494949;">"+"</span><span style="color: #494949;">]</span>
                 comp2-&gt;controller2
                 controller2-&gt;actuator
                 actuator-&gt;process<span style="color: #494949;">[</span><span style="font-style: italic;">color=</span><span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #e53935;">#e53935</span><span style="color: #494949;">"</span><span style="color: #494949;">]</span>
@@ -239,16 +243,16 @@ We can also draw a simple multi-loop control model as follows:
 
         conn-&gt;sensor2
 
-        sensor2-&gt;comp2
+        sensor2-&gt;comp2<span style="color: #bbb;">[</span>xlabel=<span style="color: #494949;">"-"</span>,<span style="font-style: italic;">fontsize=</span><span style="color: #494949;">"20pt"</span><span style="color: #bbb;">]</span>
         disturbances-&gt; process<span style="color: #bbb;">[</span><span style="font-style: italic;">color=</span><span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #e53935;">#e53935</span><span style="color: #494949;">"</span><span style="color: #bbb;">]</span>
-        conn2-&gt;sensor
-        sensor-&gt;comp
+        conn2-&gt;sensor<span style="color: #bbb;">[]</span>
+        sensor-&gt;comp<span style="color: #bbb;">[</span>xlabel=<span style="color: #494949;">"-"</span>,<span style="font-style: italic;">fontsize=</span><span style="color: #494949;">"20pt"</span><span style="color: #bbb;">]</span>
 <span style="color: #494949;">}</span>
 </pre>
 </div>
 
 
-<div id="org5b48d91" class="figure">
+<div id="org13b8526" class="figure">
 <p><img src="images/multiloop-diagram_b0c03ade-86fa-4c4f-999e-de13476ee1db.png" alt="multiloop-diagram_b0c03ade-86fa-4c4f-999e-de13476ee1db.png" />
 </p>
 </div>
@@ -260,7 +264,7 @@ Here we use a bit of a trick to actually make it work, defining a series of "lay
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W48-5 02:34</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W49-2 22:01</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

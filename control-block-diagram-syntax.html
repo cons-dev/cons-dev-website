@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W48-4 22:08 -->
+<!-- 2021-W49-2 17:31 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Control Block Diagram Syntax</title>
@@ -11,6 +11,27 @@
 <meta name="description" content="An overview of the syntax used on the site for control diagrams." />
 <meta name="generator" content="Org Mode" />
 <link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="preamble" class="status">
@@ -23,11 +44,17 @@
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#org86da886">Introduction</a></li>
-<li><a href="#org758f7e7">Basic Control Diagrams</a>
+<li><a href="#orga35a0b3">Nodes</a></li>
+<li><a href="#orgc060565">Edges</a>
 <ul>
-<li><a href="#org8338da9">Control Diagram Symbols</a></li>
 <li><a href="#org889a697">Process Nodes</a></li>
-<li><a href="#org050f789">Math-y Stuff</a></li>
+</ul>
+</li>
+<li><a href="#orgbf3cec1">Text</a></li>
+<li><a href="#org7b45ddd">Example Diagrams</a>
+<ul>
+<li><a href="#org6c0b43e">Thermostat</a></li>
+<li><a href="#orge313947">Sailboat</a></li>
 </ul>
 </li>
 </ul>
@@ -43,24 +70,58 @@ Control diagrams are a useful tool for representing control systems. However, th
 </div>
 </div>
 
-<div id="outline-container-org758f7e7" class="outline-2">
-<h2 id="org758f7e7">Basic Control Diagrams</h2>
-<div class="outline-text-2" id="text-org758f7e7">
-</div>
-<div id="outline-container-org8338da9" class="outline-3">
-<h3 id="org8338da9">Control Diagram Symbols</h3>
-<div class="outline-text-3" id="text-org8338da9">
+<div id="outline-container-orga35a0b3" class="outline-2">
+<h2 id="orga35a0b3">Nodes</h2>
+<div class="outline-text-2" id="text-orga35a0b3">
 <dl class="org-dl">
-<dt>actuator and input edges</dt><dd>red, similarly to actuators, to indicate action</dd>
 <dt>actuators</dt><dd><p>
 red and in boxes
 </p>
 
-<div id="org3402ca5" class="figure">
+<div id="orgba398eb" class="figure">
 <p><img src="images/block-diagram-actuator_96ae0f8e-df0f-4160-8f38-5fa3281a3ae3.png" alt="block-diagram-actuator_96ae0f8e-df0f-4160-8f38-5fa3281a3ae3.png" />
 </p>
 </div></dd>
+<dt>inputs and disturbances</dt><dd>Inputs and disturbances are indicated with red font that describes the input or disturbance <label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> Disturbances may be simply labeled 'disturbances'.</span> on a white background. Similarly to actuators these are to indicate action</dd>
 </dl>
+<pre class="example">
+
+</pre>
+
+<dl class="org-dl">
+<dt>summing / product points</dt><dd><p>
+Summing points and other similar regions (where multiple signals are added together) should be indicated with a \(\Sigma\) in a circle rather than a circle. Likewise, if an alternative function is being used, such as multiplication, use the \(\Pi\) symbol to indicate a product.
+</p>
+
+<p>
+Likewise, other similar, simple functions with multiple inputs can be drawn similarly.
+</p>
+
+<div id="org918bdb7" class="figure">
+<p><img src="./images/actuator-input-edges_0d80255a-8ff5-4e31-9d0c-10eec4ff5efc.png" alt="actuator-input-edges_0d80255a-8ff5-4e31-9d0c-10eec4ff5efc.png" />
+</p>
+</div></dd>
+
+<dt>comparators</dt><dd>For certain electric circuts</dd>
+</dl>
+
+
+<dl class="org-dl">
+<dt>bang-bang controllers</dt><dd>Bang-bang controllers are indicated with a simple bang-bang controller symbol alongside the threshold values to transfer between the two states.</dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-orgc060565" class="outline-2">
+<h2 id="orgc060565">Edges</h2>
+<div class="outline-text-2" id="text-orgc060565">
+<dl class="org-dl">
+<dt>actuator and input edges</dt><dd>red, similarly to actuators, to indicate action</dd>
+</dl>
+
+<div id="org882ea3c" class="figure">
+<p><img src="./images/actuator-input-edges_0d80255a-8ff5-4e31-9d0c-10eec4ff5efc.png" alt="actuator-input-edges_0d80255a-8ff5-4e31-9d0c-10eec4ff5efc.png" />
+</p>
 </div>
 </div>
 
@@ -73,13 +134,19 @@ Process nodes are
 </p>
 </div>
 </div>
+</div>
 
-<div id="outline-container-org050f789" class="outline-3">
-<h3 id="org050f789">Math-y Stuff</h3>
-<div class="outline-text-3" id="text-org050f789">
+
+<div id="outline-container-orgbf3cec1" class="outline-2">
+<h2 id="orgbf3cec1">Text</h2>
+<div class="outline-text-2" id="text-orgbf3cec1">
+<p>
+This is a collection of .
+</p>
 <dl class="org-dl">
 <dt>variable names</dt><dd><i>italics</i></dd>
 <dt>function names</dt><dd><b><i>bolded italics</i></b></dd>
+<dt>transfer functions</dt><dd>regular font</dd>
 </dl>
 
 <p>
@@ -87,10 +154,78 @@ Along with color schemes, the font choices also impact the control diagram. Name
 </p>
 </div>
 </div>
+
+
+<div id="outline-container-org7b45ddd" class="outline-2">
+<h2 id="org7b45ddd">Example Diagrams</h2>
+<div class="outline-text-2" id="text-org7b45ddd">
+</div>
+<div id="outline-container-org6c0b43e" class="outline-3">
+<h3 id="org6c0b43e">Thermostat</h3>
+<div class="outline-text-3" id="text-org6c0b43e">
+<div class="org-src-container">
+<pre class="src src-dot" id="org1ff65ba"><span style="color: #E53935; font-style: italic;">digraph</span> <span style="font-weight: bold; font-style: italic;">feedback</span> <span style="color: #494949;">{</span>
+        <span style="font-style: italic;">splines=</span>ortho;
+        <span style="font-style: italic;">size=</span><span style="color: #494949;">"15,15!"</span>;
+        <span style="font-style: italic;">fontpath=</span><span style="color: #494949;">"~/.local/share/fonts"</span>;
+        <span style="color: #E53935; font-style: italic;">node</span><span style="color: #bbb;">[</span><span style="font-style: italic;">shape=</span><span style="color: #E53935;">record</span>,
+             <span style="font-style: italic;">fontname=</span><span style="color: #494949;">"Jura"</span>
+             <span style="font-style: italic;">penwidth=</span>0,
+             <span style="font-style: italic;">style=</span><span style="color: #E53935;">filled</span>,
+             <span style="font-style: italic;">fillcolor=</span><span style="color: #494949;">"</span><span style="color: #000000; background-color: #f5f5f5;">#f5f5f5</span><span style="color: #494949;">"</span><span style="color: #bbb;">]</span>;
+        <span style="color: #E53935; font-style: italic;">edge</span><span style="color: #bbb;">[</span><span style="font-style: italic;">penwidth=</span>3<span style="color: #bbb;">]</span>;
+
+        <span style="color: #bbb;">{</span>
+                <span style="color: #E53935; font-style: italic;">node</span><span style="color: #494949;">[</span><span style="font-style: italic;">fillcolor=</span><span style="color: #494949;">white</span>, <span style="font-style: italic;">fontcolor=</span><span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #e53935;">#e53935</span><span style="color: #494949;">"</span><span style="color: #494949;">]</span>;
+                disturbances;
+                sp<span style="color: #494949;">[</span><span style="font-style: italic;">label=</span><span style="color: #494949;">"\{...1,0,1...\}"</span>, <span style="font-style: italic;">fontname=</span><span style="color: #494949;">"Jura Italic"</span><span style="color: #494949;">]</span>;
+        <span style="color: #bbb;">}</span>
+        out<span style="color: #bbb;">[</span><span style="font-style: italic;">fillcolor=</span><span style="color: #494949;">white</span>, <span style="font-style: italic;">label=</span><span style="color: #494949;">"output"</span><span style="color: #bbb;">]</span>;
+        conn<span style="color: #bbb;">[</span><span style="font-style: italic;">shape=</span><span style="color: #E53935;">point</span>, <span style="font-style: italic;">fillcolor=</span><span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #000000;">#000000</span><span style="color: #494949;">"</span> <span style="font-style: italic;">penwidth=</span>3<span style="color: #bbb;">]</span>;
+        comp<span style="color: #bbb;">[</span><span style="font-style: italic;">shape=</span><span style="color: #E53935;">circle</span>, <span style="font-style: italic;">label=</span><span style="color: #494949;">"&#931;"</span>, <span style="font-style: italic;">fontname=</span><span style="color: #494949;">"Jura Italic Bold"</span><span style="color: #bbb;">]</span>;
+        actuator<span style="color: #bbb;">[</span><span style="font-style: italic;">fillcolor=</span><span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #e53935;">#e53935</span><span style="color: #494949;">"</span>, <span style="font-style: italic;">fontcolor=</span><span style="color: #494949;">white</span>, <span style="font-style: italic;">label=</span><span style="color: #494949;">"heater"</span><span style="color: #bbb;">]</span>;
+        <span style="color: #bbb;">{</span>
+                <span style="font-style: italic;">rank=</span><span style="color: #E53935;">min</span>;
+                disturbances<span style="color: #bbb;">}</span>
+                <span style="color: #bbb;">{</span>
+                        <span style="font-style: italic;">rank=</span><span style="color: #E53935;">same</span>;
+                        sp-&gt;comp<span style="color: #494949;">[</span><span style="font-style: italic;">color=</span><span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #E53935;">#E53935</span><span style="color: #494949;">"</span><span style="color: #494949;">]</span>
+                        comp-&gt;actuator
+                        actuator-&gt;process<span style="color: #494949;">[</span><span style="font-style: italic;">color=</span><span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #e53935;">#e53935</span><span style="color: #494949;">"</span><span style="color: #494949;">]</span>
+                        process -&gt; conn <span style="color: #494949;">[</span><span style="font-style: italic;">arrowhead=</span><span style="color: #E53935;">none</span><span style="color: #494949;">]</span>
+                        conn -&gt; out
+                <span style="color: #bbb;">}</span>
+                <span style="color: #bbb;">{</span> <span style="font-style: italic;">rank=</span><span style="color: #E53935;">max</span>; sensor;
+                <span style="color: #bbb;">}</span>
+                disturbances-&gt; process<span style="color: #bbb;">[</span><span style="font-style: italic;">color=</span><span style="color: #494949;">"</span><span style="color: #ffffff; background-color: #e53935;">#e53935</span><span style="color: #494949;">"</span><span style="color: #bbb;">]</span>
+                conn-&gt;sensor
+                sensor-&gt;comp
+        <span style="color: #494949;">}</span>
+</pre>
+</div>
+
+<p>
+Here we define a simple thermostat with a set point that 
+</p>
+
+
+<div id="org3a953a0" class="figure">
+<p><img src="./images/thermostaht-example_df43ffb6-638b-46e5-a46e-215e72f4cfcc.png" alt="thermostaht-example_df43ffb6-638b-46e5-a46e-215e72f4cfcc.png" />
+</p>
 </div>
 </div>
+</div>
+
+<div id="outline-container-orge313947" class="outline-3">
+<h3 id="orge313947">Sailboat</h3>
+</div>
+</div>
+<!-- Footnotes --><!-- 
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Disturbances may be simply labeled 'disturbances'.</p></div></div>
+
+ --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W48-4 18:30</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W48-6 22:18</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>
