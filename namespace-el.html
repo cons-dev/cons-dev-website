@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W48-3 21:04 -->
+<!-- 2021-W49-6 16:28 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Namespaces in My Emacs? It's More Likely than you think!</title>
@@ -52,14 +52,14 @@
 <li><a href="#orgd53003f">The <code>ns</code> Macro</a></li>
 <li><a href="#org94b197f">Finding Private Definitions</a>
 <ul>
-<li><a href="#org427766c">ns-find-private-refs</a></li>
-<li><a href="#org6814558">ns-private?</a></li>
+<li><a href="#org4bc48f7">ns-find-private-refs</a></li>
+<li><a href="#org34a5a6d">ns-private?</a></li>
 </ul>
 </li>
 <li><a href="#org6ab6971">Structure Transformers</a>
 <ul>
-<li><a href="#orge59c3ce">ns-transform-private-refs</a></li>
-<li><a href="#orgbc412f5">ns-create-private-binds</a></li>
+<li><a href="#orgb63828d">ns-transform-private-refs</a></li>
+<li><a href="#org882fcdb">ns-create-private-binds</a></li>
 <li><a href="#org676247e">ns-remove-private-defs</a></li>
 </ul>
 </li>
@@ -113,11 +113,11 @@ You would discover that <code>fun</code> was no longer defined outside of the le
 So I began to wonder, what if I could <i>make</i> a namespace macro that solves this problem? The answer (obviously) is yes, though unfortunately it is still rather brittle due to the tenuous nature of lexical scoping in Emacs lisp. The implementation however was quick and allows you to take that code above and make it very readable:
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span>ns more
-  <span style="color: #494949;">"An example for a really fun idea."</span>
-  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">fun</span> <span style="color: #494949;">(</span>var<span style="color: #494949;">)</span> <span style="color: #494949;">(</span>+ var 23<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">more-fun</span> <span style="color: #494949;">(</span>a<span style="color: #494949;">)</span>
-      <span style="color: #494949;">(</span>fun a<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+<pre class="src src-emacs-lisp">  <span style="color: #494949;">(</span>ns more
+      <span style="color: #494949;">"An example for a really fun idea."</span>
+      <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">fun</span> <span style="color: #494949;">(</span>var<span style="color: #494949;">)</span> <span style="color: #494949;">(</span>+ var 23<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+      <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">more-fun</span> <span style="color: #494949;">(</span>a<span style="color: #494949;">)</span>
+        <span style="color: #494949;">(</span>fun a<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 
@@ -213,14 +213,14 @@ Thus we also filter out the definitions that begin with the same symbol as the n
 </p>
 </div>
 
-<div id="outline-container-org427766c" class="outline-4">
-<h4 id="org427766c">ns-find-private-refs</h4>
-<div class="outline-text-4" id="text-org427766c">
+<div id="outline-container-org4bc48f7" class="outline-4">
+<h4 id="org4bc48f7">ns-find-private-refs</h4>
+<div class="outline-text-4" id="text-org4bc48f7">
 <p>
-This filters the top level forms of the namespace using the <a href="#orgf1d1da4">ns-private?</a> predicate function and then returns the list of all top level functions.
+This filters the top level forms of the namespace using the <a href="#org6814558">ns-private?</a> predicate function and then returns the list of all top level functions.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="orgb16af4d"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-find-private-refs</span> <span style="color: #bbb;">(</span>namespace forms<span style="color: #bbb;">)</span>
+<pre class="src src-emacs-lisp" id="org427766c"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-find-private-refs</span> <span style="color: #bbb;">(</span>namespace forms<span style="color: #bbb;">)</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> forms
        <span style="color: #494949;">(</span>-filter <span style="color: #bbb;">(</span>-partial #'ns-private? namespace<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
        <span style="color: #494949;">(</span>-map 'second<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
@@ -233,14 +233,14 @@ ns-find-private-refs
 </div>
 </div>
 
-<div id="outline-container-org6814558" class="outline-4">
-<h4 id="org6814558">ns-private?</h4>
-<div class="outline-text-4" id="text-org6814558">
+<div id="outline-container-org34a5a6d" class="outline-4">
+<h4 id="org34a5a6d">ns-private?</h4>
+<div class="outline-text-4" id="text-org34a5a6d">
 <p>
 Here we define a small function that checks if our top level form is public. This simply grabs the first value of the form, then checks the second to see if it is the form has enough symbols to be a definition, then checks if it is top level or not.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="orgf1d1da4"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-private?</span> <span style="color: #bbb;">(</span>namespace top-level-form<span style="color: #bbb;">)</span>
+<pre class="src src-emacs-lisp" id="org6814558"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-private?</span> <span style="color: #bbb;">(</span>namespace top-level-form<span style="color: #bbb;">)</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span><span style="color: #494949;">(</span><span style="color: #bbb;">(</span>form-fun <span style="color: #494949;">(</span>first top-level-form<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
     <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">and</span> <span style="color: #bbb;">(</span>&gt; <span style="color: #494949;">(</span>length top-level-form<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span>
          <span style="color: #bbb;">(</span>-contains?
@@ -264,14 +264,14 @@ Once we have a list of private definitions, we need to transform regular calls i
 </p>
 </div>
 
-<div id="outline-container-orge59c3ce" class="outline-4">
-<h4 id="orge59c3ce">ns-transform-private-refs</h4>
-<div class="outline-text-4" id="text-orge59c3ce">
+<div id="outline-container-orgb63828d" class="outline-4">
+<h4 id="orgb63828d">ns-transform-private-refs</h4>
+<div class="outline-text-4" id="text-orgb63828d">
 <p>
 This is a recursive function that conducts a depth first search of the tree created by the s-expressions, modifying them so that they are properly referred to as variables. It unfortunately has a lot of special cases / repeated structure which indicates to me that it is not as elegant as it could be, though I decided to not focus too much effort on refactoring it since this is both a toy example and irritatingly fragile code.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="orge4c4342"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-transform-private-refs</span> <span style="color: #bbb;">(</span>namespace private-refs forms<span style="color: #bbb;">)</span>
+<pre class="src src-emacs-lisp" id="orge59c3ce"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-transform-private-refs</span> <span style="color: #bbb;">(</span>namespace private-refs forms<span style="color: #bbb;">)</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">cond</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>not <span style="color: #494949;">(</span>eq <span style="color: #bbb;">(</span>type-of forms<span style="color: #bbb;">)</span> 'cons<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
          forms<span style="color: #494949;">)</span>
         <span style="color: #494949;">(</span><span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">and</span> <span style="color: #494949;">(</span>eq <span style="color: #bbb;">(</span>first forms<span style="color: #bbb;">)</span> 'quote<span style="color: #494949;">)</span>
@@ -294,14 +294,14 @@ This is a recursive function that conducts a depth first search of the tree crea
 </div>
 </div>
 
-<div id="outline-container-orgbc412f5" class="outline-4">
-<h4 id="orgbc412f5">ns-create-private-binds</h4>
-<div class="outline-text-4" id="text-orgbc412f5">
+<div id="outline-container-org882fcdb" class="outline-4">
+<h4 id="org882fcdb">ns-create-private-binds</h4>
+<div class="outline-text-4" id="text-org882fcdb">
 <p>
 This transforms private bindings into a listing of symbols value two length lists as used by the <code>let</code> special form. The only tricky bit is pulling symbols from defalias.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="org3625436"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-create-private-binds</span> <span style="color: #bbb;">(</span>namespace forms<span style="color: #bbb;">)</span>
+<pre class="src src-emacs-lisp" id="orgbc412f5"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-create-private-binds</span> <span style="color: #bbb;">(</span>namespace forms<span style="color: #bbb;">)</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> forms
        <span style="color: #494949;">(</span>-filter <span style="color: #bbb;">(</span>-partial #'ns-private? namespace<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
        <span style="color: #494949;">(</span>-map <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #494949;">(</span>form<span style="color: #494949;">)</span>
@@ -459,7 +459,7 @@ It is possible to do this all without let, assuming you permit a modification of
 
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W48-3 12:29</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W49-4 01:12</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

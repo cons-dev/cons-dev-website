@@ -1,0 +1,792 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-W50-1 01:31 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Econf World Wide Web</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="Search engine configuration for emacs." />
+<meta name="generator" content="Org Mode" />
+<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">Econf World Wide Web</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org73f9396">Introduction</a></li>
+<li><a href="#orgab2bd12">Dependencies</a></li>
+<li><a href="#org2ce4eea">Configuration</a></li>
+<li><a href="#org6aa801e">Variables</a>
+<ul>
+<li><a href="#orga2f6772">Setting Browsers (and stuff)</a></li>
+<li><a href="#org3955360">The w3m Directory</a></li>
+<li><a href="#orgd0e9070">Further Customizations</a></li>
+</ul>
+</li>
+<li><a href="#org30e388f">Playing Videos Without JS</a>
+<ul>
+<li><a href="#org3cd8dad">Playing Videos</a>
+<ul>
+<li><a href="#org4abe062">ec-w3m-view-video</a></li>
+<li><a href="#org8c30cd2">ec-w3m-video-url?</a></li>
+</ul>
+</li>
+<li><a href="#org4f33b39">Redefining Some Functions</a>
+<ul>
+<li><a href="#org24ad6ee">w3m-goto-url-new-session-or-video</a></li>
+<li><a href="#org8605145">w3m-view-this-url</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgbb4d542">Search Engine Suggestions</a>
+<ul>
+<li><a href="#org2fe441e">Variables</a></li>
+<li><a href="#org2d39642">Functions</a>
+<ul>
+<li><a href="#org369c113">ec-ddg-suggest-fetch</a></li>
+<li><a href="#org0618719">ec-ddg-get-suggestions</a></li>
+<li><a href="#org7ffeed9">ec-wikipedia-suggest-fetch</a></li>
+<li><a href="#org85b5426">ec-get-region</a></li>
+<li><a href="#org280f5d0">ec-ddg-search-interactive-arg</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgcb1e076">Saving Stuff</a>
+<ul>
+<li><a href="#org4fa2bb1">Cloning Websites</a></li>
+<li><a href="#orgf229cc1">Downloading Videos</a></li>
+</ul>
+</li>
+<li><a href="#org5cb50f7">User Interface</a>
+<ul>
+<li><a href="#org47f4b0b">Buffer Names</a></li>
+<li><a href="#org16bff4a">Hydra Interface</a></li>
+<li><a href="#org40a072a">Binding Keys</a></li>
+<li><a href="#org0ddc534">Browser Functions</a></li>
+<li><a href="#org58aeb1f">Ace Link</a></li>
+</ul>
+</li>
+<li><a href="#orgca6edaf">Conclusion</a></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-org73f9396" class="outline-2">
+<h2 id="org73f9396">Introduction</h2>
+<div class="outline-text-2" id="text-org73f9396">
+<p>
+This is some fo the code I use for search engine stuff in Emacs.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-orgab2bd12" class="outline-2">
+<h2 id="orgab2bd12">Dependencies</h2>
+<div class="outline-text-2" id="text-orgab2bd12">
+<table id="org42aeff4" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Dependency</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><a href="https://github.com/tkf/emacs-request">request</a></td>
+<td class="org-left">A popular library for making requests in Emacs Lisp.</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="https://emacs-w3m.github.io/">w3m</a></td>
+<td class="org-left">A wrapper around the w3m web browser that exits for Emacs.</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="https://github.com/abo-abo/ace-link">ace-link</a></td>
+<td class="org-left">A thing that dynamically assigns links key sequences that you can jump to.</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span>ec-load-deps deps<span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2ce4eea" class="outline-2">
+<h2 id="org2ce4eea">Configuration</h2>
+</div>
+
+
+
+<div id="outline-container-org6aa801e" class="outline-2">
+<h2 id="org6aa801e">Variables</h2>
+<div class="outline-text-2" id="text-org6aa801e">
+<p>
+Here I set up a bunch of variables that are used in the rest of the package. However, I do not set all my variables here.
+</p>
+</div>
+
+<div id="outline-container-orga2f6772" class="outline-3">
+<h3 id="orga2f6772">Setting Browsers (and stuff)</h3>
+<div class="outline-text-3" id="text-orga2f6772">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defvar</span> <span style="font-style: italic;">ec-graphical-browser</span> <span style="color: #494949;">"firefox"</span>
+    <span style="color: #a4a4a4; font-style: italic;">"The browser and options used to browse the web when a non-gui browser will not work."</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defvar</span> <span style="font-style: italic;">ec-search-engine</span> <span style="color: #494949;">"lite.duckduckgo.com/lite/&amp;q="</span>
+    <span style="color: #a4a4a4; font-style: italic;">"The search engine string used to search the web."</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defvar</span> <span style="font-style: italic;">ec-video-fstring</span> <span style="color: #494949;">"vlc '%s'  --qt-minimal-view --no-video-title --loop"</span>
+  <span style="color: #a4a4a4; font-style: italic;">"The format string used to generate the video playing command."</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defvar</span> <span style="font-style: italic;">ec-graphical-browse-domains</span> '<span style="color: #bbb;">(</span><span style="color: #494949;">"http://127.0.0.1:1337?token="</span>
+                                       <span style="color: #494949;">"https://meet.jit.si"</span><span style="color: #bbb;">)</span>
+  <span style="color: #a4a4a4; font-style: italic;">"Domains that are to be browsed graphically in `</span><span style="color: #E53935; font-style: italic;">w3m-goto-url-new-session-or-video</span><span style="color: #a4a4a4; font-style: italic;">'."</span><span style="color: #494949;">)</span>
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3955360" class="outline-3">
+<h3 id="org3955360">The w3m Directory</h3>
+<div class="outline-text-3" id="text-org3955360">
+<p>
+Like everything else I like to keep the data for w3m in my data directory instead of randomly floating around in the dotfiles, so I change it to the data directory here.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org797e6b1">  <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defvar</span> <span style="font-style: italic;">ec-w3m-dir</span> <span style="color: #bbb;">(</span>concat ec-data-dir <span style="color: #494949;">"w3m/"</span><span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">"Directory where all w3m files are located."</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+Here I set the variables that I have found that need a directory to dump their files in.
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp" id="org321bff4"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">setq</span> w3m-profile-directory ec-w3m-dir
+      w3m-default-save-directory ec-downloads-dir
+      w3m-external-view-temp-directory ec-w3m-dir
+      w3m-bookmark-file <span style="color: #bbb;">(</span>concat ec-w3m-dir <span style="color: #494949;">"bookmarks"</span><span style="color: #bbb;">)</span>
+      w3m-cookie-file <span style="color: #bbb;">(</span>concat ec-w3m-dir <span style="color: #494949;">"cookie"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd0e9070" class="outline-3">
+<h3 id="orgd0e9070">Further Customizations</h3>
+<div class="outline-text-3" id="text-orgd0e9070">
+<p>
+Now I just add some further quick customizations to make the browser a little nicer to work with and to conform more with my standard interface.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="orga158ae4"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">setq</span> browse-url-browser-function #'w3m-goto-url-new-session-or-video
+      w3m-default-display-inline-images t
+      w3m-pop-up-windows t
+      w3m-search-default-engine <span style="color: #494949;">"duckduckgo"</span>
+      w3m-use-tab nil
+      w3m-display-mode 'plain<span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-org30e388f" class="outline-2">
+<h2 id="org30e388f">Playing Videos Without JS</h2>
+<div class="outline-text-2" id="text-org30e388f">
+<p>
+Now I don't really like exiting Emacs, so I have added some features to view videos without javascript.
+</p>
+</div>
+<div id="outline-container-org3cd8dad" class="outline-3">
+<h3 id="org3cd8dad">Playing Videos</h3>
+<div class="outline-text-3" id="text-org3cd8dad">
+</div>
+<div id="outline-container-org4abe062" class="outline-4">
+<h4 id="org4abe062">ec-w3m-view-video</h4>
+<div class="outline-text-4" id="text-org4abe062">
+<p>
+This function simply calls the view video function on the video.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-w3m-view-video</span> <span style="color: #bbb;">(</span>url <span style="color: #E53935;">&amp;rest</span> _<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">interactive</span> <span style="color: #494949;">(</span>browse-url-interactive-arg <span style="color: #494949;">"URL: "</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>start-process-shell-command <span style="color: #494949;">"video"</span>
+                               nil
+                               <span style="color: #494949;">(</span>format ec-video-fstring url<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8c30cd2" class="outline-4">
+<h4 id="org8c30cd2">ec-w3m-video-url?</h4>
+<div class="outline-text-4" id="text-org8c30cd2">
+<p>
+Checks if the video is on a streaming website or if the video content type is something playable with w3m. This way I can directly view videos from download links.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-w3m-video-url?</span> <span style="color: #bbb;">(</span>url<span style="color: #bbb;">)</span>
+  <span style="color: #a4a4a4; font-style: italic;">"Determine if a URL is a video, if yes return T, if not return nil."</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">and</span> url <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">or</span> <span style="color: #bbb;">(</span>s-matches? <span style="color: #494949;">"^</span><span style="color: #000; font-weight: bold;">\\</span><span style="color: #000; font-weight: bold;">(</span><span style="color: #494949;">http</span><span style="color: #000; font-weight: bold;">\\</span><span style="color: #000; font-weight: bold;">|</span><span style="color: #494949;">https</span><span style="color: #000; font-weight: bold;">\\</span><span style="color: #000; font-weight: bold;">)</span><span style="color: #494949;">://www.youtube.com/watch\\?v=.*$"</span> url<span style="color: #bbb;">)</span>
+               <span style="color: #bbb;">(</span>s-matches? <span style="color: #494949;">"^</span><span style="color: #000; font-weight: bold;">\\</span><span style="color: #000; font-weight: bold;">(</span><span style="color: #494949;">http</span><span style="color: #000; font-weight: bold;">\\</span><span style="color: #000; font-weight: bold;">|</span><span style="color: #494949;">https</span><span style="color: #000; font-weight: bold;">\\</span><span style="color: #000; font-weight: bold;">)</span><span style="color: #494949;">://vimeo.com/[0-9]+$"</span> url<span style="color: #bbb;">)</span>
+               <span style="color: #bbb;">(</span>member <span style="color: #494949;">(</span>ec-get-content-type
+                        url<span style="color: #494949;">)</span>
+                       '<span style="color: #494949;">(</span><span style="color: #494949;">"video/mpg"</span> <span style="color: #494949;">"video/mpeg"</span> <span style="color: #494949;">"video/mp3"</span> <span style="color: #494949;">"video/mp4"</span>
+                         <span style="color: #494949;">"video/avi"</span> <span style="color: #494949;">"video/wmv"</span>  <span style="color: #494949;">"video/wav"</span> <span style="color: #494949;">"video/mov"</span>
+                         <span style="color: #494949;">"video/flv"</span> <span style="color: #494949;">"video/ogm"</span>  <span style="color: #494949;">"video/ogg"</span> <span style="color: #494949;">"video/mkv"</span>
+                         <span style="color: #494949;">"video/webm"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-org4f33b39" class="outline-3">
+<h3 id="org4f33b39">Redefining Some Functions</h3>
+<div class="outline-text-3" id="text-org4f33b39">
+<p>
+Unfortunately, depending on how a video is reached, a different function may be called. I used to just advise the relevant functions, but I have (against he usual recommendations of the Emacs community) come to prefer redefining functions as redefinition ensures that the function at hand works as expected.
+</p>
+</div>
+
+<div id="outline-container-org24ad6ee" class="outline-4">
+<h4 id="org24ad6ee">w3m-goto-url-new-session-or-video</h4>
+<div class="outline-text-4" id="text-org24ad6ee">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">w3m-goto-url-new-session-or-video</span> <span style="color: #bbb;">(</span>url <span style="color: #E53935;">&amp;rest</span> _<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">cond</span>  <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>ec-w3m-video-url? url<span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">(</span>ec-w3m-view-video url<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+         <span style="color: #494949;">(</span><span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> ec-graphical-browse-domains
+            <span style="color: #494949;">(</span>-map <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #494949;">(</span>domain<span style="color: #494949;">)</span> <span style="color: #494949;">(</span>s-contains? domain url<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+            first<span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">(</span>ec-graphical-browse-url url<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+         <span style="color: #494949;">(</span>t <span style="color: #bbb;">(</span>w3m-goto-url-new-session url<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8605145" class="outline-4">
+<h4 id="org8605145">w3m-view-this-url</h4>
+<div class="outline-text-4" id="text-org8605145">
+<p>
+This just redefines the w3m URL thing entirely, checking if it is a video in the first portion of the cond predicate <code>cond</code> macro.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">w3m-view-this-url</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">&amp;optional</span> arg new-session<span style="color: #bbb;">)</span>
+  <span style="color: #a4a4a4; font-style: italic;">"Display the page pointed to by the link under point.</span>
+<span style="color: #a4a4a4; font-style: italic;">If ARG is the number 2 or the list of the number 16 (you may produce</span>
+<span style="color: #a4a4a4; font-style: italic;">this by typing `</span><span style="color: #E53935; font-style: italic;">C-u</span><span style="color: #a4a4a4; font-style: italic;">' twice) or NEW-SESSION is non-nil and the link is</span>
+<span style="color: #a4a4a4; font-style: italic;">an anchor, this function makes a copy of the current buffer in advance.</span>
+<span style="color: #a4a4a4; font-style: italic;">Otherwise, if ARG is non-nil, it forces to reload the url at point."</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">interactive</span> <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>member current-prefix-arg '<span style="color: #494949;">(</span>2 <span style="color: #bbb;">(</span>16<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+                   <span style="color: #bbb;">(</span>list nil t<span style="color: #bbb;">)</span>
+                 <span style="color: #bbb;">(</span>list current-prefix-arg nil<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Store the current position in the history structure.</span>
+  <span style="color: #bbb;">(</span>w3m-history-store-position<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>w3m-prefer-cache
+         <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">or</span> w3m-prefer-cache
+             <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">and</span> <span style="color: #494949;">(</span>stringp w3m-current-url<span style="color: #494949;">)</span>
+                  <span style="color: #494949;">(</span>string-match <span style="color: #494949;">"\\`about://</span><span style="color: #000; font-weight: bold;">\\</span><span style="color: #000; font-weight: bold;">(?:</span><span style="color: #494949;">db-</span><span style="color: #000; font-weight: bold;">\\</span><span style="color: #000; font-weight: bold;">)</span><span style="color: #494949;">?history/"</span>
+                                w3m-current-url<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+        act url<span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">cond</span>
+     <span style="color: #bbb;">(</span><span style="color: #494949;">(</span>ec-w3m-video-url? <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">w3m-anchor</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+      <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">progn</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">w3m-arrived-intern</span> <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">w3m-anchor</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+             <span style="color: #bbb;">(</span>ec-w3m-view-video <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">w3m-anchor</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+             <span style="color: #bbb;">(</span>w3m-redisplay-this-page<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+     <span style="color: #bbb;">(</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">setq</span> act <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">w3m-action</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+      <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">(</span><span style="color: #494949;">(</span>w3m-form-new-session new-session<span style="color: #494949;">)</span>
+            <span style="color: #494949;">(</span>w3m-form-download nil<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+        <span style="color: #bbb;">(</span>ignore w3m-form-new-session w3m-form-download<span style="color: #bbb;">)</span>
+        <span style="color: #bbb;">(</span>eval act<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+     <span style="color: #bbb;">(</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">setq</span> url <span style="color: #bbb;">(</span>w3m-url-valid <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">w3m-anchor</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+      <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> new-session
+          <span style="color: #bbb;">(</span>w3m-goto-url-new-session url arg<span style="color: #bbb;">)</span>
+        <span style="color: #bbb;">(</span>w3m-goto-url url arg<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+     <span style="color: #bbb;">(</span><span style="color: #494949;">(</span>w3m-url-valid <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">w3m-image</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+      <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>display-images-p<span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">(</span>w3m-toggle-inline-image<span style="color: #bbb;">)</span>
+        <span style="color: #bbb;">(</span>w3m-view-image<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+     <span style="color: #bbb;">(</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">setq</span> url <span style="color: #bbb;">(</span>w3m-active-region-or-url-at-point 'never<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+      <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">unless</span> <span style="color: #bbb;">(</span>eq 'quit <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">setq</span> url <span style="color: #bbb;">(</span>w3m-input-url nil url 'quit nil
+                                                 'feeling-searchy 'no-initial<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+        <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> new-session
+            <span style="color: #494949;">(</span>w3m-goto-url-new-session url arg<span style="color: #494949;">)</span>
+          <span style="color: #494949;">(</span>w3m-goto-url url arg<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+     <span style="color: #bbb;">(</span>t <span style="color: #494949;">(</span>w3m-message <span style="color: #494949;">"No URL at point"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbb4d542" class="outline-2">
+<h2 id="orgbb4d542">Search Engine Suggestions</h2>
+<div class="outline-text-2" id="text-orgbb4d542">
+<p>
+To add search engine suggestions
+</p>
+</div>
+<div id="outline-container-org2fe441e" class="outline-3">
+<h3 id="org2fe441e">Variables</h3>
+<div class="outline-text-3" id="text-org2fe441e">
+<p>
+Here I set a list of variables for the search engine suggestions that.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defvar</span> <span style="font-style: italic;">*search-history*</span> '<span style="color: #bbb;">(</span><span style="color: #494949;">"emacs"</span> <span style="color: #494949;">"clojure"</span> <span style="color: #494949;">"julia"</span> <span style="color: #494949;">"logistics"</span><span style="color: #bbb;">)</span>
+  <span style="color: #a4a4a4; font-style: italic;">"The search history for the current session."</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defvar</span> <span style="font-style: italic;">*ddg-suggestions*</span> nil
+  <span style="color: #a4a4a4; font-style: italic;">"The suggestions sent by DDG."</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defvar</span> <span style="font-style: italic;">*ddg-search-string*</span> nil
+  <span style="color: #a4a4a4; font-style: italic;">"The string to be searched by DDG."</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2d39642" class="outline-3">
+<h3 id="org2d39642">Functions</h3>
+<div class="outline-text-3" id="text-org2d39642">
+</div>
+<div id="outline-container-org369c113" class="outline-4">
+<h4 id="org369c113">ec-ddg-suggest-fetch</h4>
+<div class="outline-text-4" id="text-org369c113">
+<p>
+This asynchronously fetches
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-duckduckgo-suggest-fetch</span> <span style="color: #bbb;">(</span>input<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>request <span style="color: #494949;">"https://api.duckduckgo.com/ac/"</span>
+      <span style="color: #E53935;">:type</span> <span style="color: #494949;">"POST"</span>
+      <span style="color: #E53935;">:params</span> `<span style="color: #494949;">(</span><span style="color: #bbb;">(</span><span style="color: #494949;">"q"</span> . ,input<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+      <span style="color: #E53935;">:parser</span> 'json-read
+      <span style="color: #E53935;">:success</span> <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">cl-function</span>
+                <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #494949;">(</span><span style="color: #E53935;">&amp;key</span> data <span style="color: #E53935;">&amp;allow-other-keys</span><span style="color: #494949;">)</span>
+                  <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">setq</span> *ddg-suggestions*
+                        <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> data
+                             <span style="color: #494949;">(</span>-map <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #494949;">(</span>val<span style="color: #494949;">)</span>
+                                     <span style="color: #494949;">(</span>cdar val<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org0618719" class="outline-4">
+<h4 id="org0618719">ec-ddg-get-suggestions</h4>
+<div class="outline-text-4" id="text-org0618719">
+<p>
+Here we define a pretty simple function to get the list of suggestions for the search engine and merge them with the search history..
+</p>
+
+<p>
+I also use the rx-macro to dynamically filter out suggestions that don't contain any of the words currently in the input.
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-ddg-get-suggestions</span> <span style="color: #bbb;">(</span>input<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">when</span> <span style="color: #494949;">(</span>not <span style="color: #bbb;">(</span>s-equals? input *ddg-search-string*<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">setq</span> *ddg-search-string* input<span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span>ec-duckduckgo-suggest-fetch input<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> *search-history*
+    <span style="color: #494949;">(</span>-filter <span style="color: #bbb;">(</span>-partial 's-matches? <span style="color: #494949;">(</span>rx-to-string `<span style="color: #bbb;">(</span>seq ,@<span style="color: #494949;">(</span>s-split-words input<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span>-union *ddg-suggestions*<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7ffeed9" class="outline-4">
+<h4 id="org7ffeed9">ec-wikipedia-suggest-fetch</h4>
+<div class="outline-text-4" id="text-org7ffeed9">
+<p>
+I also like to browse wikipedia. Unfortunately this function doesn't work yet, but soon™, it will.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-wikipedia-suggest-fetch</span> <span style="color: #bbb;">(</span>input<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>input <span style="color: #494949;">"emacs"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #bbb;">(</span>request <span style="color: #494949;">"https://en.wikipedia.org/w/api.php"</span>
+           <span style="color: #E53935;">:type</span> <span style="color: #494949;">"GET"</span>
+           <span style="color: #E53935;">:params</span> `<span style="color: #494949;">(</span><span style="color: #bbb;">(</span><span style="color: #494949;">"action"</span> . <span style="color: #494949;">"opensearch"</span><span style="color: #bbb;">)</span>
+                     <span style="color: #bbb;">(</span><span style="color: #494949;">"format"</span> . <span style="color: #494949;">"json"</span><span style="color: #bbb;">)</span>
+                     <span style="color: #bbb;">(</span><span style="color: #494949;">"search"</span> . <span style="color: #494949;">"emacs"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+           <span style="color: #E53935;">:parser</span> 'json-read
+           <span style="color: #E53935;">:sync</span> t<span style="color: #bbb;">)</span>
+      request-response-data<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org85b5426" class="outline-4">
+<h4 id="org85b5426">ec-get-region</h4>
+<div class="outline-text-4" id="text-org85b5426">
+<p>
+This is a simple function to grab a region if it is highlighted.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-get-region</span> <span style="color: #bbb;">()</span>
+    <span style="color: #a4a4a4; font-style: italic;">"Get the text  or return a empty string if it is not present."</span>
+    <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>use-region-p<span style="color: #494949;">)</span>
+        <span style="color: #494949;">(</span>buffer-substring-no-properties <span style="color: #bbb;">(</span>region-beginning<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>region-end<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+      <span style="color: #494949;">""</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org280f5d0" class="outline-4">
+<h4 id="org280f5d0">ec-ddg-search-interactive-arg</h4>
+<div class="outline-text-4" id="text-org280f5d0">
+<p>
+This searches using my suggestions. I use it mostly to build more complex functions for searching the web.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-ddg-search-interactive-arg</span> <span style="color: #bbb;">(</span>prompt<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">"Search `</span><span style="color: #E53935; font-style: italic;">w3m-search-default-engine</span><span style="color: #a4a4a4; font-style: italic;">' with ddg completion candidates."</span>
+    <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>ec-ddg-search <span style="color: #494949;">(</span>ivy-read  prompt
+                                     #'ec-ddg-get-suggestions
+                                     <span style="color: #E53935;">:initial-input</span> <span style="color: #bbb;">(</span>ec-get-region<span style="color: #bbb;">)</span>
+                                     <span style="color: #E53935;">:dynamic-collection</span> t<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+      <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">setq</span> *search-history* <span style="color: #bbb;">(</span>cons ec-ddg-search *search-history*<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+      `<span style="color: #494949;">(</span>,ec-ddg-search<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-orgcb1e076" class="outline-2">
+<h2 id="orgcb1e076">Saving Stuff</h2>
+<div class="outline-text-2" id="text-orgcb1e076">
+<p>
+I also like to occasionally save documentation, so I have written some functions to make that easier.
+</p>
+</div>
+<div id="outline-container-org4fa2bb1" class="outline-3">
+<h3 id="org4fa2bb1">Cloning Websites</h3>
+<div class="outline-text-3" id="text-org4fa2bb1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-clone-website</span> <span style="color: #bbb;">(</span>url dirname<span style="color: #bbb;">)</span>
+  <span style="color: #a4a4a4; font-style: italic;">"Clone a wesbiste to directory."</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">interactive</span> `<span style="color: #494949;">(</span>,<span style="color: #bbb;">(</span>read-string <span style="color: #494949;">"URL: "</span><span style="color: #bbb;">)</span>
+                 ,<span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #494949;">(</span>read-string <span style="color: #494949;">"Directory name: "</span><span style="color: #494949;">)</span>
+                    <span style="color: #494949;">(</span>s-trim<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>exec-shell-command <span style="color: #494949;">(</span>format <span style="color: #494949;">"httrack \"%s\" -O ~/Websites/%s"</span> url dirname<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf229cc1" class="outline-3">
+<h3 id="orgf229cc1">Downloading Videos</h3>
+<div class="outline-text-3" id="text-orgf229cc1">
+<p>
+Sometimes while watching videos from C3 I like to download them, so this is a small, easy function that allows me to do just that.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">  <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-download-video</span> <span style="color: #bbb;">(</span>url <span style="color: #E53935;">&amp;rest</span> _<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">"Download a youtube video."</span>
+    <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">interactive</span> <span style="color: #494949;">(</span>browse-url-interactive-arg <span style="color: #494949;">"URL: "</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>exec-shell-command <span style="color: #494949;">(</span>concat <span style="color: #494949;">"youtube-dl -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 '"</span>
+                                url
+                                <span style="color: #494949;">"'"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org5cb50f7" class="outline-2">
+<h2 id="org5cb50f7">User Interface</h2>
+<div class="outline-text-2" id="text-org5cb50f7">
+<p>
+This is the porcelain of the system. Eventually I think I will separate this into multiple different porcelains (which won't be unit-tested) and libraries (which will).
+</p>
+</div>
+
+<div id="outline-container-org47f4b0b" class="outline-3">
+<h3 id="org47f4b0b">Buffer Names</h3>
+<div class="outline-text-3" id="text-org47f4b0b">
+<p>
+Here we add a function to rename the buffers to the current title to make them both more manageable and searchable than they were otherwise.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-w3m-rename-buffer-name</span> <span style="color: #bbb;">()</span>
+  <span style="color: #a4a4a4; font-style: italic;">"Rename the current buffer to whatever the current title is."</span>
+  <span style="color: #bbb;">(</span>rename-buffer <span style="color: #494949;">(</span>format <span style="color: #494949;">"*world wide web: %s*"</span> w3m-current-title<span style="color: #494949;">)</span> t<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span>add-hook 'w3m-fontify-before-hook #'ec-w3m-rename-buffer-name<span style="color: #494949;">)</span>
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org16bff4a" class="outline-3">
+<h3 id="org16bff4a">Hydra Interface</h3>
+<div class="outline-text-3" id="text-org16bff4a">
+<p>
+We also throw in a hydra interface to make all of this much easier to work with.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ec-defhydra</span> hydra-web <span style="color: #ffffff; background-color: #0000ff;">blue</span>
+  <span style="color: #bbb;">(</span>'material <span style="color: #494949;">"search"</span> <span style="color: #494949;">"Search the World Wide Web"</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">"Search"</span>
+   <span style="color: #494949;">(</span><span style="color: #bbb;">(</span><span style="color: #494949;">"s"</span> ec-search-interactively-new-session<span style="color: #494949;">"search the web"</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span><span style="color: #494949;">"u"</span> w3m-goto-url-new-session  <span style="color: #494949;">"view URL"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+   <span style="color: #494949;">"Graphical Search"</span>
+   <span style="color: #494949;">(</span><span style="color: #bbb;">(</span><span style="color: #494949;">"C-u"</span> ec-graphical-browse-url <span style="color: #494949;">"view URL using graphical browser"</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span><span style="color: #494949;">"C-s"</span> ec-graphical-search <span style="color: #494949;">"search using graphical browser"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+   <span style="color: #494949;">"Site"</span>
+   <span style="color: #494949;">(</span><span style="color: #bbb;">(</span><span style="color: #494949;">"D"</span> <span style="color: #494949;">(</span>ec-graphical-browse-url <span style="color: #494949;">"https://discord.com/app"</span><span style="color: #494949;">)</span> <span style="color: #494949;">"discord.com/app"</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span><span style="color: #494949;">"t"</span> <span style="color: #494949;">(</span>ec-graphical-browse-url <span style="color: #494949;">"https://twitter.com"</span><span style="color: #494949;">)</span> <span style="color: #494949;">"twitter.com"</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span><span style="color: #494949;">"y"</span> ec-search-yt-interactively <span style="color: #494949;">"youtube.com"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">bind-key</span> <span style="color: #bbb;">(</span>kbd <span style="color: #494949;">"C-c w"</span><span style="color: #bbb;">)</span> #'hydra-web/body<span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org40a072a" class="outline-3">
+<h3 id="org40a072a">Binding Keys</h3>
+<div class="outline-text-3" id="text-org40a072a">
+<p>
+To regularize the user interface we bind a bunch of keys that are, for some ineffable reason, not bound in a standard way. To rebind the keys in the mode I use the table and function below.<label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> I think that eventually I will also add a system to allow me to define key bindings and set variables using tables.</span>
+</p>
+
+<table id="orgbad68f6" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Chord</th>
+<th scope="col" class="org-left">Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">s</td>
+<td class="org-left">ec-search-interactively</td>
+</tr>
+
+<tr>
+<td class="org-left">S</td>
+<td class="org-left">ec-search-interactively-new-session</td>
+</tr>
+
+<tr>
+<td class="org-left">q</td>
+<td class="org-left">quit-window</td>
+</tr>
+
+<tr>
+<td class="org-left">f</td>
+<td class="org-left">w3m-view-next-page</td>
+</tr>
+
+<tr>
+<td class="org-left">b</td>
+<td class="org-left">w3m-view-previous-page</td>
+</tr>
+
+<tr>
+<td class="org-left">n</td>
+<td class="org-left">w3m-next-anchor</td>
+</tr>
+
+<tr>
+<td class="org-left">p</td>
+<td class="org-left">w3m-previous-anchor</td>
+</tr>
+
+<tr>
+<td class="org-left">M-s</td>
+<td class="org-left">w3m-select-buffer</td>
+</tr>
+
+<tr>
+<td class="org-left">&lt;right&gt;</td>
+<td class="org-left">forward-char</td>
+</tr>
+
+<tr>
+<td class="org-left">&lt;left&gt;</td>
+<td class="org-left">backward-char</td>
+</tr>
+
+<tr>
+<td class="org-left">&lt;up&gt;</td>
+<td class="org-left">previous-line</td>
+</tr>
+
+<tr>
+<td class="org-left">&lt;down&gt;</td>
+<td class="org-left">next-line</td>
+</tr>
+
+<tr>
+<td class="org-left">h</td>
+<td class="org-left">w3m-history</td>
+</tr>
+
+<tr>
+<td class="org-left">C-c C-d</td>
+<td class="org-left">lexic-search-word-at-point</td>
+</tr>
+
+<tr>
+<td class="org-left">g</td>
+<td class="org-left">w3m-redisplay-this-page</td>
+</tr>
+
+<tr>
+<td class="org-left">G</td>
+<td class="org-left">w3m-reload-this-page</td>
+</tr>
+
+<tr>
+<td class="org-left">u</td>
+<td class="org-left">w3m-goto-url</td>
+</tr>
+
+<tr>
+<td class="org-left">U</td>
+<td class="org-left">w3m-goto-url-new-session</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"> <span style="color: #494949;">(</span>-map <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #494949;">(</span>p<span style="color: #494949;">)</span> <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">bind-key</span> <span style="color: #bbb;">(</span>kbd <span style="color: #494949;">(</span>car p<span style="color: #494949;">)</span><span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>intern <span style="color: #494949;">(</span>cadr p<span style="color: #494949;">)</span><span style="color: #bbb;">)</span> 'w3m-mode-map<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+       binding-list<span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+I also add my system for creating epubs from websites automatically so I can write notes on the websites in org-mode.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">bind-key</span> <span style="color: #bbb;">(</span>kbd <span style="color: #494949;">"w"</span><span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">def-web-note-writer</span> w3m-mode w3m-current-url w3m-current-title<span style="color: #bbb;">)</span>
+          'w3m-mode-map<span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0ddc534" class="outline-3">
+<h3 id="org0ddc534">Browser Functions</h3>
+<div class="outline-text-3" id="text-org0ddc534">
+<p>
+To make all of it work I also have to define a series of browser functions that will be called in the hydra.
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-graphical-browse-url</span> <span style="color: #bbb;">(</span>url <span style="color: #E53935;">&amp;rest</span> _<span style="color: #bbb;">)</span>
+  <span style="color: #a4a4a4; font-style: italic;">"Browse a URL using the graphical browser."</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">interactive</span> <span style="color: #494949;">(</span>browse-url-interactive-arg <span style="color: #bbb;">(</span>format <span style="color: #494949;">"Open URL in %s: "</span> ec-graphical-browser<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>  <span style="color: #bbb;">(</span>start-process-shell-command <span style="color: #494949;">"ec-graphical-browser"</span>
+                               nil
+                               <span style="color: #494949;">(</span>format <span style="color: #494949;">"%s '%s'"</span> ec-graphical-browser url<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-graphical-search</span> <span style="color: #bbb;">(</span>search-terms<span style="color: #bbb;">)</span>
+  <span style="color: #a4a4a4; font-style: italic;">"Open the graphical browser in a buffer for browsing various websites."</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">interactive</span> <span style="color: #494949;">(</span>ec-ddg-search-interactive-arg <span style="color: #494949;">"Search in graphical browser. DuckDuckGo Search: "</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>exec-shell-command ec-graphical-browser <span style="color: #494949;">"\"https://"</span> ec-search-engine search-terms <span style="color: #494949;">"\""</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-search-interactively-new-session</span> <span style="color: #bbb;">(</span>search-terms<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">interactive</span> <span style="color: #494949;">(</span>ec-ddg-search-interactive-arg <span style="color: #494949;">"Search in new buffer. DuckDuckGo Search: "</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>w3m-search-new-session w3m-search-default-engine search-terms<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-search-interactively</span> <span style="color: #bbb;">(</span>search-terms<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">interactive</span> <span style="color: #494949;">(</span>ec-ddg-search-interactive-arg <span style="color: #494949;">"Search in current buffer. DuckDuckGo Search: "</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>w3m-search w3m-search-default-engine search-terms<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-search-yt-interactively</span> <span style="color: #bbb;">(</span>search-terms<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">interactive</span> <span style="color: #494949;">(</span>ec-ddg-search-interactive-arg <span style="color: #494949;">"Search in current buffer. Youtube Search: "</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>w3m-search-new-session w3m-search-default-engine <span style="color: #494949;">(</span>format <span style="color: #494949;">"site:youtube.com %s"</span> search-terms<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org58aeb1f" class="outline-3">
+<h3 id="org58aeb1f">Ace Link</h3>
+<div class="outline-text-3" id="text-org58aeb1f">
+<p>
+Now I just add <a href="https://github.com/abo-abo/ace-link">ace-link</a> to make traversing documents much nicer. 
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span>ace-link-setup-default<span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">bind-key</span> <span style="color: #bbb;">(</span>kbd <span style="color: #494949;">"C-o"</span><span style="color: #bbb;">)</span> #'ace-link<span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">bind-key</span> <span style="color: #bbb;">(</span>kbd <span style="color: #494949;">"o"</span><span style="color: #bbb;">)</span> #'ace-link 'w3m-mode-map<span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgca6edaf" class="outline-2">
+<h2 id="orgca6edaf">Conclusion</h2>
+<div class="outline-text-2" id="text-orgca6edaf">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">provide</span> '<span style="color: #E53935;">econf-world-wide-web</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+<!-- Footnotes --><!-- 
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">I think that eventually I will also add a system to allow me to define key bindings and set variables using tables.</p></div></div>
+
+ --></div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2021-W50-1 01:31</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>

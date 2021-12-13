@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W49-2 17:31 -->
+<!-- 2021-W50-1 00:30 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Website Source Code</title>
@@ -43,7 +43,7 @@
 </li>
 <li><a href="#org83c7408">HTML</a>
 <ul>
-<li><a href="#orgb4d4808">Dependencies</a></li>
+<li><a href="#org9586b78">Dependencies</a></li>
 <li><a href="#org5f148ce">Preamble and Postamble</a>
 <ul>
 <li><a href="#org9ca9c27">License Info</a></li>
@@ -55,7 +55,7 @@
 </li>
 <li><a href="#org0ed59e9">Stylesheets</a>
 <ul>
-<li><a href="#org60e8731">Dependencies</a></li>
+<li><a href="#org8227aab">Dependencies</a></li>
 <li><a href="#org5a18095">Emacs Configuration</a></li>
 <li><a href="#orgc74d02c">Create CSS File</a></li>
 <li><a href="#org70c42e7">Background and Foreground</a></li>
@@ -157,6 +157,7 @@ This sets up the Clojure project. Right now I don't actually really use the proj
                  <span style="color: #494949;">[</span><span style="color: #E53935;">org.clojure</span>/math.combinatorics <span style="color: #494949;">"0.1.6"</span><span style="color: #494949;">]</span>
                  <span style="color: #494949;">[</span><span style="color: #E53935;">org.clojure</span>/math.numeric-tower <span style="color: #494949;">"0.0.4"</span><span style="color: #494949;">]</span>
                  <span style="color: #494949;">[</span><span style="color: #E53935;">org.clojure</span>/core.match <span style="color: #494949;">"1.0.0"</span><span style="color: #494949;">]</span>
+                 <span style="color: #494949;">[</span><span style="color: #E53935;">org.clojure</span>/core.logic <span style="color: #494949;">"1.0.0"</span><span style="color: #494949;">]</span>
                  <span style="color: #494949;">[</span><span style="color: #E53935;">lambdaisland</span>/regal <span style="color: #494949;">"0.0.143"</span><span style="color: #494949;">]</span>
                  <span style="color: #494949;">[</span><span style="color: #E53935;">com.cerner</span>/clara-rules <span style="color: #494949;">"0.21.1"</span><span style="color: #494949;">]</span>
                  &lt;&lt;stylesheet-deps&gt;&gt;
@@ -201,17 +202,18 @@ This gets the website info and sets the directories relative to the current one.
 <p>
 As of generating this file, thce directory above it contains the following files. 
 </p>
-<pre class="example" id="org491ba3c">
-total 56
--rw-r--r-- 1 1000 998 13038 Dec  7 11:09 .cider-repl-history
--rw-r--r-- 1 1000 998  4935 Dec  7 11:08 .dir-locals.el
+<pre class="example" id="orgbc4f186">
+total 60
+-rw-r--r-- 1 1000 998 13938 Dec  7 22:16 .cider-repl-history
+drwxr-xr-x 2 1000 998  4096 Dec 10 18:37 classes
+-rw-r--r-- 1 1000 998  4935 Dec  7 22:16 .dir-locals.el
 -rw-r--r-- 1 1000 998    34 Jul 29 12:02 .git
--rw-r--r-- 1 1000 998   240 Dec  7 11:08 .gitignore
--rw-r--r-- 1 1000 998     5 Dec  7 11:09 .nrepl-port
--rw-r--r-- 1 1000 998   530 Dec  7 11:08 project.clj
-drwxr-xr-x 6 1000 998  4096 Dec  7 11:08 public
-drwxr-xr-x 6 1000 998  4096 Dec  7 11:08 src
-drwxr-xr-x 4 1000 998  4096 Dec  6 17:13 target
+-rw-r--r-- 1 1000 998   240 Dec  7 22:16 .gitignore
+-rw-r--r-- 1 1000 998    73 Dec 10 18:34 hello.clj
+-rw-r--r-- 1 1000 998   580 Dec  7 22:16 project.clj
+drwxr-xr-x 6 1000 998  4096 Dec 11 16:28 public
+drwxr-xr-x 6 1000 998  4096 Dec 13 00:26 src
+drwxr-xr-x 4 1000 998  4096 Dec 12 19:29 target
 -rw-r--r-- 1 1000 998  4050 Dec  2 14:01 test.css
 </pre>
 
@@ -311,6 +313,49 @@ I like the sort of tufte-css style side notes, so I decided to copy an implement
 <span style="color: #494949;">(</span>org-export-define-derived-backend 'tufte-html 'html
   <span style="color: #E53935;">:translate-alist</span> '<span style="color: #bbb;">(</span><span style="color: #494949;">(</span>footnote-reference . tufte-html-footnote-reference<span style="color: #494949;">)</span>
                      <span style="color: #494949;">(</span>footnote-definition . tufte-html-footnote-definition<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">tufte-html-src-block</span> <span style="color: #bbb;">(</span>src-block _contents info<span style="color: #bbb;">)</span>
+  <span style="color: #a4a4a4; font-style: italic;">"Transcode a SRC-BLOCK element from Org to HTML.</span>
+<span style="color: #a4a4a4; font-style: italic;">CONTENTS holds the contents of the item.  INFO is a plist holding</span>
+<span style="color: #a4a4a4; font-style: italic;">contextual information.</span>
+
+<span style="color: #a4a4a4; font-style: italic;">This is a modification meant to add a modeline-like q"</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>org-export-read-attribute <span style="color: #E53935;">:attr_html</span> src-block <span style="color: #E53935;">:textarea</span><span style="color: #494949;">)</span>
+      <span style="color: #494949;">(</span>org-html--textarea-block src-block<span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let*</span> <span style="color: #bbb;">(</span><span style="color: #494949;">(</span>lang <span style="color: #bbb;">(</span>org-element-property <span style="color: #E53935;">:language</span> src-block<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+          <span style="color: #494949;">(</span>code <span style="color: #bbb;">(</span>org-html-format-code src-block info<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+          <span style="color: #494949;">(</span>label <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>lbl <span style="color: #494949;">(</span>org-html--reference src-block info t<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                   <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> lbl <span style="color: #bbb;">(</span>format <span style="color: #494949;">" id=\"%s\""</span> lbl<span style="color: #bbb;">)</span> <span style="color: #494949;">""</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+          <span style="color: #494949;">(</span>klipsify  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">and</span>  <span style="color: #494949;">(</span>plist-get info <span style="color: #E53935;">:html-klipsify-src</span><span style="color: #494949;">)</span>
+                           <span style="color: #494949;">(</span>member lang '<span style="color: #bbb;">(</span><span style="color: #494949;">"javascript"</span> <span style="color: #494949;">"js"</span>
+                                          <span style="color: #494949;">"ruby"</span> <span style="color: #494949;">"scheme"</span> <span style="color: #494949;">"clojure"</span> <span style="color: #494949;">"php"</span> <span style="color: #494949;">"html"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+      <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>not lang<span style="color: #494949;">)</span> <span style="color: #494949;">(</span>format <span style="color: #494949;">"&lt;pre class=\"example\"%s&gt;\n%s&lt;/pre&gt;"</span> label code<span style="color: #494949;">)</span>
+        <span style="color: #494949;">(</span>format <span style="color: #494949;">"&lt;div class=\"org-src-container\"&gt;\n%s%s\n&lt;/div&gt;"</span>
+                <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Build caption.</span>
+                <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>caption <span style="color: #494949;">(</span>org-export-get-caption src-block<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                  <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>not caption<span style="color: #bbb;">)</span> <span style="color: #494949;">""</span>
+                    <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>listing-number
+                           <span style="color: #494949;">(</span>format
+                            <span style="color: #494949;">"&lt;span class=\"listing-number\"&gt;%s &lt;/span&gt;"</span>
+                            <span style="color: #bbb;">(</span>format
+                             <span style="color: #494949;">(</span>org-html--translate <span style="color: #494949;">"Listing %d:"</span> info<span style="color: #494949;">)</span>
+                             <span style="color: #494949;">(</span>org-export-get-ordinal
+                              src-block info nil #'org-html--has-caption-p<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                      <span style="color: #494949;">(</span>format <span style="color: #494949;">"&lt;label class=\"org-src-name\"&gt;%s%s&lt;/label&gt;"</span>
+                              listing-number
+                              <span style="color: #bbb;">(</span>org-trim <span style="color: #494949;">(</span>org-export-data caption info<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+                <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Contents.</span>
+                <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> klipsify
+                    <span style="color: #494949;">(</span>format <span style="color: #494949;">"&lt;pre&gt;&lt;code class=\"src src-%s\"%s%s&gt;%s&lt;/code&gt;&lt;/pre&gt;"</span>
+                            lang
+                            label
+                            <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>string= lang <span style="color: #494949;">"html"</span><span style="color: #494949;">)</span>
+                                <span style="color: #494949;">" data-editor-type=\"html\""</span>
+                              <span style="color: #494949;">""</span><span style="color: #bbb;">)</span>
+                            code<span style="color: #494949;">)</span>
+                  <span style="color: #494949;">(</span>format <span style="color: #494949;">"&lt;pre class=\"src src-%s\"%s&gt;%s&lt;/pre&gt;"</span>
+                          lang label code<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">org-html-publish-to-tufte-html</span> <span style="color: #bbb;">(</span>plist filename pub-dir<span style="color: #bbb;">)</span>
   <span style="color: #a4a4a4; font-style: italic;">"Publish an org file to HTML.</span>
@@ -435,9 +480,9 @@ This is where I configure the HTML displayed by the system, for th emost part.
 </p>
 </div>
 
-<div id="outline-container-orgb4d4808" class="outline-3">
-<h3 id="orgb4d4808">Dependencies</h3>
-<div class="outline-text-3" id="text-orgb4d4808">
+<div id="outline-container-org9586b78" class="outline-3">
+<h3 id="org9586b78">Dependencies</h3>
+<div class="outline-text-3" id="text-org9586b78">
 <p>
 Here we import hiccup so we can write our HTML in Clojure. You may have noticed that I am slightly allergic to HTML. This is partially because I like to do 
 </p>
@@ -535,9 +580,9 @@ While <a href="https://orgmode.org/manual/HTML-Export.html#HTML-Export">org-html
 </p>
 </div>
 
-<div id="outline-container-org60e8731" class="outline-3">
-<h3 id="org60e8731">Dependencies</h3>
-<div class="outline-text-3" id="text-org60e8731">
+<div id="outline-container-org8227aab" class="outline-3">
+<h3 id="org8227aab">Dependencies</h3>
+<div class="outline-text-3" id="text-org8227aab">
 <div class="org-src-container">
 <pre class="src src-clojure" id="orge5fbe3c"><span style="color: #494949;">[</span>garden <span style="color: #494949;">"1.3.10"</span><span style="color: #494949;">]</span>
 </pre>
@@ -1187,7 +1232,7 @@ This finds the background color of a face. Mostly this just extracts colors for 
 
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W49-2 11:09</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W49-6 20:26</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

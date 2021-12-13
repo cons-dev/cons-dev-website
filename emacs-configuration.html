@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-W50-1 01:24 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Emacs Configuration</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="A series of files for my emacs config." />
+<meta name="generator" content="Org Mode" />
+<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">Emacs Configuration</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org39297db">Introduction</a></li>
+<li><a href="#orge72bb2e">Components</a></li>
+<li><a href="#org9f69239">Plans</a>
+<ul>
+<li><a href="#org72e1d94"><span class="todo TODO">TODO</span> Personal Theme</a></li>
+<li><a href="#org312c389"><span class="todo TODO">TODO</span> Memex</a></li>
+<li><a href="#org28297b7"><span class="todo TODO">TODO</span> Core Feature Code</a></li>
+<li><a href="#org1cef843"><span class="todo TODO">TODO</span> Aesthetics Code</a></li>
+<li><a href="#org26b7316"><span class="todo TODO">TODO</span> Unify Lookup Code</a></li>
+</ul>
+</li>
+<li><a href="#orgdbac4e6">load-deps</a></li>
+<li><a href="#orga1a6fc8">Initialization Code</a></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-org39297db" class="outline-2">
+<h2 id="org39297db">Introduction</h2>
+<div class="outline-text-2" id="text-org39297db">
+<p>
+I like Emacs, but slowly I have accumulated around 15 000 lines of code written in Emacs lisp in my personal configuration. I have also added (some) unit tests and broke it into a file tree. This works rather well, but this is also sort of limited and troublesome as it 
+</p>
+
+<p>
+This will basically comprise the public section of my Emacs configuration. Currently there's not too much here.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge72bb2e" class="outline-2">
+<h2 id="orge72bb2e">Components</h2>
+<div class="outline-text-2" id="text-orge72bb2e">
+<p>
+Here's a quick listing of the various components to my setup. This list is comprised of various sets of features that I want loaded, in essence a list of porcelains. These then go on to load the various libraries I have written to actually execute the code.
+</p>
+<table id="orga620357" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Component</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><a href="econf-world-wide-web.html#ID-dd78c828-2160-4d2b-a285-a019099ba36d">world-wide-web</a></td>
+<td class="org-left">A collection of web search and display tools.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-org9f69239" class="outline-2">
+<h2 id="org9f69239">Plans</h2>
+<div class="outline-text-2" id="text-org9f69239">
+</div>
+<div id="outline-container-org72e1d94" class="outline-3">
+<h3 id="org72e1d94"><span class="todo TODO">TODO</span> Personal Theme</h3>
+<div class="outline-text-3" id="text-org72e1d94">
+<p>
+Move my theme code to website so I can annotate it / show it off more effectively.
+</p>
+</div>
+</div>
+<div id="outline-container-org312c389" class="outline-3">
+<h3 id="org312c389"><span class="todo TODO">TODO</span> Memex</h3>
+<div class="outline-text-3" id="text-org312c389">
+<p>
+Personal wiki (Memex) source code added to the public portion of my website.
+</p>
+</div>
+</div>
+<div id="outline-container-org28297b7" class="outline-3">
+<h3 id="org28297b7"><span class="todo TODO">TODO</span> Core Feature Code</h3>
+<div class="outline-text-3" id="text-org28297b7">
+<p>
+Core features of my configuration including package loading, <code>EXWM</code>, and other similar things.
+</p>
+</div>
+</div>
+<div id="outline-container-org1cef843" class="outline-3">
+<h3 id="org1cef843"><span class="todo TODO">TODO</span> Aesthetics Code</h3>
+<div class="outline-text-3" id="text-org1cef843">
+<p>
+The rest of the code covering the aesthetics of my development environment.
+</p>
+</div>
+</div>
+<div id="outline-container-org26b7316" class="outline-3">
+<h3 id="org26b7316"><span class="todo TODO">TODO</span> Unify Lookup Code</h3>
+<div class="outline-text-3" id="text-org26b7316">
+<p>
+I would like to eventually unify all of my lookup code into one set of lookup code. 
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdbac4e6" class="outline-2">
+<h2 id="orgdbac4e6">load-deps</h2>
+<div class="outline-text-2" id="text-orgdbac4e6">
+<p>
+Generally I like to declare my dependencies in a table at the start of my file (as you can see above) because it allows me to link to them, have commentary on what they do, and generally looks nicer than a list of strings. However, to make this possible I need to process the list a little bit.
+</p>
+
+<p>
+Eventually I might add a system to lazy-load them (presumably with an extra column as a falg to indicate it), but for now this will do.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org8d4547b"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-load-deps</span> <span style="color: #bbb;">(</span>deps-list<span style="color: #bbb;">)</span>
+  <span style="color: #a4a4a4; font-style: italic;">"Load dependencies from DEPS-LIST."</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>link-contents-rx <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">rx</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">or</span> <span style="color: #494949;">(</span>seq <span style="color: #494949;">"["</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">or</span> <span style="color: #494949;">(</span>seq <span style="color: #494949;">"id:"</span> <span style="color: #bbb;">(</span>* <span style="color: #494949;">(</span>any <span style="color: #494949;">"-"</span> <span style="color: #494949;">"0-9"</span> <span style="color: #494949;">"a-f"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                                               <span style="color: #494949;">(</span>seq <span style="color: #494949;">"https://"</span> <span style="color: #bbb;">(</span>* <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">or</span> <span style="color: #494949;">"."</span> <span style="color: #bbb;">(</span>not <span style="color: #494949;">"]"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span> <span style="color: #494949;">"]"</span><span style="color: #494949;">)</span>
+                                  <span style="color: #494949;">"["</span> <span style="color: #494949;">"]"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> deps-list
+      <span style="color: #bbb;">(</span>-map 'car<span style="color: #bbb;">)</span>
+      <span style="color: #bbb;">(</span>-map <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #bbb;">(</span>dep<span style="color: #bbb;">)</span>
+              <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>stripped-dep <span style="color: #494949;">(</span>s-replace-regexp link-contents-rx <span style="color: #494949;">""</span> dep<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>s-matches? <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">rx</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">or</span> <span style="color: #494949;">"https://"</span> <span style="color: #494949;">"http://"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> dep<span style="color: #bbb;">)</span>
+                    <span style="color: #bbb;">(</span>eval `<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">use-package</span> ,<span style="color: #bbb;">(</span>intern stripped-dep<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+                  <span style="color: #bbb;">(</span>org-babel-load-file <span style="color: #494949;">(</span>format <span style="color: #494949;">"econf-%s.org"</span> stripped-dep<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-ec-load-file-with-deps">
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orga1a6fc8" class="outline-2">
+<h2 id="orga1a6fc8">Initialization Code</h2>
+<div class="outline-text-2" id="text-orga1a6fc8">
+<p>
+This code is used to load the code in the components list automatically.
+</p>
+<div class="org-src-container">
+<pre class="src src-elisp">&lt;&lt;load-deps&gt;&gt;
+<span style="color: #494949;">(</span>ec-load-deps components<span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2021-W50-1 01:16</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>
