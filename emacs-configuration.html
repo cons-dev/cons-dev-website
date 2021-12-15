@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W50-1 01:24 -->
+<!-- 2021-W50-3 14:53 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Emacs Configuration</title>
@@ -33,7 +33,13 @@
 <li><a href="#org26b7316"><span class="todo TODO">TODO</span> Unify Lookup Code</a></li>
 </ul>
 </li>
-<li><a href="#orgdbac4e6">load-deps</a></li>
+<li><a href="#org744c1e2">Fancy Loading</a>
+<ul>
+<li><a href="#orgefc3f11">ec-load-deps</a></li>
+<li><a href="#org74914ae">ec-set-variables</a></li>
+<li><a href="#orgd629f50">ec-load-bind-keys</a></li>
+</ul>
+</li>
 <li><a href="#orga1a6fc8">Initialization Code</a></li>
 </ul>
 </div>
@@ -129,9 +135,17 @@ I would like to eventually unify all of my lookup code into one set of lookup co
 </div>
 </div>
 
-<div id="outline-container-orgdbac4e6" class="outline-2">
-<h2 id="orgdbac4e6">load-deps</h2>
-<div class="outline-text-2" id="text-orgdbac4e6">
+
+<div id="outline-container-org744c1e2" class="outline-2">
+<h2 id="org744c1e2">Fancy Loading</h2>
+<div class="outline-text-2" id="text-org744c1e2">
+<p>
+To improve the experience of loading.
+</p>
+</div>
+<div id="outline-container-orgefc3f11" class="outline-3">
+<h3 id="orgefc3f11">ec-load-deps</h3>
+<div class="outline-text-3" id="text-orgefc3f11">
 <p>
 Generally I like to declare my dependencies in a table at the start of my file (as you can see above) because it allows me to link to them, have commentary on what they do, and generally looks nicer than a list of strings. However, to make this possible I need to process the list a little bit.
 </p>
@@ -140,7 +154,7 @@ Generally I like to declare my dependencies in a table at the start of my file (
 Eventually I might add a system to lazy-load them (presumably with an extra column as a falg to indicate it), but for now this will do.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="org8d4547b"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-load-deps</span> <span style="color: #bbb;">(</span>deps-list<span style="color: #bbb;">)</span>
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-load-deps</span> <span style="color: #bbb;">(</span>deps-list<span style="color: #bbb;">)</span>
   <span style="color: #a4a4a4; font-style: italic;">"Load dependencies from DEPS-LIST."</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>link-contents-rx <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">rx</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">or</span> <span style="color: #494949;">(</span>seq <span style="color: #494949;">"["</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">or</span> <span style="color: #494949;">(</span>seq <span style="color: #494949;">"id:"</span> <span style="color: #bbb;">(</span>* <span style="color: #494949;">(</span>any <span style="color: #494949;">"-"</span> <span style="color: #494949;">"0-9"</span> <span style="color: #494949;">"a-f"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
                                                <span style="color: #494949;">(</span>seq <span style="color: #494949;">"https://"</span> <span style="color: #bbb;">(</span>* <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">or</span> <span style="color: #494949;">"."</span> <span style="color: #bbb;">(</span>not <span style="color: #494949;">"]"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span> <span style="color: #494949;">"]"</span><span style="color: #494949;">)</span>
@@ -154,9 +168,29 @@ Eventually I might add a system to lazy-load them (presumably with an extra colu
                   <span style="color: #bbb;">(</span>org-babel-load-file <span style="color: #494949;">(</span>format <span style="color: #494949;">"econf-%s.org"</span> stripped-dep<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
+</div>
+</div>
 
+<div id="outline-container-org74914ae" class="outline-3">
+<h3 id="org74914ae">ec-set-variables</h3>
+<div class="outline-text-3" id="text-org74914ae">
 <div class="org-src-container">
-<pre class="src src-ec-load-file-with-deps">
+<pre class="src src-emacs-lisp"><span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">(defun ec-set-variables)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd629f50" class="outline-3">
+<h3 id="orgd629f50">ec-load-bind-keys</h3>
+<div class="outline-text-3" id="text-orgd629f50">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">(defun ec-bind-keys)</span>
+</pre>
+</div>
+
+<pre class="example">
+ec-load-deps
 </pre>
 </div>
 </div>
@@ -170,15 +204,14 @@ Eventually I might add a system to lazy-load them (presumably with an extra colu
 This code is used to load the code in the components list automatically.
 </p>
 <div class="org-src-container">
-<pre class="src src-elisp">&lt;&lt;load-deps&gt;&gt;
-<span style="color: #494949;">(</span>ec-load-deps components<span style="color: #494949;">)</span>
+<pre class="src src-elisp"><span style="color: #494949;">(</span>ec-load-deps components<span style="color: #494949;">)</span>
 </pre>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W50-1 01:16</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W50-2 22:13</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

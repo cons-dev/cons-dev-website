@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W49-6 16:28 -->
+<!-- 2021-W50-3 14:53 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Implementing the Travling Salseman Trolly Problem</title>
@@ -19,13 +19,25 @@
 <div id="content" class="content">
 <h1 class="title">Implementing the Travling Salseman Trolly Problem
 <br />
-<span class="subtitle">Backtracking over my dead body!</span>
+<span class="subtitle">A possibly correct solution.</span>
 </h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#org8247bc0">Introduction</a></li>
+<li><a href="#org2677bd6">Algorithm Description</a></li>
+<li><a href="#orgbee6713">Implementation (Julia)</a>
+<ul>
+<li><a href="#org9b3e42a">Weighted Graphs</a>
+<ul>
+<li><a href="#org33a7a6d">Structs</a></li>
+<li><a href="#org75198d1">Macros</a></li>
+</ul>
+</li>
+<li><a href="#org702ac26">BFS</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -34,10 +46,73 @@
 <h2 id="org8247bc0">Introduction</h2>
 <div class="outline-text-2" id="text-org8247bc0">
 <p>
-The traveling salesman
+While on discord I saw this meme.
 </p>
 
 
+<div id="org3dbde0a" class="figure">
+<p><img src="images/travling-salesman-trolley-problem.webp" alt="travling-salesman-trolley-problem.webp" />
+</p>
+</div>
+
+<p>
+I decided to write an optimal solution for it because I was bored. I also decided to add this to my website because why not. I have yet to prove that it actually works, and I probably should do that.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2677bd6" class="outline-2">
+<h2 id="org2677bd6">Algorithm Description</h2>
+<div class="outline-text-2" id="text-org2677bd6">
+<p>
+In the case of an undirected graph you first consider a node, obtain the weights of the edges going from it and sort them in a list. Then you traverse along the lowest weighted edge in your list. Once you have reached this new edge you discard the previous edge, get the new edges, discard any edges that go to a visited node in both of your lists, sort them, and then merge them. You then proceed to again choose the lowest weighted edge from your list and visit the node that goes through that edge. You continue this until all nodes have been visited
+</p>
+
+<p>
+So long as the graph is not fully connected I think the time complexity should tend towards O(n log(n)), should it be more fully connected I think the time complexity will be more similar to O(n<sup>2</sup>) for the optimal solution. 
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbee6713" class="outline-2">
+<h2 id="orgbee6713">Implementation (Julia)</h2>
+<div class="outline-text-2" id="text-orgbee6713">
+<p>
+So to accompany the above description let's have a quick implementation.
+</p>
+</div>
+
+<div id="outline-container-org9b3e42a" class="outline-3">
+<h3 id="org9b3e42a">Weighted Graphs</h3>
+<div class="outline-text-3" id="text-org9b3e42a">
+</div>
+<div id="outline-container-org33a7a6d" class="outline-4">
+<h4 id="org33a7a6d">Structs</h4>
+<div class="outline-text-4" id="text-org33a7a6d">
+<p>
+To start we will represent weighted graphs as a series of nodes.
+</p>
+<div class="org-src-container">
+<pre class="src src-julia"><span style="color: #E53935; font-style: italic;">struct</span> <span style="color: #E53935;">Node</span>
+    name::<span style="color: #E53935;">String</span>
+    edges::<span style="color: #E53935;">Edge</span><span style="color: #494949;">[]</span>
+<span style="color: #E53935; font-style: italic;">end</span>
+
+<span style="color: #E53935; font-style: italic;">struct</span> <span style="color: #E53935;">Edge</span>
+    to::<span style="color: #E53935;">Node</span>
+    weight::<span style="color: #E53935;">Int64</span>
+<span style="color: #E53935; font-style: italic;">end</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org75198d1" class="outline-4">
+<h4 id="org75198d1">Macros</h4>
+<div class="outline-text-4" id="text-org75198d1">
+<p>
+To make it easier to define the graph we will also define a very small DOT-like DSL to define the graph.
+</p>
 <div class="org-src-container">
 <pre class="src src-julia">
 </pre>
@@ -45,8 +120,21 @@ The traveling salesman
 </div>
 </div>
 </div>
+
+<div id="outline-container-org702ac26" class="outline-3">
+<h3 id="org702ac26">BFS</h3>
+<div class="outline-text-3" id="text-org702ac26">
+<div class="org-src-container">
+<pre class="src src-julia"><span style="color: #E53935; font-style: italic;">using</span> LightGraphs
+<span style="color: #E53935; font-style: italic;">using</span> GraphPlot
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W49-4 01:58</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W50-2 15:03</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W50-1 01:31 -->
+<!-- 2021-W50-1 20:36 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Econf World Wide Web</title>
@@ -24,12 +24,12 @@
 <ul>
 <li><a href="#org73f9396">Introduction</a></li>
 <li><a href="#orgab2bd12">Dependencies</a></li>
-<li><a href="#org2ce4eea">Configuration</a></li>
-<li><a href="#org6aa801e">Variables</a>
+<li><a href="#org57830e5">Variables</a>
 <ul>
 <li><a href="#orga2f6772">Setting Browsers (and stuff)</a></li>
 <li><a href="#org3955360">The w3m Directory</a></li>
 <li><a href="#orgd0e9070">Further Customizations</a></li>
+<li><a href="#org3e755c9">Processing Var Tables</a></li>
 </ul>
 </li>
 <li><a href="#org30e388f">Playing Videos Without JS</a>
@@ -50,7 +50,7 @@
 </li>
 <li><a href="#orgbb4d542">Search Engine Suggestions</a>
 <ul>
-<li><a href="#org2fe441e">Variables</a></li>
+<li><a href="#orgeae13a9">Variables</a></li>
 <li><a href="#org2d39642">Functions</a>
 <ul>
 <li><a href="#org369c113">ec-ddg-suggest-fetch</a></li>
@@ -64,8 +64,8 @@
 </li>
 <li><a href="#orgcb1e076">Saving Stuff</a>
 <ul>
-<li><a href="#org4fa2bb1">Cloning Websites</a></li>
-<li><a href="#orgf229cc1">Downloading Videos</a></li>
+<li><a href="#org0896226">ec-clone-website</a></li>
+<li><a href="#org0237caf">ec-download-video</a></li>
 </ul>
 </li>
 <li><a href="#org5cb50f7">User Interface</a>
@@ -77,7 +77,6 @@
 <li><a href="#org58aeb1f">Ace Link</a></li>
 </ul>
 </li>
-<li><a href="#orgca6edaf">Conclusion</a></li>
 </ul>
 </div>
 </div>
@@ -135,20 +134,13 @@ This is some fo the code I use for search engine stuff in Emacs.
 </div>
 </div>
 
-<div id="outline-container-org2ce4eea" class="outline-2">
-<h2 id="org2ce4eea">Configuration</h2>
-</div>
-
-
-
-<div id="outline-container-org6aa801e" class="outline-2">
-<h2 id="org6aa801e">Variables</h2>
-<div class="outline-text-2" id="text-org6aa801e">
+<div id="outline-container-org57830e5" class="outline-2">
+<h2 id="org57830e5">Variables</h2>
+<div class="outline-text-2" id="text-org57830e5">
 <p>
 Here I set up a bunch of variables that are used in the rest of the package. However, I do not set all my variables here.
 </p>
 </div>
-
 <div id="outline-container-orga2f6772" class="outline-3">
 <h3 id="orga2f6772">Setting Browsers (and stuff)</h3>
 <div class="outline-text-3" id="text-orga2f6772">
@@ -186,16 +178,50 @@ Like everything else I like to keep the data for w3m in my data directory instea
 <p>
 Here I set the variables that I have found that need a directory to dump their files in.
 </p>
-<div class="org-src-container">
-<pre class="src src-elisp" id="org321bff4"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">setq</span> w3m-profile-directory ec-w3m-dir
-      w3m-default-save-directory ec-downloads-dir
-      w3m-external-view-temp-directory ec-w3m-dir
-      w3m-bookmark-file <span style="color: #bbb;">(</span>concat ec-w3m-dir <span style="color: #494949;">"bookmarks"</span><span style="color: #bbb;">)</span>
-      w3m-cookie-file <span style="color: #bbb;">(</span>concat ec-w3m-dir <span style="color: #494949;">"cookie"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-</pre>
+<table id="org0989e5e" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Variable</th>
+<th scope="col" class="org-left">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>w3m-profile-directory</code></td>
+<td class="org-left"><code>ec-w3m-dir</code></td>
+</tr>
+
+<tr>
+<td class="org-left"><code>w3m-default-save-directory</code></td>
+<td class="org-left"><code>ec-downloads-dir</code></td>
+</tr>
+
+<tr>
+<td class="org-left"><code>w3m-external-view-temp-directory</code></td>
+<td class="org-left"><code>ec-w3m-dir</code></td>
+</tr>
+
+<tr>
+<td class="org-left"><code>w3m-bookmark-file</code></td>
+<td class="org-left"><code>(concat ec-w3m-dir "bookmarks")</code></td>
+</tr>
+
+<tr>
+<td class="org-left"><code>w3m-cookie-file</code></td>
+<td class="org-left">(concat ec-w3m-dir "cookie")</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-</div>
+
 
 <div id="outline-container-orgd0e9070" class="outline-3">
 <h3 id="orgd0e9070">Further Customizations</h3>
@@ -203,20 +229,70 @@ Here I set the variables that I have found that need a directory to dump their f
 <p>
 Now I just add some further quick customizations to make the browser a little nicer to work with and to conform more with my standard interface.
 </p>
+<table id="orga158ae4" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Variable</th>
+<th scope="col" class="org-left">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>browse-url-browser-function</code></td>
+<td class="org-left"><code>#'w3m-goto-url-new-session-or-video</code></td>
+</tr>
+
+<tr>
+<td class="org-left"><code>w3m-default-display-inline-images</code></td>
+<td class="org-left"><code>t</code></td>
+</tr>
+
+<tr>
+<td class="org-left"><code>w3m-pop-up-windows</code></td>
+<td class="org-left"><code>t</code></td>
+</tr>
+
+<tr>
+<td class="org-left"><code>w3m-search-default-engine</code></td>
+<td class="org-left"><code>"duckduckgo"</code></td>
+</tr>
+
+<tr>
+<td class="org-left"><code>w3m-use-tab</code></td>
+<td class="org-left"><code>nil</code></td>
+</tr>
+
+<tr>
+<td class="org-left"><code>w3m-display-mode</code></td>
+<td class="org-left"><code>'plain</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<div id="outline-container-org3e755c9" class="outline-3">
+<h3 id="org3e755c9">Processing Var Tables</h3>
+<div class="outline-text-3" id="text-org3e755c9">
+<p>
+Now I just use the code below and the var tables above to set the various variables I need to set automatically.
+</p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="orga158ae4"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">setq</span> browse-url-browser-function #'w3m-goto-url-new-session-or-video
-      w3m-default-display-inline-images t
-      w3m-pop-up-windows t
-      w3m-search-default-engine <span style="color: #494949;">"duckduckgo"</span>
-      w3m-use-tab nil
-      w3m-display-mode 'plain<span style="color: #494949;">)</span>
+<pre class="src src-elisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #bbb;">(</span>-concat vars-data-dir vars-further-custom<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>-map <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #bbb;">(</span>v<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>set <span style="color: #494949;">(</span>read <span style="color: #bbb;">(</span>s-replace <span style="color: #494949;">"~"</span> <span style="color: #494949;">""</span> <span style="color: #494949;">(</span>car v<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> <span style="color: #494949;">(</span>eval <span style="color: #bbb;">(</span>read <span style="color: #494949;">(</span>s-replace <span style="color: #494949;">"~"</span> <span style="color: #494949;">""</span> <span style="color: #bbb;">(</span>cadr v<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 </div>
 </div>
 </div>
-
-
 
 <div id="outline-container-org30e388f" class="outline-2">
 <h2 id="org30e388f">Playing Videos Without JS</h2>
@@ -359,9 +435,9 @@ This just redefines the w3m URL thing entirely, checking if it is a video in the
 To add search engine suggestions
 </p>
 </div>
-<div id="outline-container-org2fe441e" class="outline-3">
-<h3 id="org2fe441e">Variables</h3>
-<div class="outline-text-3" id="text-org2fe441e">
+<div id="outline-container-orgeae13a9" class="outline-3">
+<h3 id="orgeae13a9">Variables</h3>
+<div class="outline-text-3" id="text-orgeae13a9">
 <p>
 Here I set a list of variables for the search engine suggestions that.
 </p>
@@ -387,7 +463,7 @@ Here I set a list of variables for the search engine suggestions that.
 <h4 id="org369c113">ec-ddg-suggest-fetch</h4>
 <div class="outline-text-4" id="text-org369c113">
 <p>
-This asynchronously fetches
+This asynchronously fetches suggestions from the <a href="https://duckduckgo.com">duckduckgo</a> API, using a variable to pass the suggestions to the display function
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">  <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-duckduckgo-suggest-fetch</span> <span style="color: #bbb;">(</span>input<span style="color: #bbb;">)</span>
@@ -412,7 +488,7 @@ This asynchronously fetches
 <h4 id="org0618719">ec-ddg-get-suggestions</h4>
 <div class="outline-text-4" id="text-org0618719">
 <p>
-Here we define a pretty simple function to get the list of suggestions for the search engine and merge them with the search history..
+Here we define a pretty simple function to get the list of suggestions for the search engine and merge them with the search history. It also starts a new request for suggestions.
 </p>
 
 <p>
@@ -501,9 +577,12 @@ This searches using my suggestions. I use it mostly to build more complex functi
 I also like to occasionally save documentation, so I have written some functions to make that easier.
 </p>
 </div>
-<div id="outline-container-org4fa2bb1" class="outline-3">
-<h3 id="org4fa2bb1">Cloning Websites</h3>
-<div class="outline-text-3" id="text-org4fa2bb1">
+<div id="outline-container-org0896226" class="outline-3">
+<h3 id="org0896226">ec-clone-website</h3>
+<div class="outline-text-3" id="text-org0896226">
+<p>
+This just clones a website fully and places it in a directory with the name of the website.
+</p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-clone-website</span> <span style="color: #bbb;">(</span>url dirname<span style="color: #bbb;">)</span>
   <span style="color: #a4a4a4; font-style: italic;">"Clone a wesbiste to directory."</span>
@@ -516,9 +595,9 @@ I also like to occasionally save documentation, so I have written some functions
 </div>
 </div>
 
-<div id="outline-container-orgf229cc1" class="outline-3">
-<h3 id="orgf229cc1">Downloading Videos</h3>
-<div class="outline-text-3" id="text-orgf229cc1">
+<div id="outline-container-org0237caf" class="outline-3">
+<h3 id="org0237caf">ec-download-video</h3>
+<div class="outline-text-3" id="text-org0237caf">
 <p>
 Sometimes while watching videos from C3 I like to download them, so this is a small, easy function that allows me to do just that.
 </p>
@@ -771,22 +850,12 @@ Now I just add <a href="https://github.com/abo-abo/ace-link">ace-link</a> to mak
 </div>
 </div>
 </div>
-
-<div id="outline-container-orgca6edaf" class="outline-2">
-<h2 id="orgca6edaf">Conclusion</h2>
-<div class="outline-text-2" id="text-orgca6edaf">
-<div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">provide</span> '<span style="color: #E53935;">econf-world-wide-web</span><span style="color: #494949;">)</span>
-</pre>
-</div>
-</div>
-</div>
 <!-- Footnotes --><!-- 
 <div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">I think that eventually I will also add a system to allow me to define key bindings and set variables using tables.</p></div></div>
 
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W50-1 01:31</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W50-1 20:36</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>
