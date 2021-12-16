@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W50-3 14:53 -->
+<!-- 2021-W50-4 01:27 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Emacs Configuration</title>
@@ -26,7 +26,6 @@
 <li><a href="#orge72bb2e">Components</a></li>
 <li><a href="#org9f69239">Plans</a>
 <ul>
-<li><a href="#org72e1d94"><span class="todo TODO">TODO</span> Personal Theme</a></li>
 <li><a href="#org312c389"><span class="todo TODO">TODO</span> Memex</a></li>
 <li><a href="#org28297b7"><span class="todo TODO">TODO</span> Core Feature Code</a></li>
 <li><a href="#org1cef843"><span class="todo TODO">TODO</span> Aesthetics Code</a></li>
@@ -37,7 +36,8 @@
 <ul>
 <li><a href="#orgefc3f11">ec-load-deps</a></li>
 <li><a href="#org74914ae">ec-set-variables</a></li>
-<li><a href="#orgd629f50">ec-load-bind-keys</a></li>
+<li><a href="#org1dd7642">ec-bind-keys</a></li>
+<li><a href="#org12df9e6">ec-literate-load</a></li>
 </ul>
 </li>
 <li><a href="#orga1a6fc8">Initialization Code</a></li>
@@ -84,6 +84,11 @@ Here's a quick listing of the various components to my setup. This list is compr
 <td class="org-left"><a href="econf-world-wide-web.html#ID-dd78c828-2160-4d2b-a285-a019099ba36d">world-wide-web</a></td>
 <td class="org-left">A collection of web search and display tools.</td>
 </tr>
+
+<tr>
+<td class="org-left"><a href="econf-styling.html#ID-36a26ae5-1749-4f5c-9579-e020ffb4b24b">styling</a></td>
+<td class="org-left">The styling for my Emacs configuration.</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -92,14 +97,6 @@ Here's a quick listing of the various components to my setup. This list is compr
 <div id="outline-container-org9f69239" class="outline-2">
 <h2 id="org9f69239">Plans</h2>
 <div class="outline-text-2" id="text-org9f69239">
-</div>
-<div id="outline-container-org72e1d94" class="outline-3">
-<h3 id="org72e1d94"><span class="todo TODO">TODO</span> Personal Theme</h3>
-<div class="outline-text-3" id="text-org72e1d94">
-<p>
-Move my theme code to website so I can annotate it / show it off more effectively.
-</p>
-</div>
 </div>
 <div id="outline-container-org312c389" class="outline-3">
 <h3 id="org312c389"><span class="todo TODO">TODO</span> Memex</h3>
@@ -140,9 +137,10 @@ I would like to eventually unify all of my lookup code into one set of lookup co
 <h2 id="org744c1e2">Fancy Loading</h2>
 <div class="outline-text-2" id="text-org744c1e2">
 <p>
-To improve the experience of loading.
+This is currently a work in progress, but basically it provides a fancy function that uses tables in org-mode buffers to define certain common tasks such as variable assignment or dependency specification for a file.
 </p>
 </div>
+
 <div id="outline-container-orgefc3f11" class="outline-3">
 <h3 id="orgefc3f11">ec-load-deps</h3>
 <div class="outline-text-3" id="text-orgefc3f11">
@@ -152,6 +150,10 @@ Generally I like to declare my dependencies in a table at the start of my file (
 
 <p>
 Eventually I might add a system to lazy-load them (presumably with an extra column as a falg to indicate it), but for now this will do.
+</p>
+
+<p>
+This also returns a list of the loaded dependencies to allow me to wrap the loaded code within the 
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-load-deps</span> <span style="color: #bbb;">(</span>deps-list<span style="color: #bbb;">)</span>
@@ -164,8 +166,9 @@ Eventually I might add a system to lazy-load them (presumably with an extra colu
       <span style="color: #bbb;">(</span>-map <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #bbb;">(</span>dep<span style="color: #bbb;">)</span>
               <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>stripped-dep <span style="color: #494949;">(</span>s-replace-regexp link-contents-rx <span style="color: #494949;">""</span> dep<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
                 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>s-matches? <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">rx</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">or</span> <span style="color: #494949;">"https://"</span> <span style="color: #494949;">"http://"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> dep<span style="color: #bbb;">)</span>
-                    <span style="color: #bbb;">(</span>eval `<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">use-package</span> ,<span style="color: #bbb;">(</span>intern stripped-dep<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-                  <span style="color: #bbb;">(</span>org-babel-load-file <span style="color: #494949;">(</span>format <span style="color: #494949;">"econf-%s.org"</span> stripped-dep<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                    <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">progn</span> <span style="color: #494949;">(</span>eval `<span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">use-package</span> ,<span style="color: #494949;">(</span>intern stripped-dep<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> stripped-dep<span style="color: #bbb;">)</span>
+                  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">progn</span> <span style="color: #494949;">(</span>org-babel-load-file <span style="color: #bbb;">(</span>format <span style="color: #494949;">"econf-%s.org"</span> stripped-dep<span style="color: #bbb;">)</span><span style="color: #494949;">)</span> stripped-dep<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+      <span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 </div>
@@ -174,28 +177,80 @@ Eventually I might add a system to lazy-load them (presumably with an extra colu
 <div id="outline-container-org74914ae" class="outline-3">
 <h3 id="org74914ae">ec-set-variables</h3>
 <div class="outline-text-3" id="text-org74914ae">
+<p>
+This parses the contents of a table to a series of setq statements which will be joined together into a function that is then evaluated.
+</p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">(defun ec-set-variables)</span>
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-set-variables</span> <span style="color: #bbb;">(</span>vars-list<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>-map <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #bbb;">(</span>v<span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>val <span style="color: #494949;">(</span>cadr v<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+            <span style="color: #494949;">(</span>set <span style="color: #bbb;">(</span>read <span style="color: #494949;">(</span>s-replace <span style="color: #494949;">"~"</span> <span style="color: #494949;">""</span> <span style="color: #bbb;">(</span>car v<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+                 <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>eq <span style="color: #bbb;">(</span>type-of val<span style="color: #bbb;">)</span> 'string<span style="color: #494949;">)</span>
+                     <span style="color: #494949;">(</span>eval <span style="color: #bbb;">(</span>read <span style="color: #494949;">(</span>s-replace <span style="color: #494949;">"~"</span> <span style="color: #494949;">""</span>  val<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                   val<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        vars-list<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgd629f50" class="outline-3">
-<h3 id="orgd629f50">ec-load-bind-keys</h3>
-<div class="outline-text-3" id="text-orgd629f50">
+
+<div id="outline-container-org1dd7642" class="outline-3">
+<h3 id="org1dd7642">ec-bind-keys</h3>
+<div class="outline-text-3" id="text-org1dd7642">
+<p>
+Another function for processing tables, in this case binding keys in the tables.
+</p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">(defun ec-bind-keys)</span>
-</pre>
-</div>
-
-<pre class="example">
-ec-load-deps
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-bind-keys</span> <span style="color: #bbb;">(</span>bindings-list keymap<span style="color: #bbb;">)</span>
+   <span style="color: #bbb;">(</span>-map <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #bbb;">(</span>p<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">bind-key</span> <span style="color: #494949;">(</span>kbd <span style="color: #bbb;">(</span>car p<span style="color: #bbb;">)</span><span style="color: #494949;">)</span> <span style="color: #494949;">(</span>intern <span style="color: #bbb;">(</span>cadr p<span style="color: #bbb;">)</span><span style="color: #494949;">)</span> keymap<span style="color: #bbb;">)</span><span style="color: #494949;">)</span> bindings-list<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 </div>
 </div>
 
+<div id="outline-container-org12df9e6" class="outline-3">
+<h3 id="org12df9e6">ec-literate-load</h3>
+<div class="outline-text-3" id="text-org12df9e6">
+<p>
+Now for the literate loading function.<label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> Note that this is heavily WIP and doesn't work right now</span> This goes over the list of different functions and then evaluates them if they are src blocks and processes them if they are a table into.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-parse-table</span> <span style="color: #bbb;">(</span>tbl<span style="color: #bbb;">)</span>
+  <span style="color: #a4a4a4; font-style: italic;">"Convert the org-element table TBL into a babel table."</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">with-temp-buffer</span> <span style="color: #494949;">(</span>insert <span style="color: #bbb;">(</span>org-element-interpret-data tbl<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                    <span style="color: #494949;">(</span>org-babel-read-table<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-literate-load</span> <span style="color: #bbb;">(</span>file<span style="color: #bbb;">)</span>
+  <span style="color: #a4a4a4; font-style: italic;">"Load FILE with special literate functions."</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let*</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>org-obj <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">with-temp-buffer</span> <span style="color: #bbb;">(</span>insert-file-contents file<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>org-element-parse-buffer<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+         <span style="color: #bbb;">(</span>deps-list <span style="color: #494949;">(</span>org-element-map
+                        org-obj
+                        'table
+                      <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #494949;">(</span>e<span style="color: #494949;">)</span>
+                        <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let*</span> <span style="color: #bbb;">(</span><span style="color: #494949;">(</span>tbl <span style="color: #bbb;">(</span>ec-parse-table e<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                               <span style="color: #494949;">(</span>tbl-head <span style="color: #bbb;">(</span>-take-while <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #bbb;">(</span>row<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>not <span style="color: #494949;">(</span>equal row 'hline<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> tbl<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                               <span style="color: #494949;">(</span>tbl-body <span style="color: #bbb;">(</span>-take-while <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #bbb;">(</span>row<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>not <span style="color: #494949;">(</span>equal row 'hline<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> <span style="color: #494949;">(</span>reverse tbl<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+                          <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">when</span> <span style="color: #494949;">(</span>equal tbl-head '<span style="color: #bbb;">(</span><span style="color: #494949;">"Dependency"</span> <span style="color: #494949;">"Description"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> <span style="color: #494949;">(</span>ec-load-deps tbl-body<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> org-obj
+      <span style="color: #bbb;">(</span>org-element-map
+          '<span style="color: #494949;">(</span>table src-block<span style="color: #494949;">)</span>
+          <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #bbb;">(</span>e<span style="color: #bbb;">)</span>
+            <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>eq <span style="color: #bbb;">(</span>org-element-type e<span style="color: #bbb;">)</span> 'src-block<span style="color: #494949;">)</span>
+                <span style="color: #494949;">(</span>read <span style="color: #bbb;">(</span>org-element-property <span style="color: #E53935;">:value</span> e<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+              <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let*</span> <span style="color: #bbb;">(</span><span style="color: #494949;">(</span>tbl <span style="color: #bbb;">(</span>ec-parse-table e<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                     <span style="color: #494949;">(</span>tbl-head <span style="color: #bbb;">(</span>-take-while <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #bbb;">(</span>row<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>not <span style="color: #494949;">(</span>equal row 'hline<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> tbl<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                     <span style="color: #494949;">(</span>tbl-body <span style="color: #bbb;">(</span>-take-while <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #bbb;">(</span>row<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>not <span style="color: #494949;">(</span>equal row 'hline<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> <span style="color: #494949;">(</span>reverse tbl<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+                <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">cond</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>equal <span style="color: #494949;">(</span>car tbl-head<span style="color: #494949;">)</span> '<span style="color: #494949;">(</span><span style="color: #494949;">"Variable"</span> <span style="color: #494949;">"Value"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+                       <span style="color: #bbb;">(</span>ec-set-variables tbl-body<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                      <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>equal <span style="color: #494949;">(</span>cadr tbl-head<span style="color: #494949;">)</span> '<span style="color: #494949;">(</span><span style="color: #494949;">"Chord"</span> <span style="color: #494949;">"Function"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+                       <span style="color: #bbb;">(</span>ec-bind-keys tbl-body <span style="color: #494949;">(</span>intern <span style="color: #bbb;">(</span>caar tbl-head<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+      -concat<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
 
 <div id="outline-container-orga1a6fc8" class="outline-2">
 <h2 id="orga1a6fc8">Initialization Code</h2>
@@ -209,9 +264,12 @@ This code is used to load the code in the components list automatically.
 </div>
 </div>
 </div>
-</div>
+<!-- Footnotes --><!-- 
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Note that this is heavily WIP and doesn't work right now</p></div></div>
+
+ --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W50-2 22:13</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W50-4 01:09</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

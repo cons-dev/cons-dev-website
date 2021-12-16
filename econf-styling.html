@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-W50-4 01:27 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Econf Styling</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="A configuration file for the style of my emacs config" />
+<meta name="generator" content="Org Mode" />
+<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">Econf Styling</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org0db1c80">Introduction</a></li>
+<li><a href="#org558639a">Dependencies</a></li>
+<li><a href="#orgde0e4d0">Basic Customizations</a></li>
+<li><a href="#orgcb5e40a">Theme loading</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org0db1c80" class="outline-2">
+<h2 id="org0db1c80">Introduction</h2>
+<div class="outline-text-2" id="text-org0db1c80">
+<p>
+This is how I define my theme in Emacs. It's probably not the best way to go about it, but it's how I have it set up.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org558639a" class="outline-2">
+<h2 id="org558639a">Dependencies</h2>
+<div class="outline-text-2" id="text-org558639a">
+<table id="org2e1c86a" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Dependency</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><a href="https://github.com/doomemacs/themes">doom-themes</a></td>
+<td class="org-left">A package for creating and using themes.</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span>ec-load-deps deps<span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgde0e4d0" class="outline-2">
+<h2 id="orgde0e4d0">Basic Customizations</h2>
+<div class="outline-text-2" id="text-orgde0e4d0">
+<p>
+To make the Emacs configuration a little more modern (and minimal) I remove the scrollbar, splash screens, and set the mini-window height.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Remove Scrollbar</span>
+<span style="color: #494949;">(</span>scroll-bar-mode -1<span style="color: #494949;">)</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Remove Tool Bar</span>
+<span style="color: #494949;">(</span>tool-bar-mode -1<span style="color: #494949;">)</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Remove Menubar</span>
+<span style="color: #494949;">(</span>menu-bar-mode -1<span style="color: #494949;">)</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Remove Tooltips</span>
+<span style="color: #494949;">(</span>tooltip-mode -1<span style="color: #494949;">)</span>
+
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">y or n instead of yes or no</span>
+<span style="color: #494949;">(</span>fset 'yes-or-no-p 'y-or-n-p<span style="color: #494949;">)</span>
+
+
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Underline line at descent position, not baseline position</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">setq</span> x-underline-at-descent-line t<span style="color: #494949;">)</span>
+
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">No ugly button for checkboxes</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">setq</span> widget-image-enable nil<span style="color: #494949;">)</span>
+
+</pre>
+</div>
+
+
+<table id="org9b67b84" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Variable</th>
+<th scope="col" class="org-left">Value</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">max-mini-window-height</td>
+<td class="org-left">20</td>
+<td class="org-left">Make minibuffer height reasonable.</td>
+</tr>
+
+<tr>
+<td class="org-left">inhibit-startup-message</td>
+<td class="org-left">t</td>
+<td class="org-left">Clear away startup nonsense.</td>
+</tr>
+
+<tr>
+<td class="org-left">inhibit-startup-screen</td>
+<td class="org-left">t</td>
+<td class="org-left">''</td>
+</tr>
+
+<tr>
+<td class="org-left">inhibit-splash-screen</td>
+<td class="org-left">t</td>
+<td class="org-left">''</td>
+</tr>
+
+<tr>
+<td class="org-left">mouse-yank-at-point</td>
+<td class="org-left">t</td>
+<td class="org-left">Make mouse paste at point.</td>
+</tr>
+
+<tr>
+<td class="org-left">widget-image-enable</td>
+<td class="org-left">nil</td>
+<td class="org-left">No more ugly buttons</td>
+</tr>
+
+<tr>
+<td class="org-left">x-underline-at-descent-line</td>
+<td class="org-left">t</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">left-fringe-width</td>
+<td class="org-left">1</td>
+<td class="org-left">Make fringes more manageable.</td>
+</tr>
+
+<tr>
+<td class="org-left">right-fringe-width</td>
+<td class="org-left">1</td>
+<td class="org-left">''</td>
+</tr>
+
+<tr>
+<td class="org-left">window-divider-default-right-width</td>
+<td class="org-left">5</td>
+<td class="org-left">Make dividers drag-able but small.</td>
+</tr>
+
+<tr>
+<td class="org-left">line-spacing</td>
+<td class="org-left">nil</td>
+<td class="org-left">Eliminate line spacing, I don't like it</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span>ec-set-variables vars<span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<pre class="example">
+(window-divider-mode t)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgcb5e40a" class="outline-2">
+<h2 id="orgcb5e40a">Theme loading</h2>
+<div class="outline-text-2" id="text-orgcb5e40a">
+<p>
+Now finally I load my theme which is located <a href="econf-theme.html#ID-ee3f7df2-c7bc-4d98-8720-448833e4012e">here</a>. This function tangles it
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span>org-babel-tangle-file <span style="color: #494949;">"econf-theme.org"</span> <span style="color: #494949;">"econf-theme.el"</span> <span style="color: #494949;">"emacs-lisp</span><span style="color: #000; font-weight: bold;">\\</span><span style="color: #000; font-weight: bold;">|</span><span style="color: #494949;">elisp"</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+I like both having a visual bell and an auditory bell, so I have this function which makes a nice beep and blinks the modeline.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-bell-function</span> <span style="color: #bbb;">()</span>
+  <span style="color: #bbb;">(</span>exec-shell-command <span style="color: #494949;">"play -n synth 0.1 sin 500 chorus 1 0.9 55 0.4 0.1 2 -t"</span><span style="color: #bbb;">)</span> 
+  <span style="color: #bbb;">(</span>doom-themes-visual-bell-fn<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<table id="orgb0399ed" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Variable</th>
+<th scope="col" class="org-left">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">doom-themes-enable-bold</td>
+<td class="org-left">t</td>
+</tr>
+
+<tr>
+<td class="org-left">doom-themes-enable-italic</td>
+<td class="org-left">t</td>
+</tr>
+
+<tr>
+<td class="org-left">doom-themes-org-fontify-special-tags</td>
+<td class="org-left">nil</td>
+</tr>
+
+<tr>
+<td class="org-left">ring-bell-function</td>
+<td class="org-left">#'ec-bell-function</td>
+</tr>
+
+<tr>
+<td class="org-left">custom-theme-directory</td>
+<td class="org-left">(f-expand "./")</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span>ec-set-variables var-themes<span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span>doom-themes-org-config<span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span>load-theme 'econf t<span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2021-W50-4 01:27</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>
