@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-W51-3 04:07 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>pcreate</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="An old project generation program." />
+<meta name="generator" content="Org Mode" />
+<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">pcreate</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orge9abfdb">Introduction</a></li>
+<li><a href="#org780447d">makefile</a></li>
+<li><a href="#orga219359">main.sh</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orge9abfdb" class="outline-2">
+<h2 id="orge9abfdb">Introduction</h2>
+<div class="outline-text-2" id="text-orge9abfdb">
+<p>
+Yet another old utility I wrote, this time to allow me to generate projects back when all my projects were both small and pretty simple.
+</p>
+
+<p>
+It's also interesting to note the inversion. Previously I would have autodoc generate the documentation (READMEs and so on) from the code. Now I have the documentation generate the code.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org780447d" class="outline-2">
+<h2 id="org780447d">makefile</h2>
+<div class="outline-text-2" id="text-org780447d">
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="font-style: italic;">PROGRAM_NAME</span>    =  <span style="color: #494949;">"tslides"</span>
+<span style="font-style: italic;">RESOURCES_DIR</span>   =  $<span style="color: #494949;">(</span><span style="font-style: italic;">HOME</span><span style="color: #494949;">)</span>/.resources
+<span style="font-style: italic;">BIN_INSTALL_DIR</span> =  $<span style="color: #494949;">(</span><span style="font-style: italic;">HOME</span><span style="color: #494949;">)</span>/bin
+
+<span style="color: #1976D2;">install</span>:
+                mkdir -p $<span style="color: #494949;">(</span><span style="font-style: italic;">RESOURCES_DIR</span><span style="color: #494949;">)</span>/$<span style="color: #494949;">(</span><span style="font-style: italic;">PROGRAM_NAME</span><span style="color: #494949;">)</span>
+                cp -r resources/* $<span style="color: #494949;">(</span><span style="font-style: italic;">RESOURCES_DIR</span><span style="color: #494949;">)</span>/$<span style="color: #494949;">(</span><span style="font-style: italic;">PROGRAM_NAME</span><span style="color: #494949;">)</span> 
+                cp -r main.sh $<span style="color: #494949;">(</span><span style="font-style: italic;">BIN_INSTALL_DIR</span><span style="color: #494949;">)</span>/$<span style="color: #494949;">(</span><span style="font-style: italic;">PROGRAM_NAME</span><span style="color: #494949;">)</span>
+
+<span style="color: #1976D2;">uninstall</span>:
+                rm -rf $<span style="color: #494949;">(</span><span style="font-style: italic;">RESOURCES_DIR</span><span style="color: #494949;">)</span>/$<span style="color: #494949;">(</span><span style="font-style: italic;">PROGRAM_NAME</span><span style="color: #494949;">)</span>
+                rm $<span style="color: #494949;">(</span><span style="font-style: italic;">BIN_INSTALL_DIR</span><span style="color: #494949;">)</span>/$<span style="color: #494949;">(</span><span style="font-style: italic;">PROGRAM_NAME</span><span style="color: #494949;">)</span>
+
+<span style="color: #1976D2;">document</span>:
+                autodoc main.sh
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga219359" class="outline-2">
+<h2 id="orga219359">main.sh</h2>
+<div class="outline-text-2" id="text-orga219359">
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #a4a4a4; font-style: italic;">#</span><span style="color: #a4a4a4; font-style: italic;">!/bin/</span><span style="color: #E53935; font-style: italic;">bash</span>
+
+: <span style="color: #494949;">'</span>
+<span style="color: #494949;">@filename: pcreate</span>
+<span style="color: #494949;">  @repository: nil</span>
+<span style="color: #494949;">  @creator: nil</span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">A simple script to create and configure basic install scripts in new projects.</span>
+<span style="color: #494949;">USAGE: pcreate PROJECT_NAME OPTIONS</span>
+<span style="color: #494949;">OPTIONS:</span>
+<span style="color: #494949;">-c                      standard program in c</span>
+<span style="color: #494949;">-c++                    standard program in C++</span>
+<span style="color: #494949;">-e      --elixir        standard program in elixir</span>
+<span style="color: #494949;">-o      --other         standard program with no specified language</span>
+<span style="color: #494949;">-h      --haskell       standard program in haskell</span>
+<span style="color: #494949;">-t      --typescript    standard program written in typescript</span>
+<span style="color: #494949;">-b      --bash                  utility written in bash with install script</span>
+<span style="color: #494949;">-cu     --c-utility             utility written in c with install script</span>
+<span style="color: #494949;">-tu     --typescript-utility    utility written in typescript with install script</span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">  @dependancies: bash, git</span>
+<span style="color: #494949;">'</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">====================  CONSTANTS  =============================================</span>
+
+<span style="font-style: italic;">HELPMSG</span>=<span style="color: #494949;">"USAGE: pcreate PROJECT_NAME OPTIONS</span>
+<span style="color: #494949;">OPTIONS:</span>
+<span style="color: #494949;">-c                      standard program in c</span>
+<span style="color: #494949;">-c++                    standard program in C++</span>
+<span style="color: #494949;">-e      --elixir        standard program in elixir</span>
+<span style="color: #494949;">-o      --other         standard program with no specified language</span>
+<span style="color: #494949;">-h      --haskell       standard program in haskell</span>
+<span style="color: #494949;">-r      --rust          standard program in rust</span>
+<span style="color: #494949;">-t      --typescript    standard program written in typescript</span>
+<span style="color: #494949;">-b      --bash                  utility written in bash with install script</span>
+<span style="color: #494949;">-cu     --c-utility             utility written in c with install script</span>
+<span style="color: #494949;">-ru     --rust-utility          utility written in rust with install script</span>
+<span style="color: #494949;">-tu     --typescript-utility    utility written in typescript with install script</span>
+<span style="color: #494949;">"</span>
+
+<span style="font-style: italic;">GITIGNORE</span>=<span style="color: #494949;">"https://gist.githubusercontent.com/Alexandra-Miller/b47139749f861f02d3176f57f17626ce/raw/160e75b70f51c2c5ef5201735f0d457abadf829d/.gitignore"</span>
+
+<span style="font-style: italic;">STANDARD_HEADER</span>=<span style="color: #494949;">"</span>
+<span style="color: #494949;">@project: $1</span>
+<span style="color: #494949;">@repo: https://github.com/Alexandra-Miller/$1</span>
+<span style="color: #494949;">@creator: Alexandra Marie Miller</span>
+<span style="color: #494949;">@description</span>
+<span style="color: #494949;">@description</span>
+<span style="color: #494949;">@deps:</span>
+<span style="color: #494949;">"</span>
+
+<span style="font-style: italic;">RESOURCES_DIR</span>=<span style="color: #494949;">"$HOME/.resources/pcreate/"</span>
+<span style="color: #494949;">[</span> -d <span style="color: #494949;">"resources"</span> <span style="color: #494949;">]</span> &amp;&amp; <span style="font-style: italic;">RESOURCES_DIR</span>=<span style="color: #494949;">"resources"</span>
+
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">====================  FUNCTIONS  =============================================</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">$1 = project name</span>
+<span style="font-weight: bold; font-style: italic;">createGit</span> <span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    <span style="color: #bbb;">(</span> 
+    <span style="color: #E53935;">cd</span> $<span style="font-style: italic;">1</span>
+
+    <span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">create README.md</span>
+    <span style="color: #E53935;">echo</span> <span style="color: #494949;">"# $1"</span> &gt;&gt; README.md
+    <span style="color: #E53935;">read</span> -p <span style="color: #494949;">"Enter Project Description: "</span> descText
+    <span style="color: #E53935;">echo</span> <span style="color: #494949;">"$descText"</span> &gt;&gt; README.md
+    
+    <span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">create git repo</span>
+    git init
+    curl $<span style="font-style: italic;">GITIGNORE</span> -o .gitignore
+    
+    <span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">add git files and commit</span>
+    git add .
+    git commit -m <span style="color: #494949;">"Initial commit"</span>
+    <span style="color: #bbb;">)</span>
+<span style="color: #494949;">}</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">$1 = project name</span>
+<span style="font-weight: bold; font-style: italic;">configMake</span> <span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    sed -i <span style="color: #494949;">"s/@@PROJECT@@/$1/g"</span> $<span style="font-style: italic;">1</span>/makefile
+<span style="color: #494949;">}</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">$1 = project name     $2 = main filename</span>
+<span style="font-weight: bold; font-style: italic;">configFile</span> <span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    sed -i <span style="color: #494949;">"s/@@PROJECT@@/$1/g"</span> $<span style="font-style: italic;">1</span>/$<span style="font-style: italic;">2</span>
+<span style="color: #494949;">}</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">$1 = project name</span>
+<span style="font-weight: bold; font-style: italic;">createC</span> <span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    mkdir $<span style="font-style: italic;">1</span>
+    cp $<span style="font-style: italic;">RESOURCES_DIR</span>/c/* $<span style="font-style: italic;">1</span>/
+    configMake $<span style="font-style: italic;">1</span>
+    configFile $<span style="font-style: italic;">1</span> main.c
+<span style="color: #494949;">}</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">$1 = project name</span>
+<span style="font-weight: bold; font-style: italic;">createCpp</span> <span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    mkdir $<span style="font-style: italic;">1</span>
+    cp $<span style="font-style: italic;">RESOURCES_DIR</span>/c++/* $<span style="font-style: italic;">1</span>/
+    configMake $<span style="font-style: italic;">1</span>
+    configFile $<span style="font-style: italic;">1</span> main.cpp
+<span style="color: #494949;">}</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">$1 = project name</span>
+<span style="font-weight: bold; font-style: italic;">createElixir</span> <span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    mkdir $<span style="font-style: italic;">1</span>
+    cp $<span style="font-style: italic;">RESOURCES_DIR</span>/elixir/* $<span style="font-style: italic;">1</span>/
+    configMake $<span style="font-style: italic;">1</span>
+    configFile $<span style="font-style: italic;">1</span> main.ex
+<span style="color: #494949;">}</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">$1 = project name</span>
+<span style="font-weight: bold; font-style: italic;">createHaskell</span> <span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    mkdir $<span style="font-style: italic;">1</span>
+    cp $<span style="font-style: italic;">RESOURCES_DIR</span>/haskell/* $<span style="font-style: italic;">1</span>/
+    configMake$<span style="font-style: italic;">1</span>
+    configFile $<span style="font-style: italic;">1</span> main.hs
+<span style="color: #494949;">}</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">$1 = project name</span>
+<span style="font-weight: bold; font-style: italic;">createOther</span> <span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    mkdir $<span style="font-style: italic;">1</span>
+    cp $<span style="font-style: italic;">RESOURCES_DIR</span>/other/* $<span style="font-style: italic;">1</span>/
+<span style="color: #494949;">}</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">$1 = project name</span>
+<span style="font-weight: bold; font-style: italic;">createRust</span> <span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    cargo new $<span style="font-style: italic;">1</span>
+    cp $<span style="font-style: italic;">RESOURCES_DIR</span>/rust/* $<span style="font-style: italic;">1</span>/
+    configMake $<span style="font-style: italic;">1</span>
+    configFile $<span style="font-style: italic;">1</span>/src/main.rs
+<span style="color: #494949;">}</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">$1 = project name</span>
+<span style="font-weight: bold; font-style: italic;">createTypescript</span> <span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    mkdir $<span style="font-style: italic;">1</span>
+    <span style="color: #bbb;">(</span> 
+    <span style="color: #E53935;">cd</span> $<span style="font-style: italic;">1</span>
+    npm init
+    npm install 
+    <span style="color: #bbb;">)</span>
+    cp $<span style="font-style: italic;">RESOURCES_DIR</span>/typescript/* $<span style="font-style: italic;">1</span>/
+    configMake $<span style="font-style: italic;">1</span>
+    configFile $<span style="font-style: italic;">1</span> index.ts
+<span style="color: #494949;">}</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">$1 = project name</span>
+<span style="font-weight: bold; font-style: italic;">createBash</span> <span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    mkdir $<span style="font-style: italic;">1</span>
+    cp $<span style="font-style: italic;">RESOURCES_DIR</span>/bash/* $<span style="font-style: italic;">1</span>/
+    configMake $<span style="font-style: italic;">1</span>
+    configFile $<span style="font-style: italic;">1</span> main.sh
+<span style="color: #494949;">}</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">$1 = project name</span>
+<span style="font-weight: bold; font-style: italic;">createCUtil</span> <span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    mkdir $<span style="font-style: italic;">1</span>
+    cp $<span style="font-style: italic;">RESOURCES_DIR</span>/c-util/* $<span style="font-style: italic;">1</span>/
+    configMake $<span style="font-style: italic;">1</span>
+    configFile $<span style="font-style: italic;">1</span> main.c
+<span style="color: #494949;">}</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">$1 = project name</span>
+<span style="font-weight: bold; font-style: italic;">createRustUtil</span> <span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    cargo new $<span style="font-style: italic;">1</span>
+    cp $<span style="font-style: italic;">RESOURCES_DIR</span>/rust-util/* $<span style="font-style: italic;">1</span>/
+    configMake $<span style="font-style: italic;">1</span>
+    configFile $<span style="font-style: italic;">1</span> main.rs
+<span style="color: #494949;">}</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">$1 = project name</span>
+<span style="font-weight: bold; font-style: italic;">createTypescriptUtil</span> <span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    mkdir $<span style="font-style: italic;">1</span>
+    <span style="color: #bbb;">(</span> 
+    <span style="color: #E53935;">cd</span> $<span style="font-style: italic;">1</span>
+    npm init
+    npm install 
+    <span style="color: #bbb;">)</span>
+    cp $<span style="font-style: italic;">RESOURCES_DIR</span>/typescript-util/* $<span style="font-style: italic;">1</span>/
+    configMake $<span style="font-style: italic;">1</span>
+    configFile $<span style="font-style: italic;">1</span> index.ts
+<span style="color: #494949;">}</span>
+
+
+<span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">[</span> <span style="color: #494949;">"$#"</span> == <span style="color: #494949;">"1"</span>  <span style="color: #494949;">]</span>
+<span style="color: #E53935; font-style: italic;">then</span>
+    mkdir $<span style="font-style: italic;">1</span>
+    createOther $<span style="font-style: italic;">1</span>
+    createGit $<span style="font-style: italic;">1</span>
+
+<span style="color: #E53935; font-style: italic;">elif</span> <span style="color: #494949;">[</span> <span style="color: #494949;">"$#"</span> == <span style="color: #494949;">"2"</span> <span style="color: #494949;">]</span>
+<span style="color: #E53935; font-style: italic;">then</span>
+    <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"-c"</span> <span style="color: #494949;">]</span> &amp;&amp; createC $<span style="font-style: italic;">2</span>
+
+    <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"-c++"</span> <span style="color: #494949;">]</span> &amp;&amp; createCpp $<span style="font-style: italic;">2</span>
+    
+    <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"--elixir"</span> <span style="color: #494949;">]</span> || <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"-e"</span> <span style="color: #494949;">]</span> &amp;&amp; createElixir $<span style="font-style: italic;">2</span>
+    
+    <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"--haskell"</span> <span style="color: #494949;">]</span> || <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"-h"</span> <span style="color: #494949;">]</span> &amp;&amp; createHaskell $<span style="font-style: italic;">2</span>
+
+    <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"--other"</span> <span style="color: #494949;">]</span> || <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"-o"</span> <span style="color: #494949;">]</span> &amp;&amp; createOther $<span style="font-style: italic;">2</span>
+    
+    <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"--rust"</span> <span style="color: #494949;">]</span> || <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"-r"</span> <span style="color: #494949;">]</span> &amp;&amp; createRust $<span style="font-style: italic;">2</span>
+
+    <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"--typescript"</span> <span style="color: #494949;">]</span> || <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"-t"</span> <span style="color: #494949;">]</span> &amp;&amp; createTypescript $<span style="font-style: italic;">2</span>
+
+    <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"--bash"</span> <span style="color: #494949;">]</span> || <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"-b"</span> <span style="color: #494949;">]</span> &amp;&amp; createBash $<span style="font-style: italic;">2</span>
+    
+    <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"--c-util"</span> <span style="color: #494949;">]</span> || <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"-c"</span> <span style="color: #494949;">]</span> &amp;&amp; createC $<span style="font-style: italic;">2</span>
+    
+    <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"--rust-util"</span> <span style="color: #494949;">]</span> || <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"-ru"</span> <span style="color: #494949;">]</span> &amp;&amp; createRustUtil $<span style="font-style: italic;">2</span>
+   
+    <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"--typescript-util"</span> <span style="color: #494949;">]</span> || <span style="color: #494949;">[</span> $<span style="font-style: italic;">1</span> = <span style="color: #494949;">"-tu"</span> <span style="color: #494949;">]</span> &amp;&amp; createTypescriptUtil $<span style="font-style: italic;">2</span>
+    
+
+    createGit $<span style="font-style: italic;">2</span>
+<span style="color: #E53935; font-style: italic;">else</span>
+    <span style="color: #E53935;">echo</span> <span style="color: #494949;">"$HELPMSG"</span>
+
+<span style="color: #E53935; font-style: italic;">fi</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2021-W51-3 03:58</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>

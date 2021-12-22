@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W50-4 01:27 -->
+<!-- 2021-W50-7 19:21 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Emacs Configuration</title>
@@ -34,6 +34,7 @@
 </li>
 <li><a href="#org744c1e2">Fancy Loading</a>
 <ul>
+<li><a href="#org31cc285">org-bable-execute:org</a></li>
 <li><a href="#orgefc3f11">ec-load-deps</a></li>
 <li><a href="#org74914ae">ec-set-variables</a></li>
 <li><a href="#org1dd7642">ec-bind-keys</a></li>
@@ -141,6 +142,21 @@ This is currently a work in progress, but basically it provides a fancy function
 </p>
 </div>
 
+
+<div id="outline-container-org31cc285" class="outline-3">
+<h3 id="org31cc285">org-bable-execute:org</h3>
+<div class="outline-text-3" id="text-org31cc285">
+<p>
+I like to occasionally include org-mode blocks as variables for my configuration (mostly for templates) so I have written a little function that basically just returns a string containing the body.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">org-babel-execute:org</span> <span style="color: #bbb;">(</span>body params<span style="color: #bbb;">)</span>
+    body<span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
 <div id="outline-container-orgefc3f11" class="outline-3">
 <h3 id="orgefc3f11">ec-load-deps</h3>
 <div class="outline-text-3" id="text-orgefc3f11">
@@ -167,8 +183,9 @@ This also returns a list of the loaded dependencies to allow me to wrap the load
               <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>stripped-dep <span style="color: #494949;">(</span>s-replace-regexp link-contents-rx <span style="color: #494949;">""</span> dep<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
                 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>s-matches? <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">rx</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">or</span> <span style="color: #494949;">"https://"</span> <span style="color: #494949;">"http://"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> dep<span style="color: #bbb;">)</span>
                     <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">progn</span> <span style="color: #494949;">(</span>eval `<span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">use-package</span> ,<span style="color: #494949;">(</span>intern stripped-dep<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> stripped-dep<span style="color: #bbb;">)</span>
-                  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">progn</span> <span style="color: #494949;">(</span>org-babel-load-file <span style="color: #bbb;">(</span>format <span style="color: #494949;">"econf-%s.org"</span> stripped-dep<span style="color: #bbb;">)</span><span style="color: #494949;">)</span> stripped-dep<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-      <span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">progn</span> <span style="color: #494949;">(</span>org-babel-load-file <span style="color: #bbb;">(</span>format <span style="color: #494949;">"econf-%s.org"</span> stripped-dep<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                         <span style="color: #494949;">(</span>delete-file  <span style="color: #bbb;">(</span>format <span style="color: #494949;">"econf-%s.el"</span> stripped-dep<span style="color: #bbb;">)</span><span style="color: #494949;">)</span> <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">immediately delete file once I am done with it </span>
+                         stripped-dep<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 </div>
@@ -269,7 +286,7 @@ This code is used to load the code in the components list automatically.
 
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W50-4 01:09</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W50-7 19:19</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-W50-7 19:26 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Org-fragtog</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="A configuration file for the style of my emacs config." />
+<meta name="generator" content="Org Mode" />
+<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">Org-fragtog</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org320ee80">Introduction</a></li>
+<li><a href="#orgc0d8202">Code</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org320ee80" class="outline-2">
+<h2 id="org320ee80">Introduction</h2>
+<div class="outline-text-2" id="text-org320ee80">
+<p>
+This is a bit of code that I use for embedded \(\LaTeX\) in Emacs. It automatically inserts images for \(\LaTeX\) fragments while allowing me to also edit them when I move the mouse over to them. Overall it's a really great package (though sadly as far as I can tell not all that maintained, hence why I keep a copy of it here).
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc0d8202" class="outline-2">
+<h2 id="orgc0d8202">Code</h2>
+<div class="outline-text-2" id="text-orgc0d8202">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #a4a4a4; font-style: italic;">;;; </span><span style="color: #a4a4a4; font-style: italic;">org-fragtog.el --- Auto-toggle Org LaTeX fragments -*- lexical-binding: t; -*-</span>
+
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Copyright (C) 2020 Benjamin Levy - MIT/X11 License</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Author: Benjamin Levy <a href="mailto:blevy%40protonmail.com">&lt;blevy@protonmail.com&gt;</a></span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Version: 0.3.2</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Description: Automatically toggle Org mode LaTeX fragment previews as the cursor enters and exits them</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Homepage: https://github.com/io12/org-fragtog</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Package-Requires: ((emacs "24.3") (org "9.3.2"))</span>
+
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Permission is hereby granted, free of charge, to any person obtaining a copy</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">of this software and associated documentation files (the "Software"), to deal</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">in the Software without restriction, including without limitation the rights</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">copies of the Software, and to permit persons to whom the Software is</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">furnished to do so, subject to the following conditions:</span>
+<span style="color: #a4a4a4; font-style: italic;">;;</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">The above copyright notice and this permission notice shall be included in all</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">copies or substantial portions of the Software.</span>
+<span style="color: #a4a4a4; font-style: italic;">;;</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">SOFTWARE.</span>
+
+<span style="color: #a4a4a4; font-style: italic;">;;; </span><span style="color: #a4a4a4; font-style: italic;">Commentary:</span>
+
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">This package automates toggling Org mode LaTeX fragment</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">previews.  Fragment previews are disabled for editing when</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">your cursor steps onto them, and re-enabled when the cursor</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">leaves.</span>
+
+<span style="color: #a4a4a4; font-style: italic;">;;; </span><span style="color: #a4a4a4; font-style: italic;">Code:</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">require</span> '<span style="color: #E53935;">org</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defgroup</span> <span style="color: #E53935;">org-fragtog</span> nil
+  <span style="color: #a4a4a4; font-style: italic;">"Auto-toggle Org LaTeX fragments"</span>
+  <span style="color: #E53935;">:group</span> 'org-latex<span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defcustom</span> <span style="font-style: italic;">org-fragtog-ignore-predicates</span> nil
+  <span style="color: #a4a4a4; font-style: italic;">"List of predicates to determine whether to ignore a fragment.</span>
+<span style="color: #a4a4a4; font-style: italic;">For example, adding `</span><span style="color: #E53935; font-style: italic;">org-at-table-p</span><span style="color: #a4a4a4; font-style: italic;">' will ignore fragments inside tables."</span>
+  <span style="color: #E53935;">:group</span> 'org-fragtog
+  <span style="color: #E53935;">:type</span> 'hook
+  <span style="color: #E53935;">:options</span> '<span style="color: #bbb;">(</span>org-at-table-p
+             org-at-table.el-p
+             org-at-block-p
+             org-at-heading-p<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #a4a4a4; font-style: italic;">;;;</span><span style="color: #a4a4a4; font-style: italic;">###</span><span style="color: #E64A19; font-style: italic;">autoload</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">define-minor-mode</span> <span style="font-weight: bold; font-style: italic;">org-fragtog-mode</span>
+  <span style="color: #a4a4a4; font-style: italic;">"A minor mode that automatically toggles Org mode LaTeX fragment previews.</span>
+<span style="color: #a4a4a4; font-style: italic;">Fragment previews are disabled for editing when your cursor steps onto them,</span>
+<span style="color: #a4a4a4; font-style: italic;">and re-enabled when the cursor leaves."</span>
+  nil nil nil
+
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Fix nil error in `</span><span style="color: #E53935; font-style: italic;">org-element-context</span><span style="color: #a4a4a4; font-style: italic;">'</span>
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">when using `</span><span style="color: #E53935; font-style: italic;">org-fragtog</span><span style="color: #a4a4a4; font-style: italic;">' without Org mode.</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">setq</span> org-complex-heading-regexp <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">or</span> org-complex-heading-regexp <span style="color: #494949;">""</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> org-fragtog-mode
+      <span style="color: #494949;">(</span>add-hook 'post-command-hook #'org-fragtog--post-cmd nil t<span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span>remove-hook 'post-command-hook #'org-fragtog--post-cmd t<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defvar-local</span> <span style="font-style: italic;">org-fragtog--prev-frag</span> nil
+  <span style="color: #a4a4a4; font-style: italic;">"Previous fragment that surrounded the cursor, or nil if the cursor was not</span>
+<span style="color: #a4a4a4; font-style: italic;">on a fragment. This is used to track when the cursor leaves a fragment."</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">org-fragtog--post-cmd</span> <span style="color: #bbb;">()</span>
+  <span style="color: #a4a4a4; font-style: italic;">"This function is executed by `</span><span style="color: #E53935; font-style: italic;">post-command-hook</span><span style="color: #a4a4a4; font-style: italic;">' in `</span><span style="color: #E53935; font-style: italic;">org-fragtog-mode</span><span style="color: #a4a4a4; font-style: italic;">'.</span>
+<span style="color: #a4a4a4; font-style: italic;">It handles toggling fragments depending on whether the cursor entered or exited them."</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let*</span>
+      <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Previous fragment</span>
+      <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>prev-frag org-fragtog--prev-frag<span style="color: #bbb;">)</span>
+       <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Current fragment</span>
+       <span style="color: #bbb;">(</span>cursor-frag <span style="color: #494949;">(</span>org-fragtog--cursor-frag<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+       <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">The current fragment didn't change</span>
+       <span style="color: #bbb;">(</span>frag-same <span style="color: #494949;">(</span>equal
+                   <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Fragments are considered the same if they have the same</span>
+                   <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">start position</span>
+                   <span style="color: #bbb;">(</span>car <span style="color: #494949;">(</span>org-fragtog--frag-pos cursor-frag<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+                   <span style="color: #bbb;">(</span>car <span style="color: #494949;">(</span>org-fragtog--frag-pos prev-frag<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+       <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">The current fragment changed</span>
+       <span style="color: #bbb;">(</span>frag-changed <span style="color: #494949;">(</span>not frag-same<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Only do anything if the current fragment changed</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">when</span> frag-changed
+      <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Current fragment is the new previous</span>
+      <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">setq</span> org-fragtog--prev-frag cursor-frag<span style="color: #bbb;">)</span>
+      <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Enable fragment if cursor left it</span>
+      <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">when</span> prev-frag
+        <span style="color: #494949;">(</span>org-fragtog--enable-frag prev-frag<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+      <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Disable fragment if cursor entered it</span>
+      <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">when</span> cursor-frag
+        <span style="color: #494949;">(</span>org-fragtog--disable-frag cursor-frag<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">org-fragtog--cursor-frag</span> <span style="color: #bbb;">()</span>
+  <span style="color: #a4a4a4; font-style: italic;">"Return the fragment currently surrounding the cursor.</span>
+<span style="color: #a4a4a4; font-style: italic;">If there is none, return nil.</span>
+<span style="color: #a4a4a4; font-style: italic;">If the fragment is ignored from rules in `</span><span style="color: #E53935; font-style: italic;">org-fragtog-ignore-predicates</span><span style="color: #a4a4a4; font-style: italic;">',</span>
+<span style="color: #a4a4a4; font-style: italic;">return nil."</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let*</span>
+      <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Element surrounding the cursor</span>
+      <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>elem <span style="color: #494949;">(</span>org-element-context<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+       <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Type of element surrounding the cursor</span>
+       <span style="color: #bbb;">(</span>elem-type <span style="color: #494949;">(</span>nth 0 elem<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+       <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">List of fragment's properties</span>
+       <span style="color: #bbb;">(</span>elem-plist <span style="color: #494949;">(</span>nth 1 elem<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+       <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">A LaTeX fragment or environment is surrounding the cursor</span>
+       <span style="color: #bbb;">(</span>elem-is-latex <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">and</span> <span style="color: #bbb;">(</span>member elem-type '<span style="color: #494949;">(</span>latex-fragment latex-environment<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+                           <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Normally org-mode considers whitespace after an</span>
+                           <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">element as part of the element.</span>
+                           <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Avoid this behavior and consider trailing</span>
+                           <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">whitespace as outside the fragment.</span>
+                           <span style="color: #bbb;">(</span>&lt; <span style="color: #494949;">(</span>point<span style="color: #494949;">)</span> <span style="color: #494949;">(</span>- <span style="color: #bbb;">(</span>plist-get elem-plist <span style="color: #E53935;">:end</span><span style="color: #bbb;">)</span>
+                                         <span style="color: #bbb;">(</span>plist-get elem-plist <span style="color: #E53935;">:post-blank</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+       <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Whether the fragment should be ignored</span>
+       <span style="color: #bbb;">(</span>should-ignore <span style="color: #494949;">(</span>run-hook-with-args-until-success
+                       'org-fragtog-ignore-predicates<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">and</span> elem-is-latex <span style="color: #494949;">(</span>not should-ignore<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+        elem
+      nil<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">org-fragtog--enable-frag</span> <span style="color: #bbb;">(</span>frag<span style="color: #bbb;">)</span>
+  <span style="color: #a4a4a4; font-style: italic;">"Enable the Org LaTeX fragment preview for the fragment FRAG."</span>
+
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">The fragment must be disabled before `</span><span style="color: #E53935; font-style: italic;">org-latex-preview</span><span style="color: #a4a4a4; font-style: italic;">', since</span>
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">`</span><span style="color: #E53935; font-style: italic;">org-latex-preview</span><span style="color: #a4a4a4; font-style: italic;">' only toggles, leaving no guarantee that it's enabled</span>
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">afterwards.</span>
+  <span style="color: #bbb;">(</span>org-fragtog--disable-frag frag<span style="color: #bbb;">)</span>
+
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Move to fragment and enable</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">save-excursion</span>
+    <span style="color: #494949;">(</span>goto-char <span style="color: #bbb;">(</span>car
+                <span style="color: #494949;">(</span>org-fragtog--frag-pos frag<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span>org-latex-preview<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">org-fragtog--disable-frag</span> <span style="color: #bbb;">(</span>frag<span style="color: #bbb;">)</span>
+  <span style="color: #a4a4a4; font-style: italic;">"Disable the Org LaTeX fragment preview for the fragment FRAG."</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span>
+      <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>pos <span style="color: #494949;">(</span>org-fragtog--frag-pos frag<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span>org-clear-latex-preview <span style="color: #bbb;">(</span>car pos<span style="color: #bbb;">)</span>
+                             <span style="color: #bbb;">(</span>cdr pos<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">org-fragtog--frag-pos</span> <span style="color: #bbb;">(</span>frag<span style="color: #bbb;">)</span>
+  <span style="color: #a4a4a4; font-style: italic;">"Get the position of the fragment FRAG.</span>
+<span style="color: #a4a4a4; font-style: italic;">Return a cons of the begin and end positions."</span>
+  <span style="color: #bbb;">(</span>cons
+   <span style="color: #494949;">(</span>org-element-property <span style="color: #E53935;">:begin</span> frag<span style="color: #494949;">)</span>
+   <span style="color: #494949;">(</span>org-element-property <span style="color: #E53935;">:end</span> frag<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">provide</span> '<span style="color: #E53935;">org-fragtog</span><span style="color: #494949;">)</span>
+
+<span style="color: #a4a4a4; font-style: italic;">;;; </span><span style="color: #a4a4a4; font-style: italic;">org-fragtog.el ends here</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2021-W50-7 19:21</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>

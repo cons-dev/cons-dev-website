@@ -1,0 +1,728 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-W51-3 04:47 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LC Language</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="A sitemap for the (cons dev nil) website." />
+<meta name="generator" content="Org Mode" />
+<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">LC Language
+<br />
+<span class="subtitle">A fully featured lunar aritmatic computing sytsem.</span>
+</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org7c599f9">Introduction</a></li>
+<li><a href="#org0c589df">Syntax Overview</a>
+<ul>
+<li><a href="#org314a127">Control Flow</a></li>
+<li><a href="#org7acab53">Boolean Logic</a></li>
+<li><a href="#org7697a69">Eval</a></li>
+<li><a href="#org8dbe1b0">Symbol Reference Table</a></li>
+</ul>
+</li>
+<li><a href="#org9b5c96a">Source Code</a>
+<ul>
+<li><a href="#org2add35c">makefile</a></li>
+<li><a href="#org255de4f">lc.sh</a></li>
+<li><a href="#orge1b8f5f">test.lc</a></li>
+<li><a href="#org4c30dab">src/main.py</a></li>
+<li><a href="#orgce1cd36">src/run<sub>exceptions.py</sub></a></li>
+<li><a href="#orgf4f84bc">src/lunar<sub>functions.py</sub></a></li>
+<li><a href="#org28289b9">src/test<sub>lunar</sub><sub>functions.py</sub></a></li>
+<li><a href="#org36bd18a">src/calculator.py</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org7c599f9" class="outline-2">
+<h2 id="org7c599f9">Introduction</h2>
+<div class="outline-text-2" id="text-org7c599f9">
+<p>
+Have you ever wished you had a command line calculator that could do all of your important base 10 lunar arithmetic based accounting?
+</p>
+
+<p>
+<a href="https://arxiv.org/abs/1107.1130">https://arxiv.org/abs/1107.1130</a>
+</p>
+
+<p>
+Well now you can have one with the popular command line utility lc. Using lc you can accurately and quickly do lunar addition, multiplication, and exponentiation all in the command line as well as execute complex, next generation code based in lunar arithmetic.
+</p>
+
+<p>
+Here is an example of a usual user session:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">$ lc
+&gt; 2 1 +
+2
+&gt; 2 2 +
+2
+&gt; 57 19 +
+59
+&gt; 17 24 *
+124
+&gt; wtf!
+?
+&gt; q
+?
+&gt; h
+?
+&gt; help
+?
+&gt; please just let me out
+?
+&gt; sudo rm -rf --no-preserve-root /
+?
+</pre>
+</div>
+
+<p>
+As you can see, <code>lc</code> has helpful, ed-like error reporting, not overwhelming the user with error messages while still helpfully flagging errors.
+</p>
+
+<p>
+<code>lc</code> also serves as an interpreter REPL for the extended <code>lc</code> language as defined below:
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0c589df" class="outline-2">
+<h2 id="org0c589df">Syntax Overview</h2>
+<div class="outline-text-2" id="text-org0c589df">
+<p>
+To make programming easier all builtin functions in the lc language use ascii non-alphanumeric characters to represent symbols in a terse, easy to understand syntax. The syntax for the lc language is designed to be compliant with the Linear Non-stopping Integrated System Environment (LINENOISE) syntax standard. Using the LINENOISE standard complex operators such as COMEFROM can be reduced to short instructions such as <code>&lt;@</code> allowing for terse, clear, TECO-like syntax. Many other languages such as most regular expression syntaxes, Mathematica, Perl, APL, and Python also follow the LINENOISE standard for syntax, allowing developers to feel right at home in <code>lc</code>.
+</p>
+</div>
+
+<div id="outline-container-org314a127" class="outline-3">
+<h3 id="org314a127">Control Flow</h3>
+<div class="outline-text-3" id="text-org314a127">
+<p>
+Control flow is conducted using the "come from" construct, conveniently shortened to <code>&lt;@</code> and <code>?&lt;@</code> for "come from" and "conditional come from" respectively. These constructs set a point in the CMFRM<sub>TAB</sub> lookup table and when the reference symbol is reached the program jumps back to the line with the CMFRM command. Other control flow options include <code>%$#@&amp;</code> which is the CRZY function,
+</p>
+
+<p>
+For further details on conditionals and boolean values, view the "Boolean Logic" section of the manual.
+</p>
+</div>
+</div>
+<div id="outline-container-org7acab53" class="outline-3">
+<h3 id="org7acab53">Boolean Logic</h3>
+<div class="outline-text-3" id="text-org7acab53">
+<p>
+Note that the <code>lc</code> language uses binary logic based upon lunar primality where if a number is a decimal lunar prime it is true, else it is false. Lunar primes are the set of all numbers that contain the character <code>'9'</code> in their decimal representation. Thus 19, 1999, 9, 92, 29, and other values are considered to be equivalent to true by the language, whereas 1, 2, 3, 5, 7, 13 and so on are not true since they are all composite numbers.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7697a69" class="outline-3">
+<h3 id="org7697a69">Eval</h3>
+<div class="outline-text-3" id="text-org7697a69">
+<p>
+Loved by security experts, eval is an essential feature in the <code>lc</code> language, used as the basis of all function calls in the language it allows you to evaluate a string from the input. 
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8dbe1b0" class="outline-3">
+<h3 id="org8dbe1b0">Symbol Reference Table</h3>
+<div class="outline-text-3" id="text-org8dbe1b0">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Symbol</th>
+<th scope="col" class="org-left">Args</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">+</td>
+<td class="org-left">int, int</td>
+<td class="org-left">conducts lunar addition</td>
+</tr>
+
+<tr>
+<td class="org-left">*</td>
+<td class="org-left">int, int</td>
+<td class="org-left">conducts lunar multiplication</td>
+</tr>
+
+<tr>
+<td class="org-left">^</td>
+<td class="org-left">int, int</td>
+<td class="org-left">raises the first int to the power of the second int</td>
+</tr>
+
+<tr>
+<td class="org-left">?</td>
+<td class="org-left">nil</td>
+<td class="org-left">requests user input</td>
+</tr>
+
+<tr>
+<td class="org-left">=</td>
+<td class="org-left">val, val</td>
+<td class="org-left">compares two values on the stack, places true on the stack if true, else false</td>
+</tr>
+
+<tr>
+<td class="org-left">&gt;</td>
+<td class="org-left">int, int</td>
+<td class="org-left">compares two ints and returns true if the first int is greater than the second</td>
+</tr>
+
+<tr>
+<td class="org-left">&lt;</td>
+<td class="org-left">int, int</td>
+<td class="org-left">compares two ints and returns true if the first int is lesser than the second</td>
+</tr>
+
+<tr>
+<td class="org-left">v</td>
+<td class="org-left">bool, bool</td>
+<td class="org-left">returns true if either of its arguments are true</td>
+</tr>
+
+<tr>
+<td class="org-left">&amp;</td>
+<td class="org-left">bool, bool</td>
+<td class="org-left">returns true if both of its arguments are true</td>
+</tr>
+
+<tr>
+<td class="org-left">~</td>
+<td class="org-left">bool</td>
+<td class="org-left">returns true if the bool is false, else returns false</td>
+</tr>
+
+<tr>
+<td class="org-left">:=</td>
+<td class="org-left">valk, atom</td>
+<td class="org-left">places val as equal to the atom provided</td>
+</tr>
+
+<tr>
+<td class="org-left">$</td>
+<td class="org-left">string</td>
+<td class="org-left">evaluates the string provided as code</td>
+</tr>
+
+<tr>
+<td class="org-left">?$</td>
+<td class="org-left">bool, string</td>
+<td class="org-left">evaluates the string provided as code should the bool be true</td>
+</tr>
+
+<tr>
+<td class="org-left">@</td>
+<td class="org-left">atom</td>
+<td class="org-left">checks if the atom provided is in the CMFRM table and jumps to the relevant address if it is</td>
+</tr>
+
+<tr>
+<td class="org-left">&lt;@</td>
+<td class="org-left">atom</td>
+<td class="org-left">adds label to CMFRM table and jumps from label in current instruction if label is reached</td>
+</tr>
+
+<tr>
+<td class="org-left">?&lt;@</td>
+<td class="org-left">bool, atom</td>
+<td class="org-left">executes CMFRM if boolean value is true, else nothing</td>
+</tr>
+
+<tr>
+<td class="org-left">&gt;%</td>
+<td class="org-left">nil</td>
+<td class="org-left">gets a random value from the program stack and places it on top of the program stack</td>
+</tr>
+
+<tr>
+<td class="org-left">&gt;!</td>
+<td class="org-left">int</td>
+<td class="org-left">prints the top value of the stack</td>
+</tr>
+
+<tr>
+<td class="org-left">&gt;#</td>
+<td class="org-left">int, int</td>
+<td class="org-left">swaps two values on the stack given their offsets from the top of the stack</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org9b5c96a" class="outline-2">
+<h2 id="org9b5c96a">Source Code</h2>
+<div class="outline-text-2" id="text-org9b5c96a">
+</div>
+<div id="outline-container-org2add35c" class="outline-3">
+<h3 id="org2add35c">makefile</h3>
+<div class="outline-text-3" id="text-org2add35c">
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #1976D2;">failure</span>:
+        <span style="color: #E53935;">@</span>echo <span style="color: #494949;">"error, run make install or make uninstall"</span>
+<span style="color: #1976D2;">install</span>:
+        mkdir -p $<span style="color: #494949;">(</span><span style="font-style: italic;">HOME</span><span style="color: #494949;">)</span>/.lc-src
+        cp -r src/* $<span style="color: #494949;">(</span><span style="font-style: italic;">HOME</span><span style="color: #494949;">)</span>/.lc-src
+        cp -r lc.sh $<span style="color: #494949;">(</span><span style="font-style: italic;">HOME</span><span style="color: #494949;">)</span>/scripts/lc
+
+<span style="color: #1976D2;">uninstall</span>:
+        rm -rf $<span style="color: #494949;">(</span><span style="font-style: italic;">HOME</span><span style="color: #494949;">)</span>/.lc-src
+        rm $<span style="color: #494949;">(</span><span style="font-style: italic;">HOME</span><span style="color: #494949;">)</span>//lc
+<span style="color: #1976D2;">test</span>:
+        python3 ./src/test_lunar_functions.py
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org255de4f" class="outline-3">
+<h3 id="org255de4f">lc.sh</h3>
+<div class="outline-text-3" id="text-org255de4f">
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #a4a4a4; font-style: italic;">#</span><span style="color: #a4a4a4; font-style: italic;">!/usr/bin/</span><span style="color: #E53935; font-style: italic;">env</span><span style="color: #a4a4a4; font-style: italic;"> bash</span>
+
+python3 $<span style="font-style: italic;">HOME</span>/.lc-src/main.py $<span style="font-style: italic;">*</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orge1b8f5f" class="outline-3">
+<h3 id="orge1b8f5f">test.lc</h3>
+</div>
+
+<div id="outline-container-org4c30dab" class="outline-3">
+<h3 id="org4c30dab">src/main.py</h3>
+<div class="outline-text-3" id="text-org4c30dab">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #a4a4a4; font-style: italic;">#</span><span style="color: #a4a4a4; font-style: italic;">!/usr/bin/env python3</span>
+
+<span style="color: #a4a4a4; font-style: italic;">"""This is the basic lunar calculator lc."""</span>
+
+<span style="color: #E53935; font-style: italic;">import</span> sys
+<span style="color: #E53935; font-style: italic;">import</span> calculator <span style="color: #E53935; font-style: italic;">as</span> calc
+
+<span style="font-style: italic;">REPL</span> = <span style="color: #494949;">"""</span>
+<span style="color: #494949;">l &lt;@</span>
+<span style="color: #494949;">: &gt;!</span>
+<span style="color: #494949;">? $ &gt;! \\n &gt;!</span>
+<span style="color: #494949;">l @</span>
+<span style="color: #494949;">"""</span>
+
+<span style="color: #E53935; font-style: italic;">if</span> <span style="color: #E53935;">len</span><span style="color: #494949;">(</span>sys.argv<span style="color: #494949;">)</span> &gt; 1:
+    sys.argv.pop<span style="color: #494949;">(</span>0<span style="color: #494949;">)</span>
+    <span style="color: #E53935; font-style: italic;">for</span> filename <span style="color: #E53935; font-style: italic;">in</span> sys.argv:
+        calc.interpret<span style="color: #494949;">(</span><span style="color: #E53935;">open</span><span style="color: #bbb;">(</span>filename, <span style="color: #494949;">'r'</span><span style="color: #bbb;">)</span>.read<span style="color: #bbb;">()</span><span style="color: #494949;">)</span>
+<span style="color: #E53935; font-style: italic;">else</span>:
+    <span style="color: #E53935; font-style: italic;">try</span>:
+        calc.interpret<span style="color: #494949;">(</span>REPL<span style="color: #494949;">)</span>
+    <span style="color: #E53935; font-style: italic;">except</span> <span style="color: #E53935;">EOFError</span>:
+        calc.interpret<span style="color: #494949;">(</span>REPL<span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgce1cd36" class="outline-3">
+<h3 id="orgce1cd36">src/run<sub>exceptions.py</sub></h3>
+<div class="outline-text-3" id="text-orgce1cd36">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #a4a4a4; font-style: italic;">"""Exceptions for the run module."""</span>
+
+
+<span style="color: #E53935; font-style: italic;">class</span> <span style="color: #E53935;">ParseError</span><span style="color: #494949;">(</span><span style="color: #E53935;">Exception</span><span style="color: #494949;">)</span>:
+    <span style="color: #a4a4a4; font-style: italic;">"""Error during parsing of the program."""</span>
+
+    <span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">__init__</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span>, message<span style="color: #494949;">)</span>:
+        <span style="color: #E53935;">Exception</span>.__init__<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span><span style="color: #494949;">)</span>
+        <span style="color: #E53935; font-style: italic;">self</span>.message = message
+
+
+<span style="color: #E53935; font-style: italic;">class</span> <span style="color: #E53935;">ProgramTimeout</span><span style="color: #494949;">(</span><span style="color: #E53935;">Exception</span><span style="color: #494949;">)</span>:
+    <span style="color: #a4a4a4; font-style: italic;">"""Error during parsing of the program."""</span>
+
+    <span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">__init__</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span>, code, program_counter, message<span style="color: #494949;">)</span>:
+        <span style="color: #E53935;">Exception</span>.__init__<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span><span style="color: #494949;">)</span>
+        <span style="color: #E53935; font-style: italic;">self</span>.code = code
+        <span style="color: #E53935; font-style: italic;">self</span>.program_counter = program_counter
+        <span style="color: #E53935; font-style: italic;">self</span>.message = message
+
+
+<span style="color: #E53935; font-style: italic;">class</span> <span style="color: #E53935;">RuntimeAssertFail</span><span style="color: #494949;">(</span><span style="color: #E53935;">Exception</span><span style="color: #494949;">)</span>:
+    <span style="color: #a4a4a4; font-style: italic;">"""An error during the runtime of the program."""</span>
+
+    <span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">__init__</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span>, program_counter, message<span style="color: #494949;">)</span>:
+        <span style="color: #E53935;">Exception</span>.__init__<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span><span style="color: #494949;">)</span>
+        <span style="color: #E53935; font-style: italic;">self</span>.program_counter = program_counter
+        <span style="color: #E53935; font-style: italic;">self</span>.message = message
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgf4f84bc" class="outline-3">
+<h3 id="orgf4f84bc">src/lunar<sub>functions.py</sub></h3>
+<div class="outline-text-3" id="text-orgf4f84bc">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">ladd</span><span style="color: #494949;">(</span>a, b<span style="color: #494949;">)</span>:
+    <span style="color: #a4a4a4; font-style: italic;">"""</span>
+<span style="color: #a4a4a4; font-style: italic;">    ladd(int a, int b) =&gt; int</span>
+<span style="color: #a4a4a4; font-style: italic;">    conducts lunar addition on a and b</span>
+<span style="color: #a4a4a4; font-style: italic;">    """</span>
+    <span style="font-style: italic;">astr</span> = <span style="color: #E53935;">str</span><span style="color: #494949;">(</span>a<span style="color: #494949;">)[</span>::-1<span style="color: #494949;">]</span>
+    <span style="font-style: italic;">bstr</span> = <span style="color: #E53935;">str</span><span style="color: #494949;">(</span>b<span style="color: #494949;">)[</span>::-1<span style="color: #494949;">]</span>
+    <span style="font-style: italic;">retstr</span> = <span style="color: #494949;">""</span>
+    <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #E53935;">len</span><span style="color: #494949;">(</span>astr<span style="color: #494949;">)</span> &lt; <span style="color: #E53935;">len</span><span style="color: #494949;">(</span>bstr<span style="color: #494949;">)</span>:
+        <span style="font-style: italic;">smaller</span> = astr
+        <span style="font-style: italic;">bigger</span> = bstr
+    <span style="color: #E53935; font-style: italic;">else</span>:
+        <span style="font-style: italic;">smaller</span> = bstr
+        <span style="font-style: italic;">bigger</span> = astr
+    <span style="font-style: italic;">i</span> = 0
+    <span style="color: #E53935; font-style: italic;">while</span> i &lt; <span style="color: #E53935;">len</span><span style="color: #494949;">(</span>smaller<span style="color: #494949;">)</span>:
+        <span style="color: #E53935; font-style: italic;">if</span> smaller<span style="color: #494949;">[</span>i<span style="color: #494949;">]</span> &lt; bigger<span style="color: #494949;">[</span>i<span style="color: #494949;">]</span>:
+            <span style="font-style: italic;">retstr</span> = bigger<span style="color: #494949;">[</span>i<span style="color: #494949;">]</span> + retstr
+        <span style="color: #E53935; font-style: italic;">else</span>:
+            <span style="font-style: italic;">retstr</span> = smaller<span style="color: #494949;">[</span>i<span style="color: #494949;">]</span> + retstr
+        <span style="font-style: italic;">i</span> += 1
+    <span style="font-style: italic;">retstr</span> = bigger<span style="color: #494949;">[</span>i:<span style="color: #494949;">]</span> + retstr
+    <span style="color: #E53935; font-style: italic;">return</span> <span style="color: #E53935;">int</span><span style="color: #494949;">(</span>retstr<span style="color: #494949;">)</span>
+
+
+<span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">lsum</span><span style="color: #494949;">(</span>*nums<span style="color: #494949;">)</span>:
+    <span style="color: #a4a4a4; font-style: italic;">"""</span>
+<span style="color: #a4a4a4; font-style: italic;">    lsum(int a, int b, ...) =&gt; int</span>
+<span style="color: #a4a4a4; font-style: italic;">    obtains the lunar sum of input values</span>
+<span style="color: #a4a4a4; font-style: italic;">    """</span>
+    <span style="font-style: italic;">total</span> = nums<span style="color: #494949;">[</span>0<span style="color: #494949;">]</span>
+    <span style="color: #E53935; font-style: italic;">for</span> num <span style="color: #E53935; font-style: italic;">in</span> nums<span style="color: #494949;">[</span>1:<span style="color: #494949;">]</span>:
+        <span style="font-style: italic;">total</span> = ladd<span style="color: #494949;">(</span>total, num<span style="color: #494949;">)</span>
+    <span style="color: #E53935; font-style: italic;">return</span> total
+
+
+<span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">lmul</span><span style="color: #494949;">(</span>a, b<span style="color: #494949;">)</span>:
+    <span style="color: #a4a4a4; font-style: italic;">"""</span>
+<span style="color: #a4a4a4; font-style: italic;">    lmul(int a , int b) =&gt; int</span>
+<span style="color: #a4a4a4; font-style: italic;">    conducts lunar multiplication on a and b</span>
+<span style="color: #a4a4a4; font-style: italic;">    """</span>
+    <span style="font-style: italic;">astr</span> = <span style="color: #E53935;">str</span><span style="color: #494949;">(</span>a<span style="color: #494949;">)[</span>::-1<span style="color: #494949;">]</span>
+    <span style="font-style: italic;">bstr</span> = <span style="color: #E53935;">str</span><span style="color: #494949;">(</span>b<span style="color: #494949;">)[</span>::-1<span style="color: #494949;">]</span>
+    <span style="font-style: italic;">retstr</span> = <span style="color: #494949;">""</span>
+    <span style="font-style: italic;">i</span> = 0
+    <span style="font-style: italic;">vals</span> = <span style="color: #494949;">[]</span>
+    <span style="color: #E53935; font-style: italic;">while</span> i &lt; <span style="color: #E53935;">len</span><span style="color: #494949;">(</span>bstr<span style="color: #494949;">)</span>:
+        <span style="font-style: italic;">current_val</span> = <span style="color: #494949;">""</span>
+        <span style="color: #E53935; font-style: italic;">for</span> val <span style="color: #E53935; font-style: italic;">in</span> astr:
+            <span style="color: #E53935; font-style: italic;">if</span> val &gt; bstr<span style="color: #494949;">[</span>i<span style="color: #494949;">]</span>:
+                <span style="font-style: italic;">current_val</span> += bstr<span style="color: #494949;">[</span>i<span style="color: #494949;">]</span>
+            <span style="color: #E53935; font-style: italic;">else</span>:
+                <span style="font-style: italic;">current_val</span> += val
+        vals.append<span style="color: #494949;">(</span>current_val<span style="color: #bbb;">[</span>::-1<span style="color: #bbb;">]</span> + <span style="color: #bbb;">(</span><span style="color: #494949;">"0"</span> * i<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        <span style="font-style: italic;">i</span> += 1
+    <span style="font-style: italic;">retstr</span> = <span style="color: #E53935;">str</span><span style="color: #494949;">(</span>lsum<span style="color: #bbb;">(</span>*<span style="color: #494949;">[</span><span style="color: #E53935;">int</span><span style="color: #bbb;">(</span>x<span style="color: #bbb;">)</span> <span style="color: #E53935; font-style: italic;">for</span> x <span style="color: #E53935; font-style: italic;">in</span> vals<span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+    <span style="color: #E53935; font-style: italic;">return</span> <span style="color: #E53935;">int</span><span style="color: #494949;">(</span>retstr<span style="color: #494949;">)</span>
+
+
+<span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">lpow</span><span style="color: #494949;">(</span>a, b<span style="color: #494949;">)</span>:
+    <span style="color: #a4a4a4; font-style: italic;">"""</span>
+<span style="color: #a4a4a4; font-style: italic;">    lpow(int a, int b) =&gt; int</span>
+<span style="color: #a4a4a4; font-style: italic;">    raises a to the lunar power of b</span>
+<span style="color: #a4a4a4; font-style: italic;">    """</span>
+    <span style="font-style: italic;">acc</span> = a
+    <span style="color: #E53935; font-style: italic;">for</span> val <span style="color: #E53935; font-style: italic;">in</span> <span style="color: #E53935;">range</span><span style="color: #494949;">(</span>b - 1<span style="color: #494949;">)</span>:
+        <span style="font-style: italic;">acc</span> = lmul<span style="color: #494949;">(</span>acc, a<span style="color: #494949;">)</span>
+    <span style="color: #E53935; font-style: italic;">return</span> acc
+
+
+<span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">llogic_is_true</span><span style="color: #494949;">(</span>a<span style="color: #494949;">)</span>:
+    <span style="color: #E53935; font-style: italic;">return</span> <span style="color: #494949;">"9"</span> <span style="color: #E53935; font-style: italic;">in</span> <span style="color: #E53935;">str</span><span style="color: #494949;">(</span>a<span style="color: #494949;">)</span>
+
+
+<span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">llogic_and</span><span style="color: #494949;">(</span>a, b<span style="color: #494949;">)</span>:
+    <span style="color: #a4a4a4; font-style: italic;">"""</span>
+<span style="color: #a4a4a4; font-style: italic;">    llogic_and(int a, int b) =&gt; int</span>
+<span style="color: #a4a4a4; font-style: italic;">    Returns 9 if both arguments a and b contain nine in their</span>
+<span style="color: #a4a4a4; font-style: italic;">    decimal representation. Else returns 1.</span>
+<span style="color: #a4a4a4; font-style: italic;">    """</span>
+    <span style="color: #E53935; font-style: italic;">if</span> llogic_is_true<span style="color: #494949;">(</span>a<span style="color: #494949;">)</span> <span style="color: #E53935; font-style: italic;">and</span> llogic_is_true<span style="color: #494949;">(</span>b<span style="color: #494949;">)</span>:
+        <span style="color: #E53935; font-style: italic;">return</span> <span style="color: #494949;">"9"</span>
+    <span style="color: #E53935; font-style: italic;">else</span>:
+        <span style="color: #E53935; font-style: italic;">return</span> <span style="color: #494949;">"1"</span>
+
+
+<span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">llogic_or</span><span style="color: #494949;">(</span>a, b<span style="color: #494949;">)</span>:
+    <span style="color: #a4a4a4; font-style: italic;">"""</span>
+<span style="color: #a4a4a4; font-style: italic;">    llogic_and(int a, int b) =&gt; int</span>
+<span style="color: #a4a4a4; font-style: italic;">    Returns 9 if both arguments a and b contain nine in their</span>
+<span style="color: #a4a4a4; font-style: italic;">    decimal representation. Else returns 1.</span>
+<span style="color: #a4a4a4; font-style: italic;">    """</span>
+    <span style="color: #E53935; font-style: italic;">if</span> llogic_is_true<span style="color: #494949;">(</span>a<span style="color: #494949;">)</span> <span style="color: #E53935; font-style: italic;">or</span> llogic_is_true<span style="color: #494949;">(</span>b<span style="color: #494949;">)</span>:
+        <span style="color: #E53935; font-style: italic;">return</span> <span style="color: #494949;">"9"</span>
+    <span style="color: #E53935; font-style: italic;">else</span>:
+        <span style="color: #E53935; font-style: italic;">return</span> <span style="color: #494949;">"1"</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org28289b9" class="outline-3">
+<h3 id="org28289b9">src/test<sub>lunar</sub><sub>functions.py</sub></h3>
+<div class="outline-text-3" id="text-org28289b9">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #a4a4a4; font-style: italic;">#</span><span style="color: #a4a4a4; font-style: italic;">!/usr/bin/env python3</span>
+
+<span style="color: #E53935; font-style: italic;">import</span> lunar_functions <span style="color: #E53935; font-style: italic;">as</span> lf
+
+
+<span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">test_ladd</span><span style="color: #494949;">()</span>:
+    <span style="color: #a4a4a4; font-style: italic;">"""Tests lunar addition."""</span>
+    <span style="color: #E53935; font-style: italic;">assert</span> lf.ladd<span style="color: #494949;">(</span>1, 22<span style="color: #494949;">)</span> == 22
+    <span style="color: #E53935; font-style: italic;">assert</span> lf.ladd<span style="color: #494949;">(</span>278, 6556<span style="color: #494949;">)</span> == 6578
+    <span style="color: #E53935; font-style: italic;">assert</span> lf.ladd<span style="color: #494949;">(</span>9999, 0000<span style="color: #494949;">)</span> == 9999
+    <span style="color: #E53935; font-style: italic;">print</span><span style="color: #494949;">(</span><span style="color: #494949;">"ladd passed"</span><span style="color: #494949;">)</span>
+
+
+<span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">test_lsum</span><span style="color: #494949;">()</span>:
+    <span style="color: #a4a4a4; font-style: italic;">"""Tests lunar summation."""</span>
+    <span style="color: #E53935; font-style: italic;">assert</span> lf.lsum<span style="color: #494949;">(</span>1, 33, 456, 2313<span style="color: #494949;">)</span> == 2456
+    <span style="color: #E53935; font-style: italic;">print</span><span style="color: #494949;">(</span><span style="color: #494949;">"lsum passed"</span><span style="color: #494949;">)</span>
+
+
+<span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">test_lmul</span><span style="color: #494949;">()</span>:
+    <span style="color: #a4a4a4; font-style: italic;">"""Tests lunar multiplication."""</span>
+    <span style="color: #E53935; font-style: italic;">assert</span> lf.lmul<span style="color: #494949;">(</span>17, 24<span style="color: #494949;">)</span> == 124
+    <span style="color: #E53935; font-style: italic;">assert</span> lf.lmul<span style="color: #494949;">(</span>25, 235<span style="color: #494949;">)</span> == 2235
+    <span style="color: #E53935; font-style: italic;">print</span><span style="color: #494949;">(</span><span style="color: #494949;">"lmul passed"</span><span style="color: #494949;">)</span>
+
+
+<span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">test_lpow</span><span style="color: #494949;">()</span>:
+    <span style="color: #a4a4a4; font-style: italic;">"""Tests lunar powers."""</span>
+    <span style="color: #E53935; font-style: italic;">assert</span> lf.lpow<span style="color: #494949;">(</span>5, 2<span style="color: #494949;">)</span> == lf.lmul<span style="color: #494949;">(</span>5, 5<span style="color: #494949;">)</span>
+    <span style="color: #E53935; font-style: italic;">assert</span> lf.lpow<span style="color: #494949;">(</span>15, 3<span style="color: #494949;">)</span> == lf.lmul<span style="color: #494949;">(</span>lf.lmul<span style="color: #bbb;">(</span>15, 15<span style="color: #bbb;">)</span>, 15<span style="color: #494949;">)</span>
+    <span style="color: #E53935; font-style: italic;">print</span><span style="color: #494949;">(</span><span style="color: #494949;">"lpow passed"</span><span style="color: #494949;">)</span>
+
+
+test_ladd<span style="color: #494949;">()</span>
+test_lsum<span style="color: #494949;">()</span>
+test_lmul<span style="color: #494949;">()</span>
+test_lpow<span style="color: #494949;">()</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org36bd18a" class="outline-3">
+<h3 id="org36bd18a">src/calculator.py</h3>
+<div class="outline-text-3" id="text-org36bd18a">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #a4a4a4; font-style: italic;">"""This is a calculator."""</span>
+
+
+<span style="color: #E53935; font-style: italic;">from</span> run_exceptions <span style="color: #E53935; font-style: italic;">import</span> RuntimeAssertFail
+<span style="color: #E53935; font-style: italic;">import</span> lunar_functions <span style="color: #E53935; font-style: italic;">as</span> lf
+
+
+<span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">num</span><span style="color: #494949;">(</span>string<span style="color: #494949;">)</span>:
+    <span style="color: #a4a4a4; font-style: italic;">"""Convert string to number."""</span>
+    <span style="color: #E53935; font-style: italic;">try</span>:
+        <span style="color: #E53935; font-style: italic;">return</span> <span style="color: #E53935;">int</span><span style="color: #494949;">(</span>string<span style="color: #494949;">)</span>
+    <span style="color: #E53935; font-style: italic;">except</span> <span style="color: #E53935;">ValueError</span>:
+        <span style="color: #E53935; font-style: italic;">return</span> <span style="color: #E53935;">float</span><span style="color: #494949;">(</span>string<span style="color: #494949;">)</span>
+
+
+<span style="color: #E53935; font-style: italic;">class</span> <span style="color: #E53935;">Calculator</span>:
+    <span style="color: #a4a4a4; font-style: italic;">"""This is the class that the calculator runs in."""</span>
+
+    <span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">__init__</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span><span style="color: #494949;">)</span>:
+        <span style="color: #E53935; font-style: italic;">self</span>.data_stack = <span style="color: #494949;">[]</span>
+        <span style="color: #E53935; font-style: italic;">self</span>.instructions = <span style="color: #494949;">[]</span>
+        <span style="color: #E53935; font-style: italic;">self</span>.comefrom_tab = <span style="color: #494949;">{}</span>
+        <span style="color: #E53935; font-style: italic;">self</span>.symtab = <span style="color: #494949;">{</span>
+            <span style="color: #494949;">"+"</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.dyadic<span style="color: #bbb;">(</span>lf.ladd<span style="color: #bbb;">)</span>,
+            <span style="color: #494949;">"*"</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.dyadic<span style="color: #bbb;">(</span>lf.lmul<span style="color: #bbb;">)</span>,
+            <span style="color: #494949;">"^"</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.dyadic<span style="color: #bbb;">(</span>lf.lpow<span style="color: #bbb;">)</span>,
+            <span style="color: #494949;">"="</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.dyadic<span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> a, b: a == b<span style="color: #bbb;">)</span>,
+            <span style="color: #494949;">"&gt;"</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.dyadic<span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> a, b: a &gt; b<span style="color: #bbb;">)</span>,
+            <span style="color: #494949;">"&lt;"</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.dyadic<span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> a, b: a &lt; b<span style="color: #bbb;">)</span>,
+            <span style="color: #494949;">"v"</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.dyadic<span style="color: #bbb;">(</span>lf.llogic_or<span style="color: #bbb;">)</span>,
+            <span style="color: #494949;">"&amp;"</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.dyadic<span style="color: #bbb;">(</span>lf.llogic_and<span style="color: #bbb;">)</span>,
+            <span style="color: #494949;">"?"</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.read_input<span style="color: #bbb;">()</span>,
+            <span style="color: #494949;">"&gt;!"</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.print_top_val<span style="color: #bbb;">()</span>,
+            <span style="color: #494949;">"&gt;#"</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.swap_top_vals<span style="color: #bbb;">()</span>,
+            <span style="color: #494949;">"&gt;%"</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.random_from_stack<span style="color: #bbb;">()</span>,
+            <span style="color: #494949;">"$"</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.evaluate<span style="color: #bbb;">()</span>,
+            <span style="color: #494949;">"@"</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.label<span style="color: #bbb;">()</span>,
+            <span style="color: #494949;">"&lt;@"</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.come_from<span style="color: #bbb;">()</span>,
+            <span style="color: #494949;">"]#"</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.nth_from_list<span style="color: #bbb;">()</span>,
+            <span style="color: #494949;">"?&lt;@"</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.conditional_come_from<span style="color: #bbb;">()</span>,
+            <span style="color: #494949;">":="</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.assign<span style="color: #bbb;">()</span>,
+            <span style="color: #494949;">"e"</span>: <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935;">exit</span><span style="color: #bbb;">(</span>0<span style="color: #bbb;">)</span>
+        <span style="color: #494949;">}</span>
+        <span style="color: #E53935; font-style: italic;">self</span>.instruction_pointer = 0
+        <span style="color: #E53935; font-style: italic;">self</span>.statement_pointer = 0
+        
+    <span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">print_top_val</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span><span style="color: #494949;">)</span>:
+        <span style="color: #a4a4a4; font-style: italic;">"""Prints the top value on the stack."""</span>
+        <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #E53935;">len</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span>.data_stack<span style="color: #494949;">)</span> &gt; 0:
+            <span style="font-style: italic;">top_val</span> = <span style="color: #E53935; font-style: italic;">self</span>.data_stack.pop<span style="color: #494949;">()</span>
+            <span style="font-style: italic;">output</span> = <span style="color: #E53935;">bytes</span><span style="color: #494949;">(</span><span style="color: #E53935;">str</span><span style="color: #bbb;">(</span>top_val<span style="color: #bbb;">)</span>, <span style="color: #494949;">"utf-8"</span><span style="color: #494949;">)</span>.decode<span style="color: #494949;">(</span><span style="color: #494949;">"unicode_escape"</span><span style="color: #494949;">)</span>
+            <span style="color: #E53935; font-style: italic;">print</span><span style="color: #494949;">(</span>output, end=<span style="color: #494949;">''</span><span style="color: #494949;">)</span>
+
+    <span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">evaluate</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span><span style="color: #494949;">)</span>:
+        <span style="color: #a4a4a4; font-style: italic;">"""Evaluates the string in the top of the stack."""</span>
+        <span style="font-style: italic;">program</span> = <span style="color: #E53935; font-style: italic;">self</span>.data_stack.pop<span style="color: #494949;">()</span>
+        <span style="font-style: italic;">sp</span> = <span style="color: #E53935; font-style: italic;">self</span>.statement_pointer
+        <span style="font-style: italic;">ip</span> = <span style="color: #E53935; font-style: italic;">self</span>.instruction_pointer
+        <span style="color: #E53935; font-style: italic;">self</span>.statement_pointer = 0
+        <span style="color: #E53935; font-style: italic;">self</span>.instruction_pointer = 0
+        <span style="color: #E53935; font-style: italic;">self</span>.execute<span style="color: #494949;">(</span>program<span style="color: #494949;">)</span>
+        <span style="color: #E53935; font-style: italic;">self</span>.statment_pointer = sp
+        <span style="color: #E53935; font-style: italic;">self</span>.instruction_pointer = ip
+
+    <span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">come_from</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span><span style="color: #494949;">)</span>:
+        <span style="color: #a4a4a4; font-style: italic;">"""Adds the current instruction position and target label to the</span>
+<span style="color: #a4a4a4; font-style: italic;">        comefrom_tab. Once the target symbol is reached the instruction counter</span>
+<span style="color: #a4a4a4; font-style: italic;">        is set to the relevant value"""</span>
+        <span style="color: #E53935; font-style: italic;">self</span>.comefrom_tab<span style="color: #494949;">[</span><span style="color: #E53935; font-style: italic;">self</span>.data_stack.pop<span style="color: #bbb;">()</span><span style="color: #494949;">]</span> = <span style="color: #E53935; font-style: italic;">self</span>.statement_pointer
+
+    <span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">conditional_come_from</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span><span style="color: #494949;">)</span>:
+        <span style="color: #a4a4a4; font-style: italic;">"""Adds the current instruction position and target label to the</span>
+<span style="color: #a4a4a4; font-style: italic;">        comefrom_tab if the second argument is true. Once the target symbol</span>
+<span style="color: #a4a4a4; font-style: italic;">        is reached the instruction counter is set to the relevant value"""</span>
+        <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">"9"</span> <span style="color: #E53935; font-style: italic;">in</span> <span style="color: #E53935;">str</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span>.data_stack.pop<span style="color: #bbb;">()</span><span style="color: #494949;">)</span>:
+            <span style="color: #E53935; font-style: italic;">self</span>.comefrom_tab<span style="color: #494949;">[</span><span style="color: #E53935; font-style: italic;">self</span>.data_stack.pop<span style="color: #bbb;">()</span><span style="color: #494949;">]</span> = <span style="color: #E53935; font-style: italic;">self</span>.statement_pointer
+
+    <span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">assign</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span><span style="color: #494949;">)</span>:
+        <span style="color: #a4a4a4; font-style: italic;">"""Assigns a value to a symbol in the symtab."""</span>
+        <span style="font-style: italic;">value</span> = <span style="color: #E53935; font-style: italic;">self</span>.data_stack.pop<span style="color: #494949;">()</span>
+        <span style="font-style: italic;">symbol</span> = <span style="color: #E53935; font-style: italic;">self</span>.data_stack.pop<span style="color: #494949;">()</span>
+        <span style="color: #E53935; font-style: italic;">self</span>.symtab<span style="color: #494949;">[</span>symbol<span style="color: #494949;">]</span> = <span style="color: #E53935; font-style: italic;">lambda</span>: <span style="color: #E53935; font-style: italic;">self</span>.data_stack.append<span style="color: #494949;">(</span>value<span style="color: #494949;">)</span>
+
+    <span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">label</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span><span style="color: #494949;">)</span>:
+        <span style="color: #a4a4a4; font-style: italic;">"""Adds the current instruction position and target label to the</span>
+<span style="color: #a4a4a4; font-style: italic;">        comefrom_tab. Once the target symbol is reached the instruction counter</span>
+<span style="color: #a4a4a4; font-style: italic;">        is set to the relevant value"""</span>
+        <span style="font-style: italic;">statement_label</span> = <span style="color: #E53935; font-style: italic;">self</span>.data_stack.pop<span style="color: #494949;">()</span>
+        <span style="color: #E53935; font-style: italic;">if</span> statement_label <span style="color: #E53935; font-style: italic;">in</span> <span style="color: #E53935; font-style: italic;">self</span>.comefrom_tab:
+            <span style="color: #E53935; font-style: italic;">self</span>.statement_pointer = <span style="color: #E53935; font-style: italic;">self</span>.comefrom_tab<span style="color: #494949;">[</span>statement_label<span style="color: #494949;">]</span>
+
+    <span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">read_input</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span><span style="color: #494949;">)</span>:
+        <span style="color: #a4a4a4; font-style: italic;">"""Gets input from user and places it on the top of the stack."""</span>
+        <span style="color: #E53935; font-style: italic;">try</span>:
+            <span style="color: #E53935; font-style: italic;">self</span>.data_stack.append<span style="color: #494949;">(</span><span style="color: #E53935;">input</span><span style="color: #bbb;">()</span><span style="color: #494949;">)</span>
+        <span style="color: #E53935; font-style: italic;">except</span>:
+            <span style="color: #E53935; font-style: italic;">self</span>.data_stack.append<span style="color: #494949;">(</span><span style="color: #494949;">"\n?"</span><span style="color: #494949;">)</span>
+
+    <span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">dyadic</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span>, function<span style="color: #494949;">)</span>:
+        <span style="color: #a4a4a4; font-style: italic;">"""Wrapper for dyadic functions."""</span>
+        <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #E53935;">len</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span>.data_stack<span style="color: #494949;">)</span> &lt; 2:
+            <span style="color: #E53935; font-style: italic;">raise</span> RuntimeAssertFail<span style="color: #494949;">(</span>
+                <span style="color: #E53935; font-style: italic;">self</span>.instruction_pointer, <span style="color: #494949;">"error, too few items on stack"</span>
+            <span style="color: #494949;">)</span>
+        <span style="color: #E53935; font-style: italic;">try</span>:
+            <span style="font-style: italic;">b_val</span> = num<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span>.data_stack.pop<span style="color: #bbb;">()</span><span style="color: #494949;">)</span>
+            <span style="font-style: italic;">a_val</span> = num<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span>.data_stack.pop<span style="color: #bbb;">()</span><span style="color: #494949;">)</span>
+            <span style="color: #E53935; font-style: italic;">self</span>.data_stack.append<span style="color: #494949;">(</span>function<span style="color: #bbb;">(</span>a_val, b_val<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        <span style="color: #E53935; font-style: italic;">except</span> <span style="color: #E53935;">ValueError</span>:
+            <span style="color: #E53935; font-style: italic;">raise</span> RuntimeAssertFail<span style="color: #494949;">(</span>
+                <span style="color: #E53935; font-style: italic;">self</span>.instruction_pointer,
+                <span style="color: #494949;">"error, invalid symbol reached during execution"</span>,
+            <span style="color: #494949;">)</span>
+
+    <span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">monadic</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span>, function<span style="color: #494949;">)</span>:
+        <span style="color: #a4a4a4; font-style: italic;">"""Wrapper for monadic functions."""</span>
+        <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #E53935;">len</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span>.data_stack<span style="color: #494949;">)</span> &lt; 1:
+            <span style="color: #E53935; font-style: italic;">raise</span> RuntimeAssertFail<span style="color: #494949;">(</span>
+                <span style="color: #E53935; font-style: italic;">self</span>.instruction_pointer, <span style="color: #494949;">"error, too few items on stack"</span>
+            <span style="color: #494949;">)</span>
+        <span style="color: #E53935; font-style: italic;">try</span>:
+            <span style="font-style: italic;">a_val</span> = num<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span>.data_stack.pop<span style="color: #bbb;">()</span><span style="color: #494949;">)</span>
+            <span style="color: #E53935; font-style: italic;">self</span>.data_stack.append<span style="color: #494949;">(</span>function<span style="color: #bbb;">(</span>a_val<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        <span style="color: #E53935; font-style: italic;">except</span> <span style="color: #E53935;">ValueError</span>:
+            <span style="color: #E53935; font-style: italic;">raise</span> RuntimeAssertFail<span style="color: #494949;">(</span>
+                <span style="color: #E53935; font-style: italic;">self</span>.instruction_pointer,
+                <span style="color: #494949;">"error, invalid symbol reached during execution"</span>,
+            <span style="color: #494949;">)</span>
+
+    <span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">parse</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span>, program<span style="color: #494949;">)</span>:
+        <span style="color: #a4a4a4; font-style: italic;">"""This parses the program and converts it into code for the vm."""</span>
+        <span style="font-style: italic;">code</span> = <span style="color: #494949;">[]</span>
+        <span style="color: #E53935; font-style: italic;">for</span> line <span style="color: #E53935; font-style: italic;">in</span> program.split<span style="color: #494949;">(</span><span style="color: #494949;">"\n"</span><span style="color: #494949;">)</span>:
+            code.append<span style="color: #494949;">(</span>line.split<span style="color: #bbb;">(</span><span style="color: #494949;">" "</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        <span style="color: #E53935; font-style: italic;">return</span> code
+
+    <span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">execute</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span>, program<span style="color: #494949;">)</span>:
+        <span style="color: #a4a4a4; font-style: italic;">"""Executes the program provided."""</span>
+        <span style="font-style: italic;">code</span> = <span style="color: #E53935; font-style: italic;">self</span>.parse<span style="color: #494949;">(</span>program<span style="color: #494949;">)</span>
+        <span style="color: #E53935; font-style: italic;">while</span> <span style="color: #E53935; font-style: italic;">self</span>.statement_pointer &lt; <span style="color: #E53935;">len</span><span style="color: #494949;">(</span>code<span style="color: #494949;">)</span>:
+            <span style="color: #E53935; font-style: italic;">self</span>.instruction_pointer = 0
+            <span style="font-style: italic;">current_statement</span> = code<span style="color: #494949;">[</span><span style="color: #E53935; font-style: italic;">self</span>.statement_pointer<span style="color: #494949;">]</span>
+            <span style="color: #E53935; font-style: italic;">while</span> <span style="color: #E53935; font-style: italic;">self</span>.instruction_pointer &lt; <span style="color: #E53935;">len</span><span style="color: #494949;">(</span>current_statement<span style="color: #494949;">)</span>:
+                <span style="font-style: italic;">symbol</span> = current_statement<span style="color: #494949;">[</span><span style="color: #E53935; font-style: italic;">self</span>.instruction_pointer<span style="color: #494949;">]</span>
+                <span style="color: #E53935; font-style: italic;">if</span> symbol <span style="color: #E53935; font-style: italic;">in</span> <span style="color: #E53935; font-style: italic;">self</span>.symtab:
+                    <span style="color: #E53935; font-style: italic;">try</span>:
+                        <span style="color: #E53935; font-style: italic;">self</span>.symtab<span style="color: #494949;">[</span>symbol<span style="color: #494949;">]()</span>
+                    <span style="color: #E53935; font-style: italic;">except</span> RuntimeAssertFail:
+                        <span style="color: #E53935; font-style: italic;">self</span>.data_stack.append<span style="color: #494949;">(</span><span style="color: #494949;">"?"</span><span style="color: #494949;">)</span>
+                <span style="color: #E53935; font-style: italic;">else</span>:
+                    <span style="color: #E53935; font-style: italic;">self</span>.data_stack.append<span style="color: #494949;">(</span>symbol<span style="color: #494949;">)</span>
+                <span style="color: #E53935; font-style: italic;">self</span>.instruction_pointer += 1
+            <span style="color: #E53935; font-style: italic;">self</span>.statement_pointer += 1
+
+
+
+
+<span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">interpret</span><span style="color: #494949;">(</span>program<span style="color: #494949;">)</span>:
+    <span style="color: #a4a4a4; font-style: italic;">"""</span>
+<span style="color: #a4a4a4; font-style: italic;">    interpret(str program) =&gt; str result</span>
+<span style="color: #a4a4a4; font-style: italic;">    executes the program on the virtual machine and returns the result</span>
+<span style="color: #a4a4a4; font-style: italic;">    """</span>
+    <span style="font-style: italic;">virtual_machine</span> = Calculator
+    <span style="font-style: italic;">virtual_machine</span> = Calculator<span style="color: #494949;">()</span>
+    <span style="color: #E53935; font-style: italic;">return</span> virtual_machine.execute<span style="color: #494949;">(</span>program<span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2021-W51-3 04:20</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>

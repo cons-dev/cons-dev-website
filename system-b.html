@@ -1,0 +1,1055 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-W51-3 04:47 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>system/b</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="A simple memory-to-memory virtual machine implemented in C++." />
+<meta name="generator" content="Org Mode" />
+<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">system/b
+<br />
+<span class="subtitle">A modern computing system.</span>
+</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org565d039">Introduction</a></li>
+<li><a href="#org9177068">Example Programs</a>
+<ul>
+<li><a href="#orgf69e44a">mult.sba</a></li>
+<li><a href="#org4f4b712">subEX.sba</a></li>
+</ul>
+</li>
+<li><a href="#org1e2dade">Source Code</a>
+<ul>
+<li><a href="#org7e6e30a">systemBshell.cpp</a></li>
+<li><a href="#orgdb82a0d">SystemBvm.h</a></li>
+<li><a href="#org4d25e41">ioStrings.h</a></li>
+<li><a href="#org6df7fac">assembler.h</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org565d039" class="outline-2">
+<h2 id="org565d039">Introduction</h2>
+<div class="outline-text-2" id="text-org565d039">
+<p>
+Another project from my early days in programming <label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> About three years ago now, wow! Amazing how time flies.</span>, a simple memory-to-memory virtual machine written in C++. I currently intend to upgrade it a bit eventually with interrupt codes, though maybe I will wait until I write a proper LISP machine with tagged memory / typed instructions. To compile it simply run GCC on systemBshell.cpp.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9177068" class="outline-2">
+<h2 id="org9177068">Example Programs</h2>
+<div class="outline-text-2" id="text-org9177068">
+</div>
+<div id="outline-container-orgf69e44a" class="outline-3">
+<h3 id="orgf69e44a">mult.sba</h3>
+<div class="outline-text-3" id="text-orgf69e44a">
+<div class="org-src-container">
+<pre class="src src-asm"><span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">this is a program that finds c for ;</span>
+<span style="color: #a4a4a4; font-style: italic;">;             </span><span style="color: #a4a4a4; font-style: italic;">a * b = c              ;</span>
+
+<span style="font-weight: bold; font-style: italic;">JIE</span> <span style="color: #E53935; font-style: italic;">05</span> 07 04   <span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">0x00 jumps to the stop instruction if the counter equals a</span>
+<span style="font-weight: bold; font-style: italic;">ADD</span> <span style="color: #E53935; font-style: italic;">06</span> 254 254 <span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">0x01 adds b to c and places it in c</span>
+<span style="font-weight: bold; font-style: italic;">ADD</span> <span style="color: #E53935; font-style: italic;">07</span> 082 07  <span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">0x02 increments the counter up by one</span>
+<span style="font-weight: bold; font-style: italic;">JMP</span> <span style="color: #E53935; font-style: italic;">00</span>         <span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">0x03 jumps to address 0x00</span>
+<span style="font-weight: bold; font-style: italic;">STP</span>            <span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">0x04 stop instruction</span>
+<span style="font-weight: bold; font-style: italic;">3</span>              <span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">0x05t a</span>
+<span style="font-weight: bold; font-style: italic;">256</span>            <span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">0x06 b</span>
+<span style="font-weight: bold; font-style: italic;">0</span>              <span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">0x07 counter</span>
+<span style="font-weight: bold; font-style: italic;">1</span>              <span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">0x08 storage for 1</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org4f4b712" class="outline-3">
+<h3 id="org4f4b712">subEX.sba</h3>
+<div class="outline-text-3" id="text-org4f4b712">
+<div class="org-src-container">
+<pre class="src src-asm"><span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">this is a program that finds c for ;</span>
+<span style="color: #a4a4a4; font-style: italic;">;             </span><span style="color: #a4a4a4; font-style: italic;">a - b = c              ;</span>
+
+<span style="font-weight: bold; font-style: italic;">FLP</span> <span style="color: #E53935; font-style: italic;">4</span>       <span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">0x00  this flips the value a</span>
+<span style="font-weight: bold; font-style: italic;">ADD</span> <span style="color: #E53935; font-style: italic;">4</span> 5 4   <span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">0x01  this adds one to a</span>
+<span style="font-weight: bold; font-style: italic;">ADD</span> <span style="color: #E53935; font-style: italic;">3</span> 4 6   <span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">0x02  this adds a to b, and places the ansewer c in address 0x6</span>
+<span style="font-weight: bold; font-style: italic;">0</span>           <span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">0x03  this stores the value a</span>
+<span style="font-weight: bold; font-style: italic;">0</span>           <span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">0x04  this stores the value of b</span>
+<span style="font-weight: bold; font-style: italic;">1</span>           <span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">0x05  this is where the one is stored for the add one operation</span>
+            <span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">0x06  this is where the value c will go</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org1e2dade" class="outline-2">
+<h2 id="org1e2dade">Source Code</h2>
+<div class="outline-text-2" id="text-org1e2dade">
+</div>
+<div id="outline-container-org7e6e30a" class="outline-3">
+<h3 id="org7e6e30a">systemBshell.cpp</h3>
+<div class="outline-text-3" id="text-org7e6e30a">
+<div class="org-src-container">
+<pre class="src src-C++"><span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">iostream</span><span style="color: #494949;">&gt;</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">string</span><span style="color: #494949;">&gt;</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">"ioStrings.h"</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">"assembler.h"</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">"SystemBvm.h"</span>
+
+<span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;"> * This is the system/b "shell" allows the user to interact with it. Feel free to write your own if you want.</span>
+<span style="color: #a4a4a4; font-style: italic;"> * note : the shell is not complete and needs more work to add full functionality to system/b</span>
+<span style="color: #a4a4a4; font-style: italic;"> */</span>
+
+<span style="color: #E53935;">int</span> <span style="font-weight: bold; font-style: italic;">main</span><span style="color: #494949;">()</span>
+<span style="color: #494949;">{</span>
+  <span style="color: #E53935;">bool</span> <span style="font-style: italic;">quit</span> = <span style="color: #E53935;">false</span>;
+  <span style="color: #E53935;">SystemBvm1024</span> <span style="font-style: italic;">vm</span>;
+  <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">cmdInput</span>,
+    <span style="font-style: italic;">command</span>,
+    <span style="font-style: italic;">argument1</span>,
+    <span style="font-style: italic;">argument2</span>;
+
+
+  <span style="color: #E53935;">std</span>::cout &lt;&lt; welcomeText<span style="color: #bbb;">()</span>;
+  <span style="color: #E53935; font-style: italic;">do</span>
+    <span style="color: #bbb;">{</span>
+      <span style="color: #E53935;">std</span>::cin.clear<span style="color: #494949;">()</span>;
+      <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"system/b&gt; "</span>; <span style="color: #E53935;">std</span>::cin &gt;&gt; command;
+      <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>command == <span style="color: #494949;">"m"</span><span style="color: #494949;">)</span> 
+        <span style="color: #494949;">{</span>
+          <span style="color: #E53935;">std</span>::cout &lt;&lt; manualText<span style="color: #bbb;">()</span>;
+          <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+        <span style="color: #494949;">}</span> 
+      <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>command == <span style="color: #494949;">"assemble"</span><span style="color: #bbb;">)</span> || <span style="color: #bbb;">(</span>command == <span style="color: #494949;">"a"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        <span style="color: #494949;">{</span>
+          <span style="color: #E53935; font-style: italic;">try</span> 
+            <span style="color: #bbb;">{</span>
+              <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"inFile&gt; "</span>; <span style="color: #E53935;">std</span>::cin &gt;&gt; argument1;
+              <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"outFile&gt; "</span>; <span style="color: #E53935;">std</span>::cin &gt;&gt; argument2;
+              assemble<span style="color: #494949;">(</span>argument1, argument2<span style="color: #494949;">)</span>;
+              <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"file assembled sucessfully "</span> &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+            <span style="color: #bbb;">}</span>
+          <span style="color: #E53935; font-style: italic;">catch</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">invalid_argument</span>&amp; <span style="font-style: italic;">e</span><span style="color: #bbb;">)</span>
+            <span style="color: #bbb;">{</span>
+              <span style="color: #E53935;">std</span>::cout &lt;&lt; e.what<span style="color: #494949;">()</span> &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+            <span style="color: #bbb;">}</span>
+          <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+        <span style="color: #494949;">}</span>
+      <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>command == <span style="color: #494949;">"boot"</span><span style="color: #bbb;">)</span> || <span style="color: #bbb;">(</span>command == <span style="color: #494949;">"b"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        <span style="color: #494949;">{</span>
+          <span style="color: #E53935; font-style: italic;">try</span> 
+            <span style="color: #bbb;">{</span>
+              <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"inFile&gt; "</span>; <span style="color: #E53935;">std</span>::cin &gt;&gt; argument1;
+              vm.boot<span style="color: #494949;">(</span>argument1<span style="color: #494949;">)</span>;
+              <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"boot completed "</span> &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+            <span style="color: #bbb;">}</span>
+          <span style="color: #E53935; font-style: italic;">catch</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">invalid_argument</span>&amp; <span style="font-style: italic;">e</span><span style="color: #bbb;">)</span>
+            <span style="color: #bbb;">{</span>
+              <span style="color: #E53935;">std</span>::cout &lt;&lt; e.what<span style="color: #494949;">()</span> &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+            <span style="color: #bbb;">}</span>
+        <span style="color: #494949;">}</span>
+      <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>command == <span style="color: #494949;">"immDump"</span><span style="color: #bbb;">)</span> || <span style="color: #bbb;">(</span>command == <span style="color: #494949;">"imm"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        <span style="color: #494949;">{</span>
+          <span style="color: #E53935; font-style: italic;">try</span> 
+            <span style="color: #bbb;">{</span>
+              vm.immDump<span style="color: #494949;">()</span>;
+              <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"imm dump completed "</span> &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+            <span style="color: #bbb;">}</span>
+          <span style="color: #E53935; font-style: italic;">catch</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">invalid_argument</span>&amp; <span style="font-style: italic;">e</span><span style="color: #bbb;">)</span>
+            <span style="color: #bbb;">{</span>
+              <span style="color: #E53935;">std</span>::cout &lt;&lt; e.what<span style="color: #494949;">()</span> &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+            <span style="color: #bbb;">}</span>
+        <span style="color: #494949;">}</span>
+      <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>command == <span style="color: #494949;">"immDump"</span><span style="color: #bbb;">)</span> || <span style="color: #bbb;">(</span>command == <span style="color: #494949;">"idr"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        <span style="color: #494949;">{</span>
+          <span style="color: #E53935; font-style: italic;">try</span> 
+            <span style="color: #bbb;">{</span>
+              vm.idrDump<span style="color: #494949;">()</span>;
+              <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"idr dump completed "</span> &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+            <span style="color: #bbb;">}</span>
+          <span style="color: #E53935; font-style: italic;">catch</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">invalid_argument</span>&amp; <span style="font-style: italic;">e</span><span style="color: #bbb;">)</span>
+            <span style="color: #bbb;">{</span>
+              <span style="color: #E53935;">std</span>::cout &lt;&lt; e.what<span style="color: #494949;">()</span> &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+            <span style="color: #bbb;">}</span>
+        <span style="color: #494949;">}</span>
+      <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>command == <span style="color: #494949;">"stepCycle"</span><span style="color: #bbb;">)</span> || <span style="color: #bbb;">(</span>command == <span style="color: #494949;">"sc"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        <span style="color: #494949;">{</span>
+          <span style="color: #E53935; font-style: italic;">try</span> 
+            <span style="color: #bbb;">{</span>
+              vm.stepCycle<span style="color: #494949;">()</span>;
+              <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"cycle step completed "</span> &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+            <span style="color: #bbb;">}</span>
+          <span style="color: #E53935; font-style: italic;">catch</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">invalid_argument</span>&amp; <span style="font-style: italic;">e</span><span style="color: #bbb;">)</span>
+            <span style="color: #bbb;">{</span>
+              <span style="color: #E53935;">std</span>::cout &lt;&lt; e.what<span style="color: #494949;">()</span> &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+            <span style="color: #bbb;">}</span>
+        <span style="color: #494949;">}</span>
+      <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>command == <span style="color: #494949;">"checkCounter"</span><span style="color: #bbb;">)</span> || <span style="color: #bbb;">(</span>command == <span style="color: #494949;">"cc"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        <span style="color: #494949;">{</span>
+          <span style="color: #E53935; font-style: italic;">try</span>
+            <span style="color: #bbb;">{</span>
+              <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"current instruction counter : "</span> &lt;&lt; vm.getinstructionCounter<span style="color: #494949;">()</span> &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+            <span style="color: #bbb;">}</span>
+          <span style="color: #E53935; font-style: italic;">catch</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">invalid_argument</span>&amp; <span style="font-style: italic;">e</span><span style="color: #bbb;">)</span>
+            <span style="color: #bbb;">{</span>
+              <span style="color: #E53935;">std</span>::cout &lt;&lt; e.what<span style="color: #494949;">()</span> &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+            <span style="color: #bbb;">}</span>
+        <span style="color: #494949;">}</span>
+      <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>command == <span style="color: #494949;">"getOutput"</span><span style="color: #bbb;">)</span> || <span style="color: #bbb;">(</span>command == <span style="color: #494949;">"go"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        <span style="color: #494949;">{</span>
+          <span style="color: #E53935; font-style: italic;">try</span>
+            <span style="color: #bbb;">{</span>
+              <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"output address contains : "</span> &lt;&lt; vm.getOutput<span style="color: #494949;">()</span> &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+            <span style="color: #bbb;">}</span>
+          <span style="color: #E53935; font-style: italic;">catch</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">invalid_argument</span>&amp; <span style="font-style: italic;">e</span><span style="color: #bbb;">)</span>
+            <span style="color: #bbb;">{</span>
+              <span style="color: #E53935;">std</span>::cout &lt;&lt; e.what<span style="color: #494949;">()</span> &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+            <span style="color: #bbb;">}</span>
+        <span style="color: #494949;">}</span>
+      <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>command == <span style="color: #494949;">"setInput"</span><span style="color: #bbb;">)</span> || <span style="color: #bbb;">(</span>command == <span style="color: #494949;">"si"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        <span style="color: #494949;">{</span>
+          <span style="color: #E53935; font-style: italic;">try</span>
+            <span style="color: #bbb;">{</span>
+              <span style="color: #E53935;">std</span>::cin &gt;&gt; argument1;
+              vm.setInput<span style="color: #494949;">(</span>argument1<span style="color: #494949;">)</span>;
+            <span style="color: #bbb;">}</span>
+          <span style="color: #E53935; font-style: italic;">catch</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">invalid_argument</span>&amp; <span style="font-style: italic;">e</span><span style="color: #bbb;">)</span>
+            <span style="color: #bbb;">{</span>
+              <span style="color: #E53935;">std</span>::cout &lt;&lt; e.what<span style="color: #494949;">()</span> &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+            <span style="color: #bbb;">}</span>
+        <span style="color: #494949;">}</span>
+      <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>command == <span style="color: #494949;">"quit"</span><span style="color: #bbb;">)</span> || <span style="color: #bbb;">(</span>command == <span style="color: #494949;">"q"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        <span style="color: #494949;">{</span>
+          quit = <span style="color: #E53935;">true</span>;
+        <span style="color: #494949;">}</span> 
+      <span style="color: #E53935; font-style: italic;">else</span> 
+        <span style="color: #494949;">{</span>
+          <span style="color: #E53935;">std</span>::cout &lt;&lt; errorText<span style="color: #bbb;">()</span>;
+        <span style="color: #494949;">}</span>
+    <span style="color: #bbb;">}</span> <span style="color: #E53935; font-style: italic;">while</span> <span style="color: #bbb;">(</span><span style="color: #000; font-weight: bold;">!</span>quit<span style="color: #bbb;">)</span>;
+  <span style="color: #E53935;">std</span>::cout &lt;&lt; quitText<span style="color: #bbb;">()</span>;
+
+  <span style="color: #E53935; font-style: italic;">return</span> 0;
+<span style="color: #494949;">}</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgdb82a0d" class="outline-3">
+<h3 id="orgdb82a0d">SystemBvm.h</h3>
+<div class="outline-text-3" id="text-orgdb82a0d">
+<div class="org-src-container">
+<pre class="src src-C++"><span style="color: #000; font-weight: bold;">#pragma</span> once
+
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">fstream</span><span style="color: #494949;">&gt;</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">iostream</span><span style="color: #494949;">&gt;</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">cmath</span><span style="color: #494949;">&gt;</span>
+
+<span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;"> * This is the basic system\b vm with 1024 possible indirectly addressed locations in memory. The addresses FD and FE are used for input and output, repsectively</span>
+<span style="color: #a4a4a4; font-style: italic;"> */</span>
+<span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">short</span> <span style="font-style: italic;">WORD_SIZE</span> = 32;
+<span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">short</span> <span style="font-style: italic;">IMM_ADDR_SPACE_SIZE</span> = 256;
+<span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">unsigned</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">IDR_ADDR_SPACE_SIZE</span> = 1024;
+
+<span style="color: #E53935; font-style: italic;">class</span> <span style="color: #E53935;">SystemBvm1024</span>
+<span style="color: #494949;">{</span>
+<span style="color: #E53935; font-style: italic;">private</span>:
+  <span style="color: #E53935;">bool</span> <span style="font-style: italic;">immediateAddressSpace</span><span style="color: #bbb;">[</span>IMM_ADDR_SPACE_SIZE<span style="color: #bbb;">][</span>WORD_SIZE<span style="color: #bbb;">]</span>;
+  <span style="color: #E53935;">bool</span> <span style="font-style: italic;">indirectAddressSpace</span><span style="color: #bbb;">[</span>IDR_ADDR_SPACE_SIZE<span style="color: #bbb;">][</span>WORD_SIZE<span style="color: #bbb;">]</span>;
+  <span style="color: #E53935;">short</span> <span style="font-style: italic;">instructionCounter</span>;
+
+
+  <span style="color: #E53935;">short</span> <span style="font-weight: bold; font-style: italic;">addressToShort</span><span style="color: #bbb;">(</span><span style="color: #E53935;">short</span> <span style="font-style: italic;">start</span><span style="color: #bbb;">)</span> 
+  <span style="color: #bbb;">{</span>
+    <span style="color: #E53935;">short</span> <span style="font-style: italic;">address</span> = 0;
+    <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">i</span> = 8; i &gt; 0; i--<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>immediateAddressSpace<span style="color: #494949;">[</span>instructionCounter<span style="color: #494949;">][</span>i + start - 1<span style="color: #494949;">]</span><span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">{</span>
+            address += pow<span style="color: #494949;">(</span>2,<span style="color: #bbb;">(</span>8 - i<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>;
+          <span style="color: #bbb;">}</span>
+      <span style="color: #494949;">}</span>
+    <span style="color: #E53935; font-style: italic;">return</span> address;
+  <span style="color: #bbb;">}</span>
+
+  <span style="color: #E53935;">unsigned</span> <span style="color: #E53935;">int</span> <span style="font-weight: bold; font-style: italic;">addrToInt</span><span style="color: #bbb;">(</span><span style="color: #E53935;">short</span> <span style="font-style: italic;">addr</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">{</span>
+    <span style="color: #E53935;">unsigned</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">address</span> = 0;
+    <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">i</span> = WORD_SIZE; i &gt; 0; i--<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>immediateAddressSpace<span style="color: #494949;">[</span>instructionCounter<span style="color: #494949;">][</span>i - 1<span style="color: #494949;">]</span><span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">{</span>
+            address += pow<span style="color: #494949;">(</span>2, <span style="color: #bbb;">(</span>8 - i<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>;
+          <span style="color: #bbb;">}</span>
+      <span style="color: #494949;">}</span>
+    <span style="color: #E53935; font-style: italic;">return</span> address;
+  <span style="color: #bbb;">}</span>
+  <span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">    instruction : JIE</span>
+<span style="color: #a4a4a4; font-style: italic;">    binary representatioin : 0000 1010</span>
+<span style="color: #a4a4a4; font-style: italic;">    usage :</span>
+<span style="color: #a4a4a4; font-style: italic;">    JIE [argument address] [argument address] [argument address]</span>
+<span style="color: #a4a4a4; font-style: italic;">    jumps to the third argument address if the value of the first argument</span>
+<span style="color: #a4a4a4; font-style: italic;">    address equals the second argumet address</span>
+<span style="color: #a4a4a4; font-style: italic;">  */</span>
+  <span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">JIE</span><span style="color: #bbb;">()</span>
+  <span style="color: #bbb;">{</span>
+    <span style="color: #E53935;">bool</span> <span style="font-style: italic;">addrEquality</span> = <span style="color: #E53935;">true</span>;
+    <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">short</span> <span style="font-style: italic;">argAddr0</span> = addressToShort<span style="color: #494949;">(</span>8<span style="color: #494949;">)</span>;
+    <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">short</span> <span style="font-style: italic;">argAddr1</span> = addressToShort<span style="color: #494949;">(</span>16<span style="color: #494949;">)</span>;
+    <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">short</span> <span style="font-style: italic;">argAddr2</span> = addressToShort<span style="color: #494949;">(</span>24<span style="color: #494949;">)</span>;
+
+    <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">i</span> = 0; i &lt; WORD_SIZE; i++<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>immediateAddressSpace<span style="color: #494949;">[</span>argAddr0<span style="color: #494949;">][</span>i<span style="color: #494949;">]</span> != immediateAddressSpace<span style="color: #494949;">[</span>argAddr1<span style="color: #494949;">][</span>i<span style="color: #494949;">]</span><span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">{</span>
+            addrEquality = <span style="color: #E53935;">false</span>;
+          <span style="color: #bbb;">}</span>
+      <span style="color: #494949;">}</span>
+
+    <span style="color: #E53935; font-style: italic;">if</span><span style="color: #494949;">(</span>addrEquality<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        instructionCounter = argAddr2;
+      <span style="color: #494949;">}</span>
+    <span style="color: #E53935; font-style: italic;">else</span>
+      <span style="color: #494949;">{</span>
+        instructionCounter++;
+      <span style="color: #494949;">}</span>
+  <span style="color: #bbb;">}</span>
+  <span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">    instruction : JMP</span>
+<span style="color: #a4a4a4; font-style: italic;">    binary representatioin : 0000 0101</span>
+<span style="color: #a4a4a4; font-style: italic;">    usage :</span>
+<span style="color: #a4a4a4; font-style: italic;">    JMP [argument address]</span>
+<span style="color: #a4a4a4; font-style: italic;">    unconditionally jumps to the argument address provided</span>
+<span style="color: #a4a4a4; font-style: italic;">  */</span>
+  <span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">JMP</span><span style="color: #bbb;">()</span>
+  <span style="color: #bbb;">{</span>
+    instructionCounter = addressToShort<span style="color: #494949;">(</span>8<span style="color: #494949;">)</span>;
+  <span style="color: #bbb;">}</span>
+  <span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">    instruction : MOV</span>
+<span style="color: #a4a4a4; font-style: italic;">    binary representatioin : 0000 1100</span>
+<span style="color: #a4a4a4; font-style: italic;">    usage :</span>
+<span style="color: #a4a4a4; font-style: italic;">    MOV [argument address] [argument address]</span>
+<span style="color: #a4a4a4; font-style: italic;">    copies the value stored in the first argument address to the second argument</span>
+<span style="color: #a4a4a4; font-style: italic;">    address unconditionally</span>
+<span style="color: #a4a4a4; font-style: italic;">  */</span>
+  <span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">MOV</span><span style="color: #bbb;">()</span>
+  <span style="color: #bbb;">{</span>
+    <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">short</span> <span style="font-style: italic;">argAddr0</span> = addressToShort<span style="color: #494949;">(</span>8<span style="color: #494949;">)</span>;
+    <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">short</span> <span style="font-style: italic;">argAddr1</span> = addressToShort<span style="color: #494949;">(</span>16<span style="color: #494949;">)</span>;
+        
+    <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">i</span> = 0; i &lt; WORD_SIZE; i++<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        immediateAddressSpace<span style="color: #bbb;">[</span>argAddr1<span style="color: #bbb;">][</span>i<span style="color: #bbb;">]</span> = immediateAddressSpace<span style="color: #bbb;">[</span>argAddr0<span style="color: #bbb;">][</span>i<span style="color: #bbb;">]</span>;
+      <span style="color: #494949;">}</span>
+
+    instructionCounter++;
+  <span style="color: #bbb;">}</span>
+  <span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">    instruction : ADD</span>
+<span style="color: #a4a4a4; font-style: italic;">    binary representatioin : 0000 1011</span>
+<span style="color: #a4a4a4; font-style: italic;">    usage :</span>
+<span style="color: #a4a4a4; font-style: italic;">    ADD [argument address] [argument address] [argument address]</span>
+<span style="color: #a4a4a4; font-style: italic;">    adds the contents of the first argument address to the second argument</span>
+<span style="color: #a4a4a4; font-style: italic;">    address and then places the result in the third argument address</span>
+<span style="color: #a4a4a4; font-style: italic;">  */</span>
+  <span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">ADD</span><span style="color: #bbb;">()</span>
+  <span style="color: #bbb;">{</span>
+    <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">short</span> <span style="font-style: italic;">argAddr0</span> = addressToShort<span style="color: #494949;">(</span>8<span style="color: #494949;">)</span>;
+    <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">short</span> <span style="font-style: italic;">argAddr1</span> = addressToShort<span style="color: #494949;">(</span>16<span style="color: #494949;">)</span>;
+    <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">short</span> <span style="font-style: italic;">argAddr2</span> = addressToShort<span style="color: #494949;">(</span>24<span style="color: #494949;">)</span>;
+
+    <span style="color: #E53935;">bool</span> <span style="font-style: italic;">carry</span> = <span style="color: #E53935;">false</span>,
+      <span style="font-style: italic;">bit0</span> = <span style="color: #E53935;">false</span>,
+      <span style="font-style: italic;">bit1</span> = <span style="color: #E53935;">false</span>;
+
+    <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">i</span> = WORD_SIZE; i &gt;= 0; i--<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        bit0 = immediateAddressSpace<span style="color: #bbb;">[</span>argAddr0<span style="color: #bbb;">][</span>i<span style="color: #bbb;">]</span>;
+        bit1 = immediateAddressSpace<span style="color: #bbb;">[</span>argAddr1<span style="color: #bbb;">][</span>i<span style="color: #bbb;">]</span>;
+        <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span><span style="color: #494949;">(</span>bit0 + bit1 == 1<span style="color: #494949;">)</span> &amp;&amp; <span style="color: #494949;">(</span>carry == 0<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">{</span>
+            immediateAddressSpace<span style="color: #494949;">[</span>argAddr2<span style="color: #494949;">][</span>i<span style="color: #494949;">]</span> = 1;
+            <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"1"</span>;
+          <span style="color: #bbb;">}</span>
+        <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span><span style="color: #494949;">(</span>bit0 + bit1 == 0<span style="color: #494949;">)</span> &amp;&amp; <span style="color: #494949;">(</span>carry == 1<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">{</span>
+            immediateAddressSpace<span style="color: #494949;">[</span>argAddr2<span style="color: #494949;">][</span>i<span style="color: #494949;">]</span> = 1;
+            carry = 0;
+            <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"2"</span>;
+          <span style="color: #bbb;">}</span>
+        <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>bit0 + bit1 + carry == 0<span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">{</span>
+            immediateAddressSpace<span style="color: #494949;">[</span>argAddr2<span style="color: #494949;">][</span>i<span style="color: #494949;">]</span> = 0;
+            carry = 0;
+            <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"3"</span>;
+          <span style="color: #bbb;">}</span>
+        <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>bit0 + bit1 + carry == 2<span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">{</span>
+            immediateAddressSpace<span style="color: #494949;">[</span>argAddr2<span style="color: #494949;">][</span>i<span style="color: #494949;">]</span> = 0;
+            carry = 1;
+            <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"4"</span>;
+          <span style="color: #bbb;">}</span>
+        <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>bit0 + bit1 + carry == 3<span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">{</span>
+            immediateAddressSpace<span style="color: #494949;">[</span>argAddr2<span style="color: #494949;">][</span>i<span style="color: #494949;">]</span> = 1;
+            carry = 1;
+            <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"5"</span>;
+          <span style="color: #bbb;">}</span>
+      <span style="color: #494949;">}</span>
+    <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+    <span style="color: #E53935;">std</span>::cout &lt;&lt; argAddr0 &lt;&lt; <span style="color: #494949;">"::"</span> &lt;&lt; argAddr1 &lt;&lt; <span style="color: #494949;">"::"</span> &lt;&lt; argAddr2 &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+
+    instructionCounter++;
+  <span style="color: #bbb;">}</span>
+  <span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">    instruction : FLP</span>
+<span style="color: #a4a4a4; font-style: italic;">    binary representatioin : 0000 0100</span>
+<span style="color: #a4a4a4; font-style: italic;">    usage :</span>
+<span style="color: #a4a4a4; font-style: italic;">    FLP [argument address]</span>
+<span style="color: #a4a4a4; font-style: italic;">    flips the bits in the argument address provided</span>
+<span style="color: #a4a4a4; font-style: italic;">  */</span>
+  <span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">FLP</span><span style="color: #bbb;">()</span>
+  <span style="color: #bbb;">{</span>
+    <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">short</span> <span style="font-style: italic;">argAddr0</span> = addressToShort<span style="color: #494949;">(</span>8<span style="color: #494949;">)</span>;
+    <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">i</span> = 0; i &lt; WORD_SIZE; i++<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        immediateAddressSpace<span style="color: #bbb;">[</span>argAddr0<span style="color: #bbb;">][</span>i<span style="color: #bbb;">]</span> = <span style="color: #000; font-weight: bold;">!</span>immediateAddressSpace<span style="color: #bbb;">[</span>argAddr0<span style="color: #bbb;">][</span>i<span style="color: #bbb;">]</span>;
+      <span style="color: #494949;">}</span>
+    instructionCounter++;
+  <span style="color: #bbb;">}</span>
+  <span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">    instruction : RED</span>
+<span style="color: #a4a4a4; font-style: italic;">    binary representatioin : 0000 1101</span>
+<span style="color: #a4a4a4; font-style: italic;">    usage :</span>
+<span style="color: #a4a4a4; font-style: italic;">    RED [argument address] [argument address]</span>
+<span style="color: #a4a4a4; font-style: italic;">    special instruction, reads the value located in the directly addressed</span>
+<span style="color: #a4a4a4; font-style: italic;">    space to the second argument address, the first argument address provides</span>
+<span style="color: #a4a4a4; font-style: italic;">    the pointer to the location of the data in the directly addressed space</span>
+<span style="color: #a4a4a4; font-style: italic;">  */</span>
+  <span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">RED</span><span style="color: #bbb;">()</span>
+  <span style="color: #bbb;">{</span>
+    <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">short</span> <span style="font-style: italic;">argAddr0</span> = addressToShort<span style="color: #494949;">(</span>8<span style="color: #494949;">)</span>;
+    <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">short</span> <span style="font-style: italic;">argAddr1</span> = addressToShort<span style="color: #494949;">(</span>16<span style="color: #494949;">)</span>;
+    <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">unsigned</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">idrAddr</span> = addrToInt<span style="color: #494949;">(</span>argAddr0<span style="color: #494949;">)</span>;
+
+    <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">i</span> = 0; i &lt; WORD_SIZE; i++<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        immediateAddressSpace<span style="color: #bbb;">[</span>argAddr1<span style="color: #bbb;">][</span>i<span style="color: #bbb;">]</span> = indirectAddressSpace<span style="color: #bbb;">[</span>idrAddr<span style="color: #bbb;">][</span>i<span style="color: #bbb;">]</span>;
+      <span style="color: #494949;">}</span>
+    instructionCounter++;
+  <span style="color: #bbb;">}</span>
+  <span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">    instruction : WRT</span>
+<span style="color: #a4a4a4; font-style: italic;">    binary representatioin : 0000 0010</span>
+<span style="color: #a4a4a4; font-style: italic;">    usage :</span>
+<span style="color: #a4a4a4; font-style: italic;">    WRT [argument address] [argument address]</span>
+<span style="color: #a4a4a4; font-style: italic;">    special instruction, writes the value located in the second argument</span>
+<span style="color: #a4a4a4; font-style: italic;">    address to an address located in the directly addressed space, the first</span>
+<span style="color: #a4a4a4; font-style: italic;">    argument address provides the pointer to the location of the data in the</span>
+<span style="color: #a4a4a4; font-style: italic;">    directly addresssed space</span>
+<span style="color: #a4a4a4; font-style: italic;">  */</span>
+  <span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">WRT</span><span style="color: #bbb;">()</span>
+  <span style="color: #bbb;">{</span>
+    <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">short</span> <span style="font-style: italic;">argAddr0</span> = addressToShort<span style="color: #494949;">(</span>8<span style="color: #494949;">)</span>;
+    <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">short</span> <span style="font-style: italic;">argAddr1</span> = addressToShort<span style="color: #494949;">(</span>16<span style="color: #494949;">)</span>;
+    <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">unsigned</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">idrAddr</span> = addrToInt<span style="color: #494949;">(</span>argAddr0<span style="color: #494949;">)</span>;
+
+    <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">i</span> = 0; i &lt; WORD_SIZE; i++<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        indirectAddressSpace<span style="color: #bbb;">[</span>idrAddr<span style="color: #bbb;">][</span>i<span style="color: #bbb;">]</span> = immediateAddressSpace<span style="color: #bbb;">[</span>argAddr1<span style="color: #bbb;">][</span>i<span style="color: #bbb;">]</span>;
+      <span style="color: #494949;">}</span>
+    instructionCounter++;
+  <span style="color: #bbb;">}</span>
+  <span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">    instruction : STP</span>
+<span style="color: #a4a4a4; font-style: italic;">    binary representatioin : 0000 1111</span>
+<span style="color: #a4a4a4; font-style: italic;">    usage :</span>
+<span style="color: #a4a4a4; font-style: italic;">    STP</span>
+<span style="color: #a4a4a4; font-style: italic;">    Stops the execution of code by system/b</span>
+<span style="color: #a4a4a4; font-style: italic;">  */</span>
+  <span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">STP</span><span style="color: #bbb;">()</span>
+  <span style="color: #bbb;">{</span>
+
+  <span style="color: #bbb;">}</span>
+
+<span style="color: #E53935; font-style: italic;">public</span>:
+  <span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">stepCycle</span><span style="color: #bbb;">()</span>
+  <span style="color: #bbb;">{</span>
+    <span style="color: #E53935;">bool</span> <span style="font-style: italic;">i0</span>, <span style="font-style: italic;">i1</span>, <span style="font-style: italic;">i2</span>, <span style="font-style: italic;">i3</span>;
+
+                
+    i0 = immediateAddressSpace<span style="color: #494949;">[</span>instructionCounter<span style="color: #494949;">][</span>4<span style="color: #494949;">]</span>;
+    i1 = immediateAddressSpace<span style="color: #494949;">[</span>instructionCounter<span style="color: #494949;">][</span>5<span style="color: #494949;">]</span>;
+    i2 = immediateAddressSpace<span style="color: #494949;">[</span>instructionCounter<span style="color: #494949;">][</span>6<span style="color: #494949;">]</span>;
+    i3 = immediateAddressSpace<span style="color: #494949;">[</span>instructionCounter<span style="color: #494949;">][</span>7<span style="color: #494949;">]</span>;
+
+    <span style="color: #a4a4a4; font-style: italic;">//</span><span style="color: #a4a4a4; font-style: italic;">JIE</span>
+    <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>i0 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>i1 &amp;&amp; i2 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>i3<span style="color: #494949;">)</span> 
+      <span style="color: #494949;">{</span>
+        JIE<span style="color: #bbb;">()</span>;
+      <span style="color: #494949;">}</span>
+    <span style="color: #a4a4a4; font-style: italic;">//</span><span style="color: #a4a4a4; font-style: italic;">JMP</span>
+    <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span><span style="color: #000; font-weight: bold;">!</span>i0 &amp;&amp; i1 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>i2 &amp;&amp; i3<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        JMP<span style="color: #bbb;">()</span>;
+      <span style="color: #494949;">}</span>
+    <span style="color: #a4a4a4; font-style: italic;">//</span><span style="color: #a4a4a4; font-style: italic;">MOV</span>
+    <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>i0 &amp;&amp; i1 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>i2 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>i3<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        MOV<span style="color: #bbb;">()</span>;
+      <span style="color: #494949;">}</span>
+    <span style="color: #a4a4a4; font-style: italic;">//</span><span style="color: #a4a4a4; font-style: italic;">ADD</span>
+    <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>i0 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>i1 &amp;&amp; i2 &amp;&amp; i3<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        ADD<span style="color: #bbb;">()</span>;
+      <span style="color: #494949;">}</span>
+    <span style="color: #a4a4a4; font-style: italic;">//</span><span style="color: #a4a4a4; font-style: italic;">FLP</span>
+    <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span><span style="color: #000; font-weight: bold;">!</span>i0 &amp;&amp; i1 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>i2 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>i3<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        FLP<span style="color: #bbb;">()</span>;
+      <span style="color: #494949;">}</span>
+    <span style="color: #a4a4a4; font-style: italic;">//</span><span style="color: #a4a4a4; font-style: italic;">RED</span>
+    <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>i0 &amp;&amp; i1 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>i2 &amp;&amp; i3<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        RED<span style="color: #bbb;">()</span>;
+      <span style="color: #494949;">}</span>
+    <span style="color: #a4a4a4; font-style: italic;">//</span><span style="color: #a4a4a4; font-style: italic;">WRT</span>
+    <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span><span style="color: #000; font-weight: bold;">!</span>i0 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>i1 &amp;&amp; i2 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>i3<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        WRT<span style="color: #bbb;">()</span>;
+      <span style="color: #494949;">}</span>
+    <span style="color: #a4a4a4; font-style: italic;">//</span><span style="color: #a4a4a4; font-style: italic;">STP</span>
+    <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>i0 &amp;&amp; i1 &amp;&amp; i2 &amp;&amp; i3<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        STP<span style="color: #bbb;">()</span>;
+      <span style="color: #494949;">}</span>
+    <span style="color: #E53935; font-style: italic;">else</span>
+      <span style="color: #494949;">{</span>
+        instructionCounter++;
+      <span style="color: #494949;">}</span>
+  <span style="color: #bbb;">}</span>
+
+  <span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">writeInput</span><span style="color: #bbb;">(</span><span style="color: #E53935;">bool</span> <span style="font-style: italic;">input</span><span style="color: #494949;">[</span>WORD_SIZE<span style="color: #494949;">]</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">{</span>
+    <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">i</span> = 0; i &lt; WORD_SIZE; i++<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        input<span style="color: #bbb;">[</span>i<span style="color: #bbb;">]</span> = immediateAddressSpace<span style="color: #bbb;">[</span>254<span style="color: #bbb;">][</span>i<span style="color: #bbb;">]</span>;
+      <span style="color: #494949;">}</span>
+  <span style="color: #bbb;">}</span>
+
+  <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-weight: bold; font-style: italic;">getOutput</span><span style="color: #bbb;">()</span>
+  <span style="color: #bbb;">{</span>
+    <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">output</span> = <span style="color: #494949;">""</span>;
+    <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">i</span> = 0; i &lt; WORD_SIZE; i++<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>immediateAddressSpace<span style="color: #494949;">[</span>254<span style="color: #494949;">][</span>i<span style="color: #494949;">]</span><span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">{</span>
+            output += <span style="color: #494949;">"1"</span>;
+          <span style="color: #bbb;">}</span>
+        <span style="color: #E53935; font-style: italic;">else</span>
+          <span style="color: #bbb;">{</span>
+            output += <span style="color: #494949;">"0"</span>;
+          <span style="color: #bbb;">}</span>
+      <span style="color: #494949;">}</span>
+    <span style="color: #E53935; font-style: italic;">return</span> output;
+  <span style="color: #bbb;">}</span>
+
+  <span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">setInput</span><span style="color: #bbb;">(</span><span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">input</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">{</span>
+    <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">i</span> = 0; i &lt; WORD_SIZE; i++<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>input<span style="color: #494949;">[</span>i<span style="color: #494949;">]</span> == <span style="color: #494949;">'1'</span><span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">{</span>
+            immediateAddressSpace<span style="color: #494949;">[</span>253<span style="color: #494949;">][</span>i<span style="color: #494949;">]</span> = 1;
+          <span style="color: #bbb;">}</span>
+        <span style="color: #E53935; font-style: italic;">else</span>
+          <span style="color: #bbb;">{</span>
+            immediateAddressSpace<span style="color: #494949;">[</span>253<span style="color: #494949;">][</span>i<span style="color: #494949;">]</span> = 0;
+          <span style="color: #bbb;">}</span>
+      <span style="color: #494949;">}</span>
+  <span style="color: #bbb;">}</span>
+
+  <span style="color: #E53935;">short</span> <span style="font-weight: bold; font-style: italic;">getinstructionCounter</span><span style="color: #bbb;">()</span>
+  <span style="color: #bbb;">{</span>
+    <span style="color: #E53935; font-style: italic;">return</span> instructionCounter;
+  <span style="color: #bbb;">}</span>
+
+  <span style="color: #a4a4a4; font-style: italic;">/* </span>
+<span style="color: #a4a4a4; font-style: italic;">   * this is a dummy bootloader designed to clear the immediately addressable space and load the </span>
+<span style="color: #a4a4a4; font-style: italic;">   * relevant system/b machine code file into the immediately addressable file space</span>
+<span style="color: #a4a4a4; font-style: italic;">   */</span>
+  <span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">boot</span><span style="color: #bbb;">(</span><span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">filename</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">{</span>
+    <span style="color: #E53935;">std</span>::<span style="color: #E53935;">ifstream</span> <span style="font-style: italic;">inFile</span><span style="color: #494949;">(</span>filename<span style="color: #494949;">)</span>;
+    <span style="color: #E53935;">char</span> <span style="font-style: italic;">bit</span>;
+
+    instructionCounter = 0;
+    <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">i</span> = 0; i &lt; IMM_ADDR_SPACE_SIZE; i++<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">j</span> = 0; j &lt; WORD_SIZE; j++<span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">{</span>
+            immediateAddressSpace<span style="color: #494949;">[</span>i<span style="color: #494949;">][</span>j<span style="color: #494949;">]</span> = 0;
+          <span style="color: #bbb;">}</span>
+      <span style="color: #494949;">}</span>
+
+    <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">i</span> = 0; i &lt; IMM_ADDR_SPACE_SIZE; i++<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">j</span> = 0; j &lt; WORD_SIZE; j++<span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">{</span>
+            inFile &gt;&gt; bit;
+            <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>inFile<span style="color: #494949;">)</span>
+              <span style="color: #494949;">{</span>
+                <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>bit == <span style="color: #494949;">'1'</span><span style="color: #bbb;">)</span>
+                  <span style="color: #bbb;">{</span>
+                    immediateAddressSpace<span style="color: #494949;">[</span>i<span style="color: #494949;">][</span>j<span style="color: #494949;">]</span> = 1;
+                  <span style="color: #bbb;">}</span>
+                <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>bit == <span style="color: #494949;">'0'</span><span style="color: #bbb;">)</span>
+                  <span style="color: #bbb;">{</span>
+                    immediateAddressSpace<span style="color: #494949;">[</span>i<span style="color: #494949;">][</span>j<span style="color: #494949;">]</span> = 0;
+                  <span style="color: #bbb;">}</span>
+              <span style="color: #494949;">}</span>
+            <span style="color: #E53935; font-style: italic;">else</span>
+              <span style="color: #494949;">{</span>
+                immediateAddressSpace<span style="color: #bbb;">[</span>i<span style="color: #bbb;">][</span>j<span style="color: #bbb;">]</span> = 0;
+              <span style="color: #494949;">}</span>
+          <span style="color: #bbb;">}</span>
+      <span style="color: #494949;">}</span>
+    instructionCounter = 0;
+  <span style="color: #bbb;">}</span>
+
+  <span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">immDump</span><span style="color: #bbb;">()</span>
+  <span style="color: #bbb;">{</span>
+    <span style="color: #E53935;">std</span>::<span style="color: #E53935;">ofstream</span> <span style="font-style: italic;">otFile</span><span style="color: #494949;">(</span><span style="color: #494949;">"immDump.txt"</span><span style="color: #494949;">)</span>;
+
+    otFile &lt;&lt; <span style="color: #494949;">"current instruction counter : "</span> &lt;&lt; instructionCounter &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+    otFile &lt;&lt; <span style="color: #494949;">"Immediate Address Space State :"</span> &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+    <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">i</span> = 0; i &lt; IMM_ADDR_SPACE_SIZE; i++<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">j</span> = 0; j &lt; WORD_SIZE; j++<span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">{</span>
+            otFile &lt;&lt; immediateAddressSpace<span style="color: #494949;">[</span>i<span style="color: #494949;">][</span>j<span style="color: #494949;">]</span>;
+          <span style="color: #bbb;">}</span>
+        otFile &lt;&lt; <span style="color: #494949;">" "</span> &lt;&lt; i &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+      <span style="color: #494949;">}</span>
+    otFile.close<span style="color: #494949;">()</span>;
+  <span style="color: #bbb;">}</span>
+  <span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">idrDump</span><span style="color: #bbb;">()</span>
+  <span style="color: #bbb;">{</span>
+    <span style="color: #E53935;">std</span>::<span style="color: #E53935;">ofstream</span> <span style="font-style: italic;">otFile</span><span style="color: #494949;">(</span><span style="color: #494949;">"idrDump.txt"</span><span style="color: #494949;">)</span>;
+    otFile &lt;&lt; <span style="color: #494949;">"current instruction counter : "</span> &lt;&lt; instructionCounter &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+    otFile &lt;&lt; <span style="color: #494949;">"indirect address space state : "</span> &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+    <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">i</span> = 0; i &lt; IDR_ADDR_SPACE_SIZE; i++<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">j</span> = 0; j &lt; WORD_SIZE; j++<span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">{</span>
+            otFile &lt;&lt; indirectAddressSpace<span style="color: #494949;">[</span>i<span style="color: #494949;">][</span>j<span style="color: #494949;">]</span>;
+          <span style="color: #bbb;">}</span>
+        otFile &lt;&lt; <span style="color: #494949;">" "</span> &lt;&lt; i &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+      <span style="color: #494949;">}</span>
+    otFile.close<span style="color: #494949;">()</span>;
+  <span style="color: #bbb;">}</span>
+<span style="color: #494949;">}</span>;
+
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org4d25e41" class="outline-3">
+<h3 id="org4d25e41">ioStrings.h</h3>
+<div class="outline-text-3" id="text-org4d25e41">
+<p>
+This is a file that I used to store functions that would return strings. Honestly I probably should have just had a file of constant functions, but these were the old days when I didn't know better and wanted everything to be "functional" regardless of how good an idea that was. <label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> Be glad I have spared you from the worst of it where I wrote several C++ programs with only recursion and constants, no loops or mutable variables. I probably gave my algorithms teacher nightmares.</span> As a consequence I did things a bit weirdly.
+</p>
+<div class="org-src-container">
+<pre class="src src-C++"><span style="color: #000; font-weight: bold;">#pragma</span> once
+
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">string</span><span style="color: #494949;">&gt;</span>
+
+<span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-weight: bold; font-style: italic;">welcomeText</span><span style="color: #494949;">()</span>
+<span style="color: #494949;">{</span>
+        <span style="color: #E53935; font-style: italic;">return</span>
+        <span style="color: #494949;">"                    __                       __   __  \n"</span>
+        <span style="color: #494949;">"   _______  _______/ /____  ____ ___       _/_/  / /_ \n"</span>
+        <span style="color: #494949;">"  / ___/ / / / ___/ __/ _ \\/ __ `__ \\    _/_/   / __ \\\n"</span>
+        <span style="color: #494949;">" (__  ) /_/ (__  ) /_/  __/ / / / / /  _/_/    / /_/ /\n"</span>
+        <span style="color: #494949;">"/____/\\__, /____/\\__/\\___/_/ /_/ /_/  /_/     /_.___/ \n"</span>
+        <span style="color: #494949;">"        /____/                                            \n"</span>
+        <span style="color: #494949;">"a simple virtual machine\n"</span>
+        <span style="color: #494949;">"\n"</span>
+        <span style="color: #494949;">"\n"</span>;
+<span style="color: #494949;">}</span>
+
+<span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-weight: bold; font-style: italic;">errorText</span><span style="color: #494949;">()</span>
+<span style="color: #494949;">{</span>
+        <span style="color: #E53935; font-style: italic;">return</span>
+                <span style="color: #494949;">"Invalid input, could not parse.\n"</span>
+                <span style="color: #494949;">"Abort, Retry, Fail?\n"</span>
+                <span style="color: #494949;">"\n"</span>;
+<span style="color: #494949;">}</span>
+
+<span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-weight: bold; font-style: italic;">manualText</span><span style="color: #494949;">()</span>
+<span style="color: #494949;">{</span>
+        <span style="color: #E53935; font-style: italic;">return</span>
+                <span style="color: #494949;">"system/b manual : \n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"system/b is an evolution on the earlier system/a virtual machine archictecture using\n"</span>
+                <span style="color: #494949;">"a similar 32 bit word size and word addressed memory, but now with direct addressing\n"</span>
+                <span style="color: #494949;">"allowing for a signifigant expansion in the size of programs that can be run by\n"</span>
+                <span style="color: #494949;">"system/b from 1024 bytes to up to 17179869184 bytes of code. This is divided between\n"</span>
+                <span style="color: #494949;">"the 1024 bytes of immediately addressed space and 17179869184 bytes of directly\n"</span>
+                <span style="color: #494949;">"addressed space. Direct addressing is conducted using the RED and WRT instructions. An\n"</span>
+                <span style="color: #494949;">"explination of the instructions used by system/b and their use is contained in the\n"</span>
+                <span style="color: #494949;">"\"instruction setsection\" of the system/b manual.\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"sections :\n"</span>
+                <span style="color: #494949;">"0 basic operation \\ shell commands\n"</span>
+                <span style="color: #494949;">"1 instruction set\n"</span>
+                <span style="color: #494949;">"2 debugging code\n"</span>
+                <span style="color: #494949;">"3 system implmentation\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"0 basic operation \\ shell commands :\n"</span>
+                <span style="color: #494949;">"command, alias | arguments                          | description \n"</span>
+                <span style="color: #494949;">"assemble,  a   | input_file(sba), output_file(sbm)  | assembles the input file\n"</span>
+                <span style="color: #494949;">"manual,    m   | null                               | displays this manual\n"</span>
+                <span style="color: #494949;">"quit,      q   | null                               | quits the shell\n"</span>
+                <span style="color: #494949;">"boot,      b   | input_file(sbm)                    | boots the systm/b vm with\n"</span>
+                <span style="color: #494949;">"               |                                    | the code in the immediately\n"</span>
+                <span style="color: #494949;">"               |                                    | addressed space.\n"</span>
+                <span style="color: #494949;">"stepCycle, sc  | null                               | steps the system/b vm one cycle\n"</span>
+                <span style="color: #494949;">"immDump,   imm | null                               | dumps the immediately addressed\n"</span>
+                <span style="color: #494949;">"               |                                    | space to the file \"immDump.txt\"\n"</span>
+                <span style="color: #494949;">"idrDump,   idr | null                               | dumps the indirectly addressed\n"</span>
+                <span style="color: #494949;">"               |                                    | space to the file \"idrDump.txt\"\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"1 instruction set :\n"</span>
+                <span style="color: #494949;">"The system/b instruction set is a fixed width instructon set containing eight\n"</span>
+                <span style="color: #494949;">"instructions, MOV, ADD, FLP, JIE, JMP, RED, WRT and STP. All instructions except the\n"</span>
+                <span style="color: #494949;">"special instructions RED and WRT only access data from the immediately addressed space.\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"standard instruction format :\n"</span>
+                <span style="color: #494949;">"[instruction] [argument address] [argument address] [argument address]\n"</span>
+                <span style="color: #494949;">"     JIE              AB                 10                23         \n"</span>
+                <span style="color: #494949;">"  0000 1010        1010 1011          0001 0000         0010 0011     \n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"instruction : JIE\n"</span>
+                <span style="color: #494949;">"binary representatioin : 0000 1010\n"</span>
+                <span style="color: #494949;">"usage : \n"</span>
+                <span style="color: #494949;">"JIE [argument address] [argument address] [argument address]\n"</span>
+                <span style="color: #494949;">"jumps to the third argument address if the value of the first argument\n"</span>
+                <span style="color: #494949;">"address equals the second argumet address\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"instruction : JMP\n"</span>
+                <span style="color: #494949;">"binary representatioin : 0000 0101\n"</span>
+                <span style="color: #494949;">"usage : \n"</span>
+                <span style="color: #494949;">"JMP [argument address]\n"</span>
+                <span style="color: #494949;">"unconditionally jumps to the argument address provided\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"instruction : MOV\n"</span>
+                <span style="color: #494949;">"binary representatioin : 0000 1100\n"</span>
+                <span style="color: #494949;">"usage : \n"</span>
+                <span style="color: #494949;">"MOV [argument address] [argument address]\n"</span>
+                <span style="color: #494949;">"copies the value stored in the first argument address to the second argument\n"</span>
+                <span style="color: #494949;">"address unconditionally\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"instruction : ADD\n"</span>
+                <span style="color: #494949;">"binary representatioin : 0000 1011\n"</span>
+                <span style="color: #494949;">"usage : \n"</span>
+                <span style="color: #494949;">"ADD [argument address] [argument address] [argument address]\n"</span>
+                <span style="color: #494949;">"adds the contents of the first argument address to the second argument\n"</span>
+                <span style="color: #494949;">"address and then places the result in the third argument address\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"instruction : FLP\n"</span>
+                <span style="color: #494949;">"binary representatioin : 0000 0100\n"</span>
+                <span style="color: #494949;">"usage : \n"</span>
+                <span style="color: #494949;">"FLP [argument address]\n"</span>
+                <span style="color: #494949;">"flips the bits in the argument address provided\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"instruction : RED\n"</span>
+                <span style="color: #494949;">"binary representatioin : 0000 1101\n"</span>
+                <span style="color: #494949;">"usage : \n"</span>
+                <span style="color: #494949;">"RED [argument address] [argument address]\n"</span>
+                <span style="color: #494949;">"special instruction, reads the value located in the directly addressed\n"</span>
+                <span style="color: #494949;">"space to the second argument address, the first argument address provides\n"</span>
+                <span style="color: #494949;">"the pointer to the location of the data in the directly addressed space\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"instruction : WRT\n"</span>
+                <span style="color: #494949;">"binary representatioin : 0000 0010\n"</span>
+                <span style="color: #494949;">"usage : \n"</span>
+                <span style="color: #494949;">"WRT [argument address] [argument address]\n"</span>
+                <span style="color: #494949;">"special instruction, writes the value located in the second argument\n"</span>
+                <span style="color: #494949;">"address to an address located in the directly addressed space, the first\n"</span>
+                <span style="color: #494949;">"argument address provides the pointer to the location of the data in the\n"</span>
+                <span style="color: #494949;">"directly addresssed space\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"instruction : STP\n"</span>
+                <span style="color: #494949;">"binary representatioin : 0000 1111\n"</span>
+                <span style="color: #494949;">"usage : \n"</span>
+                <span style="color: #494949;">"STP\n"</span>
+                <span style="color: #494949;">"Stops the execution of code by system/b\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"debugging code :\n"</span>
+                <span style="color: #494949;">"To debug system/b assembly programs, simply create a system/b instance\n"</span>
+                <span style="color: #494949;">"and load a system/b machine code file into the machine. Then step through\n"</span>
+                <span style="color: #494949;">"the code using the included assembler using the \"stepCycle\" command, it\n"</span>
+                <span style="color: #494949;">"may be advisable to use the immDump and idrDump commands to gain a \n"</span>
+                <span style="color: #494949;">"snapshot of the immediate address space and the indirect address space.\n"</span>
+                <span style="color: #494949;">"Viewing these snapshots, translate the binary to the assembly yourself and\n"</span>
+                <span style="color: #494949;">"use that to identify how the program is running\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"\n"</span>
+                <span style="color: #494949;">"system implmentation :\n"</span>
+                <span style="color: #494949;">"system/b is a simple machine modled loosely on the Analytical Engine\n"</span>
+                <span style="color: #494949;">"as created by Charles Babbage. The operation of system/b is simple to,\n"</span>
+                <span style="color: #494949;">"visualize. The code is loaded into the immediately addressable space as\n"</span>
+                <span style="color: #494949;">"a series of binary instructions that are read by the machine and then\n"</span>
+                <span style="color: #494949;">"executed, with all non-jump instructions iterating the instruction counter\n"</span>
+                <span style="color: #494949;">"by, causing the next instruction in the immediately addressed space to \n"</span>
+                <span style="color: #494949;">"be executed. Code can be loaded into the directly addressed space using the\n"</span>
+                <span style="color: #494949;">"special WRT instruction and read from it using the RED instruction. All numbers\n"</span>
+                <span style="color: #494949;">"are stored in a little endian two's complment format."</span>;
+<span style="color: #494949;">}</span>
+
+<span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-weight: bold; font-style: italic;">quitText</span><span style="color: #494949;">()</span>
+<span style="color: #494949;">{</span>
+        <span style="color: #E53935; font-style: italic;">return</span>
+                <span style="color: #494949;">"Thank you for using system/b, have a nice day.\n"</span>;
+<span style="color: #494949;">}</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6df7fac" class="outline-3">
+<h3 id="org6df7fac">assembler.h</h3>
+<div class="outline-text-3" id="text-org6df7fac">
+<div class="org-src-container">
+<pre class="src src-C++"><span style="color: #000; font-weight: bold;">#pragma</span> once
+
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">fstream</span><span style="color: #494949;">&gt;</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">bitset</span><span style="color: #494949;">&gt;</span>
+
+<span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">assemble</span><span style="color: #494949;">(</span><span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">inputFile</span>, <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">outputFile</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+  <span style="color: #E53935;">std</span>::<span style="color: #E53935;">ifstream</span> <span style="font-style: italic;">inFile</span>;
+  <span style="color: #E53935;">std</span>::<span style="color: #E53935;">ofstream</span> <span style="font-style: italic;">otFile</span><span style="color: #bbb;">(</span>outputFile<span style="color: #bbb;">)</span>;
+  <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">instruction</span>,
+    <span style="font-style: italic;">argumentAddr1</span>,
+    <span style="font-style: italic;">argumentAddr2</span>,
+    <span style="font-style: italic;">argumentAddr3</span>,
+    <span style="font-style: italic;">machineLine</span>,
+    <span style="font-style: italic;">ignore</span>;
+  <span style="color: #E53935;">bool</span> <span style="font-style: italic;">complete</span> = <span style="color: #E53935;">false</span>;
+
+  inFile.open<span style="color: #bbb;">(</span>inputFile<span style="color: #bbb;">)</span>;
+  <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span><span style="color: #000; font-weight: bold;">!</span>inFile<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">{</span>
+      <span style="color: #E53935; font-style: italic;">throw</span> <span style="color: #E53935;">std</span>::invalid_argument<span style="color: #494949;">(</span><span style="color: #494949;">"infile not accessable"</span><span style="color: #494949;">)</span>;
+    <span style="color: #bbb;">}</span>
+  <span style="color: #E53935; font-style: italic;">while</span> <span style="color: #bbb;">(</span><span style="color: #000; font-weight: bold;">!</span>complete<span style="color: #bbb;">)</span> <span style="color: #bbb;">{</span>
+    inFile &gt;&gt; instruction;
+    <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>inFile<span style="color: #494949;">)</span>
+      <span style="color: #494949;">{</span>
+        <span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">         * this checks if the instruction is actually a comment</span>
+<span style="color: #a4a4a4; font-style: italic;">         */</span>
+        <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>instruction == <span style="color: #494949;">";"</span><span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">{</span>
+            <span style="color: #E53935;">std</span>::getline<span style="color: #494949;">(</span>inFile, ignore<span style="color: #494949;">)</span>;
+          <span style="color: #bbb;">}</span>
+
+        <span style="color: #E53935; font-style: italic;">else</span>
+          <span style="color: #bbb;">{</span>
+            <span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">              instruction : JIE</span>
+<span style="color: #a4a4a4; font-style: italic;">              binary representatioin : 0000 1010</span>
+<span style="color: #a4a4a4; font-style: italic;">              usage :</span>
+<span style="color: #a4a4a4; font-style: italic;">              JIE [argument address] [argument address] [argument address]</span>
+<span style="color: #a4a4a4; font-style: italic;">              jumps to the third argument address if the value of the first argument</span>
+<span style="color: #a4a4a4; font-style: italic;">              address equals the second argumet address</span>
+<span style="color: #a4a4a4; font-style: italic;">            */</span>
+            <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>instruction == <span style="color: #494949;">"JIE"</span><span style="color: #494949;">)</span>
+              <span style="color: #494949;">{</span>
+                inFile &gt;&gt; argumentAddr1;
+                inFile &gt;&gt; argumentAddr2;
+                inFile &gt;&gt; argumentAddr3;
+                machineLine = <span style="color: #494949;">"00001010"</span> + <span style="color: #E53935;">std</span>::bitset<span style="color: #bbb;">&lt;</span>8<span style="color: #bbb;">&gt;(</span>stoi<span style="color: #494949;">(</span>argumentAddr1<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>.to_string<span style="color: #bbb;">()</span> + <span style="color: #E53935;">std</span>::bitset<span style="color: #bbb;">&lt;</span>8<span style="color: #bbb;">&gt;(</span>stoi<span style="color: #494949;">(</span>argumentAddr2<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>.to_string<span style="color: #bbb;">()</span> + <span style="color: #E53935;">std</span>::bitset<span style="color: #bbb;">&lt;</span>8<span style="color: #bbb;">&gt;(</span>stoi<span style="color: #494949;">(</span>argumentAddr3<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>.to_string<span style="color: #bbb;">()</span>;
+              <span style="color: #494949;">}</span>
+
+            <span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">              instruction : JMP</span>
+<span style="color: #a4a4a4; font-style: italic;">              binary representatioin : 0000 0101</span>
+<span style="color: #a4a4a4; font-style: italic;">              usage :</span>
+<span style="color: #a4a4a4; font-style: italic;">              JMP [argument address]</span>
+<span style="color: #a4a4a4; font-style: italic;">              unconditionally jumps to the argument address provided</span>
+<span style="color: #a4a4a4; font-style: italic;">            */</span>
+            <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>instruction == <span style="color: #494949;">"JMP"</span><span style="color: #494949;">)</span>
+              <span style="color: #494949;">{</span>
+                inFile &gt;&gt; argumentAddr1;
+                machineLine = <span style="color: #494949;">"00000101"</span> + <span style="color: #E53935;">std</span>::bitset<span style="color: #bbb;">&lt;</span>8<span style="color: #bbb;">&gt;(</span>stoi<span style="color: #494949;">(</span>argumentAddr1<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>.to_string<span style="color: #bbb;">()</span> + <span style="color: #494949;">"0000000000000000"</span>;
+              <span style="color: #494949;">}</span>
+
+            <span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">              instruction : MOV</span>
+<span style="color: #a4a4a4; font-style: italic;">              binary representatioin : 0000 1100</span>
+<span style="color: #a4a4a4; font-style: italic;">              usage :</span>
+<span style="color: #a4a4a4; font-style: italic;">              MOV [argument address] [argument address]</span>
+<span style="color: #a4a4a4; font-style: italic;">              copies the value stored in the first argument address to the second argument</span>
+<span style="color: #a4a4a4; font-style: italic;">              address unconditionally</span>
+<span style="color: #a4a4a4; font-style: italic;">            */</span>
+            <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>instruction == <span style="color: #494949;">"MOV"</span><span style="color: #494949;">)</span>
+              <span style="color: #494949;">{</span>
+                inFile &gt;&gt; argumentAddr1;
+                inFile &gt;&gt; argumentAddr2;
+                machineLine = <span style="color: #494949;">"00001100"</span> + <span style="color: #E53935;">std</span>::bitset<span style="color: #bbb;">&lt;</span>8<span style="color: #bbb;">&gt;(</span>stoi<span style="color: #494949;">(</span>argumentAddr1<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>.to_string<span style="color: #bbb;">()</span> + <span style="color: #E53935;">std</span>::bitset<span style="color: #bbb;">&lt;</span>8<span style="color: #bbb;">&gt;(</span>stoi<span style="color: #494949;">(</span>argumentAddr2<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>.to_string<span style="color: #bbb;">()</span> + <span style="color: #494949;">"00000000"</span>;
+              <span style="color: #494949;">}</span>
+
+
+            <span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">              instruction : ADD</span>
+<span style="color: #a4a4a4; font-style: italic;">              binary representatioin : 0000 1011</span>
+<span style="color: #a4a4a4; font-style: italic;">              usage :</span>
+<span style="color: #a4a4a4; font-style: italic;">              ADD [argument address] [argument address] [argument address]</span>
+<span style="color: #a4a4a4; font-style: italic;">              adds the contents of the first argument address to the second argument</span>
+<span style="color: #a4a4a4; font-style: italic;">              address and then places the result in the third argument address</span>
+<span style="color: #a4a4a4; font-style: italic;">            */</span>
+            <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>instruction == <span style="color: #494949;">"ADD"</span><span style="color: #494949;">)</span>
+              <span style="color: #494949;">{</span>
+                inFile &gt;&gt; argumentAddr1;
+                inFile &gt;&gt; argumentAddr2;
+                inFile &gt;&gt; argumentAddr3;
+                machineLine = <span style="color: #494949;">"00001011"</span> + <span style="color: #E53935;">std</span>::bitset<span style="color: #bbb;">&lt;</span>8<span style="color: #bbb;">&gt;(</span>stoi<span style="color: #494949;">(</span>argumentAddr1<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>.to_string<span style="color: #bbb;">()</span> + <span style="color: #E53935;">std</span>::bitset<span style="color: #bbb;">&lt;</span>8<span style="color: #bbb;">&gt;(</span>stoi<span style="color: #494949;">(</span>argumentAddr2<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>.to_string<span style="color: #bbb;">()</span> + <span style="color: #E53935;">std</span>::bitset<span style="color: #bbb;">&lt;</span>8<span style="color: #bbb;">&gt;(</span>stoi<span style="color: #494949;">(</span>argumentAddr3<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>.to_string<span style="color: #bbb;">()</span>;
+              <span style="color: #494949;">}</span>
+
+
+            <span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">              instruction : FLP</span>
+<span style="color: #a4a4a4; font-style: italic;">              binary representatioin : 0000 0100</span>
+<span style="color: #a4a4a4; font-style: italic;">              usage :</span>
+<span style="color: #a4a4a4; font-style: italic;">              FLP [argument address]</span>
+<span style="color: #a4a4a4; font-style: italic;">              flips the bits in the argument address provided</span>
+<span style="color: #a4a4a4; font-style: italic;">            */</span>
+            <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>instruction == <span style="color: #494949;">"FLP"</span><span style="color: #494949;">)</span>
+              <span style="color: #494949;">{</span>
+                inFile &gt;&gt; argumentAddr1;
+                machineLine = <span style="color: #494949;">"00000100"</span> + <span style="color: #E53935;">std</span>::bitset<span style="color: #bbb;">&lt;</span>8<span style="color: #bbb;">&gt;(</span>stoi<span style="color: #494949;">(</span>argumentAddr1<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>.to_string<span style="color: #bbb;">()</span> + <span style="color: #494949;">"0000000000000000"</span>;
+              <span style="color: #494949;">}</span>
+
+
+            <span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">              instruction : RED</span>
+<span style="color: #a4a4a4; font-style: italic;">              binary representatioin : 0000 1101</span>
+<span style="color: #a4a4a4; font-style: italic;">              usage :</span>
+<span style="color: #a4a4a4; font-style: italic;">              RED [argument address] [argument address]</span>
+<span style="color: #a4a4a4; font-style: italic;">              special instruction, reads the value located in the directly addressed</span>
+<span style="color: #a4a4a4; font-style: italic;">              space to the second argument address, the first argument address provides</span>
+<span style="color: #a4a4a4; font-style: italic;">              the pointer to the location of the data in the directly addressed space</span>
+<span style="color: #a4a4a4; font-style: italic;">            */</span>
+            <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>instruction == <span style="color: #494949;">"RED"</span><span style="color: #494949;">)</span>
+              <span style="color: #494949;">{</span>
+                inFile &gt;&gt; argumentAddr1;
+                inFile &gt;&gt; argumentAddr2;
+                machineLine = <span style="color: #494949;">"00001101"</span> + <span style="color: #E53935;">std</span>::bitset<span style="color: #bbb;">&lt;</span>8<span style="color: #bbb;">&gt;(</span>stoi<span style="color: #494949;">(</span>argumentAddr1<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>.to_string<span style="color: #bbb;">()</span> + <span style="color: #E53935;">std</span>::bitset<span style="color: #bbb;">&lt;</span>8<span style="color: #bbb;">&gt;(</span>stoi<span style="color: #494949;">(</span>argumentAddr2<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>.to_string<span style="color: #bbb;">()</span> + <span style="color: #494949;">"00000000"</span>;
+              <span style="color: #494949;">}</span>
+
+
+            <span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">              instruction : WRT</span>
+<span style="color: #a4a4a4; font-style: italic;">              binary representatioin : 0000 0010</span>
+<span style="color: #a4a4a4; font-style: italic;">              usage :</span>
+<span style="color: #a4a4a4; font-style: italic;">              WRT [argument address] [argument address]</span>
+<span style="color: #a4a4a4; font-style: italic;">              special instruction, writes the value located in the second argument</span>
+<span style="color: #a4a4a4; font-style: italic;">              address to an address located in the directly addressed space, the first</span>
+<span style="color: #a4a4a4; font-style: italic;">              argument address provides the pointer to the location of the data in the</span>
+<span style="color: #a4a4a4; font-style: italic;">              directly addresssed space</span>
+<span style="color: #a4a4a4; font-style: italic;">            */</span>
+            <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>instruction == <span style="color: #494949;">"WRT"</span><span style="color: #494949;">)</span>
+              <span style="color: #494949;">{</span>
+                inFile &gt;&gt; argumentAddr1;
+                inFile &gt;&gt; argumentAddr2;
+                machineLine = <span style="color: #494949;">"00000010"</span> + <span style="color: #E53935;">std</span>::bitset<span style="color: #bbb;">&lt;</span>8<span style="color: #bbb;">&gt;(</span>stoi<span style="color: #494949;">(</span>argumentAddr1<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>.to_string<span style="color: #bbb;">()</span> + <span style="color: #E53935;">std</span>::bitset<span style="color: #bbb;">&lt;</span>8<span style="color: #bbb;">&gt;(</span>stoi<span style="color: #494949;">(</span>argumentAddr2<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>.to_string<span style="color: #bbb;">()</span> + <span style="color: #494949;">"00000000"</span>;
+              <span style="color: #494949;">}</span>
+
+
+            <span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">              instruction : STP</span>
+<span style="color: #a4a4a4; font-style: italic;">              binary representatioin : 0000 1111</span>
+<span style="color: #a4a4a4; font-style: italic;">              usage :</span>
+<span style="color: #a4a4a4; font-style: italic;">              STP</span>
+<span style="color: #a4a4a4; font-style: italic;">              Stops the execution of code by system/b</span>
+<span style="color: #a4a4a4; font-style: italic;">            */</span>
+            <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>instruction == <span style="color: #494949;">"STP"</span><span style="color: #494949;">)</span>
+              <span style="color: #494949;">{</span>
+                machineLine = <span style="color: #494949;">"00001111000000000000000000000000"</span>;
+              <span style="color: #494949;">}</span>
+
+            <span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">              this ignores comments on lines</span>
+<span style="color: #a4a4a4; font-style: italic;">            */</span>
+            <span style="color: #E53935; font-style: italic;">else</span>
+              <span style="color: #494949;">{</span>
+                machineLine = <span style="color: #E53935;">std</span>::bitset<span style="color: #bbb;">&lt;</span>32<span style="color: #bbb;">&gt;(</span>stoi<span style="color: #494949;">(</span>instruction<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>.to_string<span style="color: #bbb;">()</span>;
+              <span style="color: #494949;">}</span>
+            otFile &lt;&lt; machineLine &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+          <span style="color: #bbb;">}</span>
+      <span style="color: #494949;">}</span>
+    <span style="color: #E53935; font-style: italic;">else</span>
+      <span style="color: #494949;">{</span>
+        complete = <span style="color: #E53935;">true</span>;
+      <span style="color: #494949;">}</span>
+  <span style="color: #bbb;">}</span>
+  otFile.close<span style="color: #bbb;">()</span>;
+  inFile.close<span style="color: #bbb;">()</span>;
+<span style="color: #494949;">}</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<!-- Footnotes --><!-- 
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">About three years ago now, wow! Amazing how time flies.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Be glad I have spared you from the worst of it where I wrote several C++ programs with only recursion and constants, no loops or mutable variables. I probably gave my algorithms teacher nightmares.</p></div></div>
+
+ --></div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2021-W51-3 04:33</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>

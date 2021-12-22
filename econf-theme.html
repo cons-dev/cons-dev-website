@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W50-4 01:27 -->
+<!-- 2021-W51-3 01:51 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Econf Theme</title>
@@ -32,6 +32,7 @@
 <li><a href="#orgcf5a0ce">Basic Faces</a></li>
 <li><a href="#org56ea7e7">Code Style</a></li>
 <li><a href="#org5c61d10">Interface-y Stuff</a></li>
+<li><a href="#orgf941d85">EMMS</a></li>
 <li><a href="#org2673635">Documentation Lookups</a></li>
 <li><a href="#org884d9d5">Elfeed Related</a></li>
 <li><a href="#orgab15db6">w3m</a></li>
@@ -84,7 +85,6 @@ This is how I define my theme in Emacs. It's probably not the best way to go abo
 </div>
 </div>
 </div>
-
 <div id="outline-container-org7b69ca1" class="outline-2">
 <h2 id="org7b69ca1">Variables</h2>
 <div class="outline-text-2" id="text-org7b69ca1">
@@ -123,8 +123,16 @@ This is how I define my theme in Emacs. It's probably not the best way to go abo
   <span style="color: #E53935;">:group</span> 'doom-themes<span style="color: #494949;">)</span>
 </pre>
 </div>
+
+
+<blockquote>
+<p>
+
+</p>
+</blockquote>
 </div>
 </div>
+
 
 
 <div id="outline-container-orga06682f" class="outline-2">
@@ -317,6 +325,7 @@ Here I set faces for the stuff that is used in interface like stuff rather than 
 <span style="color: #494949;">(</span>Man-underline <span style="color: #E53935;">:foreground</span> fg <span style="color: #E53935;">:background</span> bg <span style="color: #E53935;">:slant</span> 'italic<span style="color: #494949;">)</span>
 
    <span style="color: #a4a4a4; font-style: italic;">;;;; </span><span style="color: #a4a4a4; font-style: italic;">isearch</span>
+<span style="color: #494949;">(</span>lazy-highlight <span style="color: #E53935;">:foreground</span> bg <span style="color: #E53935;">:background</span> dark-<span style="color: #ffffff; background-color: #ff0000;">red</span><span style="color: #494949;">)</span>
 <span style="color: #494949;">(</span>isearch <span style="color: #E53935;">:foreground</span> bg <span style="color: #E53935;">:background</span> <span style="color: #ffffff; background-color: #ff0000;">red</span> <span style="color: #E53935;">:weight</span> 'bold<span style="color: #494949;">)</span>
 <span style="color: #494949;">(</span>pdf-isearch-lazy <span style="color: #E53935;">:foreground</span> bg <span style="color: #E53935;">:background</span> dark-<span style="color: #ffffff; background-color: #ff0000;">red</span><span style="color: #494949;">)</span>
 <span style="color: #494949;">(</span>pdf-isearch-match <span style="color: #E53935;">:foreground</span> bg <span style="color: #E53935;">:background</span> <span style="color: #ffffff; background-color: #ff0000;">red</span> <span style="color: #E53935;">:weight</span> 'bold<span style="color: #494949;">)</span>
@@ -337,8 +346,11 @@ Here I set faces for the stuff that is used in interface like stuff rather than 
 
    <span style="color: #a4a4a4; font-style: italic;">;;;; </span><span style="color: #a4a4a4; font-style: italic;">ivy posframe</span>
 <span style="color: #494949;">(</span>ivy-posframe <span style="color: #E53935;">:background</span> bg-alt<span style="color: #494949;">)</span>
-<span style="color: #494949;">(</span>ivy-posframe-border <span style="color: #E53935;">:background</span> comments <span style="color: #E53935;">:foreground</span> comments<span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span>ivy-posframe-border <span style="color: #E53935;">:background</span> base2 <span style="color: #E53935;">:foreground</span> base2<span style="color: #494949;">)</span>
 
+<span style="color: #a4a4a4; font-style: italic;">;;;; </span><span style="color: #a4a4a4; font-style: italic;">Hydra posframe</span>
+<span style="color: #494949;">(</span>hydra-posframe-face <span style="color: #E53935;">:background</span> bg-alt<span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span>hydra-posframe-border-face <span style="color: #E53935;">:background</span> base2 <span style="color: #E53935;">:foreground</span> base2<span style="color: #494949;">)</span>
 
    <span style="color: #a4a4a4; font-style: italic;">;;;; </span><span style="color: #a4a4a4; font-style: italic;">Avy faces</span>
 <span style="color: #494949;">(</span>avy-lead-face   <span style="color: #E53935;">:background</span> bg <span style="color: #E53935;">:foreground</span> <span style="color: #ffffff; background-color: #ff0000;">red</span><span style="color: #494949;">)</span>
@@ -371,6 +383,23 @@ Here I set faces for the stuff that is used in interface like stuff rather than 
    <span style="color: #a4a4a4; font-style: italic;">;;;; </span><span style="color: #a4a4a4; font-style: italic;">Links</span>
 <span style="color: #494949;">(</span>link-visited <span style="color: #E53935;">:foreground</span> dark-<span style="color: #ffffff; background-color: #ff0000;">red</span><span style="color: #494949;">)</span>
 
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf941d85" class="outline-3">
+<h3 id="orgf941d85">EMMS</h3>
+<div class="outline-text-3" id="text-orgf941d85">
+<p>
+These
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span>emms-playlist-track-face <span style="color: #E53935;">:foreground</span> <span style="color: #ffffff; background-color: #ff0000;">red</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span>emms-playlist-selected-face <span style="color: #E53935;">:foreground</span> bg <span style="color: #E53935;">:background</span> <span style="color: #ffffff; background-color: #ff0000;">red</span> <span style="color: #E53935;">:extend</span> t<span style="color: #494949;">)</span>
+
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">(emms-browser-year/genere-face)</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">(emms-brwoser-artist-face :foreground fg)</span>
 </pre>
 </div>
 </div>
@@ -447,41 +476,42 @@ I set the documentation lookup function faces so the interfaces for them are mor
 <div id="outline-container-orgab15db6" class="outline-3">
 <h3 id="orgab15db6">w3m</h3>
 <div class="outline-text-3" id="text-orgab15db6">
-<pre class="example">
-   ;;;; w3m
-   (w3m-error :foreground red :weight 'bold)
-   (w3m-image :foreground red :underline t :weight 'bold)
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">   <span style="color: #a4a4a4; font-style: italic;">;;;; </span><span style="color: #a4a4a4; font-style: italic;">w3m</span>
+   <span style="color: #494949;">(</span>w3m-error <span style="color: #E53935;">:foreground</span> <span style="color: #ffffff; background-color: #ff0000;">red</span> <span style="color: #E53935;">:weight</span> 'bold<span style="color: #494949;">)</span>
+   <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">w3m-image</span> <span style="color: #E53935;">:foreground</span> <span style="color: #ffffff; background-color: #ff0000;">red</span> <span style="color: #E53935;">:underline</span> t <span style="color: #E53935;">:weight</span> 'bold<span style="color: #494949;">)</span>
 
 
-   ;; form buttons
-   (w3m-form-button :foreground red
-                    :background bg
-                    :box '(:line-width 1 :style none))
-   (w3m-form-button-mouse :foreground bg-alt
-                          :background red
-                          :box '(:line-width 1 :style none))
-   (w3m-form-button-pressed :foreground bg-alt
-                            :background red
-                            :box '(:line-width 1 :style none))
+   <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">form buttons</span>
+   <span style="color: #494949;">(</span>w3m-form-button <span style="color: #E53935;">:foreground</span> <span style="color: #ffffff; background-color: #ff0000;">red</span>
+                    <span style="color: #E53935;">:background</span> bg
+                    <span style="color: #E53935;">:box</span> '<span style="color: #bbb;">(</span><span style="color: #E53935;">:line-width</span> 1 <span style="color: #E53935;">:style</span> none<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+   <span style="color: #494949;">(</span>w3m-form-button-mouse <span style="color: #E53935;">:foreground</span> bg-alt
+                          <span style="color: #E53935;">:background</span> <span style="color: #ffffff; background-color: #ff0000;">red</span>
+                          <span style="color: #E53935;">:box</span> '<span style="color: #bbb;">(</span><span style="color: #E53935;">:line-width</span> 1 <span style="color: #E53935;">:style</span> none<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+   <span style="color: #494949;">(</span>w3m-form-button-pressed <span style="color: #E53935;">:foreground</span> bg-alt
+                            <span style="color: #E53935;">:background</span> <span style="color: #ffffff; background-color: #ff0000;">red</span>
+                            <span style="color: #E53935;">:box</span> '<span style="color: #bbb;">(</span><span style="color: #E53935;">:line-width</span> 1 <span style="color: #E53935;">:style</span> none<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 
-   ;; Text entries
-   (w3m-form :foreground red)
+   <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Text entries</span>
+   <span style="color: #494949;">(</span>w3m-form <span style="color: #E53935;">:foreground</span> <span style="color: #ffffff; background-color: #ff0000;">red</span><span style="color: #494949;">)</span>
 
-   ;; header line
-   (w3m-header-line-title :foreground red
-                          :background bg-alt
-                          :weight 'bold)
+   <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">header line</span>
+   <span style="color: #494949;">(</span>w3m-header-line-title <span style="color: #E53935;">:foreground</span> <span style="color: #ffffff; background-color: #ff0000;">red</span>
+                          <span style="color: #E53935;">:background</span> bg-alt
+                          <span style="color: #E53935;">:weight</span> 'bold<span style="color: #494949;">)</span>
 
-   (w3m-header-line-background :background bg-alt)
-   (w3m-header-line-content :background bg-alt :foreground fg)
+   <span style="color: #494949;">(</span>w3m-header-line-background <span style="color: #E53935;">:background</span> bg-alt<span style="color: #494949;">)</span>
+   <span style="color: #494949;">(</span>w3m-header-line-content <span style="color: #E53935;">:background</span> bg-alt <span style="color: #E53935;">:foreground</span> fg<span style="color: #494949;">)</span>
    
-   ;; anchors
-   (w3m-anchor :inherit 'link)
-   (w3m-current-anchor :foreground red)
-   ((w3m-arrived-anchor &amp;override) :foreground dark-red :inherit 'link)
-   ((w3m-image-anchor &amp;override) :inherit 'link)
+   <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">anchors</span>
+   <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">w3m-anchor</span> <span style="color: #E53935;">:inherit</span> 'link<span style="color: #494949;">)</span>
+   <span style="color: #494949;">(</span>w3m-current-anchor <span style="color: #E53935;">:foreground</span> <span style="color: #ffffff; background-color: #ff0000;">red</span><span style="color: #494949;">)</span>
+   <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>w3m-arrived-anchor <span style="color: #E53935;">&amp;override</span><span style="color: #bbb;">)</span> <span style="color: #E53935;">:foreground</span> dark-<span style="color: #ffffff; background-color: #ff0000;">red</span> <span style="color: #E53935;">:inherit</span> 'link<span style="color: #494949;">)</span>
+   <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>w3m-image-anchor <span style="color: #E53935;">&amp;override</span><span style="color: #bbb;">)</span> <span style="color: #E53935;">:inherit</span> 'link<span style="color: #494949;">)</span>
 
 </pre>
+</div>
 </div>
 </div>
 
@@ -556,6 +586,9 @@ A few settings to make markdown-mode like the org-mode theme which is below.
                         <span style="color: #E53935;">:font</span> ec-heading-font
                         <span style="color: #E53935;">:weight</span> 'bold
                         <span style="color: #E53935;">:height</span> 1<span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span>markdown-code-face <span style="color: #E53935;">:background</span> bg-alt <span style="color: #E53935;">:foreground</span> fg <span style="color: #E53935;">:extend</span> t<span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span>markdown-inline-code-face <span style="color: #E53935;">:background</span> bg-alt <span style="color: #E53935;">:foreground</span> fg<span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span>markdown-link-face <span style="color: #E53935;">:inherit</span> 'link<span style="color: #494949;">)</span>
 </pre>
 </div>
 </div>
@@ -664,7 +697,8 @@ Now for the monster of a theme, basically all my settings for org-mode collated 
                         <span style="color: #E53935;">:background</span> <span style="color: #ffffff; background-color: #ff0000;">red</span><span style="color: #494949;">)</span>
 
 <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Drawers</span>
-<span style="color: #494949;">(</span>org-drawer <span style="color: #E53935;">:foreground</span> comments<span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span>org-drawer <span style="color: #E53935;">:foreground</span> comments <span style="color: #E53935;">:inherit</span> 'fixed-pitch<span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span>org-property-value <span style="color: #E53935;">:foreground</span> comments <span style="color: #E53935;">:inherit</span> 'fixed-pitch<span style="color: #494949;">)</span>
 </pre>
 </div>
 
@@ -677,7 +711,7 @@ Now for the monster of a theme, basically all my settings for org-mode collated 
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W50-4 01:27</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W50-7 22:39</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

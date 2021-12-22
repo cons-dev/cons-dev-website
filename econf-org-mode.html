@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-W51-3 01:51 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Econf Org Mode</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="A configuration file for org-mode documents." />
+<meta name="generator" content="Org Mode" />
+<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">Econf Org Mode</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org3fbfe51">Introduction</a></li>
+<li><a href="#org6282903">Dependencies</a></li>
+<li><a href="#org1a4b6c8">Agenda</a></li>
+<li><a href="#orga51ee27">Database Facts</a>
+<ul>
+<li><a href="#org109a2ea">get-dependent-nodes</a></li>
+<li><a href="#org7af8ed4">add-reference</a></li>
+</ul>
+</li>
+<li><a href="#orgadd117e">Theming</a></li>
+<li><a href="#org7c3ab56">Org-Fragtog</a></li>
+<li><a href="#orgb12b875">org-noter</a></li>
+<li><a href="#orge54b578">Org mode</a>
+<ul>
+<li><a href="#org628f4cd">Assorted Vars</a></li>
+<li><a href="#org707c498">Org Babel</a></li>
+<li><a href="#org7cfbf20">\(\LaTeX\)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-org3fbfe51" class="outline-2">
+<h2 id="org3fbfe51">Introduction</h2>
+<div class="outline-text-2" id="text-org3fbfe51">
+<p>
+I like org-mode, so this provides a partial configuration for my org-mode setup and "Memex" features.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org6282903" class="outline-2">
+<h2 id="org6282903">Dependencies</h2>
+<div class="outline-text-2" id="text-org6282903">
+<table id="orge9618c8" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Dependency</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><a href="https://orgmode.org/">org</a></td>
+<td class="org-left">Org-mode, the standard tool for Emacs.</td>
+</tr>
+
+<tr>
+<td class="org-left">org-noter</td>
+<td class="org-left">A simple note taking tool for</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="org-fragtog.html#ID-cbc432f4-a536-42e9-895c-e92b901cdbcd">org-fragtog</a></td>
+<td class="org-left">Automatically inserts</td>
+</tr>
+
+<tr>
+<td class="org-left">org-superstar</td>
+<td class="org-left">Extra fonvorg leading bullets</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">
+</pre>
+</div>
+
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span>ec-load-deps deps<span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org1a4b6c8" class="outline-2">
+<h2 id="org1a4b6c8">Agenda</h2>
+<div class="outline-text-2" id="text-org1a4b6c8">
+<pre class="example">
+
+</pre>
+</div>
+</div>
+
+
+<div id="outline-container-orga51ee27" class="outline-2">
+<h2 id="orga51ee27">Database Facts</h2>
+<div class="outline-text-2" id="text-orga51ee27">
+<p>
+So one thing that I am <i>trying</i> to do is represent my knowledge as facts and provide a structure for taxonomies.
+</p>
+
+<p>
+So you might imagine an idea as.
+</p>
+
+<p>
+Now of course this is in fact philosophically unsound!
+</p>
+
+<p>
+However, I do think that having a set of facts, and then being able to have dependencies for them, is going to at least be somewhat neat and an interesting thing to try out.
+</p>
+</div>
+
+<div id="outline-container-org109a2ea" class="outline-3">
+<h3 id="org109a2ea">get-dependent-nodes</h3>
+<div class="outline-text-3" id="text-org109a2ea">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">get-dependent-nodes</span> <span style="color: #bbb;">()</span>
+ <span style="color: #bbb;">(</span>org-roam-db-query <span style="color: #494949;">[</span><span style="color: #E53935;">:select</span> * <span style="color: #E53935;">:from</span> nodes<span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+<p>
+This gets the set of nodes that depend upon the current node.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7af8ed4" class="outline-3">
+<h3 id="org7af8ed4">add-reference</h3>
+</div>
+</div>
+
+
+<div id="outline-container-orgadd117e" class="outline-2">
+<h2 id="orgadd117e">Theming</h2>
+<div class="outline-text-2" id="text-orgadd117e">
+<p>
+So there are a few more things
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">use-package</span> <span style="color: #E53935;">org-superstar</span>
+  <span style="color: #E53935;">:hook</span> <span style="color: #bbb;">(</span>org-mode . org-superstar-mode<span style="color: #bbb;">)</span>
+  <span style="color: #E53935;">:custom</span>
+  <span style="color: #bbb;">(</span>org-superstar-headline-bullets-list
+   '<span style="color: #494949;">(</span>?&#9673; ?&#9675; ?&#9635; ?&#9655;<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7c3ab56" class="outline-2">
+<h2 id="org7c3ab56">Org-Fragtog</h2>
+<div class="outline-text-2" id="text-org7c3ab56">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">use-package</span> <span style="color: #E53935;">org-fragtog</span>
+  <span style="color: #E53935;">:straight</span> nil
+  <span style="color: #E53935;">:hook</span> <span style="color: #bbb;">(</span>org-mode . org-fragtog-mode<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgb12b875" class="outline-2">
+<h2 id="orgb12b875">org-noter</h2>
+<div class="outline-text-2" id="text-orgb12b875">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">use-package</span> <span style="color: #E53935;">org-noter</span>
+  <span style="color: #E53935;">:custom</span>
+  <span style="color: #bbb;">(</span>org-noter-always-create-frame t<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>org-noter-notes-search-path `<span style="color: #494949;">(</span>,ec-memex-dir<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge54b578" class="outline-2">
+<h2 id="orge54b578">Org mode</h2>
+<div class="outline-text-2" id="text-orge54b578">
+</div>
+<div id="outline-container-org628f4cd" class="outline-3">
+<h3 id="org628f4cd">Assorted Vars</h3>
+</div>
+
+<div id="outline-container-org707c498" class="outline-3">
+<h3 id="org707c498">Org Babel</h3>
+</div>
+
+<div id="outline-container-org7cfbf20" class="outline-3">
+<h3 id="org7cfbf20">\(\LaTeX\)</h3>
+<div class="outline-text-3" id="text-org7cfbf20">
+<div class="org-src-container">
+<pre class="src src-latex"><span style="color: #E53935; font-style: italic;">\usepackage</span><span style="color: #494949;">[</span><span style="font-style: italic;">T1</span><span style="color: #494949;">]{</span><span style="font-weight: bold; font-style: italic;">fontenc</span><span style="color: #494949;">}</span>
+<span style="color: #E53935; font-style: italic;">\usepackage</span><span style="color: #494949;">{</span><span style="font-weight: bold; font-style: italic;">fontspec</span><span style="color: #494949;">}</span>
+<span style="color: #E53935; font-style: italic;">\usepackage</span><span style="color: #494949;">{</span><span style="font-weight: bold; font-style: italic;">graphicx</span><span style="color: #494949;">}</span>
+<span style="color: #E53935; font-style: italic;">\usepackage</span><span style="color: #494949;">{</span><span style="font-weight: bold; font-style: italic;">xcolor</span><span style="color: #494949;">}</span>
+<span style="color: #E53935; font-style: italic;">\usepackage</span><span style="color: #494949;">{</span><span style="font-weight: bold; font-style: italic;">color</span><span style="color: #494949;">}</span>
+<span style="color: #E53935; font-style: italic;">\usepackage</span><span style="color: #494949;">{</span><span style="font-weight: bold; font-style: italic;">datetime2</span><span style="color: #494949;">}</span>
+<span style="color: #E53935; font-style: italic;">\usepackage</span><span style="color: #494949;">{</span><span style="font-weight: bold; font-style: italic;">multicol</span><span style="color: #494949;">}</span>
+<span style="color: #E53935; font-style: italic;">\usepackage</span><span style="color: #494949;">{</span><span style="font-weight: bold; font-style: italic;">titlesec</span><span style="color: #494949;">}</span>
+<span style="color: #E53935; font-style: italic;">\usepackage</span><span style="color: #494949;">{</span><span style="font-weight: bold; font-style: italic;">titling</span><span style="color: #494949;">}</span>
+<span style="color: #E53935; font-style: italic;">\usepackage</span><span style="color: #494949;">[</span><span style="font-style: italic;">colorlinks</span><span style="color: #494949;">]{</span><span style="font-weight: bold; font-style: italic;">hyperref</span><span style="color: #494949;">}</span>
+<span style="color: #E53935; font-style: italic;">\usepackage</span><span style="color: #494949;">{</span><span style="font-weight: bold; font-style: italic;">enumitem</span><span style="color: #494949;">}</span>
+<span style="color: #E53935; font-style: italic;">\usepackage</span><span style="color: #494949;">{</span><span style="font-weight: bold; font-style: italic;">sectsty</span><span style="color: #494949;">}</span>
+<span style="color: #E53935; font-style: italic;">\usepackage</span><span style="color: #494949;">{</span><span style="font-weight: bold; font-style: italic;">parskip</span><span style="color: #494949;">}</span>
+
+<span style="color: #696969;">\definecolor</span><span style="color: #494949;">{</span>fg<span style="color: #494949;">}{</span>HTML<span style="color: #494949;">}{</span>000000<span style="color: #494949;">}</span>
+<span style="color: #696969;">\definecolor</span><span style="color: #494949;">{</span>bg<span style="color: #494949;">}{</span>HTML<span style="color: #494949;">}{</span>FFFFFF<span style="color: #494949;">}</span>
+<span style="color: #696969;">\definecolor</span><span style="color: #494949;">{</span>gvred<span style="color: #494949;">}{</span>HTML<span style="color: #494949;">}{</span>E53935<span style="color: #494949;">}</span>
+<span style="color: #696969;">\definecolor</span><span style="color: #494949;">{</span>gvyellow<span style="color: #494949;">}{</span>HTML<span style="color: #494949;">}{</span>fabd2f<span style="color: #494949;">}</span>
+<span style="color: #696969;">\definecolor</span><span style="color: #494949;">{</span>bgcode<span style="color: #494949;">}{</span>HTML<span style="color: #494949;">}{</span>f5f5f5<span style="color: #494949;">}</span>
+
+<span style="color: #696969;">\color</span><span style="color: #494949;">{</span>fg<span style="color: #494949;">}</span>
+<span style="color: #696969;">\pagecolor</span><span style="color: #494949;">{</span>bg<span style="color: #494949;">}</span>
+<span style="color: #696969;">\hypersetup</span><span style="color: #494949;">{</span>colorlinks, linkcolor=gvred, urlcolor=gvred<span style="color: #494949;">}</span>
+
+<span style="color: #E53935; font-style: italic;">\renewcommand</span><span style="color: #494949;">{</span><span style="color: #696969; font-weight: bold; font-style: italic;">\labelitemi</span><span style="color: #494949;">}{</span><span style="color: #1976D2; font-weight: bold; font-style: italic;">$</span><span style="color: #1976D2; font-weight: bold; font-style: italic;">\textcolor</span><span style="color: #bbb; font-weight: bold; font-style: italic;">{</span><span style="color: #1976D2; font-weight: bold; font-style: italic;">gvred</span><span style="color: #bbb; font-weight: bold; font-style: italic;">}{</span><span style="color: #1976D2; font-weight: bold; font-style: italic;">\bullet</span><span style="color: #bbb; font-weight: bold; font-style: italic;">}</span><span style="color: #1976D2; font-weight: bold; font-style: italic;">$</span><span style="color: #494949;">}</span>
+<span style="color: #696969;">\setlist</span><span style="color: #494949;">[</span>description<span style="color: #494949;">]{</span>format=<span style="color: #696969;">\textcolor</span><span style="color: #bbb;">{</span>gvred<span style="color: #bbb;">}</span><span style="color: #494949;">}</span>
+
+<span style="color: #696969;">\defaultfontfeatures</span><span style="color: #494949;">{</span>Mapping=tex-text<span style="color: #494949;">}</span>
+<span style="color: #696969;">\setromanfont</span><span style="color: #494949;">{</span>Jura<span style="color: #494949;">}</span>
+<span style="color: #696969;">\setromanfont</span><span style="color: #494949;">[</span>BoldFont=<span style="color: #bbb;">{</span>Iosevka Aile Bold<span style="color: #bbb;">}</span>,ItalicFont=<span style="color: #bbb;">{</span>Iosevka Aile Italic<span style="color: #bbb;">}</span><span style="color: #494949;">]{</span>Iosevka Aile<span style="color: #494949;">}</span>
+<span style="color: #696969;">\setsansfont</span><span style="color: #494949;">{</span>Iosevka Aile<span style="color: #494949;">}</span>
+<span style="color: #696969;">\setmonofont</span><span style="color: #494949;">[</span>Scale=0.8<span style="color: #494949;">]{</span>Iosevka Term<span style="color: #494949;">}</span>
+
+<span style="color: #a4a4a4; font-style: italic;">% </span><span style="color: #a4a4a4; font-style: italic;">set the comments</span>
+<span style="color: #696969;">\partfont</span><span style="color: #494949;">{</span><span style="color: #696969;">\color</span><span style="color: #bbb;">{</span>gvred<span style="color: #bbb;">}</span><span style="color: #494949;">}</span>
+<span style="color: #696969;">\chapterfont</span><span style="color: #494949;">{</span><span style="color: #696969;">\color</span><span style="color: #bbb;">{</span>gvred<span style="color: #bbb;">}</span><span style="color: #494949;">}</span>
+<span style="color: #696969;">\sectionfont</span><span style="color: #494949;">{</span><span style="color: #696969;">\color</span><span style="color: #bbb;">{</span>gvred<span style="color: #bbb;">}</span><span style="color: #494949;">}</span>
+<span style="color: #696969;">\subsectionfont</span><span style="color: #494949;">{</span><span style="color: #696969;">\color</span><span style="color: #bbb;">{</span>gvred<span style="color: #bbb;">}</span><span style="color: #494949;">}</span>
+<span style="color: #696969;">\subsubsectionfont</span><span style="color: #494949;">{</span><span style="color: #696969;">\color</span><span style="color: #bbb;">{</span>gvred<span style="color: #bbb;">}</span><span style="color: #494949;">}</span>
+
+<span style="color: #a4a4a4; font-style: italic;">% </span><span style="color: #a4a4a4; font-style: italic;">don't indenent paragraphs</span>
+<span style="color: #E53935; font-style: italic;">\setlength</span><span style="color: #696969; font-style: italic;">\parindent</span><span style="color: #494949;">{</span><span style="font-style: italic;">0pt</span><span style="color: #494949;">}</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">use-package</span> <span style="color: #E53935;">org</span>
+  <span style="color: #E53935;">:custom</span>
+  <span style="color: #bbb;">(</span>org-fontify-whole-heading-line t<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>org-fontify-done-headline t<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>org-fontify-quote-and-verse-blocks t<span style="color: #bbb;">)</span>
+
+  <span style="color: #bbb;">(</span>org-list-allow-alphabetical t<span style="color: #bbb;">)</span>
+
+  <span style="color: #bbb;">(</span>org-startup-folded 'nofold<span style="color: #bbb;">)</span>
+  
+  <span style="color: #bbb;">(</span>org-directory <span style="color: #494949;">""</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>org-tags-column 50<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>org-confirm-babel-evaluate nil<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>org-hide-emphasis-markers t<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>org-taskjuggler-target-version 3.6<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>org-habit-graph-column 70<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>inital-major-mode 'org-mode<span style="color: #bbb;">)</span>
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">start with latex previws</span>
+  <span style="color: #bbb;">(</span>org-startup-with-latex-preview t<span style="color: #bbb;">)</span>
+
+
+
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">make pdf exporting nicer</span>
+  <span style="color: #bbb;">(</span>ec-org-pdf-directory <span style="color: #494949;">(</span>concat ec-memex-dir <span style="color: #494949;">"pdfs/"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>org-latex-compiler <span style="color: #494949;">"xelatex"</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>org-latex-default-class <span style="color: #494949;">"article"</span><span style="color: #bbb;">)</span>
+  <span style="color: #E53935;">:config</span>
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Org link override to use helpful. It's more helpful that way.</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">org-link--open-help</span> <span style="color: #494949;">(</span>path _<span style="color: #494949;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">"Open a \"help\" type link.</span>
+<span style="color: #a4a4a4; font-style: italic;">PATH is a symbol name, as a string."</span>
+    <span style="color: #494949;">(</span>helpful-symbol <span style="color: #bbb;">(</span>intern path<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">setq</span> org-image-actual-width 800<span style="color: #bbb;">)</span>
+  
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">org+-buffer-name-to-title</span> <span style="color: #494949;">(</span><span style="color: #E53935;">&amp;optional</span> end<span style="color: #494949;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">"Rename buffer to value of #+TITLE:.</span>
+
+<span style="color: #a4a4a4; font-style: italic;">If END is non-nil search for #+TITLE: at `</span><span style="color: #E53935; font-style: italic;">point</span><span style="color: #a4a4a4; font-style: italic;">' and</span>
+<span style="color: #a4a4a4; font-style: italic;">delimit it to END.</span>
+
+<span style="color: #a4a4a4; font-style: italic;">Start an unlimited search at `</span><span style="color: #E53935; font-style: italic;">point-min</span><span style="color: #a4a4a4; font-style: italic;">' otherwise."</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">interactive</span><span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">(</span><span style="color: #494949;">(</span>beg <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">or</span> <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">and</span> end <span style="color: #bbb;">(</span>point<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                   <span style="color: #494949;">(</span>point-min<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+      <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">save-excursion</span>
+        <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">when</span> end
+          <span style="color: #bbb;">(</span>goto-char end<span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">setq</span> end <span style="color: #494949;">(</span>line-end-position<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        <span style="color: #494949;">(</span>goto-char beg<span style="color: #494949;">)</span>
+        <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">when</span> <span style="color: #bbb;">(</span>re-search-forward <span style="color: #494949;">"^[[:space:]]*#\\+TITLE:[[:space:]]*</span><span style="color: #000; font-weight: bold;">\\</span><span style="color: #000; font-weight: bold;">(</span><span style="color: #494949;">.*?</span><span style="color: #000; font-weight: bold;">\\</span><span style="color: #000; font-weight: bold;">)</span><span style="color: #494949;">[[:space:]]*$"</span> end t<span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">(</span>rename-buffer <span style="color: #494949;">(</span>match-string 1<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+    nil<span style="color: #bbb;">)</span>
+
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">org+-buffer-name-to-title-config</span> <span style="color: #494949;">()</span>
+    <span style="color: #a4a4a4; font-style: italic;">"Configure Org to rename buffer to value of #+TITLE:."</span>
+    <span style="color: #494949;">(</span>font-lock-add-keywords nil '<span style="color: #bbb;">(</span>org+-buffer-name-to-title<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+
+
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">defvar</span> <span style="font-style: italic;">ec-exports-dir</span> <span style="color: #494949;">(</span>concat ec-memex-dir <span style="color: #494949;">"exports/"</span><span style="color: #494949;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">"Directory where org-export will export my memex files to.</span>
+
+<span style="color: #a4a4a4; font-style: italic;">This keeps the main directory clean and free of .pdf and .tex</span>
+<span style="color: #a4a4a4; font-style: italic;">files dotting it."</span><span style="color: #bbb;">)</span>
+  
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Better Timestamps</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">setq</span> org-time-stamp-custom-formats
+        '<span style="color: #494949;">(</span><span style="color: #494949;">"&lt;%G-W%V-%u&gt;"</span> . <span style="color: #494949;">"&lt;%G-W%V-%u %H:%M&gt;"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">setq</span> org-display-custom-times nil<span style="color: #bbb;">)</span>
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Misc org features</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">require</span> '<span style="color: #E53935;">org-habit</span><span style="color: #bbb;">)</span>
+
+  
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">require</span> '<span style="color: #E53935;">ox-latex</span><span style="color: #bbb;">)</span>
+
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">more PDF exporting</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">setq</span> ec-standard-latex-header
+        <span style="color: #494949;">(</span>s-join
+         <span style="color: #494949;">"\n"</span>
+         '<span style="color: #bbb;">(</span><span style="color: #494949;">"\\usepackage[T1]{fontenc}"</span>
+           <span style="color: #494949;">"\\usepackage{fontspec}"</span>
+           <span style="color: #494949;">"\\usepackage{graphicx}"</span>
+           <span style="color: #494949;">"\\usepackage{xcolor}"</span>
+           <span style="color: #494949;">"\\usepackage{color}"</span>
+           <span style="color: #494949;">"\\usepackage{datetime2}"</span>
+           <span style="color: #494949;">"\\usepackage{multicol}"</span>
+           <span style="color: #494949;">"\\usepackage{titlesec}"</span>
+           <span style="color: #494949;">"\\usepackage{titling}"</span>
+           <span style="color: #494949;">"\\usepackage[colorlinks]{hyperref}"</span>
+           <span style="color: #494949;">"\\usepackage{enumitem}"</span>
+           <span style="color: #494949;">"\\usepackage{sectsty}"</span>
+           <span style="color: #494949;">"\\usepackage{parskip}"</span>
+
+
+           <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">colors</span>
+           <span style="color: #494949;">"\\definecolor{fg}{HTML}{000000}"</span>
+           <span style="color: #494949;">"\\definecolor{bg}{HTML}{FFFFFF}"</span>
+           <span style="color: #494949;">"\\definecolor{gvred}{HTML}{E53935}"</span>
+           <span style="color: #494949;">"\\definecolor{gvyellow}{HTML}{fabd2f}"</span>
+           <span style="color: #494949;">"\\definecolor{bgcode}{HTML}{f5f5f5}"</span>
+
+           <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">set page color</span>
+           <span style="color: #494949;">"\\color{fg}"</span>
+           <span style="color: #494949;">"\\pagecolor{bg}"</span>
+
+           <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">colorize url links</span>
+           <span style="color: #494949;">"\\hypersetup{colorlinks, linkcolor=gvred, urlcolor=gvred}"</span>
+           
+           <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">make lists pretty</span>
+           <span style="color: #494949;">"\\renewcommand{\\labelitemi}{$\\textcolor{gvred}{\\bullet}$}"</span>
+           <span style="color: #494949;">"\\setlist[description]{format=\\textcolor{gvred}}"</span>
+
+           <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">font setup</span>
+           <span style="color: #494949;">"\\defaultfontfeatures{Mapping=tex-text}"</span>
+           <span style="color: #494949;">"\\setromanfont{Jura}"</span>
+           <span style="color: #494949;">"\\setromanfont[BoldFont={Iosevka Aile Bold},ItalicFont={Iosevka Aile Italic}]{Iosevka Aile}"</span>
+           <span style="color: #494949;">"\\setsansfont{Iosevka Aile}"</span>
+           <span style="color: #494949;">"\\setmonofont[Scale=0.8]{Iosevka Term}"</span>
+           
+           <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">section fonts</span>
+           <span style="color: #494949;">"\\partfont{\\color{gvred}}"</span>
+           <span style="color: #494949;">"\\chapterfont{\\color{gvred}}"</span>
+           <span style="color: #494949;">"\\sectionfont{\\color{gvred}}"</span>
+           <span style="color: #494949;">"\\subsectionfont{\\color{gvred}}"</span>
+           <span style="color: #494949;">"\\subsubsectionfont{\\color{gvred}}"</span>
+
+           <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Indentation</span>
+           <span style="color: #494949;">"\\setlength\\parindent{0pt}"</span><span style="color: #bbb;">)</span> <span style="color: #494949;">)</span>
+        org-latex-classes
+        `<span style="color: #494949;">(</span><span style="color: #bbb;">(</span><span style="color: #494949;">"article"</span>
+           ,<span style="color: #494949;">(</span>concat <span style="color: #494949;">"\\documentclass[11pt]{article}"</span> ec-standard-latex-header<span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\section{%s}"</span> . <span style="color: #494949;">"\\section*{%s}"</span><span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\subsection{%s}"</span> . <span style="color: #494949;">"\\subsection*{%s}"</span><span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\subsubsection{%s}"</span> . <span style="color: #494949;">"\\subsubsection*{%s}"</span><span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\paragraph{%s}"</span> . <span style="color: #494949;">"\\paragraph*{%s}"</span><span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\subparagraph{%s}"</span> . <span style="color: #494949;">"\\subparagraph*{%s}"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">(</span><span style="color: #494949;">"resume"</span>
+           ,<span style="color: #494949;">(</span>s-join
+             <span style="color: #494949;">"\n"</span>
+             `<span style="color: #bbb;">(</span><span style="color: #494949;">"\\documentclass[11pt]{article}"</span>
+               <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">set columns</span>
+               <span style="color: #494949;">"\\setlength{\\columnseprule}{0.5pt}"</span>
+               <span style="color: #494949;">"\\setlength{\\columnsep}{1cm}"</span>
+               <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">set margins</span>
+               <span style="color: #494949;">"\\usepackage[left=1cm, right=1cm, top=2cm, bottom=2cm]{geometry}"</span>
+               <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">no page numbers</span>
+               <span style="color: #494949;">"\\usepackage{nopageno}"</span>
+               ,ec-standard-latex-header<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\section{%s}"</span> . <span style="color: #494949;">"\\section*{%s}"</span><span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\subsection{%s}"</span> . <span style="color: #494949;">"\\subsection*{%s}"</span><span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\subsubsection{%s}"</span> . <span style="color: #494949;">"\\subsubsection*{%s}"</span><span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\paragraph{%s}"</span> . <span style="color: #494949;">"\\paragraph*{%s}"</span><span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\subparagraph{%s}"</span> . <span style="color: #494949;">"\\subparagraph*{%s}"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">(</span><span style="color: #494949;">"report"</span>
+           ,<span style="color: #494949;">(</span>concat <span style="color: #494949;">"\\documentclass[11pt]{report}"</span> ec-standard-latex-header<span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\part{%s}"</span> . <span style="color: #494949;">"\\part*{%s}"</span><span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\chapter{%s}"</span> . <span style="color: #494949;">"\\chapter*{%s}"</span><span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\section{%s}"</span> . <span style="color: #494949;">"\\section*{%s}"</span><span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\subsection{%s}"</span> . <span style="color: #494949;">"\\subsection*{%s}"</span><span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\subsubsection{%s}"</span> . <span style="color: #494949;">"\\subsubsection*{%s}"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">(</span><span style="color: #494949;">"book"</span>
+           ,<span style="color: #494949;">(</span>concat <span style="color: #494949;">"\\documentclass[11pt]{book}"</span> ec-standard-latex-header<span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\part{%s}"</span> . <span style="color: #494949;">"\\part*{%s}"</span><span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\chapter{%s}"</span> . <span style="color: #494949;">"\\chapter*{%s}"</span><span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\section{%s}"</span> . <span style="color: #494949;">"\\section*{%s}"</span><span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\subsection{%s}"</span> . <span style="color: #494949;">"\\subsection*{%s}"</span><span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span><span style="color: #494949;">"\\subsubsection{%s}"</span> . <span style="color: #494949;">"\\subsubsection*{%s}"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">setq</span> org-latex-listings 'minted<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>add-to-list 'org-latex-packages-alist '<span style="color: #494949;">(</span><span style="color: #494949;">"newfloat"</span> <span style="color: #494949;">"minted"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">setq</span> org-latex-minted-options
+        '<span style="color: #494949;">(</span><span style="color: #bbb;">(</span><span style="color: #494949;">"bgcolor"</span> <span style="color: #494949;">"bgcode"</span><span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">(</span><span style="color: #494949;">"style"</span> <span style="color: #494949;">"trac"</span><span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">(</span><span style="color: #494949;">"frame"</span> <span style="color: #494949;">"lines"</span><span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">(</span><span style="color: #494949;">"linenos"</span> <span style="color: #494949;">"true"</span><span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">(</span><span style="color: #494949;">"breaklines"</span> <span style="color: #494949;">"true"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+
+
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Citations</span>
+
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">setq</span> org-cite-global-bibliography `<span style="color: #494949;">(</span>,<span style="color: #bbb;">(</span>concat ec-memex-dir <span style="color: #494949;">"global-cite.bib"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Org babel features</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">require</span> '<span style="color: #E53935;">ob-clojure</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">setq</span> org-babel-clojure-backend 'cider<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">require</span> '<span style="color: #E53935;">ob-java</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">require</span> '<span style="color: #E53935;">ob-python</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">setq</span> org-babel-python-command <span style="color: #494949;">"python3"</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">require</span> '<span style="color: #E53935;">ob-scheme</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">require</span> '<span style="color: #E53935;">ob-lisp</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">require</span> '<span style="color: #E53935;">ob-dot</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">require</span> '<span style="color: #E53935;">ob-latex</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">require</span> '<span style="color: #E53935;">ob-shell</span><span style="color: #bbb;">)</span>
+
+
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">make code nicer</span>
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">(defun ec-poly-init-font-lock-mode ()</span>
+  <span style="color: #a4a4a4; font-style: italic;">;;   </span><span style="color: #a4a4a4; font-style: italic;">"Activate font lock mode if it is not already active in polymode buffers."</span>
+  <span style="color: #a4a4a4; font-style: italic;">;;   </span><span style="color: #a4a4a4; font-style: italic;">(unless (mode-active? 'font-lock-mode)</span>
+  <span style="color: #a4a4a4; font-style: italic;">;;     </span><span style="color: #a4a4a4; font-style: italic;">(font-lock-mode +1)))  </span>
+
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">(use-package poly-org</span>
+  <span style="color: #a4a4a4; font-style: italic;">;;   </span><span style="color: #a4a4a4; font-style: italic;">:hook (org-mode . poly-org-mode)</span>
+  <span style="color: #a4a4a4; font-style: italic;">;;   </span><span style="color: #a4a4a4; font-style: italic;">:hook (polymode-init-inner . ec-poly-init-font-lock-mode))</span>
+
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">plantuml</span>
+
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">use-package</span> <span style="color: #E53935;">plantuml-mode</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">setq</span> org-plantuml-jar-path
+        <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">setq</span> plantuml-jar-path
+              <span style="color: #bbb;">(</span>expand-file-name <span style="color: #494949;">"/gnu/store/fg59789xsx62l9pm3j0dyzdpgs2h2f86-plantuml-1.2020.24/share/java/plantuml.jar"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>add-to-list 'auto-mode-alist '<span style="color: #494949;">(</span><span style="color: #494949;">"\\.plantuml\\'"</span> . plantuml-mode<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>add-to-list 'org-src-lang-modes '<span style="color: #494949;">(</span><span style="color: #494949;">"plantuml"</span> . plantuml<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">setq</span> plantuml-default-exec-mode 'jar<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>add-to-list 'org-src-lang-modes '<span style="color: #494949;">(</span><span style="color: #494949;">"plantuml"</span> . plantuml<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>org-babel-do-load-languages 'org-babel-load-languages '<span style="color: #494949;">(</span><span style="color: #bbb;">(</span>plantuml . t<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">grfaphviz</span>
+  <span style="color: #bbb;">(</span>add-to-list 'org-src-lang-modes '<span style="color: #494949;">(</span><span style="color: #494949;">"dot"</span> . graphviz-dot<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">julia stuff</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">use-package</span> <span style="color: #E53935;">julia-mode</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">use-package</span> <span style="color: #E53935;">ess</span>
+    <span style="color: #E53935;">:config</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">use-package</span> <span style="color: #E53935;">ess-inf</span>
+      <span style="color: #E53935;">:after</span> ess
+      <span style="color: #E53935;">:straight</span> nil
+      <span style="color: #E53935;">:bind</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">:map</span> inferior-ess-mode-map
+                  <span style="color: #494949;">(</span><span style="color: #494949;">"RET"</span> . newline-and-indent<span style="color: #494949;">)</span>
+                  <span style="color: #494949;">(</span><span style="color: #494949;">"S-&lt;return&gt;"</span> . inferior-ess-send-input<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">use-package</span> <span style="color: #E53935;">ob-ess-julia</span>
+      <span style="color: #E53935;">:config</span>
+      <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">defalias</span> '<span style="font-weight: bold; font-style: italic;">org-babel-execute:julia</span> 'org-babel-execute:ess-julia<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">fontify stuff nicely</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">setq</span> org-src-fontify-natively t<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">setq</span> org-src-preserve-indentation t<span style="color: #bbb;">)</span>
+
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">pdf nonsense</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">setq</span> org-latex-pdf-process
+        '<span style="color: #494949;">(</span><span style="color: #494949;">"%latex -shell-escape -8bit -interaction nonstopmode -output-directory %o %f"</span>
+          <span style="color: #494949;">"%latex -shell-escape -8bit -interaction nonstopmode -output-directory %o %f"</span>
+          <span style="color: #494949;">"%latex -shell-escape -8bit -interaction nonstopmode -output-directory %o %f"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">make the agenda restore the window config (like why doesn't it do this by default!)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">setq</span> org-agenda-restore-windows-after-quit t<span style="color: #bbb;">)</span>
+
+
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">variable pitch in org mode</span>
+  <span style="color: #bbb;">(</span>add-hook 'org-mode-hook <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #bbb;">()</span> <span style="color: #bbb;">(</span>variable-pitch-mode t<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  
+  <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">Org export features</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">require</span> '<span style="color: #E53935;">ox</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">require</span> '<span style="color: #E53935;">ox-latex</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">require</span> '<span style="color: #E53935;">ox-texinfo</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">require</span> '<span style="color: #E53935;">ox-publish</span><span style="color: #bbb;">)</span>
+  <span style="color: #E53935;">:bind</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">:map</span> org-mode-map
+              <span style="color: #494949;">(</span><span style="color: #494949;">"C-c C-s"</span> . ec-speak-region<span style="color: #494949;">)</span>
+              <span style="color: #494949;">(</span><span style="color: #494949;">"C-c C-d"</span> . lexic-search-word-at-point<span style="color: #494949;">)</span>
+              <span style="color: #494949;">(</span><span style="color: #494949;">"C-x C-s"</span> . ec-save-and-log-edit<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #E53935;">:hook</span> <span style="color: #bbb;">(</span>org-mode  . org-indent-mode<span style="color: #bbb;">)</span>
+  <span style="color: #E53935;">:hook</span> <span style="color: #bbb;">(</span>org-mode  . org-toggle-time-stamp-overlays<span style="color: #bbb;">)</span>
+  <span style="color: #E53935;">:hook</span> <span style="color: #bbb;">(</span>org-mode  . org-toggle-inline-images<span style="color: #bbb;">)</span>
+  <span style="color: #E53935;">:hook</span> <span style="color: #bbb;">(</span>auto-save . org-save-all-org-buffers<span style="color: #bbb;">)</span>
+  <span style="color: #E53935;">:hook</span> <span style="color: #bbb;">(</span>org-babel-after-execute . org-redisplay-inline-images<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2021-W50-7 20:54</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>

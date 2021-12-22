@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W50-4 01:02 -->
+<!-- 2021-W50-7 19:21 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Econf World Wide Web</title>
@@ -24,7 +24,7 @@
 <ul>
 <li><a href="#org73f9396">Introduction</a></li>
 <li><a href="#orgab2bd12">Dependencies</a></li>
-<li><a href="#orgcb9b2a1">Variables</a>
+<li><a href="#orgb7958bc">Variables</a>
 <ul>
 <li><a href="#orga2f6772">Setting Browsers (and stuff)</a></li>
 <li><a href="#org3955360">The w3m Directory</a></li>
@@ -49,7 +49,7 @@
 </li>
 <li><a href="#orgbb4d542">Search Engine Suggestions</a>
 <ul>
-<li><a href="#orgb7958bc">Variables</a></li>
+<li><a href="#org057432f">Variables</a></li>
 <li><a href="#org2d39642">Functions</a>
 <ul>
 <li><a href="#org369c113">ec-ddg-suggest-fetch</a></li>
@@ -132,9 +132,9 @@ This is some fo the code I use for search engine stuff in Emacs.
 </div>
 </div>
 
-<div id="outline-container-orgcb9b2a1" class="outline-2">
-<h2 id="orgcb9b2a1">Variables</h2>
-<div class="outline-text-2" id="text-orgcb9b2a1">
+<div id="outline-container-orgb7958bc" class="outline-2">
+<h2 id="orgb7958bc">Variables</h2>
+<div class="outline-text-2" id="text-orgb7958bc">
 <p>
 Here I set up a bunch of variables that are used in the rest of the package. However, I do not set all my variables here and do make some closer to where they are used. <label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> I am not sure that this is the best practice, but I am so far from the "best practices" zone with this configuration that I may as well just go with it.</span>
 </p>
@@ -153,7 +153,8 @@ Here I set up a bunch of variables that are used in the rest of the package. How
   <span style="color: #a4a4a4; font-style: italic;">"The format string used to generate the video playing command."</span><span style="color: #494949;">)</span>
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defvar</span> <span style="font-style: italic;">ec-graphical-browse-domains</span> '<span style="color: #bbb;">(</span><span style="color: #494949;">"http://127.0.0.1:1337?token="</span>
-                                       <span style="color: #494949;">"https://meet.jit.si"</span><span style="color: #bbb;">)</span>
+                                      <span style="color: #494949;">"https://meet.jit.si"</span>
+                                      <span style="color: #494949;">"http://localhost:35901/"</span><span style="color: #bbb;">)</span>
   <span style="color: #a4a4a4; font-style: italic;">"Domains that are to be browsed graphically in `</span><span style="color: #E53935; font-style: italic;">w3m-goto-url-new-session-or-video</span><span style="color: #a4a4a4; font-style: italic;">'."</span><span style="color: #494949;">)</span>
 
 </pre>
@@ -431,9 +432,9 @@ This just redefines the w3m URL thing entirely, checking if it is a video in the
 To add search engine suggestions
 </p>
 </div>
-<div id="outline-container-orgb7958bc" class="outline-3">
-<h3 id="orgb7958bc">Variables</h3>
-<div class="outline-text-3" id="text-orgb7958bc">
+<div id="outline-container-org057432f" class="outline-3">
+<h3 id="org057432f">Variables</h3>
+<div class="outline-text-3" id="text-org057432f">
 <p>
 Here I set a list of variables for the search engine suggestions that.
 </p>
@@ -860,7 +861,7 @@ Now I just add <a href="https://github.com/abo-abo/ace-link">ace-link</a> to mak
 
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W50-3 19:58</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W50-6 00:53</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

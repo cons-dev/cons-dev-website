@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-W51-3 03:44 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TSLIDES</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="Ever wanted to display slides in the termianl, in bash? Now you can." />
+<meta name="generator" content="Org Mode" />
+<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">TSLIDES
+<br />
+<span class="subtitle">A very reasonable, effective, terminal slideshow engine.</span>
+</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org46474ed">Introduction</a></li>
+<li><a href="#orga404bc5">makefile</a></li>
+<li><a href="#orgd77d05e">main.sh</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org46474ed" class="outline-2">
+<h2 id="org46474ed">Introduction</h2>
+<div class="outline-text-2" id="text-org46474ed">
+<p>
+A while back I wrote tslides, a very reasonable, not at all absurd terminal slideshow program. This was done in the days in which I sort of bought into the UNIX philosophy wholesale. I also implemented a documentation program which has sadly since been lost to time, but that's what the sphinx-like <code>@something</code> lines are for.
+</p>
+
+<p>
+As you can see I haven't really given up on my desire to document absolutely everything, I just have sort of shifted my approach.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga404bc5" class="outline-2">
+<h2 id="orga404bc5">makefile</h2>
+<div class="outline-text-2" id="text-orga404bc5">
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="font-style: italic;">PROGRAM_NAME</span>    =  <span style="color: #494949;">"tslides"</span>
+<span style="font-style: italic;">RESOURCES_DIR</span>   =  $<span style="color: #494949;">(</span><span style="font-style: italic;">HOME</span><span style="color: #494949;">)</span>/.resources
+<span style="font-style: italic;">BIN_INSTALL_DIR</span> =  $<span style="color: #494949;">(</span><span style="font-style: italic;">HOME</span><span style="color: #494949;">)</span>/bin
+
+<span style="color: #1976D2;">install</span>:
+                mkdir -p $<span style="color: #494949;">(</span><span style="font-style: italic;">RESOURCES_DIR</span><span style="color: #494949;">)</span>/$<span style="color: #494949;">(</span><span style="font-style: italic;">PROGRAM_NAME</span><span style="color: #494949;">)</span>
+                cp -r resources/* $<span style="color: #494949;">(</span><span style="font-style: italic;">RESOURCES_DIR</span><span style="color: #494949;">)</span>/$<span style="color: #494949;">(</span><span style="font-style: italic;">PROGRAM_NAME</span><span style="color: #494949;">)</span> 
+                cp -r main.sh $<span style="color: #494949;">(</span><span style="font-style: italic;">BIN_INSTALL_DIR</span><span style="color: #494949;">)</span>/$<span style="color: #494949;">(</span><span style="font-style: italic;">PROGRAM_NAME</span><span style="color: #494949;">)</span>
+
+<span style="color: #1976D2;">uninstall</span>:
+                rm -rf $<span style="color: #494949;">(</span><span style="font-style: italic;">RESOURCES_DIR</span><span style="color: #494949;">)</span>/$<span style="color: #494949;">(</span><span style="font-style: italic;">PROGRAM_NAME</span><span style="color: #494949;">)</span>
+                rm $<span style="color: #494949;">(</span><span style="font-style: italic;">BIN_INSTALL_DIR</span><span style="color: #494949;">)</span>/$<span style="color: #494949;">(</span><span style="font-style: italic;">PROGRAM_NAME</span><span style="color: #494949;">)</span>
+
+<span style="color: #1976D2;">document</span>:
+                autodoc main.sh
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd77d05e" class="outline-2">
+<h2 id="orgd77d05e">main.sh</h2>
+<div class="outline-text-2" id="text-orgd77d05e">
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #a4a4a4; font-style: italic;">#</span><span style="color: #a4a4a4; font-style: italic;">!/bin/</span><span style="color: #E53935; font-style: italic;">bash</span>
+: <span style="color: #494949;">'</span>
+<span style="color: #494949;">@project: tslides</span>
+<span style="color: #494949;">@repo: nil</span>
+<span style="color: #494949;">@creator: nil</span>
+<span style="color: #494949;">@description</span>
+<span style="color: #494949;">A slideshow in the termianl.</span>
+<span style="color: #494949;">@description</span>
+<span style="color: #494949;">@dependencies: bash, jp2a, figlet </span>
+<span style="color: #494949;">'</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">====================  GLOBAL VARS  ===========================================</span>
+
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">CONSTANTS</span>
+<span style="font-style: italic;">HELPMSG</span>=<span style="color: #494949;">"USAGE: tslides FILE || OPTIONS</span>
+<span style="color: #494949;">OPTIONS:</span>
+<span style="color: #494949;">-v  --version   prints version and then exits</span>
+<span style="color: #494949;">-h  --help      prints this message and then exits</span>
+<span style="color: #494949;">"</span>
+<span style="font-style: italic;">TERM_WIDTH</span>=<span style="color: #000; font-weight: bold;">`tput cols`</span>
+<span style="font-style: italic;">TERM_HEIGHT</span>=<span style="color: #000; font-weight: bold;">`tput lines`</span>
+<span style="font-style: italic;">FONT_DIR</span>=<span style="color: #494949;">"$HOME/.resources/tslides/fonts"</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">MUTABLE VARS</span>
+<span style="font-style: italic;">current_transition</span>=<span style="color: #494949;">"cut"</span>
+
+<span style="font-style: italic;">title_font</span>=<span style="color: #494949;">"epic"</span>
+<span style="font-style: italic;">subtitle_font</span>=<span style="color: #494949;">"standard"</span>
+<span style="font-style: italic;">header_font</span>=<span style="color: #494949;">"mini"</span>
+
+<span style="font-style: italic;">pause_on</span>=<span style="color: #494949;">"slides"</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">====================  FUNCTIONS  ============================================</span>
+: <span style="color: #494949;">'</span>
+<span style="color: #494949;">@function</span>
+<span style="color: #494949;">  @name: cutTransition</span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">Transitions in text instantly.</span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">  @dependencies: none</span>
+<span style="color: #494949;">  @args: $1 transition text</span>
+<span style="color: #494949;">  @sideEffects: sends text to STDOUT</span>
+<span style="color: #494949;">  @returns: none</span>
+<span style="color: #494949;">@function</span>
+<span style="color: #494949;">'</span>
+<span style="font-weight: bold; font-style: italic;">cutTransition</span><span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    <span style="color: #E53935;">echo</span> <span style="color: #494949;">"$1"</span>
+<span style="color: #494949;">}</span>
+
+: <span style="color: #494949;">'</span>
+<span style="color: #494949;">@function</span>
+<span style="color: #494949;">  @name: ttyTransition</span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">Transitions in text like a TTY terminal running on a high baud modem.</span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">  @dependencies: none</span>
+<span style="color: #494949;">  @args: $1 transition text</span>
+<span style="color: #494949;">  @sideEffects: sends text to STDOUT</span>
+<span style="color: #494949;">  @returns: none</span>
+<span style="color: #494949;">@function</span>
+<span style="color: #494949;">'</span>
+<span style="font-weight: bold; font-style: italic;">ttyTransition</span> <span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    <span style="font-style: italic;">IFS</span>=$<span style="color: #494949;">'\n'</span>
+    <span style="color: #E53935;">echo</span> <span style="color: #494949;">"$1"</span> |
+    <span style="color: #E53935; font-style: italic;">while </span><span style="color: #E53935;">read</span> -r line
+    <span style="color: #E53935; font-style: italic;">do</span>
+        <span style="color: #E53935;">echo</span> <span style="color: #494949;">"$line"</span> |
+        <span style="color: #E53935; font-style: italic;">while  </span><span style="color: #E53935;">read</span> -r -n1 char
+        <span style="color: #E53935; font-style: italic;">do</span>
+            <span style="color: #E53935;">echo</span> -n <span style="color: #494949;">"$char"</span>
+            sleep 0.0000694444
+        <span style="color: #E53935; font-style: italic;">done</span>
+        <span style="color: #E53935;">echo</span> <span style="color: #494949;">""</span>
+    <span style="color: #E53935; font-style: italic;">done</span>
+<span style="color: #494949;">}</span>
+
+: <span style="color: #494949;">'</span>
+<span style="color: #494949;">@function</span>
+<span style="color: #494949;">  @name: lineTransition</span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">Fades in text line by line.</span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">  @dependencies: none</span>
+<span style="color: #494949;">  @args: $1 transition text</span>
+<span style="color: #494949;">  @sideEffects: sends text to STDOUT</span>
+<span style="color: #494949;">  @returns: none</span>
+<span style="color: #494949;">@function</span>
+<span style="color: #494949;">'</span>
+<span style="font-weight: bold; font-style: italic;">lineTransition</span> <span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    <span style="font-style: italic;">IFS</span>=$<span style="color: #494949;">'\n'</span>
+    <span style="color: #E53935;">echo</span> <span style="color: #494949;">"$1"</span> |
+    <span style="color: #E53935; font-style: italic;">while </span><span style="color: #E53935;">read</span> -r line
+    <span style="color: #E53935; font-style: italic;">do</span>
+        <span style="color: #E53935;">echo</span> <span style="color: #494949;">"$line"</span>
+        sleep 0.1
+    <span style="color: #E53935; font-style: italic;">done</span>
+<span style="color: #494949;">}</span>
+
+: <span style="color: #494949;">'</span>
+<span style="color: #494949;">@function</span>
+<span style="color: #494949;">  @name: transition</span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">Transitions text in terminal.</span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">  @dependencies: cutTransition, ttyTransition, lineTransition</span>
+<span style="color: #494949;">  @args: $1 transition text, $2  transition type</span>
+<span style="color: #494949;">  @sideEffects: sends text to STDOUT</span>
+<span style="color: #494949;">  @returns: nothing</span>
+<span style="color: #494949;">@function</span>
+<span style="color: #494949;">'</span>
+<span style="font-weight: bold; font-style: italic;">transition</span><span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    <span style="color: #bbb;">[</span> <span style="color: #494949;">"$2"</span> = <span style="color: #494949;">"cut"</span> <span style="color: #bbb;">]</span> &amp;&amp; cutTransition <span style="color: #494949;">"$1"</span>
+    <span style="color: #bbb;">[</span> <span style="color: #494949;">"$2"</span> = <span style="color: #494949;">"tty"</span> <span style="color: #bbb;">]</span> &amp;&amp; ttyTransition <span style="color: #494949;">"$1"</span>
+    <span style="color: #bbb;">[</span> <span style="color: #494949;">"$2"</span> = <span style="color: #494949;">"line"</span> <span style="color: #bbb;">]</span> &amp;&amp; lineTransition <span style="color: #494949;">"$1"</span>
+<span style="color: #494949;">}</span>
+
+: <span style="color: #494949;">'</span>
+<span style="color: #494949;">@function</span>
+<span style="color: #494949;">  @name: evalCode</span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">Evaluates a line of code and returns the text sent to STDOUT from program to terminal.</span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">  @dependencies: nothing</span>
+<span style="color: #494949;">  @args: $1 line of code to be evaluated</span>
+<span style="color: #494949;">  @sideEffects: Executes line of code and substitutes it into string.</span>
+<span style="color: #494949;">  @returns: text sent to STDOUT by program</span>
+<span style="color: #494949;">@function</span>
+<span style="color: #494949;">'</span>
+<span style="font-weight: bold; font-style: italic;">evalCode</span><span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    <span style="font-style: italic;">code</span>=<span style="color: #000; font-weight: bold;">`sed 's/.*|&gt;\(.*\)&lt;|.*/\1/' &lt;&lt;&lt; "$1"`</span>
+    <span style="font-style: italic;">front</span>=<span style="color: #000; font-weight: bold;">`sed 's/|&gt;.*//' &lt;&lt;&lt; "$1"`</span>
+    <span style="font-style: italic;">back</span>=<span style="color: #000; font-weight: bold;">`sed 's/.*&lt;|//' &lt;&lt;&lt; "$1"`</span>
+    <span style="font-style: italic;">evalResult</span>=<span style="color: #000; font-weight: bold;">`( eval "$code" )`</span>
+    <span style="color: #E53935;">echo</span> -e <span style="color: #494949;">"$front $evalResult $back"</span>
+<span style="color: #494949;">}</span>
+
+: <span style="color: #494949;">'</span>
+<span style="color: #494949;">@function</span>
+<span style="color: #494949;">  @name:</span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">Displays image in terminal.</span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">  @dependencies: jp2a, transition</span>
+<span style="color: #494949;">  @args: $1  line of code containing image text</span>
+<span style="color: #494949;">  @sideEffects: prints image in terminal</span>
+<span style="color: #494949;">  @returns: nothing</span>
+<span style="color: #494949;">@function</span>
+<span style="color: #494949;">'</span>
+<span style="font-weight: bold; font-style: italic;">printImg</span><span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    clear
+    <span style="font-style: italic;">imgfile</span>=<span style="color: #000; font-weight: bold;">`sed 's/\;i\[\(.*\)\]/\1/' &lt;&lt;&lt; "$1"`</span>
+    <span style="font-style: italic;">image</span>=<span style="color: #000; font-weight: bold;">`jp2a "$imgfile"`</span>
+    transition <span style="color: #494949;">"$image"</span> <span style="color: #494949;">"$current_transition"</span>
+<span style="color: #494949;">}</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">TODO: make video play in same terminal</span>
+: <span style="color: #494949;">'</span>
+<span style="color: #494949;">@function</span>
+<span style="color: #494949;">  @name: playVideo</span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">Plays video in the terminal </span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">  @dependencies: caca, mplayer</span>
+<span style="color: #494949;">  @args: $1  line of code containing video text</span>
+<span style="color: #494949;">  @sideEffects: plays video in new window</span>
+<span style="color: #494949;">  @returns: nothing</span>
+<span style="color: #494949;">@function</span>
+<span style="color: #494949;">'</span>
+<span style="font-weight: bold; font-style: italic;">playVideo</span><span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    <span style="font-style: italic;">termwide_width</span>=<span style="color: #000; font-weight: bold;">`(( $TERM_HEIGHT * 16 / 9 ))`</span>
+    
+    <span style="font-style: italic;">videoFile</span>=<span style="color: #000; font-weight: bold;">`sed 's/\;v\[\(.*\)\]/\1/' &lt;&lt;&lt; "$1"`</span>
+    mplayer -vo caca -quiet <span style="color: #494949;">"$videoFile"</span>
+<span style="color: #494949;">}</span>
+
+: <span style="color: #494949;">'</span>
+<span style="color: #494949;">@function</span>
+<span style="color: #494949;">  @name: printHeader</span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">Prints a line of special text as defined by a delimiter.</span>
+<span style="color: #494949;">  @description </span>
+<span style="color: #494949;">  @dependencies: figlet</span>
+<span style="color: #494949;">  @args: $1  line of code containing text, $2  text designatot, $3 font</span>
+<span style="color: #494949;">  @sideEffects: prints to terminal</span>
+<span style="color: #494949;">  @returns: nothing</span>
+<span style="color: #494949;">@function</span>
+<span style="color: #494949;">'</span>
+<span style="font-weight: bold; font-style: italic;">printText</span><span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    <span style="font-style: italic;">text</span>=<span style="color: #000; font-weight: bold;">`sed "s/$2\(.*\)/\1/" &lt;&lt;&lt; "$1"`</span>
+    <span style="font-style: italic;">figText</span>=<span style="color: #000; font-weight: bold;">`figlet -t -f "$FONT_DIR/$3.flf" "$text"`</span>
+    transition <span style="color: #494949;">"$figText"</span> <span style="color: #494949;">"$current_transition"</span>
+<span style="color: #494949;">}</span>
+
+: <span style="color: #494949;">'</span>
+<span style="color: #494949;">@function</span>
+<span style="color: #494949;">  @name: parseLine</span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">Parses a line of code from the input file.</span>
+<span style="color: #494949;">  @description</span>
+<span style="color: #494949;">  @dependencies: printHeader, printSubtitle, printTitle, printImg, showVideo, transition, evalCode</span>
+<span style="color: #494949;">  @args: $1  line of code to be evaluated</span>
+<span style="color: #494949;">  @sideEffects: subprocesses print to terminal and may execute system commands</span>
+<span style="color: #494949;">  @returns: nothing</span>
+<span style="color: #494949;">@function</span>
+<span style="color: #494949;">'</span>
+<span style="font-weight: bold; font-style: italic;">parseLine</span><span style="color: #494949;">()</span> <span style="color: #494949;">{</span>
+    <span style="font-style: italic;">val</span>=<span style="color: #494949;">"$1"</span>
+    <span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">this executes embedded code</span>
+    <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span> <span style="color: #494949;">"$1"</span> =~ ^.*<span style="color: #494949;">\|\&gt;</span>.*<span style="color: #494949;">\&lt;\|</span><span style="color: #E53935;">.</span>*$ <span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+    <span style="color: #E53935; font-style: italic;">then</span>
+        <span style="font-style: italic;">val</span>=<span style="color: #000; font-weight: bold;">`evalCode "$1"`</span>
+    <span style="color: #E53935; font-style: italic;">fi</span>
+
+    <span style="color: #a4a4a4; font-style: italic;">#</span><span style="color: #a4a4a4; font-style: italic;">this catches setters</span>
+    <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span> <span style="color: #494949;">"$val"</span> =~ ^<span style="color: #494949;">\;\;</span><span style="color: #E53935;">.</span>*$ <span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+    <span style="color: #E53935; font-style: italic;">then</span>
+        <span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">this matches setters for various fonts</span>
+        <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span> <span style="color: #494949;">"$val"</span> =~ ^<span style="color: #494949;">\;\;</span>transition:<span style="color: #494949;">\ \ </span>*.*$  <span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+        <span style="color: #E53935; font-style: italic;">then</span>
+                <span style="font-style: italic;">current_transition</span>=<span style="color: #000; font-weight: bold;">`sed 's/\;\;transition:\ *\(.*\)\ */\1/' &lt;&lt;&lt; "$val"`</span>
+        <span style="color: #E53935; font-style: italic;">elif</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span> <span style="color: #494949;">"$val"</span> =~ ^<span style="color: #494949;">\;\;</span>titleFont:<span style="color: #494949;">\ \ </span>*.*$  <span style="color: #494949;">]</span><span style="color: #bbb;">]</span> 
+        <span style="color: #E53935; font-style: italic;">then</span>
+            <span style="font-style: italic;">title_font</span>=<span style="color: #000; font-weight: bold;">`sed 's/\;\;titleFont:\ *\(.*\)\ */\1/' &lt;&lt;&lt; "$val"`</span>
+        <span style="color: #E53935; font-style: italic;">elif</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span> <span style="color: #494949;">"$val"</span> =~ ^<span style="color: #494949;">\;\;</span>subtitleFont:<span style="color: #494949;">\ \ </span>*.*$  <span style="color: #494949;">]</span><span style="color: #bbb;">]</span>  
+        <span style="color: #E53935; font-style: italic;">then</span>
+            <span style="font-style: italic;">subtitle_font</span>=<span style="color: #000; font-weight: bold;">`sed 's/\;\;subtitleFont:\ *\(.*\)\ */\1/' &lt;&lt;&lt; "$val"`</span>
+        <span style="color: #E53935; font-style: italic;">elif</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span> <span style="color: #494949;">"$val"</span> =~ ^<span style="color: #494949;">\;\;</span>headerFont:<span style="color: #494949;">\ \ </span>*.*$  <span style="color: #494949;">]</span><span style="color: #bbb;">]</span> 
+        <span style="color: #E53935; font-style: italic;">then</span>
+            <span style="font-style: italic;">header_font</span>=<span style="color: #000; font-weight: bold;">`sed 's/\;\;headerFont:\ *\(.*\)\ */\1/' &lt;&lt;&lt; "$val"`</span>
+ 
+        <span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">this matches pause on inidcators</span>
+        <span style="color: #E53935; font-style: italic;">elif</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span> <span style="color: #494949;">"$val"</span> =~ ^<span style="color: #494949;">\;\;</span>pauseOn:<span style="color: #494949;">\ \ </span>*.*$  <span style="color: #494949;">]</span><span style="color: #bbb;">]</span> 
+        <span style="color: #E53935; font-style: italic;">then</span>
+            <span style="font-style: italic;">pause_on</span>=<span style="color: #000; font-weight: bold;">`sed 's/\;\;pauseOn:\ *\(.*\)\ */\1/' &lt;&lt;&lt; "$val"`</span>
+        <span style="color: #E53935; font-style: italic;">fi</span>
+    <span style="color: #E53935; font-style: italic;">else</span> 
+        <span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">this matches indicators for slide changes</span>
+        <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span> <span style="color: #494949;">"$val"</span> =~ ^<span style="color: #494949;">\;</span>slide<span style="color: #494949;">\ </span>*$ <span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+        <span style="color: #E53935; font-style: italic;">then</span>
+            <span style="color: #E53935;">read</span> -rsn 1 -u 1
+            clear
+            <span style="color: #E53935; font-style: italic;">return</span> 0 
+        
+        <span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">this matches headers and titles</span>
+        <span style="color: #E53935; font-style: italic;">elif</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span> <span style="color: #494949;">"$val"</span> =~ ^#<span style="color: #494949;">\ \ </span>*.*$  <span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+        <span style="color: #E53935; font-style: italic;">then</span>
+            printText <span style="color: #494949;">"$val"</span> <span style="color: #494949;">"#"</span> <span style="color: #494949;">"$title_font"</span>  
+        <span style="color: #E53935; font-style: italic;">elif</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span> <span style="color: #494949;">"$val"</span> =~ ^##<span style="color: #494949;">\ \ </span>*.*$  <span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+        <span style="color: #E53935; font-style: italic;">then</span>
+            printText <span style="color: #494949;">"$val"</span> <span style="color: #494949;">"##"</span> <span style="color: #494949;">"$subtitle_font"</span>  
+        <span style="color: #E53935; font-style: italic;">elif</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span> <span style="color: #494949;">"$val"</span> =~ ^###<span style="color: #494949;">\ \ </span>*.*$  <span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+        <span style="color: #E53935; font-style: italic;">then</span>
+            printText <span style="color: #494949;">"$val"</span> <span style="color: #494949;">"###"</span> <span style="color: #494949;">"$header_font"</span>  
+ 
+        <span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">this matches images </span>
+        <span style="color: #E53935; font-style: italic;">elif</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span> <span style="color: #494949;">"$val"</span> =~ ^<span style="color: #494949;">\;</span>i<span style="color: #494949;">\[</span>.*<span style="color: #494949;">\]</span>$<span style="color: #494949;">\ </span>* <span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+        <span style="color: #E53935; font-style: italic;">then</span>
+            printImg <span style="color: #494949;">"$val"</span>
+ 
+        <span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">this matches videos </span>
+        <span style="color: #E53935; font-style: italic;">elif</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span> <span style="color: #494949;">"$val"</span> =~ ^<span style="color: #494949;">\;</span>v<span style="color: #494949;">\[</span>.*<span style="color: #494949;">\]</span>$<span style="color: #494949;">\ </span>* <span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+        <span style="color: #E53935; font-style: italic;">then</span>
+            playVideo <span style="color: #494949;">"$val"</span>
+ 
+        <span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">this prints any text that was not matched by previous patterns</span>
+        <span style="color: #E53935; font-style: italic;">else</span>
+            transition <span style="color: #494949;">"$val"</span> <span style="color: #494949;">"$current_transition"</span>
+        <span style="color: #E53935; font-style: italic;">fi</span>
+ 
+        <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">[</span> <span style="color: #494949;">"$pause_on"</span> = <span style="color: #494949;">"line"</span> <span style="color: #bbb;">]</span>
+        <span style="color: #E53935; font-style: italic;">then</span>
+            <span style="color: #E53935;">read</span> -rsn 1 -u 1
+        <span style="color: #E53935; font-style: italic;">fi</span>
+    <span style="color: #E53935; font-style: italic;">fi</span>
+<span style="color: #494949;">}</span>
+
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">==================== PROCEDURAL CODE =========================================</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">get start time</span>
+<span style="font-style: italic;">start</span>=<span style="color: #000; font-weight: bold;">`date +%s`</span>
+<span style="font-style: italic;">startDate</span>=<span style="color: #000; font-weight: bold;">`date -Is`</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">execute slideshow</span>
+cat <span style="color: #494949;">"$1"</span> |
+<span style="color: #E53935; font-style: italic;">while </span><span style="color: #E53935;">read</span> -r line
+<span style="color: #E53935; font-style: italic;">do</span>
+    parseLine <span style="color: #494949;">"$line"</span>
+<span style="color: #E53935; font-style: italic;">done</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">get end time</span>
+<span style="font-style: italic;">end</span>=<span style="color: #000; font-weight: bold;">`date +%s`</span>
+<span style="font-style: italic;">endDate</span>=<span style="color: #000; font-weight: bold;">`date -Is`</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">get runtime</span>
+<span style="font-style: italic;">runtime</span>=$<span style="color: #494949;">(</span><span style="color: #bbb;">(</span>end-start<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #a4a4a4; font-style: italic;"># </span><span style="color: #a4a4a4; font-style: italic;">display runtime and end time</span>
+<span style="color: #E53935;">echo</span> <span style="color: #494949;">"slideshow finished"</span>
+<span style="color: #E53935;">echo</span> <span style="color: #494949;">"start: $startDate end: $endDate runtime: $runtime"</span>
+
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2021-W51-3 03:20</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>

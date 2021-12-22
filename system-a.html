@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-W51-3 04:47 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>system/a</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="A simple memory-to-memory virtual machine implemented in C++. (nonfunctional)" />
+<meta name="generator" content="Org Mode" />
+<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">system/a
+<br />
+<span class="subtitle">A slightly-less modern computing system.</span>
+</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org7434113">Introduction</a></li>
+<li><a href="#org0490009">Source Code</a>
+<ul>
+<li><a href="#org7b6c798">main.cpp</a></li>
+<li><a href="#org9d4cf69">systema.h</a></li>
+<li><a href="#orgd770643">assembler.h</a></li>
+<li><a href="#orgf38b037">instructions.h</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="org962997a" class="figure">
+<p><img src="images/system-a-logo.jpeg" alt="system-a-logo.jpeg" />
+</p>
+</div>
+
+<div id="outline-container-org7434113" class="outline-2">
+<h2 id="org7434113">Introduction</h2>
+<div class="outline-text-2" id="text-org7434113">
+<p>
+This was, in essence, the thing that made me realize the beauty of computer science. Yes, it looks incredibly ugly and doesn't work right now, <i>but when it did work</i> it was beyond beautiful. Why? Because in learning how a basic memory-to-memory virtual machine was implemented I realized how elegant and simple computer science is.
+</p>
+
+<p>
+Yes, there are instruction pipelines, yes, there are other complex things going on, but even with the added complexity the simplicity and beauty of the interfaces stood out. With a continuous block of memory and simple rules you could simulate anything and it was interesting to experience and discover how programming languages worked as well.
+</p>
+
+<p>
+You can see the fancy manual I made for it <a href="other/operating-manual.pdf">here</a>.
+</p>
+
+<p>
+Please note that all of this code is terrible and possibly non-functional. I have it here simply because I have fond memories about it.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org0490009" class="outline-2">
+<h2 id="org0490009">Source Code</h2>
+<div class="outline-text-2" id="text-org0490009">
+</div>
+<div id="outline-container-org7b6c798" class="outline-3">
+<h3 id="org7b6c798">main.cpp</h3>
+<div class="outline-text-3" id="text-org7b6c798">
+<div class="org-src-container">
+<pre class="src src-C++"><span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">iostream</span><span style="color: #494949;">&gt;</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">string</span><span style="color: #494949;">&gt;</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">"assembler.h"</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">"systema.h"</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">"instructions.h"</span>
+
+<span style="color: #a4a4a4; font-style: italic;">/*</span>
+<span style="color: #a4a4a4; font-style: italic;">  system/a</span>
+
+<span style="color: #a4a4a4; font-style: italic;">  this is the program that contains the code for simulating a</span>
+<span style="color: #a4a4a4; font-style: italic;">  system/a computer and includes a translator for</span>
+<span style="color: #a4a4a4; font-style: italic;">  output, a complete system/a instruction set and a full</span>
+<span style="color: #a4a4a4; font-style: italic;">  assembler for converting ASM to machine code.</span>
+<span style="color: #a4a4a4; font-style: italic;">*/</span>
+
+<span style="color: #E53935;">int</span> <span style="font-weight: bold; font-style: italic;">main</span><span style="color: #494949;">()</span>
+<span style="color: #494949;">{</span>
+  assembleFile<span style="color: #bbb;">(</span><span style="color: #494949;">"test.saa"</span>, <span style="color: #494949;">"test.sam"</span><span style="color: #bbb;">)</span>;
+  runSystemAProgram<span style="color: #bbb;">(</span><span style="color: #494949;">"test.sam"</span><span style="color: #bbb;">)</span>;
+  <span style="color: #E53935;">std</span>::cin.get<span style="color: #bbb;">()</span>;
+  <span style="color: #E53935; font-style: italic;">return</span> 0;
+<span style="color: #494949;">}</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org9d4cf69" class="outline-3">
+<h3 id="org9d4cf69">systema.h</h3>
+<div class="outline-text-3" id="text-org9d4cf69">
+<div class="org-src-container">
+<pre class="src src-C++"><span style="color: #000; font-weight: bold;">#pragma</span> once
+
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">string</span><span style="color: #494949;">&gt;</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">iostream</span><span style="color: #494949;">&gt;</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">fstream</span><span style="color: #494949;">&gt;</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">sstream</span><span style="color: #494949;">&gt;</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">cmath</span><span style="color: #494949;">&gt;</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">"instructions.h"</span>
+
+<span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">readFileIntoMemory</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">inputFile</span>, <span style="color: #E53935;">bool</span><span style="color: #bbb;">(</span>&amp;<span style="font-style: italic;">memory</span><span style="color: #bbb;">)[</span>256<span style="color: #bbb;">][</span>32<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>;
+<span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">coreDumpToConsole</span><span style="color: #494949;">(</span><span style="color: #E53935;">bool</span> <span style="font-style: italic;">memory</span><span style="color: #bbb;">[</span>256<span style="color: #bbb;">][</span>32<span style="color: #bbb;">]</span>, <span style="color: #E53935;">int</span> <span style="font-style: italic;">programCounter</span><span style="color: #494949;">)</span>;
+<span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">processCycle</span><span style="color: #494949;">(</span><span style="color: #E53935;">int</span> &amp;<span style="font-style: italic;">programCounter</span>, <span style="color: #E53935;">bool</span><span style="color: #bbb;">(</span><span style="font-style: italic;">inputBuffer</span><span style="color: #bbb;">)[</span>32<span style="color: #bbb;">]</span>, <span style="color: #E53935;">bool</span><span style="color: #bbb;">(</span>&amp;<span style="font-style: italic;">outputBuffer</span><span style="color: #bbb;">)[</span>32<span style="color: #bbb;">]</span>, <span style="color: #E53935;">bool</span><span style="color: #bbb;">(</span>&amp;<span style="font-style: italic;">memory</span><span style="color: #bbb;">)[</span>256<span style="color: #bbb;">][</span>32<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>;
+<span style="color: #E53935;">int</span> <span style="font-weight: bold; font-style: italic;">toAddr</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">addrPos</span>, <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">programCounter</span>, <span style="color: #E53935;">bool</span> <span style="font-style: italic;">memory</span><span style="color: #bbb;">[</span>256<span style="color: #bbb;">][</span>32<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>;
+<span style="color: #E53935;">int</span> <span style="font-weight: bold; font-style: italic;">addrToDec</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">addr</span>, <span style="color: #E53935;">bool</span> <span style="font-style: italic;">memory</span><span style="color: #bbb;">[</span>256<span style="color: #bbb;">][</span>32<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>;
+
+<span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">readFileIntoMemory</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">inputFile</span>, <span style="color: #E53935;">bool</span><span style="color: #bbb;">(</span>&amp;<span style="font-style: italic;">memory</span><span style="color: #bbb;">)[</span>256<span style="color: #bbb;">][</span>32<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+  <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">ASCIIOffset</span> = 48;
+  <span style="color: #E53935;">int</span> <span style="font-style: italic;">lineNum</span> = 0;
+  <span style="color: #E53935;">std</span>::<span style="color: #E53935;">ifstream</span> <span style="font-style: italic;">machineCode</span><span style="color: #bbb;">(</span>inputFile<span style="color: #bbb;">)</span>;
+  <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">line</span>;
+
+  <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">lineNum</span>= 0; lineNum &lt; 256; lineNum++<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">{</span>
+      <span style="color: #E53935;">std</span>::getline<span style="color: #494949;">(</span>machineCode, line<span style="color: #494949;">)</span>;
+      <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">CharcterNum</span> = 0; CharcterNum &lt; line.length<span style="color: #bbb;">()</span>; CharcterNum++<span style="color: #494949;">)</span>
+        <span style="color: #494949;">{</span>
+          <span style="color: #E53935;">int</span> <span style="font-style: italic;">numChar</span> = line<span style="color: #bbb;">[</span>CharcterNum<span style="color: #bbb;">]</span>;
+          numChar = numChar - ASCIIOffset;
+          <span style="color: #E53935;">bool</span> <span style="font-style: italic;">slot</span> = numChar;
+          memory <span style="color: #bbb;">[</span>lineNum<span style="color: #bbb;">][</span>CharcterNum<span style="color: #bbb;">]</span> = slot;
+        <span style="color: #494949;">}</span>
+    <span style="color: #bbb;">}</span>
+<span style="color: #494949;">}</span>
+
+
+<span style="color: #a4a4a4; font-style: italic;">//</span><span style="color: #a4a4a4; font-style: italic;">this prints the state of the machine to the console</span>
+<span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">coreDumpToConsole</span><span style="color: #494949;">(</span><span style="color: #E53935;">bool</span> <span style="font-style: italic;">memory</span><span style="color: #bbb;">[</span>256<span style="color: #bbb;">][</span>32<span style="color: #bbb;">]</span>, <span style="color: #E53935;">int</span> <span style="font-style: italic;">programCounter</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+  <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"CURRENT INSTRUCTION ADDR :"</span> &lt;&lt; programCounter &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+  <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"CORE DUMP OUTPUT : "</span> &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+  <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">rowNum</span> = 0; rowNum &lt; 16; rowNum++<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">{</span>
+      <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">columnNum</span> = 0; columnNum &lt; 32; columnNum++<span style="color: #494949;">)</span>
+        <span style="color: #494949;">{</span>
+          <span style="color: #E53935;">int</span> <span style="font-style: italic;">slot</span> = memory<span style="color: #bbb;">[</span>rowNum<span style="color: #bbb;">][</span>columnNum<span style="color: #bbb;">]</span>;
+          <span style="color: #E53935;">std</span>::cout &lt;&lt; slot;
+        <span style="color: #494949;">}</span>
+      <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+    <span style="color: #bbb;">}</span>
+<span style="color: #494949;">}</span>
+
+
+<span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">printOutBuf</span><span style="color: #494949;">(</span><span style="color: #E53935;">bool</span> <span style="font-style: italic;">outputBuffer</span><span style="color: #bbb;">[</span>32<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+  <span style="color: #E53935;">long</span> <span style="color: #E53935;">long</span> <span style="font-style: italic;">value</span> = 0;
+  <span style="color: #E53935;">long</span> <span style="color: #E53935;">long</span> <span style="font-style: italic;">positionVal</span> = 0;
+  <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">bit</span> = 31; bit &gt; 0; bit--<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">{</span>
+      value += outputBuffer<span style="color: #494949;">[</span>bit<span style="color: #494949;">]</span> ? pow<span style="color: #494949;">(</span>2, positionVal<span style="color: #494949;">)</span> : 0;
+      positionVal++;
+    <span style="color: #bbb;">}</span>
+  <span style="color: #E53935;">std</span>::cout &lt;&lt; value;
+<span style="color: #494949;">}</span>
+
+<span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">runSystemAProgram</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">inputFile</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+  <span style="color: #E53935;">bool</span> <span style="font-style: italic;">inputBuffer</span> <span style="color: #bbb;">[</span>32<span style="color: #bbb;">]</span>;
+  <span style="color: #E53935;">bool</span> <span style="font-style: italic;">outputBuffer</span> <span style="color: #bbb;">[</span>32<span style="color: #bbb;">]</span>;
+  <span style="color: #E53935;">bool</span> <span style="font-style: italic;">memory</span> <span style="color: #bbb;">[</span>256<span style="color: #bbb;">][</span>32<span style="color: #bbb;">]</span>;
+
+  <span style="color: #E53935;">bool</span> <span style="font-style: italic;">STP</span> = <span style="color: #E53935;">false</span>;
+  <span style="color: #E53935;">int</span> <span style="font-style: italic;">programCounter</span> = 0;
+
+  readFileIntoMemory<span style="color: #bbb;">(</span>inputFile, memory<span style="color: #bbb;">)</span>;
+
+  <span style="color: #E53935; font-style: italic;">while</span> <span style="color: #bbb;">(</span>STP == <span style="color: #E53935;">false</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">{</span>
+      processCycle<span style="color: #494949;">(</span>programCounter, inputBuffer, outputBuffer, memory<span style="color: #494949;">)</span>;
+      <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>programCounter &lt; 0<span style="color: #494949;">)</span>
+        STP = <span style="color: #E53935;">true</span>;
+      coreDumpToConsole<span style="color: #494949;">(</span>memory, programCounter<span style="color: #494949;">)</span>;        <span style="color: #E53935;">std</span>::cin.get<span style="color: #494949;">()</span>;
+    <span style="color: #bbb;">}</span>
+  printOutBuf<span style="color: #bbb;">(</span>outputBuffer<span style="color: #bbb;">)</span>;
+<span style="color: #494949;">}</span>
+
+
+<span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">this simulates a operating cycle of system/a </span>
+<span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">processCycle</span><span style="color: #494949;">(</span><span style="color: #E53935;">int</span> &amp;<span style="font-style: italic;">programCounter</span>, <span style="color: #E53935;">bool</span> <span style="color: #bbb;">(</span><span style="font-style: italic;">inputBuffer</span><span style="color: #bbb;">)[</span>32<span style="color: #bbb;">]</span>, <span style="color: #E53935;">bool</span> <span style="color: #bbb;">(</span>&amp;<span style="font-style: italic;">outputBuffer</span><span style="color: #bbb;">)[</span>32<span style="color: #bbb;">]</span>, <span style="color: #E53935;">bool</span> <span style="color: #bbb;">(</span>&amp;<span style="font-style: italic;">memory</span><span style="color: #bbb;">)[</span>256<span style="color: #bbb;">][</span>32<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+  <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">bool</span> <span style="font-style: italic;">iP0</span> = memory<span style="color: #bbb;">[</span>programCounter<span style="color: #bbb;">][</span>4<span style="color: #bbb;">]</span>;
+  <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">bool</span> <span style="font-style: italic;">iP1</span> = memory<span style="color: #bbb;">[</span>programCounter<span style="color: #bbb;">][</span>5<span style="color: #bbb;">]</span>;
+  <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">bool</span> <span style="font-style: italic;">iP2</span> = memory<span style="color: #bbb;">[</span>programCounter<span style="color: #bbb;">][</span>6<span style="color: #bbb;">]</span>;
+  <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">bool</span> <span style="font-style: italic;">iP3</span> = memory<span style="color: #bbb;">[</span>programCounter<span style="color: #bbb;">][</span>7<span style="color: #bbb;">]</span>;
+
+  <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">argAddr1</span> = toAddr<span style="color: #bbb;">(</span>0, programCounter, memory<span style="color: #bbb;">)</span>;
+  <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">argAddr2</span> = toAddr<span style="color: #bbb;">(</span>1, programCounter, memory<span style="color: #bbb;">)</span>;
+  <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">tgtAddr</span> = toAddr<span style="color: #bbb;">(</span>2, programCounter, memory<span style="color: #bbb;">)</span>;
+
+  <span style="color: #E53935;">std</span>::cout &lt;&lt; <span style="color: #494949;">"ProgCount : "</span> &lt;&lt; programCounter &lt;&lt; <span style="color: #494949;">" AA1 : "</span> &lt;&lt; argAddr1 &lt;&lt; <span style="color: #494949;">" AA2 : "</span> &lt;&lt; argAddr2 &lt;&lt; <span style="color: #494949;">" TGA : "</span> &lt;&lt; tgtAddr &lt;&lt; <span style="color: #494949;">" iP0 : "</span> &lt;&lt; iP0 &lt;&lt; <span style="color: #494949;">" iP1 : "</span> &lt;&lt; iP1 &lt;&lt; <span style="color: #494949;">" iP2 : "</span> &lt;&lt; iP2 &lt;&lt; <span style="color: #494949;">" iP3 : "</span> &lt;&lt; iP3 &lt;&lt; <span style="color: #E53935;">std</span>::endl;
+
+  <span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">FLP 00001101</span>
+  <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>iP0 &amp;&amp; iP1 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>iP2 &amp;&amp; iP3<span style="color: #bbb;">)</span>
+    FLP<span style="color: #bbb;">(</span>argAddr1, programCounter, memory<span style="color: #bbb;">)</span>;
+
+  <span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">ADD 00000010</span>
+  <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span><span style="color: #000; font-weight: bold;">!</span>iP0 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>iP1 &amp;&amp; iP2 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>iP3<span style="color: #bbb;">)</span>
+    ADD<span style="color: #bbb;">(</span>argAddr1, argAddr2, tgtAddr, programCounter, memory<span style="color: #bbb;">)</span>;
+
+  <span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">JMP 00001010</span>
+  <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>iP0 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>iP1 &amp;&amp; iP2 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>iP3<span style="color: #bbb;">)</span>
+    JMP<span style="color: #bbb;">(</span>tgtAddr, programCounter, memory<span style="color: #bbb;">)</span>;
+
+  <span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">JIE 00000101</span>
+  <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span><span style="color: #000; font-weight: bold;">!</span>iP0 &amp;&amp; iP1 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>iP2 &amp;&amp; iP3<span style="color: #bbb;">)</span>
+    JIE<span style="color: #bbb;">(</span>argAddr1, argAddr2, tgtAddr, programCounter, memory<span style="color: #bbb;">)</span>;
+
+  <span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">WRT 00000011</span>
+  <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span><span style="color: #000; font-weight: bold;">!</span>iP0 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>iP1 &amp;&amp; iP2 &amp;&amp; iP3<span style="color: #bbb;">)</span>
+    WRT<span style="color: #bbb;">(</span>tgtAddr, outputBuffer, programCounter, memory<span style="color: #bbb;">)</span>;
+
+  <span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">RED 00001100</span>
+  <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>iP0 &amp;&amp; iP1 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>iP2 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>iP3<span style="color: #bbb;">)</span>
+    RED<span style="color: #bbb;">(</span>tgtAddr, inputBuffer, programCounter, memory<span style="color: #bbb;">)</span>;
+
+  <span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">MOV 00000100 -&gt; this moves the </span>
+  <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span><span style="color: #000; font-weight: bold;">!</span>iP0 &amp;&amp; iP1 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>iP2 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>iP3<span style="color: #bbb;">)</span>
+    MOV<span style="color: #bbb;">(</span>argAddr1, tgtAddr, programCounter, memory<span style="color: #bbb;">)</span>;
+
+  <span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">STP 00001111 -&gt; this stops the machine</span>
+  <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>iP0 &amp;&amp; iP1 &amp;&amp; iP2 &amp;&amp; iP3<span style="color: #bbb;">)</span> <span style="color: #bbb;">{</span>
+    STP<span style="color: #494949;">(</span>programCounter<span style="color: #494949;">)</span>;
+  <span style="color: #bbb;">}</span>
+
+  <span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">if given illegal opcode the system ignores it and increments the program counter</span>
+  <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #bbb;">{</span>
+    programCounter++;
+  <span style="color: #bbb;">}</span>
+<span style="color: #494949;">}</span>
+
+
+<span style="color: #E53935;">int</span> <span style="font-weight: bold; font-style: italic;">toAddr</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">addrPos</span>, <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">programCounter</span>, <span style="color: #E53935;">bool</span> <span style="font-style: italic;">memory</span><span style="color: #bbb;">[</span>256<span style="color: #bbb;">][</span>32<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+  <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">addrPosF</span> = <span style="color: #bbb;">(</span>addrPos * 8<span style="color: #bbb;">)</span> + 8;
+
+  <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">p0</span> = <span style="color: #bbb;">(</span>memory<span style="color: #494949;">[</span>programCounter<span style="color: #494949;">][</span>addrPosF + 0<span style="color: #494949;">]</span><span style="color: #bbb;">)</span> ? 128 : 0;
+  <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">p1</span> = <span style="color: #bbb;">(</span>memory<span style="color: #494949;">[</span>programCounter<span style="color: #494949;">][</span>addrPosF + 1<span style="color: #494949;">]</span><span style="color: #bbb;">)</span> ? 64 : 0;
+  <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">p2</span> = <span style="color: #bbb;">(</span>memory<span style="color: #494949;">[</span>programCounter<span style="color: #494949;">][</span>addrPosF + 2<span style="color: #494949;">]</span><span style="color: #bbb;">)</span> ? 32 : 0;
+  <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">p3</span> = <span style="color: #bbb;">(</span>memory<span style="color: #494949;">[</span>programCounter<span style="color: #494949;">][</span>addrPosF + 3<span style="color: #494949;">]</span><span style="color: #bbb;">)</span> ? 16 : 0;
+
+  <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">p4</span> = <span style="color: #bbb;">(</span>memory<span style="color: #494949;">[</span>programCounter<span style="color: #494949;">][</span>addrPosF + 4<span style="color: #494949;">]</span><span style="color: #bbb;">)</span> ? 8 : 0;
+  <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">p5</span> = <span style="color: #bbb;">(</span>memory<span style="color: #494949;">[</span>programCounter<span style="color: #494949;">][</span>addrPosF + 5<span style="color: #494949;">]</span><span style="color: #bbb;">)</span> ? 4 : 0;
+  <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">p6</span> = <span style="color: #bbb;">(</span>memory<span style="color: #494949;">[</span>programCounter<span style="color: #494949;">][</span>addrPosF + 6<span style="color: #494949;">]</span><span style="color: #bbb;">)</span> ? 2 : 0;
+  <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">p7</span> = <span style="color: #bbb;">(</span>memory<span style="color: #494949;">[</span>programCounter<span style="color: #494949;">][</span>addrPosF + 7<span style="color: #494949;">]</span><span style="color: #bbb;">)</span> ? 1 : 0;
+
+  <span style="color: #E53935; font-style: italic;">return</span> p0 + p1 + p2 + p3 + p4 + p5 + p6 + p7;
+<span style="color: #494949;">}</span>
+
+
+<span style="color: #E53935;">int</span> <span style="font-weight: bold; font-style: italic;">addrToDec</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">int</span> <span style="font-style: italic;">addr</span>, <span style="color: #E53935;">bool</span> <span style="font-style: italic;">memory</span><span style="color: #bbb;">[</span>256<span style="color: #bbb;">][</span>32<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+  <span style="color: #E53935;">long</span> <span style="color: #E53935;">long</span> <span style="font-style: italic;">value</span> = 0;
+  <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">bit</span> = 31; bit &gt; 0; bit--<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">{</span>
+      value += memory<span style="color: #494949;">[</span>addr<span style="color: #494949;">][</span>bit<span style="color: #494949;">]</span> ? pow<span style="color: #494949;">(</span>2, bit<span style="color: #494949;">)</span> : 0;
+    <span style="color: #bbb;">}</span>
+  <span style="color: #E53935; font-style: italic;">return</span> value;
+<span style="color: #494949;">}</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd770643" class="outline-3">
+<h3 id="orgd770643">assembler.h</h3>
+<div class="outline-text-3" id="text-orgd770643">
+<div class="org-src-container">
+<pre class="src src-C++"><span style="color: #000; font-weight: bold;">#pragma</span> once
+
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">string</span><span style="color: #494949;">&gt;</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">fstream</span><span style="color: #494949;">&gt;</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">sstream</span><span style="color: #494949;">&gt;</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">bitset</span><span style="color: #494949;">&gt;</span>
+<span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">map</span><span style="color: #494949;">&gt;</span>
+
+
+
+<span style="color: #E53935;">int</span> <span style="font-weight: bold; font-style: italic;">assembleFile</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">inputFile</span>, <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">outputFile</span><span style="color: #494949;">)</span>;
+<span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-weight: bold; font-style: italic;">assembleLine</span><span style="color: #494949;">(</span><span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">asmLine</span><span style="color: #494949;">)</span>;
+<span style="color: #E53935;">int</span> <span style="font-weight: bold; font-style: italic;">hexToDec</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">hexNum</span><span style="color: #494949;">)</span>;
+
+
+<span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">this assembles a system/a assembly file and converts it into a system/a machine code file</span>
+<span style="color: #E53935;">int</span> <span style="font-weight: bold; font-style: italic;">assembleFile</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">inputFile</span>, <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">outputFile</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+        <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">machineLine</span>, <span style="font-style: italic;">machineCode</span>;
+
+        <span style="color: #E53935;">std</span>::<span style="color: #E53935;">ifstream</span> <span style="font-style: italic;">assembly</span><span style="color: #bbb;">(</span>inputFile<span style="color: #bbb;">)</span>;
+        <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">line</span>; <span style="color: #E53935;">std</span>::getline<span style="color: #494949;">(</span>assembly, line<span style="color: #494949;">)</span>;<span style="color: #bbb;">)</span> <span style="color: #bbb;">{</span>
+                machineLine = assembleLine<span style="color: #494949;">(</span>line<span style="color: #494949;">)</span>;
+                machineCode += <span style="color: #494949;">(</span>machineLine + <span style="color: #494949;">"\n"</span><span style="color: #494949;">)</span>;
+        <span style="color: #bbb;">}</span>
+        <span style="color: #E53935;">std</span>::<span style="color: #E53935;">ofstream</span> <span style="font-style: italic;">machineCodeFile</span>;
+        machineCodeFile.open<span style="color: #bbb;">(</span>outputFile<span style="color: #bbb;">)</span>;
+        machineCodeFile &lt;&lt; machineCode;
+        machineCodeFile.close<span style="color: #bbb;">()</span>;
+        <span style="color: #E53935; font-style: italic;">return</span> 0;
+<span style="color: #494949;">}</span>
+
+
+<span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">this reads lines of fixed-width assembly and converts them into binary machine code</span>
+<span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-weight: bold; font-style: italic;">assembleLine</span><span style="color: #494949;">(</span><span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">asmLine</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+        <span style="color: #E53935;">int</span> <span style="font-style: italic;">position</span> = 0;
+        <span style="color: #E53935;">std</span>::<span style="color: #E53935;">stringstream</span> <span style="font-style: italic;">asmStream</span><span style="color: #bbb;">(</span>asmLine<span style="color: #bbb;">)</span>;
+        <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">token</span>;
+        <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">machineLine</span>;
+        <span style="color: #E53935;">bool</span> <span style="font-style: italic;">NUMMarker</span> = <span style="color: #E53935;">false</span>;
+
+        <span style="color: #E53935;">std</span>::<span style="color: #E53935;">map</span><span style="color: #bbb;">&lt;</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span>, <span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span><span style="color: #bbb;">&gt;</span> <span style="font-style: italic;">instructions</span> = <span style="color: #bbb;">{</span>
+                <span style="color: #494949;">{</span> <span style="color: #494949;">"FLP"</span>, <span style="color: #494949;">"00001101"</span> <span style="color: #494949;">}</span>,<span style="color: #494949;">{</span> <span style="color: #494949;">"ADD"</span>, <span style="color: #494949;">"00000010"</span> <span style="color: #494949;">}</span>,<span style="color: #494949;">{</span> <span style="color: #494949;">"JMP"</span>, <span style="color: #494949;">"000010100000000000000000"</span> <span style="color: #494949;">}</span>,<span style="color: #494949;">{</span> <span style="color: #494949;">"JIE"</span> , <span style="color: #494949;">"00000101"</span> <span style="color: #494949;">}</span>,
+                <span style="color: #494949;">{</span> <span style="color: #494949;">"WRT"</span> , <span style="color: #494949;">"000000110000000000000000"</span> <span style="color: #494949;">}</span>,<span style="color: #494949;">{</span> <span style="color: #494949;">"RED"</span> , <span style="color: #494949;">"000011000000000000000000"</span> <span style="color: #494949;">}</span>,
+                <span style="color: #494949;">{</span> <span style="color: #494949;">"MOV"</span>, <span style="color: #494949;">"00000100"</span> <span style="color: #494949;">}</span>,<span style="color: #494949;">{</span> <span style="color: #494949;">"STP"</span>, <span style="color: #494949;">"00001111000000000000000000000000"</span> <span style="color: #494949;">}</span> <span style="color: #bbb;">}</span>;
+
+        <span style="color: #E53935; font-style: italic;">while</span> <span style="color: #bbb;">(</span>getline<span style="color: #494949;">(</span>asmStream, token, <span style="color: #494949;">' '</span><span style="color: #494949;">)</span> &amp;&amp; <span style="color: #494949;">(</span>machineLine.length<span style="color: #bbb;">()</span> &lt; 32<span style="color: #494949;">)</span> &amp;&amp; <span style="color: #494949;">(</span>token != <span style="color: #494949;">";"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+        <span style="color: #bbb;">{</span>
+
+                <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>NUMMarker == <span style="color: #E53935;">true</span><span style="color: #494949;">)</span> <span style="color: #494949;">{</span>
+                        <span style="color: #E53935;">std</span>::<span style="color: #E53935;">bitset</span><span style="color: #bbb;">&lt;</span>32<span style="color: #bbb;">&gt;</span> <span style="font-style: italic;">Binary</span><span style="color: #bbb;">(</span>hexToDec<span style="color: #494949;">(</span>token<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>;
+                        machineLine += Binary.to_string<span style="color: #bbb;">()</span>;
+                <span style="color: #494949;">}</span>
+
+                <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>instructions.find<span style="color: #bbb;">(</span>token<span style="color: #bbb;">)</span> != instructions.end<span style="color: #bbb;">()</span><span style="color: #494949;">)</span>
+                        machineLine += instructions.find<span style="color: #494949;">(</span>token<span style="color: #494949;">)</span>-&gt;second;
+
+                <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>token == <span style="color: #494949;">"NUM"</span><span style="color: #494949;">)</span>
+                        NUMMarker = <span style="color: #E53935;">true</span>;
+
+                <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>token != <span style="color: #494949;">""</span><span style="color: #494949;">)</span> <span style="color: #494949;">{</span>
+                        <span style="color: #E53935;">std</span>::<span style="color: #E53935;">bitset</span><span style="color: #bbb;">&lt;</span>8<span style="color: #bbb;">&gt;</span> <span style="font-style: italic;">Binary</span><span style="color: #bbb;">(</span>hexToDec<span style="color: #494949;">(</span>token<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>;
+                        machineLine += Binary.to_string<span style="color: #bbb;">()</span>;
+                <span style="color: #494949;">}</span>
+
+        <span style="color: #bbb;">}</span>
+
+        <span style="color: #E53935; font-style: italic;">while</span> <span style="color: #bbb;">(</span>machineLine.length<span style="color: #494949;">()</span> &lt; 32<span style="color: #bbb;">)</span>
+        <span style="color: #bbb;">{</span>
+                machineLine += <span style="color: #494949;">"00000000"</span>;
+        <span style="color: #bbb;">}</span>
+        <span style="color: #E53935; font-style: italic;">return</span> machineLine;
+<span style="color: #494949;">}</span> 
+
+
+<span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">this converts intigers to decimal values</span>
+<span style="color: #E53935;">int</span> <span style="font-weight: bold; font-style: italic;">hexToDec</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">const</span> <span style="color: #E53935;">std</span>::<span style="color: #E53935;">string</span> <span style="font-style: italic;">hexNum</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+        <span style="color: #E53935;">std</span>::<span style="color: #E53935;">stringstream</span> <span style="font-style: italic;">numStream</span>;
+        numStream &lt;&lt; <span style="color: #E53935;">std</span>::hex &lt;&lt; hexNum;
+        <span style="color: #E53935;">int</span> <span style="font-style: italic;">decimalNum</span>;
+        numStream &gt;&gt; decimalNum;
+        <span style="color: #E53935; font-style: italic;">return</span> decimalNum;
+<span style="color: #494949;">}</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf38b037" class="outline-3">
+<h3 id="orgf38b037">instructions.h</h3>
+<div class="outline-text-3" id="text-orgf38b037">
+<div class="org-src-container">
+<pre class="src src-C++">once
+
+
+<span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">this flips the bits of a memory address</span>
+<span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">FLP</span><span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">argAddr1</span>, <span style="color: #E53935;">int</span> &amp;<span style="font-style: italic;">programCounter</span>, <span style="color: #E53935;">bool</span> <span style="color: #bbb;">(</span>&amp;<span style="font-style: italic;">memory</span><span style="color: #bbb;">)[</span>256<span style="color: #bbb;">][</span>32<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+  <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">bit</span> = 0; bit &lt; 32; bit++<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">{</span>
+      memory<span style="color: #494949;">[</span>argAddr1<span style="color: #494949;">][</span>bit<span style="color: #494949;">]</span> = <span style="color: #000; font-weight: bold;">!</span>memory<span style="color: #494949;">[</span>argAddr1<span style="color: #494949;">][</span>bit<span style="color: #494949;">]</span>;
+    <span style="color: #bbb;">}</span>
+  programCounter++;
+<span style="color: #494949;">}</span>
+
+
+<span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">this adds the number in argAddr1 to argAddr2 and places it in the tgtAddr</span>
+<span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">ADD</span><span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">argAddr1</span>, <span style="color: #E53935;">int</span> <span style="font-style: italic;">argAddr2</span>, <span style="color: #E53935;">int</span> <span style="font-style: italic;">tgtAddr</span>, <span style="color: #E53935;">int</span> &amp;<span style="font-style: italic;">programCounter</span>, <span style="color: #E53935;">bool</span><span style="color: #bbb;">(</span>&amp;<span style="font-style: italic;">memory</span><span style="color: #bbb;">)[</span>256<span style="color: #bbb;">][</span>32<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+  <span style="color: #E53935;">bool</span> <span style="font-style: italic;">carry</span> = <span style="color: #E53935;">false</span>;
+  <span style="color: #E53935;">bool</span> <span style="font-style: italic;">contArgAddr1</span>;
+  <span style="color: #E53935;">bool</span> <span style="font-style: italic;">contArgAddr2</span>;
+
+
+  <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">bit</span> = 31; bit &gt; 0; bit--<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">{</span>
+      contArgAddr1 = memory<span style="color: #494949;">[</span>argAddr1<span style="color: #494949;">][</span>bit<span style="color: #494949;">]</span>;
+      contArgAddr2 = memory<span style="color: #494949;">[</span>argAddr2<span style="color: #494949;">][</span>bit<span style="color: #494949;">]</span>;
+
+      <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>contArgAddr1 &amp;&amp; contArgAddr2 &amp;&amp; carry<span style="color: #494949;">)</span>
+        <span style="color: #494949;">{</span>
+          memory<span style="color: #bbb;">[</span>tgtAddr<span style="color: #bbb;">][</span>bit<span style="color: #bbb;">]</span> = 1;
+          carry = 1;
+        <span style="color: #494949;">}</span>
+      <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span><span style="color: #494949;">(</span>contArgAddr1 &amp;&amp; contArgAddr2<span style="color: #494949;">)</span> &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>carry<span style="color: #bbb;">)</span> || <span style="color: #bbb;">(</span><span style="color: #494949;">(</span>contArgAddr1 &amp;&amp; carry<span style="color: #494949;">)</span> &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>contArgAddr2<span style="color: #bbb;">)</span> || <span style="color: #bbb;">(</span><span style="color: #494949;">(</span>contArgAddr2 &amp;&amp; carry<span style="color: #494949;">)</span> &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>contArgAddr1<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        <span style="color: #494949;">{</span>
+          memory<span style="color: #bbb;">[</span>tgtAddr<span style="color: #bbb;">][</span>bit<span style="color: #bbb;">]</span> = 0;
+          carry = 1;
+        <span style="color: #494949;">}</span>
+      <span style="color: #E53935; font-style: italic;">else</span> <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>contArgAddr1 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>contArgAddr2 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>carry<span style="color: #bbb;">)</span> || <span style="color: #bbb;">(</span><span style="color: #000; font-weight: bold;">!</span>contArgAddr1 &amp;&amp; contArgAddr2 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>carry<span style="color: #bbb;">)</span> || <span style="color: #bbb;">(</span><span style="color: #000; font-weight: bold;">!</span>contArgAddr1 &amp;&amp; <span style="color: #000; font-weight: bold;">!</span>contArgAddr2 &amp;&amp; carry<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        <span style="color: #494949;">{</span>
+          memory<span style="color: #bbb;">[</span>tgtAddr<span style="color: #bbb;">][</span>bit<span style="color: #bbb;">]</span> = 1;
+          carry = 0;
+        <span style="color: #494949;">}</span>
+      <span style="color: #E53935; font-style: italic;">else</span>
+        <span style="color: #494949;">{</span>
+          memory<span style="color: #bbb;">[</span>tgtAddr<span style="color: #bbb;">][</span>bit<span style="color: #bbb;">]</span> = 0;
+          carry = 0;
+        <span style="color: #494949;">}</span>
+    <span style="color: #bbb;">}</span>
+  programCounter++;
+<span style="color: #494949;">}</span>
+
+
+<span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">this unconditionally sets the program counter to the target address</span>
+<span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">JMP</span><span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">tgtAddr</span>, <span style="color: #E53935;">int</span> &amp;<span style="font-style: italic;">programCounter</span>, <span style="color: #E53935;">bool</span><span style="color: #bbb;">(</span>&amp;<span style="font-style: italic;">memory</span><span style="color: #bbb;">)[</span>256<span style="color: #bbb;">][</span>32<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+  programCounter = tgtAddr;
+<span style="color: #494949;">}</span>
+
+
+<span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">this sets the program counter to the target address if argAddr1 and argAddr2 is equal</span>
+<span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">JIE</span><span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">argAddr1</span>, <span style="color: #E53935;">int</span> <span style="font-style: italic;">argAddr2</span>, <span style="color: #E53935;">int</span> <span style="font-style: italic;">tgtAddr</span>, <span style="color: #E53935;">int</span> &amp;<span style="font-style: italic;">programCounter</span>, <span style="color: #E53935;">bool</span><span style="color: #bbb;">(</span>&amp;<span style="font-style: italic;">memory</span><span style="color: #bbb;">)[</span>256<span style="color: #bbb;">][</span>32<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+  <span style="color: #E53935;">bool</span> <span style="font-style: italic;">equal</span> = <span style="color: #E53935;">true</span>;
+  <span style="color: #E53935;">int</span> <span style="font-style: italic;">bit</span> = 0;
+  <span style="color: #E53935; font-style: italic;">while</span> <span style="color: #bbb;">(</span><span style="color: #494949;">(</span>bit &lt; 32<span style="color: #494949;">)</span> &amp;&amp; equal<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">{</span>
+      <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>memory<span style="color: #bbb;">[</span>argAddr1<span style="color: #bbb;">][</span>bit<span style="color: #bbb;">]</span> != memory<span style="color: #bbb;">[</span>argAddr2<span style="color: #bbb;">][</span>bit<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+        equal = <span style="color: #E53935;">false</span>;
+      bit++;
+    <span style="color: #bbb;">}</span>
+  <span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>equal<span style="color: #bbb;">)</span>
+    programCounter = tgtAddr;
+  <span style="color: #E53935; font-style: italic;">else</span>
+    programCounter++;
+<span style="color: #494949;">}</span>
+
+
+<span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">this writes the contents of tgtAddr to the output buffer</span>
+<span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">WRT</span><span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">tgtAddr</span>, <span style="color: #E53935;">bool</span> <span style="color: #bbb;">(</span>&amp;<span style="font-style: italic;">outputBuffer</span><span style="color: #bbb;">)[</span>32<span style="color: #bbb;">]</span>, <span style="color: #E53935;">int</span> &amp;<span style="font-style: italic;">programCounter</span>, <span style="color: #E53935;">bool</span><span style="color: #bbb;">(</span>&amp;<span style="font-style: italic;">memory</span><span style="color: #bbb;">)[</span>256<span style="color: #bbb;">][</span>32<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+  <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">bit</span> = 0; bit &lt; 32; bit++<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">{</span>
+      outputBuffer<span style="color: #494949;">[</span>bit<span style="color: #494949;">]</span> = memory<span style="color: #494949;">[</span>tgtAddr<span style="color: #494949;">]</span> <span style="color: #494949;">[</span>bit<span style="color: #494949;">]</span>;
+    <span style="color: #bbb;">}</span>
+  programCounter++;
+<span style="color: #494949;">}</span>
+
+
+<span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">this writes the contents of the input buffer to tgtAddr</span>
+<span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">RED</span><span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">tgtAddr</span>, <span style="color: #E53935;">bool</span> <span style="color: #bbb;">(</span><span style="font-style: italic;">inputBuffer</span><span style="color: #bbb;">)[</span>32<span style="color: #bbb;">]</span>, <span style="color: #E53935;">int</span> &amp;<span style="font-style: italic;">programCounter</span>, <span style="color: #E53935;">bool</span><span style="color: #bbb;">(</span>&amp;<span style="font-style: italic;">memory</span><span style="color: #bbb;">)[</span>256<span style="color: #bbb;">][</span>32<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+  <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">bit</span> = 0; bit &lt; 32; bit++<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">{</span>
+      memory<span style="color: #494949;">[</span>tgtAddr<span style="color: #494949;">][</span>bit<span style="color: #494949;">]</span> = inputBuffer<span style="color: #494949;">[</span>bit<span style="color: #494949;">]</span>;
+      <span style="color: #E53935;">int</span> <span style="font-style: italic;">bitVal</span> = memory<span style="color: #494949;">[</span>tgtAddr<span style="color: #494949;">][</span>bit<span style="color: #494949;">]</span>;
+      memory<span style="color: #494949;">[</span>tgtAddr<span style="color: #494949;">][</span>bit<span style="color: #494949;">]</span> = 0;
+    <span style="color: #bbb;">}</span>
+  programCounter++;
+<span style="color: #494949;">}</span>
+
+
+<span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">this copies the value contained in argAddr1 to tgtAddr</span>
+<span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">MOV</span><span style="color: #494949;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">argAddr1</span>, <span style="color: #E53935;">int</span> <span style="font-style: italic;">tgtAddr</span>, <span style="color: #E53935;">int</span> &amp;<span style="font-style: italic;">programCounter</span>, <span style="color: #E53935;">bool</span><span style="color: #bbb;">(</span>&amp;<span style="font-style: italic;">memory</span><span style="color: #bbb;">)[</span>256<span style="color: #bbb;">][</span>32<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+  <span style="color: #E53935; font-style: italic;">for</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">int</span> <span style="font-style: italic;">bit</span> = 0; bit &lt; 32; bit++<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">{</span>
+      memory<span style="color: #494949;">[</span>tgtAddr<span style="color: #494949;">][</span>bit<span style="color: #494949;">]</span> = memory<span style="color: #494949;">[</span>argAddr1<span style="color: #494949;">][</span>bit<span style="color: #494949;">]</span>;
+    <span style="color: #bbb;">}</span>
+  programCounter++;
+<span style="color: #494949;">}</span>
+
+
+<span style="color: #a4a4a4; font-style: italic;">// </span><span style="color: #a4a4a4; font-style: italic;">this sets the program counter to an illegal value, causing the computer to stop and return the STP code</span>
+<span style="color: #E53935;">void</span> <span style="font-weight: bold; font-style: italic;">STP</span><span style="color: #494949;">(</span><span style="color: #E53935;">int</span> &amp;<span style="font-style: italic;">programCounter</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">{</span>
+  programCounter = -1;
+<span style="color: #494949;">}</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2021-W51-3 04:45</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>
