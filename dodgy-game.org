@@ -3,7 +3,7 @@
 :END:
 #+TITLE: Dodgy Game
 #+SUBTITLE: Download this game and run it as root! I promise nothing bad will happen.
-#+DESCRIPTION: A simple game.
+#+DESCRIPTION: A simple game in clojurescript.
 #+PROPERTY: header-args :noweb no-export
 #+FILETAGS: :website:public:game:source_code:
 
