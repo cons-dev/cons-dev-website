@@ -3,7 +3,7 @@
 :END:
 #+TITLE: Dodgy Game
 #+SUBTITLE: Download this game and run it as root! I promise nothing bad will happen.
-#+DESCRIPTION: An overview of the syntax used on the site for control diagrams.
+#+DESCRIPTION: A simple game.
 #+PROPERTY: header-args :noweb no-export
 #+FILETAGS: :website:public:game:source_code:
 
