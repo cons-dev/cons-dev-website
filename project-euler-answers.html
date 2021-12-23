@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-3 18:55 -->
+<!-- 2021-W51-4 01:32 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Project Euler Answers</title>
@@ -391,15 +391,10 @@ Once we have this function, we can then begin to look into generating the primes
 <span style="color: #494949;">(</span>last <span style="color: #bbb;">(</span>prime-factors 600851475143<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
-
-<p>
-Time to compute this should be approximately \(O(sqrt(n)^2)\) time due to the idiosyncrasies of how Clojure works.
-</p>
 </div>
 </div>
 </div>
 </div>
-
 
 <div id="outline-container-org1dc646a" class="outline-2">
 <h2 id="org1dc646a">774: Conjunctive Sequences</h2>
@@ -575,10 +570,7 @@ Where \(p\) is the index from the LSB and \(n\) is the number.
 
 <p>
 To determine if a sequence is conjunctive we want to determine if  \(p\) becomes zero from \(\{n, n+1...n+b\}\). To start out with solving this we first find where the next point at which it will be zero will occur, that is to say the next value at which \(n\%2^{p}\) will be zero. To do this we can simply take:
-</p>
-
-<p>
-\(\displaystyle \lfloor \frac{n}{2^{p}} \rfloor + 2^{p}\)
+\(\displaystyle \left\lfloor \frac{n}{2^{p}} \right\rfloor + 2^{p}\)
 </p>
 
 <p>
@@ -608,7 +600,7 @@ Therefore we can apply this predicate to all for all values \(n\) in the set \(\
 
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W51-3 18:55</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W51-4 01:31</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>
