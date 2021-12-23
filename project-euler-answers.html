@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-3 16:08 -->
+<!-- 2021-W51-3 18:51 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Project Euler Answers</title>
@@ -60,6 +60,12 @@
 <li><a href="#org41c1152">A More Ugly Approach</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a href="#org1dc646a">774: Conjunctive Sequences</a>
+<ul>
+<li><a href="#org24a173f">Brute Force Approach</a></li>
+<li><a href="#org0dc8a0d">O(n)</a></li>
 </ul>
 </li>
 </ul>
@@ -387,9 +393,209 @@ Once we have this function, we can then begin to look into generating the primes
 </div>
 
 <p>
-Time to compute this should be approximately \(O(sqrt()^2)\) time due to the idiosyncrasies of how Clojure works.
+Time to compute this should be approximately \(O(sqrt(n)^2)\) time due to the idiosyncrasies of how Clojure works.
 </p>
 </div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org1dc646a" class="outline-2">
+<h2 id="org1dc646a">774: Conjunctive Sequences</h2>
+<div class="outline-text-2" id="text-org1dc646a">
+<p>
+Conjunctive sequences are defined as the finite integer sequences for which the bitwise and operation on any adjacent pair within the sequence will not yield 0 as an answer. The function that we are asked to implement \(C(n, b)\) returns the number of sequences of length \(n\) all of whose terms are less than \(b\).
+</p>
+</div>
+
+<div id="outline-container-org24a173f" class="outline-3">
+<h3 id="org24a173f">Brute Force Approach</h3>
+<div class="outline-text-3" id="text-org24a173f">
+<p>
+First we can start by defining a simple brute force approach. This will take the length of the sequences \(n\) and the maximum value of any element of the sequences \(b\) and generate every possible sequence within the list. Then it will check if they are conjunctive, convert those true/false answers to numbers
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">num-conj-seq</span> <span style="color: #bbb;">[</span>n b<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">letfn</span> <span style="color: #494949;">[</span><span style="color: #bbb;">(</span>conjunctive? <span style="color: #494949;">[</span><span style="color: #bbb;">[</span>x y &amp; xs<span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
+            <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>seq-n <span style="color: #494949;">(</span>not <span style="color: #bbb;">(</span>zero? <span style="color: #494949;">(</span>bit-and x y<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
+              <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">cond</span> <span style="color: #494949;">(</span>empty? xs<span style="color: #494949;">)</span> <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> seq-n <span style="color: #E53935;">true</span> <span style="color: #E53935;">false</span><span style="color: #494949;">)</span>
+                    <span style="color: #494949;">(</span>not seq-n<span style="color: #494949;">)</span> <span style="color: #E53935;">false</span>
+                    <span style="color: #E53935;">:else</span>       <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">recur</span> <span style="color: #bbb;">(</span>cons y xs<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #bbb;">(</span>range n <span style="color: #494949;">(</span>inc b<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+         <span style="color: #bbb;">(</span>map #<span style="color: #494949;">(</span>range <span style="color: #bbb;">(</span>- <span style="font-style: italic;">%</span> n<span style="color: #bbb;">)</span> <span style="font-style: italic;">%</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+         <span style="color: #bbb;">(</span>map conjunctive?<span style="color: #bbb;">)</span>
+         <span style="color: #bbb;">(</span>filter true?<span style="color: #bbb;">)</span>
+         count<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span>num-conj-seq 3 30<span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0dc8a0d" class="outline-3">
+<h3 id="org0dc8a0d">O(n)</h3>
+<div class="outline-text-3" id="text-org0dc8a0d">
+<p>
+However, the brute force approach, when given that string, will have a time complexity of \(O(n \times b)\), which is obviously something we <i>don't</i> want for our system, and is also the reason why I didn't just generate the answer using the brute force approach.
+</p>
+
+<p>
+Instead we should think about what we want. So first we must imagine what the rules of the sequence are. Bitwise operations take two values \(a\) and \(b\) and convert them into effectively arrays of 1's and 0's. Therefore, for a sequence to be conjunctive we can conclude that at least one of the one-valued indexes in the lowest or highest value of the sequence must be one as well. That is to say that, given the bounds on this sequence, we can conclude it is not conjunctive out of the bat.
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Lower</td>
+<td class="org-right">010001</td>
+</tr>
+
+<tr>
+<td class="org-left">Higher</td>
+<td class="org-right">101110</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Now in essence we must determine that for each index within the lower value if it will at any point between the lower value and the higher value become zero. So to solve this we can imagine each bit as something that is set to zero every \(x\%n\) numbers. To illustrate let's come up with a list of numbers
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Binary</th>
+<th scope="col" class="org-right">Decimal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0000</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">0001</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">0010</td>
+<td class="org-right">2</td>
+</tr>
+
+<tr>
+<td class="org-right">0011</td>
+<td class="org-right">3</td>
+</tr>
+
+<tr>
+<td class="org-right">0100</td>
+<td class="org-right">4</td>
+</tr>
+
+<tr>
+<td class="org-right">0101</td>
+<td class="org-right">5</td>
+</tr>
+
+<tr>
+<td class="org-right">0110</td>
+<td class="org-right">6</td>
+</tr>
+
+<tr>
+<td class="org-right">0111</td>
+<td class="org-right">7</td>
+</tr>
+
+<tr>
+<td class="org-right">1000</td>
+<td class="org-right">8</td>
+</tr>
+
+<tr>
+<td class="org-right">1001</td>
+<td class="org-right">9</td>
+</tr>
+
+<tr>
+<td class="org-right">1010</td>
+<td class="org-right">10</td>
+</tr>
+
+<tr>
+<td class="org-right">&#xa0;</td>
+<td class="org-right">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+As we can see the LSB, \(b\) is 0 for each value that satisfies \(n%2 < 0\) where \(n\) is the number. We can also see that the second bit is 0 for each value that satisfies the equation \(n%4 < 2\)
+</p>
+
+<p>
+From this we can create a generalized equation to find if a value becomes zero:
+</p>
+
+<p>
+\(\displaystyle n\%2^{p+1} < 2^p\)
+</p>
+
+<p>
+or, in Clojure:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">bit-idx-0?</span> <span style="color: #bbb;">[</span>p n<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span>&lt; <span style="color: #494949;">(</span>mod n <span style="color: #bbb;">(</span><span style="color: #E53935;">Math</span>/pow 2 <span style="color: #494949;">(</span>inc p<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> <span style="color: #494949;">(</span><span style="color: #E53935;">Math</span>/pow 2 p<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+Where \(p\) is the index from the LSB and \(n\) is the number.
+</p>
+
+<p>
+To determine if a sequence is conjunctive we want to determine if  \(p\) becomes zero from \(\{n, n+1...n+b\}\). To start out with solving this we first find where the next point at which it will be zero will occur, that is to say the next value at which \(n\%2^{p}\) will be zero. To do this we can simply take:
+</p>
+
+<p>
+\(\displaystyle \lfloor \frac{n}{2^{p}} \rfloor + 2^{p}\)
+</p>
+
+<p>
+From here \(p\) becomes zero from \(\{n, n+1...n+b\}\) if the result of the equation is less than \(n+b\), and therefore the value of \(p\) is zero for the sequence. Or:
+</p>
+
+<p>
+\(\displaystyle n+b >  \left\lfloor \frac{n}{2^{p}} \right\rfloor + 2^{p}\)
+</p>
+
+<p>
+From here we can see that the solution is to check if any 1 valued bit of \(n\) satisfies the above. If it does then the value is conjunctive.
+</p>
+
+<p>
+Therefore we can apply this predicate to all for all values \(n\) in the set \(\{0, 1..b-n\}\) and then find the number of true values produced by this. This reduces our search time to \(O(n)\) which is fairly respectable.
+</p>
 </div>
 </div>
 </div>
@@ -402,7 +608,7 @@ Time to compute this should be approximately \(O(sqrt()^2)\) time due to the idi
 
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W51-3 16:08</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W51-3 18:50</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>
