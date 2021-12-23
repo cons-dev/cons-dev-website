@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-3 16:04 -->
+<!-- 2021-W51-3 16:08 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Project Euler Answers</title>
@@ -11,6 +11,27 @@
 <meta name="description" content="Answers to project euler problems." />
 <meta name="generator" content="Org Mode" />
 <link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="preamble" class="status">
@@ -30,6 +51,17 @@
 </ul>
 </li>
 <li><a href="#orgacdc6f5">2: Even Fibonacci Numbers</a></li>
+<li><a href="#org32fe25f">3: Largest Prime Factor</a>
+<ul>
+<li><a href="#org750c6b0">Finding Prime Numbers</a>
+<ul>
+<li><a href="#org6d9cffd">Checking for Divisibility</a></li>
+<li><a href="#org2b12bc1">Sieve of Eratosthenes</a></li>
+<li><a href="#org41c1152">A More Ugly Approach</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -116,12 +148,261 @@ This just gets even fib numbers. There's not much to optimize here because the p
 </div>
 </div>
 </div>
+
+
+<div id="outline-container-org32fe25f" class="outline-2">
+<h2 id="org32fe25f">3: Largest Prime Factor</h2>
+<div class="outline-text-2" id="text-org32fe25f">
+<p>
+The goal is to find the largest prime factor of a number. To start we will first begin by creating a function that finds a number of primes up to the target value divided by 2. This is because the target value will, ultimately, be at most \(n \times 2\).
+</p>
+</div>
+
+<div id="outline-container-org750c6b0" class="outline-3">
+<h3 id="org750c6b0">Finding Prime Numbers</h3>
+<div class="outline-text-3" id="text-org750c6b0">
+<p>
+To start out we find a list of prime numbers. A neat feature of prime numbers is that to test a number for primality you both only need to test for the division of a number by other prime numbers up to the square root of the value, for the largest number will be at most the square root.
+</p>
+</div>
+
+<div id="outline-container-org6d9cffd" class="outline-4">
+<h4 id="org6d9cffd">Checking for Divisibility</h4>
+<div class="outline-text-4" id="text-org6d9cffd">
+<p>
+To start off, and to make our code more clear, we define a small predicate called <code>divisible?</code> which checks if a number is divisible by some other number. While it doesn't really shorten the code all that much, it adds clarity to the code
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="orge7849f1"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">divisible?</span> <span style="color: #bbb;">[</span>num div<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span>zero? <span style="color: #494949;">(</span>mod num div<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2b12bc1" class="outline-4">
+<h4 id="org2b12bc1">Sieve of Eratosthenes</h4>
+<div class="outline-text-4" id="text-org2b12bc1">
+<p>
+The most elegant solution would be the sieve of Eratosthenes. The logic behind it is fairly simple:
+</p>
+<ol class="org-ol">
+<li>all natural numbers are either primes or a composite of a number of primes</li>
+<li>the primes which they are the composite of must by nature be below</li>
+<li>the second</li>
+</ol>
+
+<p>
+As you can see, it follows that the list generated will be entirely comprised of prime numbers.
+</p>
+
+<p>
+To solve this we can implement a lazy sieve of Eratosthenes. Lazy in that the resulting sequence will be infinite.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="org29811e7"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">seive</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[]</span> <span style="color: #494949;">(</span>seive <span style="color: #bbb;">(</span>drop 2 <span style="color: #494949;">(</span>range<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>l<span style="color: #494949;">]</span>
+   <span style="color: #494949;">(</span>lazy-seq
+    <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">[</span><span style="color: #bbb;">[</span>x &amp; xs<span style="color: #bbb;">]</span> l<span style="color: #494949;">]</span>
+      <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>empty? xs<span style="color: #bbb;">)</span>
+        <span style="color: #bbb;">[</span>x<span style="color: #bbb;">]</span>
+        <span style="color: #bbb;">(</span>cons x <span style="color: #494949;">(</span>seive <span style="color: #bbb;">(</span>filter #<span style="color: #494949;">(</span>not <span style="color: #bbb;">(</span>divisible? <span style="font-style: italic;">%</span> x<span style="color: #bbb;">)</span><span style="color: #494949;">)</span> xs<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">primes</span> <span style="color: #bbb;">(</span>seive<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+Unfortunately this does not work for what we want. It is very beautiful, and I wish it did work, but because of the specific features of TCO in Clojure <label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> Even with the <code>recur</code> special form.</span> it doesn't actually produce TCO code, and, because it is recursive, will end up causing a stack overflow.
+</p>
+
+<p>
+However, because of the lazy list semantics you can take a nearly infinite series of primes from it, assuming you only increase your requested list size by one each time you take from it. This is interesting, though unfortunately not something I can really use.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org41c1152" class="outline-4">
+<h4 id="org41c1152">A More Ugly Approach</h4>
+<div class="outline-text-4" id="text-org41c1152">
+<p>
+So in order to solve this we can rewrite the is-prime function to, rather than generating a list from 0 to \(n\) and then filtering it, simply loop until a value at the range of the prime number is found. This ensures that the space complexity of it is \(O(\log(n))\) rather than \(O(n)\), though does not change the time complexity.
+</p>
+
+<p>
+First we define an <a href="https://clojure.org/reference/atoms">atom</a> to <a href="https://en.wikipedia.org/wiki/Memoization">memoize</a> our primes called <code>found-primes</code>, and initialize it with the first prime number, 2.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="org7eed331"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> ^<span style="color: #E53935;">:private</span> <span style="font-style: italic;">found-primes</span>
+  <span style="color: #a4a4a4; font-style: italic;">"A map of all primes that have been found thus far by the system"</span>
+  <span style="color: #bbb;">(</span>atom #<span style="color: #494949;">{</span>2<span style="color: #494949;">}</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> ^<span style="color: #E53935;">:private</span> <span style="font-style: italic;">max-prime</span> <span style="color: #bbb;">(</span>atom 2<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+Next we define an <code>is-prime?</code> predicate which will test if a value is prime by iterating over the list of primes that are less than the square root of the new value. This is basically the same as the sieve of Eratosthenes applied to a single element. Below is the function itself, don't worry, we will break it down.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure" id="org96c6eca"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">is-prime?</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>n<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>is-prime? n <span style="color: #E53935;">false</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>n contiguous?<span style="color: #494949;">]</span>
+   <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>max-div <span style="color: #494949;">(</span>int <span style="color: #bbb;">(</span>inc <span style="color: #494949;">(</span><span style="color: #E53935;">Math</span>/sqrt n<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
+     <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">letfn</span> <span style="color: #494949;">[</span><span style="color: #bbb;">(</span>div? <span style="color: #494949;">[</span>n<span style="color: #494949;">]</span>
+               <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> @found-primes
+                    <span style="color: #bbb;">(</span>take-while #<span style="color: #494949;">(</span>&gt; max-div <span style="font-style: italic;">%</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+                    <span style="color: #bbb;">(</span>some #<span style="color: #494949;">(</span>divisible? n <span style="font-style: italic;">%</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+                    not<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
+       <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">cond</span>
+         <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">if it is in the set of found primes, just return true</span>
+         <span style="color: #bbb;">(</span>contains? @found-primes n<span style="color: #bbb;">)</span>
+         <span style="color: #E53935;">true</span>
+
+         <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">if it is less than the max prime and it is not in that set then it must be false</span>
+         <span style="color: #bbb;">(</span>&gt; @max-prime n<span style="color: #bbb;">)</span>
+         <span style="color: #E53935;">false</span>
+
+         <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">start generating primes if there are not enough of them to test it</span>
+         <span style="color: #bbb;">(</span>&lt; @max-prime max-div<span style="color: #bbb;">)</span>
+         <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">do</span> <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">doall</span> <span style="color: #bbb;">(</span>map #<span style="color: #494949;">(</span>is-prime? <span style="font-style: italic;">%</span> <span style="color: #E53935;">true</span><span style="color: #494949;">)</span> <span style="color: #494949;">(</span>range @max-prime max-div<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+             <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>div? n<span style="color: #bbb;">)</span>
+               <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">do</span> <span style="color: #494949;">(</span>swap! found-primes conj n<span style="color: #494949;">)</span>
+                   <span style="color: #E53935;">true</span><span style="color: #bbb;">)</span>
+               <span style="color: #E53935;">false</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+
+         <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">if it is divisible (and not part of the set of found primes) add it to the set of found primes</span>
+         <span style="color: #bbb;">(</span>div? n<span style="color: #bbb;">)</span>
+         <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">do</span> <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> contiguous?
+               <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">add to primes if prime and swap if it is generating primes (as above)</span>
+               <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">do</span> <span style="color: #494949;">(</span>swap! found-primes conj n<span style="color: #494949;">)</span>
+                   <span style="color: #494949;">(</span>reset! max-prime n<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+               <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">else just add it to the set</span>
+               <span style="color: #bbb;">(</span>swap! found-primes conj n<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+             <span style="color: #E53935;">true</span><span style="color: #bbb;">)</span>
+
+         <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">If none of these pass, then it must not be a prime</span>
+         <span style="color: #E53935;">:else</span> <span style="color: #E53935;">false</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span>is-prime? 3000 <span style="color: #E53935;">true</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">do</span> <span style="color: #bbb;">(</span>reset! max-prime 2<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>reset! found-primes <span style="color: #494949;">(</span>sorted-set 2<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+@max-prime
+@found-primes
+</pre>
+</div>
+
+
+<p>
+There are, however, a number of fun tricks being used to speed up the computation. First we generate the maximum divisor using this little bit of code. This isn't really the maximum size of the prime divisor, but rather the maximum size of the minimum element of the pair of divisors produced.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span>int <span style="color: #bbb;">(</span>inc <span style="color: #494949;">(</span><span style="color: #E53935;">Math</span>/sqrt n<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+
+<p>
+Next we have the conditional. First it checks if the number is in the list of found primes, and if it is then it simply returns <code>true</code>. This means that it has \(O(1)\) runtime should the prime be found already. <label class="sidenote-number" for="3"><sup>3</sup></label><input checked="checked" id="3" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 3</span> Though in Clojure, since sets are trees, it has more \(O(log(n))\) runtime.</span>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span>contains? @found-primes n<span style="color: #494949;">)</span>
+      <span style="color: #E53935;">true</span>
+</pre>
+</div>
+
+<p>
+But, if it is both not in the list of found primes <i>and</i> is less than the largest prime, it must be the case that it is not a prime, and therefore it returns false. 
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span>&gt; @max-prime n<span style="color: #494949;">)</span>
+<span style="color: #E53935;">false</span>
+</pre>
+</div>
+
+<p>
+Following this we check the case that the <code>max-prime</code> is smaller than <code>max-div</code>. In this case we check the primality of every prime from the last largest prime to the <code>max-div</code>. This places each prime number in the set of found primes and ensures that it can run and check if the number is prime. Following that we check that <code>n</code> is prime.
+</p>
+
+<p>
+We do add it to the list of primes, but we don't set the <code>max-prime</code>, even though it far exceeds it. This is because the value <code>max-prime</code> represents the maximum prime for which all primes lower than it are known. In this case not all primes lower than it are known.
+</p>
+
+<p>
+Unfortunately it is not possible to, for any \(n\) know that it is the next prime without testing the range between n and the previous prime. Therefore, for now, this part of it is the only way to check if previous elements are prime.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span>&lt; @max-prime max-div<span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">do</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">doall</span> <span style="color: #494949;">(</span>map #<span style="color: #bbb;">(</span>is-prime? <span style="font-style: italic;">%</span> <span style="color: #E53935;">true</span><span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>range @max-prime max-div<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>div? n<span style="color: #494949;">)</span>
+      <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">do</span> <span style="color: #bbb;">(</span>swap! found-primes conj n<span style="color: #bbb;">)</span>
+          <span style="color: #E53935;">true</span><span style="color: #494949;">)</span>
+      <span style="color: #E53935;">false</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+Now we check if a number is or is not in fact prime, and in this case we do set the prime in the event it is contiguous because the number is the next number in the set of found primes.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span>div? n<span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">do</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> contiguous?
+      <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">add to primes if prime and swap if it is generating primes (as above)</span>
+      <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">do</span> <span style="color: #bbb;">(</span>swap! found-primes conj n<span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">(</span>reset! max-prime n<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+      <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">else just add it to the set</span>
+      <span style="color: #494949;">(</span>swap! found-primes conj n<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+    <span style="color: #E53935;">true</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+Once we have this function, we can then begin to look into generating the primes to some value. Like before we want to ensure that we can use as many numbers form our prime list as possible, therefore we implement a simple function that will first attempt to return all the values from our <code>found-primes</code> list. should they not exist, it will then use the side effects of the <code>is-prime?</code> function to generate it.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure">&lt;&lt;divisible?&gt;&gt;
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">prime-range</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>end<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>prime-range 2 end<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>start end<span style="color: #494949;">]</span>
+
+   <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>@max-prime<span style="color: #bbb;">)</span>
+     <span style="color: #bbb;">(</span>drop-while<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+   
+   <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #bbb;">(</span>range <span style="color: #494949;">(</span>max start 2<span style="color: #494949;">)</span> end<span style="color: #bbb;">)</span>
+        <span style="color: #bbb;">(</span>filter is-prime?<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">prime-factors</span> <span style="color: #bbb;">[</span>x<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">(</span>prime-range <span style="color: #bbb;">(</span>inc <span style="color: #494949;">(</span><span style="color: #E53935;">Math</span>/sqrt x<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+       <span style="color: #494949;">(</span>filter #<span style="color: #bbb;">(</span>divisible? x <span style="font-style: italic;">%</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+
+<span style="color: #494949;">(</span>last <span style="color: #bbb;">(</span>prime-factors 600851475143<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+Time to compute this should be approximately \(O(sqrt()^2)\) time due to the idiosyncrasies of how Clojure works.
+</p>
+</div>
+</div>
+</div>
+</div>
 <!-- Footnotes --><!-- 
 <div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">the n-ary function syntax for Clojure is really nice here, allowing me to use default arguments.</p></div></div>
 
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Even with the <code>recur</code> special form.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Though in Clojure, since sets are trees, it has more \(O(log(n))\) runtime.</p></div></div>
+
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W51-3 16:04</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W51-3 16:08</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>
