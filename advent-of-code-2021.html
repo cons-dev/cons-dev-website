@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-3 16:04 -->
+<!-- 2021-W51-5 00:05 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Advent Of Code 2021</title>
@@ -47,39 +47,39 @@
 <li><a href="#org016765f">Utility Functions</a></li>
 <li><a href="#org7ce192d">Day 1: Sonar Sweep</a>
 <ul>
-<li><a href="#orgcf8a133">Part A</a></li>
-<li><a href="#orgba4fb73">Part B</a></li>
+<li><a href="#org26311aa">Part A</a></li>
+<li><a href="#org5d6c040">Part B</a></li>
 </ul>
 </li>
 <li><a href="#orge8f30f6">Day 2: Dive!</a>
 <ul>
-<li><a href="#org04199a8">Part A</a></li>
-<li><a href="#org78783a5">Part B</a></li>
+<li><a href="#org4ef204b">Part A</a></li>
+<li><a href="#org963cf5e">Part B</a></li>
 </ul>
 </li>
 <li><a href="#orgb46704a">Day 3: Binary Diagnostic</a>
 <ul>
-<li><a href="#org428e498">Part A</a></li>
-<li><a href="#org967be4f">Part B</a></li>
+<li><a href="#orgce9870f">Part A</a></li>
+<li><a href="#orgbfa3b24">Part B</a></li>
 </ul>
 </li>
 <li><a href="#org600f92d">Day 4: Giant Squid</a>
 <ul>
-<li><a href="#org5cea98e">Common</a>
+<li><a href="#org630bd19">Common</a>
 <ul>
 <li><a href="#org1f83d9d">won?</a></li>
-<li><a href="#org60eb612">vectorify</a></li>
-<li><a href="#orge3095c8">score-board</a></li>
+<li><a href="#orge5882b5">vectorify</a></li>
+<li><a href="#org5a177ae">score-board</a></li>
 </ul>
 </li>
-<li><a href="#org8ac76bd">Part A</a></li>
-<li><a href="#org9b4ce65">Part B</a></li>
+<li><a href="#org65bbc1a">Part A</a></li>
+<li><a href="#org714e451">Part B</a></li>
 <li><a href="#org3232bbc">A Better Version</a>
 <ul>
-<li><a href="#org8e5876d">Game</a></li>
+<li><a href="#org9c82b2a">Game</a></li>
 <li><a href="#org1dd73d1">play-round</a></li>
-<li><a href="#orgcd1129f">make-game</a></li>
-<li><a href="#orgb300c92">score-winners</a></li>
+<li><a href="#orgdbb1f8e">make-game</a></li>
+<li><a href="#org428fe99">score-winners</a></li>
 <li><a href="#org525f7c9">Putting It Together</a></li>
 </ul>
 </li>
@@ -87,33 +87,33 @@
 </li>
 <li><a href="#orgc51159e">Day 5: Hydrothermal Venture</a>
 <ul>
-<li><a href="#org630bd19">Common</a>
+<li><a href="#org2810cef">Common</a>
 <ul>
-<li><a href="#orgfb69757">draw-line-segment</a></li>
-<li><a href="#org4fd448d">find-intersections</a></li>
+<li><a href="#orga833fde">draw-line-segment</a></li>
+<li><a href="#org2900310">find-intersections</a></li>
 <li><a href="#org214420b">parse-lines</a></li>
 </ul>
 </li>
-<li><a href="#org845b311">Part A</a></li>
-<li><a href="#orgd34fc57">Part B</a></li>
+<li><a href="#orgadf2ec7">Part A</a></li>
+<li><a href="#orgf43aff2">Part B</a></li>
 </ul>
 </li>
 <li><a href="#org4e7a43b">Day 6: Lanternfish</a>
 <ul>
-<li><a href="#org25e9a33">Part A</a></li>
-<li><a href="#org55e0ab6">Part B</a></li>
+<li><a href="#org38561f5">Part A</a></li>
+<li><a href="#org4350e08">Part B</a></li>
 </ul>
 </li>
 <li><a href="#org7c09a51">Day 7: The Treachery of Whales</a>
 <ul>
-<li><a href="#org68bded0">Part A</a></li>
-<li><a href="#orgca0dd83">Part B</a></li>
+<li><a href="#orgfd8e5e4">Part A</a></li>
+<li><a href="#org29bb1f0">Part B</a></li>
 </ul>
 </li>
 <li><a href="#org2aa2379"><span class="todo TODO">TODO</span> Day 8: Seven Segment Search</a>
 <ul>
-<li><a href="#org26311aa">Part A</a></li>
-<li><a href="#org5d6c040">Part B</a></li>
+<li><a href="#org969287e">Part A</a></li>
+<li><a href="#orgbedf252">Part B</a></li>
 </ul>
 </li>
 </ul>
@@ -153,11 +153,11 @@ To start out I will define a utility function to make reading EDN files easier. 
 The first problem is fairly simple. We are to take a list of numbers and compare each pair within the list, producing.
 </p>
 </div>
-<div id="outline-container-orgcf8a133" class="outline-3">
-<h3 id="orgcf8a133">Part A</h3>
-<div class="outline-text-3" id="text-orgcf8a133">
+<div id="outline-container-org26311aa" class="outline-3">
+<h3 id="org26311aa">Part A</h3>
+<div class="outline-text-3" id="text-org26311aa">
 <p>
-Once that is done we are to add up the total number of increases. This is fairly simple, and the following code does that through a simple recursive function and list destructing.<label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> List destructuring is really one of my favorite bits of Clojure's syntax. Yes, it's common, but it's also really useful.</span> We take the first two elements of the list, and compare them to check if they have increased, returning 1 if they have, 0 if they have not. Then we check if the list is empty, if it is we simply return, but if it is not we sum with the function applied to the rest of the list minus the first element.
+Once that is done we are to add up the total number of increases. This is fairly simple, and the following code does that through a simple recursive function and list destructing.<label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> List destructuring is really one of my favorite bits of Clojure's syntax. Yes, it's common, but it's also really useful.</span> We take the first two elements of the list, and compare them to check if they have increased, returning 1 if they have, 0 if they have not. Then we check if the list is empty, if it is we simply return, but if it is not we sum with the function applied to the rest of the list minus the first element.
 </p>
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">aoc.1.a</span>
@@ -177,9 +177,9 @@ Once that is done we are to add up the total number of increases. This is fairly
 </div>
 </div>
 
-<div id="outline-container-orgba4fb73" class="outline-3">
-<h3 id="orgba4fb73">Part B</h3>
-<div class="outline-text-3" id="text-orgba4fb73">
+<div id="outline-container-org5d6c040" class="outline-3">
+<h3 id="org5d6c040">Part B</h3>
+<div class="outline-text-3" id="text-org5d6c040">
 <p>
 The second problem is the generation of a three measurement sliding window. To solve this we make a slight modification, adding some further elements in the destructuring bind. Once that is done it's smooth sailing.
 </p>
@@ -212,11 +212,11 @@ The second problem is the generation of a three measurement sliding window. To s
 In both cases it was possible to solve the problems in \(O(n)\) time. However, unfortunately, unlike the last one this probably could not be parallelized for matrix math, like I have seen with some of my friends.
 </p>
 </div>
-<div id="outline-container-org04199a8" class="outline-3">
-<h3 id="org04199a8">Part A</h3>
-<div class="outline-text-3" id="text-org04199a8">
+<div id="outline-container-org4ef204b" class="outline-3">
+<h3 id="org4ef204b">Part A</h3>
+<div class="outline-text-3" id="text-org4ef204b">
 <p>
-Here we write a simple bit of code to calculate the position of the craft. Here we simply have the string representing the file pre-converted into an EDN.<label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> I think this is reasonably within the rules. The lists are basically structured so that I only have to add an extra pair of square brackets to make it a vector.</span> Then we read it in, partition it into a series of 2-tuples, use some destructuring to conduct math to add it to a vector (\(i\) represents the horizontal, \(j\) the vertical) and then we multiply our values together.
+Here we write a simple bit of code to calculate the position of the craft. Here we simply have the string representing the file pre-converted into an EDN.<label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> I think this is reasonably within the rules. The lists are basically structured so that I only have to add an extra pair of square brackets to make it a vector.</span> Then we read it in, partition it into a series of 2-tuples, use some destructuring to conduct math to add it to a vector (\(i\) represents the horizontal, \(j\) the vertical) and then we multiply our values together.
 </p>
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">aoc.2.a</span>
@@ -236,9 +236,9 @@ Here we write a simple bit of code to calculate the position of the craft. Here 
 </div>
 </div>
 
-<div id="outline-container-org78783a5" class="outline-3">
-<h3 id="org78783a5">Part B</h3>
-<div class="outline-text-3" id="text-org78783a5">
+<div id="outline-container-org963cf5e" class="outline-3">
+<h3 id="org963cf5e">Part B</h3>
+<div class="outline-text-3" id="text-org963cf5e">
 <p>
 To solve part two we now need to treat the <code>up</code> and <code>down</code> pairs as representing changes to the slope of the list. To do so we simply add a new value representing the slope to the accumulator, known as <code>aim</code>. We then, when looping over it, modify the aim value for up and down commands, and modify the depth during forward commands.
 </p>
@@ -278,9 +278,9 @@ Programs must be written for people to read, and only incidentally for machines 
 </p>
 </blockquote>
 </div>
-<div id="outline-container-org428e498" class="outline-3">
-<h3 id="org428e498">Part A</h3>
-<div class="outline-text-3" id="text-org428e498">
+<div id="outline-container-orgce9870f" class="outline-3">
+<h3 id="orgce9870f">Part A</h3>
+<div class="outline-text-3" id="text-orgce9870f">
 <p>
 Here in our first binary diagnostic we write a rather simple bit of code, really not much more than we would normally do, though the program logic is a bit twistier than the usual.
 </p>
@@ -319,11 +319,11 @@ After this we can just multiply them togetehr.
 </div>
 </div>
 </div>
-<div id="outline-container-org967be4f" class="outline-3">
-<h3 id="org967be4f">Part B</h3>
-<div class="outline-text-3" id="text-org967be4f">
+<div id="outline-container-orgbfa3b24" class="outline-3">
+<h3 id="orgbfa3b24">Part B</h3>
+<div class="outline-text-3" id="text-orgbfa3b24">
 <p>
-Here is the fun part, and the part where we apply recursion<label class="sidenote-number" for="3"><sup>3</sup></label><input checked="checked" id="3" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 3</span> See recursion.</span> to solve the problem, and also put ourselves in a somewhat strange world of program logic.
+Here is the fun part, and the part where we apply recursion<label class="sidenote-number" for="3"><sup>3</sup></label><input checked="checked" id="3" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 3</span> See recursion.</span> to solve the problem, and also put ourselves in a somewhat strange world of program logic.
 </p>
 
 <p>
@@ -368,15 +368,15 @@ Here we simply write a bit of code to find the winning bingo board and cheat. Ah
 </p>
 </div>
 
-<div id="outline-container-org5cea98e" class="outline-3">
-<h3 id="org5cea98e">Common</h3>
-<div class="outline-text-3" id="text-org5cea98e">
+<div id="outline-container-org630bd19" class="outline-3">
+<h3 id="org630bd19">Common</h3>
+<div class="outline-text-3" id="text-org630bd19">
 </div>
 <div id="outline-container-org1f83d9d" class="outline-4">
 <h4 id="org1f83d9d">won?</h4>
 <div class="outline-text-4" id="text-org1f83d9d">
 <p>
-The won predicate <label class="sidenote-number" for="4"><sup>4</sup></label><input checked="checked" id="4" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 4</span> Also known as a test function.</span> takes two arguments, a list of numbers already played as well as a single board. It then extracts the possible score positions from the board and combines them into a list. Following this it proceeds to check if any of them are a subset of the set of nums. Should this be the case it returns true.
+The won predicate <label class="sidenote-number" for="4"><sup>4</sup></label><input checked="checked" id="4" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 4</span> Also known as a test function.</span> takes two arguments, a list of numbers already played as well as a single board. It then extracts the possible score positions from the board and combines them into a list. Following this it proceeds to check if any of them are a subset of the set of nums. Should this be the case it returns true.
 </p>
 <div class="org-src-container">
 <pre class="src src-clojure" id="orgae1786a"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">won?</span> <span style="color: #bbb;">[</span>nums board<span style="color: #bbb;">]</span>
@@ -387,14 +387,14 @@ The won predicate <label class="sidenote-number" for="4"><sup>4</sup></label><in
 </div>
 </div>
 </div>
-<div id="outline-container-org60eb612" class="outline-4">
-<h4 id="org60eb612">vectorify</h4>
-<div class="outline-text-4" id="text-org60eb612">
+<div id="outline-container-orge5882b5" class="outline-4">
+<h4 id="orge5882b5">vectorify</h4>
+<div class="outline-text-4" id="text-orge5882b5">
 <p>
-This is a simple recursive function that just converts everything into a series of vectors, mostly for when I need vectors but I don't get them initially.<label class="sidenote-number" for="5"><sup>5</sup></label><input checked="checked" id="5" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 5</span> This is only used once, but having a function makes what I am doing clearer.</span>
+This is a simple recursive function that just converts everything into a series of vectors, mostly for when I need vectors but I don't get them initially.<label class="sidenote-number" for="5"><sup>5</sup></label><input checked="checked" id="5" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 5</span> This is only used once, but having a function makes what I am doing clearer.</span>
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org347ff29"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">vectorify</span> <span style="color: #bbb;">[</span>c<span style="color: #bbb;">]</span>
+<pre class="src src-clojure" id="org60eb612"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">vectorify</span> <span style="color: #bbb;">[</span>c<span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>coll? c<span style="color: #494949;">)</span>
     <span style="color: #494949;">(</span>vec <span style="color: #bbb;">(</span>map vectorify c<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
     c<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
@@ -402,14 +402,14 @@ This is a simple recursive function that just converts everything into a series 
 </div>
 </div>
 </div>
-<div id="outline-container-orge3095c8" class="outline-4">
-<h4 id="orge3095c8">score-board</h4>
-<div class="outline-text-4" id="text-orge3095c8">
+<div id="outline-container-org5a177ae" class="outline-4">
+<h4 id="org5a177ae">score-board</h4>
+<div class="outline-text-4" id="text-org5a177ae">
 <p>
 Here our score function that takes the list of numbers played as well as a board and converts it into a score.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org0b4ec04"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">score-board</span> <span style="color: #bbb;">[</span>nums board<span style="color: #bbb;">]</span>
+<pre class="src src-clojure" id="orge3095c8"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">score-board</span> <span style="color: #bbb;">[</span>nums board<span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span>* <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> board
           flatten
           <span style="color: #bbb;">(</span>filter #<span style="color: #494949;">(</span>not <span style="color: #bbb;">(</span>contains? <span style="color: #494949;">(</span>set nums<span style="color: #494949;">)</span> <span style="font-style: italic;">%</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
@@ -426,9 +426,9 @@ Here our score function that takes the list of numbers played as well as a board
 </div>
 
 
-<div id="outline-container-org8ac76bd" class="outline-3">
-<h3 id="org8ac76bd">Part A</h3>
-<div class="outline-text-3" id="text-org8ac76bd">
+<div id="outline-container-org65bbc1a" class="outline-3">
+<h3 id="org65bbc1a">Part A</h3>
+<div class="outline-text-3" id="text-org65bbc1a">
 <p>
 Now we put it all together using the <a href="https://orgmode.org/manual/Noweb-Reference-Syntax.html">noweb syntax</a> in org-mode.
 </p>
@@ -462,9 +462,9 @@ Now we put it all together using the <a href="https://orgmode.org/manual/Noweb-R
 </div>
 
 
-<div id="outline-container-org9b4ce65" class="outline-3">
-<h3 id="org9b4ce65">Part B</h3>
-<div class="outline-text-3" id="text-org9b4ce65">
+<div id="outline-container-org714e451" class="outline-3">
+<h3 id="org714e451">Part B</h3>
+<div class="outline-text-3" id="text-org714e451">
 <p>
 How for part B we start working on finding the last board to score. To do this we make a slight modification to our initial function and simply ask for the last board to win by filtering out the winning boards until none are left.
 </p>
@@ -511,14 +511,14 @@ Now I wasn't fully satisfied with that approach as I don't think it is very idio
 To do this I create a game object which contains information about the current round, the boards that have won this round, and the boards that have not won. Each iteration of this therefore produces a map of the game state
 </p>
 </div>
-<div id="outline-container-org8e5876d" class="outline-4">
-<h4 id="org8e5876d">Game</h4>
-<div class="outline-text-4" id="text-org8e5876d">
+<div id="outline-container-org9c82b2a" class="outline-4">
+<h4 id="org9c82b2a">Game</h4>
+<div class="outline-text-4" id="text-org9c82b2a">
 <p>
 This is the game record. I chose a record rather than a map because it would be more explicit about the structure of the actual data and more effectively constrains it. 
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org8663b33"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">Game</span> <span style="color: #bbb;">[</span>round nums boards winners<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<pre class="src src-clojure" id="org8e5876d"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">Game</span> <span style="color: #bbb;">[</span>round nums boards winners<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 </div>
@@ -542,14 +542,14 @@ Now we can write some code to play a single round. As you can see we simply take
 </div>
 </div>
 
-<div id="outline-container-orgcd1129f" class="outline-4">
-<h4 id="orgcd1129f">make-game</h4>
-<div class="outline-text-4" id="text-orgcd1129f">
+<div id="outline-container-orgdbb1f8e" class="outline-4">
+<h4 id="orgdbb1f8e">make-game</h4>
+<div class="outline-text-4" id="text-orgdbb1f8e">
 <p>
 The make-game function is also fairly simple. We move the partitioning and loading logic into it, simply taking a file of the correct format and converting it into a game at round 0.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org3c1afa4">  <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">make-game</span> <span style="color: #bbb;">[</span>f<span style="color: #bbb;">]</span>
+<pre class="src src-clojure" id="orgcd1129f">  <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">make-game</span> <span style="color: #bbb;">[</span>f<span style="color: #bbb;">]</span>
     <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">[</span><span style="color: #bbb;">{</span>raw-boards <span style="color: #E53935;">:boards</span>
            moves      <span style="color: #E53935;">:moves</span><span style="color: #bbb;">}</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> f
                                    read-edn<span style="color: #bbb;">)</span>
@@ -563,14 +563,14 @@ The make-game function is also fairly simple. We move the partitioning and loadi
 </div>
 </div>
 
-<div id="outline-container-orgb300c92" class="outline-4">
-<h4 id="orgb300c92">score-winners</h4>
-<div class="outline-text-4" id="text-orgb300c92">
+<div id="outline-container-org428fe99" class="outline-4">
+<h4 id="org428fe99">score-winners</h4>
+<div class="outline-text-4" id="text-org428fe99">
 <p>
 Now we have a little function for scoring each of the winners in a game which uses the <code>score-board</code> function for the scoring logic.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="orga1cde73"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">score-winners</span> <span style="color: #bbb;">[</span><span style="color: #494949;">{</span>nums <span style="color: #E53935;">:nums</span> round <span style="color: #E53935;">:round</span> winners <span style="color: #E53935;">:winners</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
+<pre class="src src-clojure" id="orgb300c92"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">score-winners</span> <span style="color: #bbb;">[</span><span style="color: #494949;">{</span>nums <span style="color: #E53935;">:nums</span> round <span style="color: #E53935;">:round</span> winners <span style="color: #E53935;">:winners</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span>map <span style="color: #494949;">(</span>partial score-board <span style="color: #bbb;">(</span>take <span style="color: #494949;">(</span>dec round<span style="color: #494949;">)</span> nums<span style="color: #bbb;">)</span><span style="color: #494949;">)</span> winners<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
@@ -612,18 +612,18 @@ As we can see we now have some functions to simply simulate a game played over t
 This next problem asks us to find the intersections of various lines. To do this we.
 </p>
 </div>
-<div id="outline-container-org630bd19" class="outline-3">
-<h3 id="org630bd19">Common</h3>
-<div class="outline-text-3" id="text-org630bd19">
+<div id="outline-container-org2810cef" class="outline-3">
+<h3 id="org2810cef">Common</h3>
+<div class="outline-text-3" id="text-org2810cef">
 </div>
-<div id="outline-container-orgfb69757" class="outline-4">
-<h4 id="orgfb69757">draw-line-segment</h4>
-<div class="outline-text-4" id="text-orgfb69757">
+<div id="outline-container-orga833fde" class="outline-4">
+<h4 id="orga833fde">draw-line-segment</h4>
+<div class="outline-text-4" id="text-orga833fde">
 <p>
 Here we introduce a simple function that produces a set of integer or rational coordinates at the natural numbers on the line segment provided by the two coordinates given to the function in a tuple. 
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="orgae11524"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">draw-line-segment</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span><span style="color: #bbb;">[</span>x1 y1<span style="color: #bbb;">]</span> <span style="color: #bbb;">[</span>x2 y2<span style="color: #bbb;">]</span><span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+<pre class="src src-clojure" id="orgfb69757"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">draw-line-segment</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span><span style="color: #bbb;">[</span>x1 y1<span style="color: #bbb;">]</span> <span style="color: #bbb;">[</span>x2 y2<span style="color: #bbb;">]</span><span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">[</span>y-diff      <span style="color: #bbb;">(</span>- y1 y2<span style="color: #bbb;">)</span>
         x-diff      <span style="color: #bbb;">(</span>- x1 x2<span style="color: #bbb;">)</span>
         <span style="color: #bbb;">[</span>xmin xmax<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span>sort <span style="color: #494949;">[</span>x1 x2<span style="color: #494949;">]</span><span style="color: #bbb;">)</span>
@@ -645,14 +645,14 @@ Here we introduce a simple function that produces a set of integer or rational c
 </div>
 
 
-<div id="outline-container-org4fd448d" class="outline-4">
-<h4 id="org4fd448d">find-intersections</h4>
-<div class="outline-text-4" id="text-org4fd448d">
+<div id="outline-container-org2900310" class="outline-4">
+<h4 id="org2900310">find-intersections</h4>
+<div class="outline-text-4" id="text-org2900310">
 <p>
 To find the points on which each one intersects we simply consider each point and find the set intersections of it with the rest of the sets. We then (to avoid double-counting) discard the set from the set of coordinates and continue on this new set until all are exhausted.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org58a0ad0"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">find-intersections</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span>f &amp; rest<span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+<pre class="src src-clojure" id="org4fd448d"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">find-intersections</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span>f &amp; rest<span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>empty? rest<span style="color: #494949;">)</span>
     #<span style="color: #494949;">{}</span>
     <span style="color: #494949;">(</span>apply union
@@ -684,9 +684,9 @@ Here we simply parse the list into a series of tuples containing the coordinates
 </div>
 </div>
 
-<div id="outline-container-org845b311" class="outline-3">
-<h3 id="org845b311">Part A</h3>
-<div class="outline-text-3" id="text-org845b311">
+<div id="outline-container-orgadf2ec7" class="outline-3">
+<h3 id="orgadf2ec7">Part A</h3>
+<div class="outline-text-3" id="text-orgadf2ec7">
 <p>
 Now to actually execute all we need to do is filter out the unwanted functions, which are in this case are all the functions that are not vertical or horizontal.
 </p>
@@ -715,9 +715,9 @@ Now to actually execute all we need to do is filter out the unwanted functions, 
 </div>
 </div>
 
-<div id="outline-container-orgd34fc57" class="outline-3">
-<h3 id="orgd34fc57">Part B</h3>
-<div class="outline-text-3" id="text-orgd34fc57">
+<div id="outline-container-orgf43aff2" class="outline-3">
+<h3 id="orgf43aff2">Part B</h3>
+<div class="outline-text-3" id="text-orgf43aff2">
 <p>
 For this next part we simply remove the filter we used in the last one and let it run again.
 </p>
@@ -748,9 +748,9 @@ For this next part we simply remove the filter we used in the last one and let i
 <h2 id="org4e7a43b">Day 6: Lanternfish</h2>
 <div class="outline-text-2" id="text-org4e7a43b">
 </div>
-<div id="outline-container-org25e9a33" class="outline-3">
-<h3 id="org25e9a33">Part A</h3>
-<div class="outline-text-3" id="text-org25e9a33">
+<div id="outline-container-org38561f5" class="outline-3">
+<h3 id="org38561f5">Part A</h3>
+<div class="outline-text-3" id="text-org38561f5">
 <p>
 Here we basically implement what we can imagine as an entity component system with some basic rules. Each entity in the system has a reproduction time (<code>rep-time</code>) which, for each update of the system, is decremented by one. Should an entity in the system have a <code>rep-time</code> of less than 0 it will create a new entity with a <code>rep-time</code> of 8 and have it's <code>rep-time</code> set to 6.
 </p>
@@ -811,9 +811,9 @@ Here we basically implement what we can imagine as an entity component system wi
 </div>
 
 
-<div id="outline-container-org55e0ab6" class="outline-3">
-<h3 id="org55e0ab6">Part B</h3>
-<div class="outline-text-3" id="text-org55e0ab6">
+<div id="outline-container-org4350e08" class="outline-3">
+<h3 id="org4350e08">Part B</h3>
+<div class="outline-text-3" id="text-org4350e08">
 <p>
 Here we take a dramatically improved approach by, instead of treating each fish as one number, simply counting the number of fish with a certain time to reproduce. Therefore, each lantern fish is not recorded separately.
 </p>
@@ -863,9 +863,9 @@ When a set of lantern fish have reached zero we place them back at 6 and we add 
 Here we get into a simple optimization problem where we just have to find the most fuel-efficient position for all crabs. The algorithm I implemented tests all possible positions, giving us and \(O(n^2)\) runtime, though I think that could be improved a fair bit
 </p>
 </div>
-<div id="outline-container-org68bded0" class="outline-3">
-<h3 id="org68bded0">Part A</h3>
-<div class="outline-text-3" id="text-org68bded0">
+<div id="outline-container-orgfd8e5e4" class="outline-3">
+<h3 id="orgfd8e5e4">Part A</h3>
+<div class="outline-text-3" id="text-orgfd8e5e4">
 <p>
 Here we simply brute-force the answer.
 </p>
@@ -896,9 +896,9 @@ Here we simply brute-force the answer.
 </div>
 </div>
 </div>
-<div id="outline-container-orgca0dd83" class="outline-3">
-<h3 id="orgca0dd83">Part B</h3>
-<div class="outline-text-3" id="text-orgca0dd83">
+<div id="outline-container-org29bb1f0" class="outline-3">
+<h3 id="org29bb1f0">Part B</h3>
+<div class="outline-text-3" id="text-org29bb1f0">
 <p>
 Now on part b we have the fuel increase with the range, so we make a slight modification.
 </p>
@@ -934,11 +934,11 @@ Now on part b we have the fuel increase with the range, so we make a slight modi
 <h2 id="org2aa2379"><span class="todo TODO">TODO</span> Day 8: Seven Segment Search</h2>
 <div class="outline-text-2" id="text-org2aa2379">
 <p>
-Here we break out my favorite tool, logic programming<label class="sidenote-number" for="6"><sup>6</sup></label><input checked="checked" id="6" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 6</span> Basically it's the class of programming that contains GOFAI.</span>. More specifically, we need to use backwards chaining to find the collection of facts about the translation connections that produce the results we see here.
+Here we break out my favorite tool, logic programming<label class="sidenote-number" for="6"><sup>6</sup></label><input checked="checked" id="6" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 6</span> Basically it's the class of programming that contains GOFAI.</span>. More specifically, we need to use backwards chaining to find the collection of facts about the translation connections that produce the results we see here.
 </p>
 
 <p>
-So let's imagine what we want first. What we want is a translation table that tells us what the inputs should be from the outputs and vise-versa. Something akin to this translation table.<label class="sidenote-number" for="7"><sup>7</sup></label><input checked="checked" id="7" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 7</span> Or, if you like diagrams: <img src="./images/trans-table_edc90865-ee8f-4e91-a685-620a2dd6438b.png" alt="trans-table_edc90865-ee8f-4e91-a685-620a2dd6438b.png" /></span>
+So let's imagine what we want first. What we want is a translation table that tells us what the inputs should be from the outputs and vise-versa. Something akin to this translation table.<label class="sidenote-number" for="7"><sup>7</sup></label><input checked="checked" id="7" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 7</span> Or, if you like diagrams: <img src="./images/trans-table_edc90865-ee8f-4e91-a685-620a2dd6438b.png" alt="trans-table_edc90865-ee8f-4e91-a685-620a2dd6438b.png" /></span>
 </p>
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">trans-table</span> <span style="color: #bbb;">{</span>1 2
@@ -956,9 +956,9 @@ This provides us with an obvious starting point. We also know that a letter will
 </p>
 </div>
 
-<div id="outline-container-org26311aa" class="outline-3">
-<h3 id="org26311aa">Part A</h3>
-<div class="outline-text-3" id="text-org26311aa">
+<div id="outline-container-org969287e" class="outline-3">
+<h3 id="org969287e">Part A</h3>
+<div class="outline-text-3" id="text-org969287e">
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">aoc.8.a</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935;">:require</span> <span style="color: #494949;">[</span>clojure.core.logic <span style="color: #E53935;">:as</span> logic<span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
@@ -980,8 +980,8 @@ This provides us with an obvious starting point. We also know that a letter will
 </div>
 </div>
 
-<div id="outline-container-org5d6c040" class="outline-3">
-<h3 id="org5d6c040">Part B</h3>
+<div id="outline-container-orgbedf252" class="outline-3">
+<h3 id="orgbedf252">Part B</h3>
 </div>
 </div>
 <!-- Footnotes --><!-- 

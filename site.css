@@ -63,8 +63,6 @@ ol li {
 
 ol li::before {
   content: counter(li);
-  color: #e53935;
-  display: inline-block;
   width: 1em;
   margin-right: 0.5em;
   text-align: right;
@@ -78,10 +76,17 @@ ul {
 
 ul li::before {
   content: '•';
-  color: #e53935;
-  display: inline-block;
   width: 1em;
   margin-left: -1em;
+}
+
+li::before {
+  color: #e53935;
+  display: inline-block;
+}
+
+li {
+  margin-top: 0.5em;
 }
 
 blockquote {

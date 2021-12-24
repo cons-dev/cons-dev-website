@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-3 16:04 -->
+<!-- 2021-W51-5 00:05 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Econf World Wide Web</title>
@@ -24,7 +24,7 @@
 <ul>
 <li><a href="#org73f9396">Introduction</a></li>
 <li><a href="#orgab2bd12">Dependencies</a></li>
-<li><a href="#org8fb4a19">Variables</a>
+<li><a href="#org42d38f3">Variables</a>
 <ul>
 <li><a href="#orga2f6772">Setting Browsers (and stuff)</a></li>
 <li><a href="#org3955360">The w3m Directory</a></li>
@@ -49,7 +49,7 @@
 </li>
 <li><a href="#orgbb4d542">Search Engine Suggestions</a>
 <ul>
-<li><a href="#org42d38f3">Variables</a></li>
+<li><a href="#orgb197f75">Variables</a></li>
 <li><a href="#org2d39642">Functions</a>
 <ul>
 <li><a href="#org369c113">ec-ddg-suggest-fetch</a></li>
@@ -132,11 +132,11 @@ This is some fo the code I use for search engine stuff in Emacs.
 </div>
 </div>
 
-<div id="outline-container-org8fb4a19" class="outline-2">
-<h2 id="org8fb4a19">Variables</h2>
-<div class="outline-text-2" id="text-org8fb4a19">
+<div id="outline-container-org42d38f3" class="outline-2">
+<h2 id="org42d38f3">Variables</h2>
+<div class="outline-text-2" id="text-org42d38f3">
 <p>
-Here I set up a bunch of variables that are used in the rest of the package. However, I do not set all my variables here and do make some closer to where they are used. <label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> I am not sure that this is the best practice, but I am so far from the "best practices" zone with this configuration that I may as well just go with it.</span>
+Here I set up a bunch of variables that are used in the rest of the package. However, I do not set all my variables here and do make some closer to where they are used. <label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> I am not sure that this is the best practice, but I am so far from the "best practices" zone with this configuration that I may as well just go with it.</span>
 </p>
 </div>
 <div id="outline-container-orga2f6772" class="outline-3">
@@ -345,7 +345,7 @@ Checks if the video is on a streaming website or if the video content type is so
 <h3 id="org4f33b39">Redefining Some Functions</h3>
 <div class="outline-text-3" id="text-org4f33b39">
 <p>
-Unfortunately, depending on how a video is reached, a different function may be called. I used to just advise the relevant functions, but I have (against the usual recommendations of the Emacs community) come to prefer redefining functions as redefinition ensures that the function at hand works as expected. <label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> Basically advices are weird and difficult to parse when you get too many of them whereas redefinition is pretty clear and simple.</span>
+Unfortunately, depending on how a video is reached, a different function may be called. I used to just advise the relevant functions, but I have (against the usual recommendations of the Emacs community) come to prefer redefining functions as redefinition ensures that the function at hand works as expected. <label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> Basically advices are weird and difficult to parse when you get too many of them whereas redefinition is pretty clear and simple.</span>
 </p>
 </div>
 
@@ -432,9 +432,9 @@ This just redefines the w3m URL thing entirely, checking if it is a video in the
 To add search engine suggestions
 </p>
 </div>
-<div id="outline-container-org42d38f3" class="outline-3">
-<h3 id="org42d38f3">Variables</h3>
-<div class="outline-text-3" id="text-org42d38f3">
+<div id="outline-container-orgb197f75" class="outline-3">
+<h3 id="orgb197f75">Variables</h3>
+<div class="outline-text-3" id="text-orgb197f75">
 <p>
 Here I set a list of variables for the search engine suggestions that.
 </p>
@@ -485,7 +485,7 @@ This asynchronously fetches suggestions from the <a href="https://duckduckgo.com
 <h4 id="org0618719">ec-ddg-get-suggestions</h4>
 <div class="outline-text-4" id="text-org0618719">
 <p>
-Here we define a pretty simple function to get the list of suggestions for the search engine and merge them with the search history. It also starts a new request for suggestions.<label class="sidenote-number" for="3"><sup>3</sup></label><input checked="checked" id="3" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 3</span> Unfortunately this doesn't actually work fully</span>
+Here we define a pretty simple function to get the list of suggestions for the search engine and merge them with the search history. It also starts a new request for suggestions.<label class="sidenote-number" for="3"><sup>3</sup></label><input checked="checked" id="3" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 3</span> Unfortunately this doesn't actually work fully</span>
 </p>
 
 
@@ -509,7 +509,7 @@ I also use the rx-macro to dynamically filter out suggestions that don't contain
 <h4 id="org7ffeed9">ec-wikipedia-suggest-fetch</h4>
 <div class="outline-text-4" id="text-org7ffeed9">
 <p>
-I also like to browse wikipedia. <label class="sidenote-number" for="4"><sup>4</sup></label><input checked="checked" id="4" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 4</span> Unfortunately this function doesn't work yet, but soon™, it will.</span>
+I also like to browse wikipedia. <label class="sidenote-number" for="4"><sup>4</sup></label><input checked="checked" id="4" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 4</span> Unfortunately this function doesn't work yet, but soon™, it will.</span>
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-wikipedia-suggest-fetch</span> <span style="color: #bbb;">(</span>input<span style="color: #bbb;">)</span>
@@ -531,7 +531,7 @@ I also like to browse wikipedia. <label class="sidenote-number" for="4"><sup>4</
 <h4 id="org85b5426">ec-get-region</h4>
 <div class="outline-text-4" id="text-org85b5426">
 <p>
-This is a simple function to grab a region if it is highlighted, else return nil. IDK if it is defined in emacs elsewhere or not, but I decided to add it anyways because it might not be. <label class="sidenote-number" for="5"><sup>5</sup></label><input checked="checked" id="5" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 5</span> Yes, I know that is a terrible idea.</span>
+This is a simple function to grab a region if it is highlighted, else return nil. IDK if it is defined in emacs elsewhere or not, but I decided to add it anyways because it might not be. <label class="sidenote-number" for="5"><sup>5</sup></label><input checked="checked" id="5" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 5</span> Yes, I know that is a terrible idea.</span>
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-get-region</span> <span style="color: #bbb;">()</span>
@@ -625,7 +625,7 @@ This is the porcelain of the system. Eventually I think I will separate this int
 <h3 id="org47f4b0b">Buffer Names</h3>
 <div class="outline-text-3" id="text-org47f4b0b">
 <p>
-Here we add a function to rename the buffers to the current title to make them both more manageable and searchable than they were otherwise. <label class="sidenote-number" for="6"><sup>6</sup></label><input checked="checked" id="6" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 6</span> One of my pet-peeves was that w3m didn't really have good names for buffers, instead giving them the usual numeric names which sucked.</span>
+Here we add a function to rename the buffers to the current title to make them both more manageable and searchable than they were otherwise. <label class="sidenote-number" for="6"><sup>6</sup></label><input checked="checked" id="6" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 6</span> One of my pet-peeves was that w3m didn't really have good names for buffers, instead giving them the usual numeric names which sucked.</span>
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ec-w3m-rename-buffer-name</span> <span style="color: #bbb;">()</span>

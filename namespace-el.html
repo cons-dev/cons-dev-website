@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-3 16:04 -->
+<!-- 2021-W51-5 00:05 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Namespaces in My Emacs? It's More Likely than you think!</title>
@@ -52,14 +52,14 @@
 <li><a href="#orgd53003f">The <code>ns</code> Macro</a></li>
 <li><a href="#org94b197f">Finding Private Definitions</a>
 <ul>
-<li><a href="#org4bce5ea">ns-find-private-refs</a></li>
-<li><a href="#org4ea427f">ns-private?</a></li>
+<li><a href="#org056a1ea">ns-find-private-refs</a></li>
+<li><a href="#orgeedf7c8">ns-private?</a></li>
 </ul>
 </li>
 <li><a href="#org6ab6971">Structure Transformers</a>
 <ul>
-<li><a href="#org87312e7">ns-transform-private-refs</a></li>
-<li><a href="#orgc01028a">ns-create-private-binds</a></li>
+<li><a href="#org7494d92">ns-transform-private-refs</a></li>
+<li><a href="#org65116d1">ns-create-private-binds</a></li>
 <li><a href="#org676247e">ns-remove-private-defs</a></li>
 </ul>
 </li>
@@ -96,7 +96,7 @@ So it's commonly said that Emacs does not have namespaces, everything is in one 
 </p>
 
 <p>
-But I realized while working on this blog <label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> Specifically when using it to avoid polluting the global namespace <a href="source-code.html#org0381022">here</a>.</span> that lexical binding and lexical closures were basically private functions and namespaces, if ugly looking. Therefore, if you just used something akin to this:
+But I realized while working on this blog <label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> Specifically when using it to avoid polluting the global namespace <a href="source-code.html#org0d904f2">here</a>.</span> that lexical binding and lexical closures were basically private functions and namespaces, if ugly looking. Therefore, if you just used something akin to this:
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">setq</span> lexical-binding t<span style="color: #494949;">)</span>
@@ -106,7 +106,7 @@ But I realized while working on this blog <label class="sidenote-number" for="1"
 </pre>
 </div>
 <p>
-You would discover that <code>fun</code> was no longer defined outside of the let binding, <i>however</i> (and this is the exciting part) <code>more-fun</code> would still add 23 to it's input because it had successfully captured <code>fun</code>!<label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> This is very fun.</span>
+You would discover that <code>fun</code> was no longer defined outside of the let binding, <i>however</i> (and this is the exciting part) <code>more-fun</code> would still add 23 to it's input because it had successfully captured <code>fun</code>!<label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> This is very fun.</span>
 </p>
 
 <p>
@@ -213,14 +213,14 @@ Thus we also filter out the definitions that begin with the same symbol as the n
 </p>
 </div>
 
-<div id="outline-container-org4bce5ea" class="outline-4">
-<h4 id="org4bce5ea">ns-find-private-refs</h4>
-<div class="outline-text-4" id="text-org4bce5ea">
+<div id="outline-container-org056a1ea" class="outline-4">
+<h4 id="org056a1ea">ns-find-private-refs</h4>
+<div class="outline-text-4" id="text-org056a1ea">
 <p>
-This filters the top level forms of the namespace using the <a href="#org32b7f39">ns-private?</a> predicate function and then returns the list of all top level functions.
+This filters the top level forms of the namespace using the <a href="#org4ea427f">ns-private?</a> predicate function and then returns the list of all top level functions.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="orge6a086e"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-find-private-refs</span> <span style="color: #bbb;">(</span>namespace forms<span style="color: #bbb;">)</span>
+<pre class="src src-emacs-lisp" id="org4bce5ea"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-find-private-refs</span> <span style="color: #bbb;">(</span>namespace forms<span style="color: #bbb;">)</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> forms
        <span style="color: #494949;">(</span>-filter <span style="color: #bbb;">(</span>-partial #'ns-private? namespace<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
        <span style="color: #494949;">(</span>-map 'second<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
@@ -233,14 +233,14 @@ ns-find-private-refs
 </div>
 </div>
 
-<div id="outline-container-org4ea427f" class="outline-4">
-<h4 id="org4ea427f">ns-private?</h4>
-<div class="outline-text-4" id="text-org4ea427f">
+<div id="outline-container-orgeedf7c8" class="outline-4">
+<h4 id="orgeedf7c8">ns-private?</h4>
+<div class="outline-text-4" id="text-orgeedf7c8">
 <p>
 Here we define a small function that checks if our top level form is public. This simply grabs the first value of the form, then checks the second to see if it is the form has enough symbols to be a definition, then checks if it is top level or not.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="org32b7f39"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-private?</span> <span style="color: #bbb;">(</span>namespace top-level-form<span style="color: #bbb;">)</span>
+<pre class="src src-emacs-lisp" id="org4ea427f"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-private?</span> <span style="color: #bbb;">(</span>namespace top-level-form<span style="color: #bbb;">)</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span><span style="color: #494949;">(</span><span style="color: #bbb;">(</span>form-fun <span style="color: #494949;">(</span>first top-level-form<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
     <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">and</span> <span style="color: #bbb;">(</span>&gt; <span style="color: #494949;">(</span>length top-level-form<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span>
          <span style="color: #bbb;">(</span>-contains?
@@ -264,14 +264,14 @@ Once we have a list of private definitions, we need to transform regular calls i
 </p>
 </div>
 
-<div id="outline-container-org87312e7" class="outline-4">
-<h4 id="org87312e7">ns-transform-private-refs</h4>
-<div class="outline-text-4" id="text-org87312e7">
+<div id="outline-container-org7494d92" class="outline-4">
+<h4 id="org7494d92">ns-transform-private-refs</h4>
+<div class="outline-text-4" id="text-org7494d92">
 <p>
 This is a recursive function that conducts a depth first search of the tree created by the s-expressions, modifying them so that they are properly referred to as variables. It unfortunately has a lot of special cases / repeated structure which indicates to me that it is not as elegant as it could be, though I decided to not focus too much effort on refactoring it since this is both a toy example and irritatingly fragile code.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="org037ca64"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-transform-private-refs</span> <span style="color: #bbb;">(</span>namespace private-refs forms<span style="color: #bbb;">)</span>
+<pre class="src src-emacs-lisp" id="org87312e7"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-transform-private-refs</span> <span style="color: #bbb;">(</span>namespace private-refs forms<span style="color: #bbb;">)</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">cond</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>not <span style="color: #494949;">(</span>eq <span style="color: #bbb;">(</span>type-of forms<span style="color: #bbb;">)</span> 'cons<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
          forms<span style="color: #494949;">)</span>
         <span style="color: #494949;">(</span><span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">and</span> <span style="color: #494949;">(</span>eq <span style="color: #bbb;">(</span>first forms<span style="color: #bbb;">)</span> 'quote<span style="color: #494949;">)</span>
@@ -294,14 +294,14 @@ This is a recursive function that conducts a depth first search of the tree crea
 </div>
 </div>
 
-<div id="outline-container-orgc01028a" class="outline-4">
-<h4 id="orgc01028a">ns-create-private-binds</h4>
-<div class="outline-text-4" id="text-orgc01028a">
+<div id="outline-container-org65116d1" class="outline-4">
+<h4 id="org65116d1">ns-create-private-binds</h4>
+<div class="outline-text-4" id="text-org65116d1">
 <p>
 This transforms private bindings into a listing of symbols value two length lists as used by the <code>let</code> special form. The only tricky bit is pulling symbols from defalias.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="org20eb996"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-create-private-binds</span> <span style="color: #bbb;">(</span>namespace forms<span style="color: #bbb;">)</span>
+<pre class="src src-emacs-lisp" id="orgc01028a"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-create-private-binds</span> <span style="color: #bbb;">(</span>namespace forms<span style="color: #bbb;">)</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> forms
        <span style="color: #494949;">(</span>-filter <span style="color: #bbb;">(</span>-partial #'ns-private? namespace<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
        <span style="color: #494949;">(</span>-map <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #494949;">(</span>form<span style="color: #494949;">)</span>
@@ -453,7 +453,7 @@ It is possible to do this all without let, assuming you permit a modification of
 </div>
 </div>
 <!-- Footnotes --><!-- 
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Specifically when using it to avoid polluting the global namespace <a href="source-code.html#org0381022">here</a>.</p></div></div>
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Specifically when using it to avoid polluting the global namespace <a href="source-code.html#org0d904f2">here</a>.</p></div></div>
 
 <div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">This is very fun.</p></div></div>
 

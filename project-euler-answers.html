@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-4 01:32 -->
+<!-- 2021-W51-5 00:05 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Project Euler Answers</title>
@@ -108,7 +108,7 @@ Here I use the simple brute force answer, which is to generate a list to 1000 an
 <h3 id="org8ff9945">Optimized Answer</h3>
 <div class="outline-text-3" id="text-org8ff9945">
 <p>
-So instead of that approach there's a much faster one using recursion.<label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> the n-ary function syntax for Clojure is really nice here, allowing me to use default arguments.</span>
+So instead of that approach there's a much faster one using recursion.<label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> the n-ary function syntax for Clojure is really nice here, allowing me to use default arguments.</span>
 </p>
 
 <div class="org-src-container">
@@ -219,7 +219,7 @@ To solve this we can implement a lazy sieve of Eratosthenes. Lazy in that the re
 </div>
 
 <p>
-Unfortunately this does not work for what we want. It is very beautiful, and I wish it did work, but because of the specific features of TCO in Clojure <label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> Even with the <code>recur</code> special form.</span> it doesn't actually produce TCO code, and, because it is recursive, will end up causing a stack overflow.
+Unfortunately this does not work for what we want. It is very beautiful, and I wish it did work, but because of the specific features of TCO in Clojure <label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> Even with the <code>recur</code> special form.</span> it doesn't actually produce TCO code, and, because it is recursive, will end up causing a stack overflow.
 </p>
 
 <p>
@@ -261,15 +261,12 @@ Next we define an <code>is-prime?</code> predicate which will test if a value is
                     <span style="color: #bbb;">(</span>some #<span style="color: #494949;">(</span>divisible? n <span style="font-style: italic;">%</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
                     not<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
        <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">cond</span>
-         <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">if it is in the set of found primes, just return true</span>
          <span style="color: #bbb;">(</span>contains? @found-primes n<span style="color: #bbb;">)</span>
          <span style="color: #E53935;">true</span>
 
-         <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">if it is less than the max prime and it is not in that set then it must be false</span>
          <span style="color: #bbb;">(</span>&gt; @max-prime n<span style="color: #bbb;">)</span>
          <span style="color: #E53935;">false</span>
 
-         <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">start generating primes if there are not enough of them to test it</span>
          <span style="color: #bbb;">(</span>&lt; @max-prime max-div<span style="color: #bbb;">)</span>
          <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">do</span> <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">doall</span> <span style="color: #bbb;">(</span>map #<span style="color: #494949;">(</span>is-prime? <span style="font-style: italic;">%</span> <span style="color: #E53935;">true</span><span style="color: #494949;">)</span> <span style="color: #494949;">(</span>range @max-prime max-div<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
              <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>div? n<span style="color: #bbb;">)</span>
@@ -277,26 +274,14 @@ Next we define an <code>is-prime?</code> predicate which will test if a value is
                    <span style="color: #E53935;">true</span><span style="color: #bbb;">)</span>
                <span style="color: #E53935;">false</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
 
-         <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">if it is divisible (and not part of the set of found primes) add it to the set of found primes</span>
          <span style="color: #bbb;">(</span>div? n<span style="color: #bbb;">)</span>
          <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">do</span> <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> contiguous?
-               <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">add to primes if prime and swap if it is generating primes (as above)</span>
                <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">do</span> <span style="color: #494949;">(</span>swap! found-primes conj n<span style="color: #494949;">)</span>
                    <span style="color: #494949;">(</span>reset! max-prime n<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-               <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">else just add it to the set</span>
                <span style="color: #bbb;">(</span>swap! found-primes conj n<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
              <span style="color: #E53935;">true</span><span style="color: #bbb;">)</span>
 
-         <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">If none of these pass, then it must not be a prime</span>
          <span style="color: #E53935;">:else</span> <span style="color: #E53935;">false</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-
-<span style="color: #494949;">(</span>is-prime? 3000 <span style="color: #E53935;">true</span><span style="color: #494949;">)</span>
-
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">do</span> <span style="color: #bbb;">(</span>reset! max-prime 2<span style="color: #bbb;">)</span>
-    <span style="color: #bbb;">(</span>reset! found-primes <span style="color: #494949;">(</span>sorted-set 2<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-
-@max-prime
-@found-primes
 </pre>
 </div>
 
@@ -312,7 +297,7 @@ There are, however, a number of fun tricks being used to speed up the computatio
 
 
 <p>
-Next we have the conditional. First it checks if the number is in the list of found primes, and if it is then it simply returns <code>true</code>. This means that it has \(O(1)\) runtime should the prime be found already. <label class="sidenote-number" for="3"><sup>3</sup></label><input checked="checked" id="3" style="display: none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 3</span> Though in Clojure, since sets are trees, it has more \(O(log(n))\) runtime.</span>
+Next we have the conditional. First it checks if the number is in the list of found primes, and if it is then it simply returns <code>true</code>. This means that it has \(O(1)\) runtime should the prime be found already. <label class="sidenote-number" for="3"><sup>3</sup></label><input checked="checked" id="3" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 3</span> Though in Clojure, since sets are trees, it has more \(O(log(n))\) runtime.</span>
 </p>
 
 <div class="org-src-container">
@@ -357,10 +342,8 @@ Now we check if a number is or is not in fact prime, and in this case we do set 
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span>div? n<span style="color: #494949;">)</span>
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">do</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> contiguous?
-      <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">add to primes if prime and swap if it is generating primes (as above)</span>
       <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">do</span> <span style="color: #bbb;">(</span>swap! found-primes conj n<span style="color: #bbb;">)</span>
           <span style="color: #bbb;">(</span>reset! max-prime n<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-      <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">else just add it to the set</span>
       <span style="color: #494949;">(</span>swap! found-primes conj n<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
     <span style="color: #E53935;">true</span><span style="color: #494949;">)</span>
 </pre>
@@ -423,8 +406,6 @@ First we can start by defining a simple brute force approach. This will take the
          <span style="color: #bbb;">(</span>map conjunctive?<span style="color: #bbb;">)</span>
          <span style="color: #bbb;">(</span>filter true?<span style="color: #bbb;">)</span>
          count<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-
-<span style="color: #494949;">(</span>num-conj-seq 3 30<span style="color: #494949;">)</span>
 </pre>
 </div>
 </div>
@@ -600,7 +581,7 @@ Therefore we can apply this predicate to all for all values \(n\) in the set \(\
 
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W51-4 01:31</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W51-4 12:36</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>
