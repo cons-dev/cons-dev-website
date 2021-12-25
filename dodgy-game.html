@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-5 00:05 -->
+<!-- 2021-W51-6 02:33 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Dodgy Game</title>
@@ -47,6 +47,10 @@
 <div class="outline-text-2" id="text-orgae79a48">
 <p>
 This is a small game I wrote a while back when I wanted to mess around with clojurescript. I am currently working on rewriting it with clara-rules. You can expect this file to be a WIP. You can play it <a href="dodgy/resources/public/index.html">here</a>.
+</p>
+
+<p>
+I think that, when I do refactor it <label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> I promise it will happen soon™. I just have a lot of other work and stuff I need to do.</span> I probably should consider also refactoring it to an ECS. So you might have both enemies and point squares be moving entities which applies a certain set of functions both on spawn and so on.
 </p>
 </div>
 </div>
@@ -107,9 +111,14 @@ This is a small game I wrote a while back when I wanted to mess around with cloj
 This is the file used as the index of the game.
 </p>
 <div class="org-src-container">
-<pre class="src src-html">&lt;<span style="color: #E53935; font-style: italic;">!DOCTYPE</span> html&gt;
-&lt;<span style="font-weight: bold; font-style: italic;">html</span>&gt;
+<pre class="src src-html">&lt;<span style="color: #E53935; font-style: italic;">?xml</span> <span style="font-style: italic;">version</span>="1.0" <span style="font-style: italic;">encoding</span>="utf-8"?&gt;
+&lt;<span style="color: #E53935; font-style: italic;">!DOCTYPE</span> html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;<span style="font-weight: bold; font-style: italic;">html</span> <span style="font-style: italic;">xmlns</span>=<span style="color: #494949;">"http://www.w3.org/1999/xhtml"</span> <span style="font-style: italic;">lang</span>=<span style="color: #494949;">"en"</span> <span style="color: #E53935;">xml</span>:<span style="font-style: italic;">lang</span>=<span style="color: #494949;">"en"</span>&gt;
   &lt;<span style="font-weight: bold; font-style: italic;">head</span>&gt;
+    &lt;<span style="font-weight: bold; font-style: italic;">meta</span> <span style="font-style: italic;">http-equiv</span>=<span style="color: #494949;">"Content-Type"</span> <span style="font-style: italic;">content</span>=<span style="color: #494949;">"text/html;charset=utf-8"</span> /&gt;
+    &lt;<span style="font-weight: bold; font-style: italic;">meta</span> <span style="font-style: italic;">name</span>=<span style="color: #494949;">"viewport"</span> <span style="font-style: italic;">content</span>=<span style="color: #494949;">"width=device-width, initial-scale=1"</span> /&gt;
+    &lt;<span style="font-weight: bold; font-style: italic;">meta</span> <span style="font-style: italic;">name</span>=<span style="color: #494949;">"description"</span> <span style="font-style: italic;">content</span>=<span style="color: #494949;">"A bullet hell type game where you attempt to dodge oncoming squares with the speed of oncoming squares being a function of your speed."</span> /&gt;
     &lt;<span style="font-weight: bold; font-style: italic;">title</span>&gt;<span style="font-weight: bold; text-decoration: underline;">dodgy</span>&lt;/<span style="font-weight: bold; font-style: italic;">title</span>&gt;
   &lt;/<span style="font-weight: bold; font-style: italic;">head</span>&gt;
   &lt;<span style="font-weight: bold; font-style: italic;">body</span> <span style="font-style: italic;">style</span>=<span style="color: #494949;">"background-color:#a4a4a4;font-family: 'Jura';"</span>&gt;
@@ -127,7 +136,7 @@ This is the file used as the index of the game.
 <h3 id="org3bb3520">Build/Deploy Script</h3>
 <div class="outline-text-3" id="text-org3bb3520">
 <p>
-A small script that builds the game and then deploys it by copying it to my source code directory.
+A small script that builds the game. Deployments copy the code to the public directory using the Emacs project interface.
 </p>
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #E53935;">cd</span> dodgy
@@ -152,10 +161,6 @@ The core of the game which sets the initial state.
             <span style="color: #494949;">[</span>reagent.cookies <span style="color: #E53935;">:as</span> cookies<span style="color: #494949;">]</span>
             <span style="color: #494949;">[</span>dodgy.render <span style="color: #E53935;">:as</span> render<span style="color: #494949;">]</span>
             <span style="color: #494949;">[</span>dodgy.stages <span style="color: #E53935;">:as</span> stages<span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> ^<span style="color: #E53935;">:private</span> <span style="font-style: italic;">default-player-position</span>
-  <span style="color: #bbb;">{</span><span style="color: #E53935;">:x</span> -20
-   <span style="color: #E53935;">:y</span> 20<span style="color: #bbb;">}</span><span style="color: #494949;">)</span>
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">setup</span> <span style="color: #bbb;">[]</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935;">q</span>/frame-rate 30<span style="color: #bbb;">)</span>
@@ -185,8 +190,6 @@ The core of the game which sets the initial state.
    <span style="color: #E53935;">:score</span>         0
    <span style="color: #E53935;">:max-score</span>     0
    <span style="color: #E53935;">:stage</span>         <span style="color: #494949;">"title"</span><span style="color: #bbb;">}</span><span style="color: #494949;">)</span>
-
-
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> ^<span style="color: #E53935;">:export</span> <span style="font-weight: bold; font-style: italic;">run-sketch</span> <span style="color: #bbb;">[]</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">[</span>width  <span style="color: #bbb;">(</span>- <span style="color: #494949;">(</span>.-innerWidth <span style="color: #E53935;">js</span>/window<span style="color: #494949;">)</span> 15<span style="color: #bbb;">)</span>
@@ -219,7 +222,7 @@ The engine behind the game. It provides utility functions that are used in the s
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">entity-bounds</span>
   <span style="color: #a4a4a4; font-style: italic;">"Returns the rectangle representing the bounds of a size 20 square entity."</span>
-  <span style="color: #bbb;">[</span><span style="color: #494949;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #bbb;">[</span><span style="color: #E53935;">:x</span> <span style="color: #E53935;">:y</span><span style="color: #bbb;">]</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">[</span><span style="color: #494949;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #bbb;">[</span>x y<span style="color: #bbb;">]</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
   <span style="color: #bbb;">[</span><span style="color: #494949;">(</span>- x 20<span style="color: #494949;">)</span> x <span style="color: #494949;">(</span>- y 20<span style="color: #494949;">)</span> y<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">intersect?</span>
@@ -230,7 +233,7 @@ The engine behind the game. It provides utility functions that are used in the s
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">player-alive?</span>
   <span style="color: #a4a4a4; font-style: italic;">"Returns whether the player has stayed clear of the walls and enemies."</span>
   <span style="color: #bbb;">[</span>player min-x max-x min-y max-y enemies<span style="color: #bbb;">]</span>
-  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">and</span> <span style="color: #494949;">(</span>intersect? <span style="color: #bbb;">[</span><span style="color: #494949;">(</span><span style="color: #E53935;">:x</span> player<span style="color: #494949;">)</span> <span style="color: #494949;">(</span><span style="color: #E53935;">:x</span> player<span style="color: #494949;">)</span> <span style="color: #494949;">(</span><span style="color: #E53935;">:y</span> player<span style="color: #494949;">)</span> <span style="color: #494949;">(</span><span style="color: #E53935;">:y</span> player<span style="color: #494949;">)</span><span style="color: #bbb;">]</span> <span style="color: #bbb;">[</span>min-x max-x min-y max-y<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">and</span> <span style="color: #494949;">(</span>intersect? <span style="color: #bbb;">(</span>entity-bounds player<span style="color: #bbb;">)</span> <span style="color: #bbb;">[</span>min-x max-x min-y max-y<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
        <span style="color: #494949;">(</span>not-any? <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #494949;">[</span>enemy<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>intersect? <span style="color: #bbb;">(</span>entity-bounds player<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>entity-bounds enemy<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span> enemies<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">gc-entities</span>
@@ -363,20 +366,18 @@ The rendering utilities. It renders the game regardless of the stage.
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">player-color</span> <span style="color: #bbb;">[</span>0xe5 0x39 0x35<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">bg</span> <span style="color: #bbb;">[</span>0xff 0xff 0xff<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
 
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">render-square</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span>r g b<span style="color: #494949;">]</span> thickness size <span style="color: #494949;">{</span>x <span style="color: #E53935;">:x</span> y <span style="color: #E53935;">:y</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">render-square</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span>r g b<span style="color: #494949;">]</span> thickness size <span style="color: #494949;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #bbb;">[</span>x y<span style="color: #bbb;">]</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">[</span>inner <span style="color: #bbb;">(</span>- size <span style="color: #494949;">(</span>* thickness 2<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
     <span style="color: #494949;">(</span><span style="color: #E53935;">q</span>/fill r g b<span style="color: #494949;">)</span>
     <span style="color: #494949;">(</span><span style="color: #E53935;">q</span>/rect x y size size<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 
 
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">render-entities</span> <span style="color: #bbb;">[</span><span style="color: #494949;">{</span>spawned? <span style="color: #E53935;">:spawned?</span> player <span style="color: #E53935;">:player</span> enemies <span style="color: #E53935;">:enemies</span> point-squares <span style="color: #E53935;">:point-squares</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">render-entities</span> <span style="color: #bbb;">[</span><span style="color: #494949;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #bbb;">[</span>spawned? player enemies point-squares<span style="color: #bbb;">]</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935;">q</span>/text <span style="color: #494949;">(</span>str spawned?<span style="color: #494949;">)</span> 100 100<span style="color: #bbb;">)</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935;">q</span>/with-translation <span style="color: #494949;">[</span><span style="color: #bbb;">(</span>/ <span style="color: #494949;">(</span><span style="color: #E53935;">q</span>/width<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span>
                        <span style="color: #bbb;">(</span>/ <span style="color: #494949;">(</span><span style="color: #E53935;">q</span>/height<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
-
     <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">dorun</span> <span style="color: #bbb;">(</span>map <span style="color: #494949;">(</span>partial render-square score-color 2.5 20<span style="color: #494949;">)</span> point-squares<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
     <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">dorun</span> <span style="color: #bbb;">(</span>map <span style="color: #494949;">(</span>partial render-square enemy-color 2.5 20<span style="color: #494949;">)</span> enemies<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-
     <span style="color: #494949;">(</span>render-square player-color 2.5 20 player<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">render-state</span> <span style="color: #bbb;">[</span>state<span style="color: #bbb;">]</span>
@@ -418,33 +419,26 @@ between the different stages. Future games will not use a stage system and inste
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">game-stage</span>
   <span style="color: #a4a4a4; font-style: italic;">"The function that executes during the game stage."</span>
-  <span style="color: #bbb;">[</span><span style="color: #494949;">{</span><span style="color: #E53935;">:as</span>                     state
-    enemies                 <span style="color: #E53935;">:enemies</span>
-    <span style="color: #bbb;">{</span>player-x       <span style="color: #E53935;">:x</span>
-     player-y       <span style="color: #E53935;">:y</span>
-     player-speed-x <span style="color: #E53935;">:speed-x</span>
-     player-speed-y <span style="color: #E53935;">:speed-y</span>
-     <span style="color: #E53935;">:as</span>            player<span style="color: #bbb;">}</span> <span style="color: #E53935;">:player</span>
-    time                    <span style="color: #E53935;">:time</span>
-    score                   <span style="color: #E53935;">:score</span>
-    point-squares           <span style="color: #E53935;">:point-squares</span>
-    distance                <span style="color: #494949;">"distance"</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">[</span><span style="color: #494949;">{</span><span style="color: #E53935;">:as</span>            state
+    <span style="color: #E53935;">:keys</span>          <span style="color: #bbb;">[</span>enemies time score point-squares distance<span style="color: #bbb;">]</span>
+    <span style="color: #bbb;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #494949;">[</span>x y speed-x speed-y<span style="color: #494949;">]</span>
+     <span style="color: #E53935;">:as</span>   player<span style="color: #bbb;">}</span> <span style="color: #E53935;">:player</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span>merge
    state
-   <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>new-player-speed-x <span style="color: #494949;">(</span>+ player-speed-x <span style="color: #bbb;">(</span><span style="color: #E53935;">io</span>/get-x-accel<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-         new-player-speed-y <span style="color: #494949;">(</span>+ player-speed-y <span style="color: #bbb;">(</span><span style="color: #E53935;">io</span>/get-y-accel<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-         min-x              <span style="color: #494949;">(</span>- <span style="color: #bbb;">(</span>/ <span style="color: #494949;">(</span><span style="color: #E53935;">q</span>/width<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-         max-x              <span style="color: #494949;">(</span>- <span style="color: #bbb;">(</span>/ <span style="color: #494949;">(</span><span style="color: #E53935;">q</span>/width<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span> 20<span style="color: #494949;">)</span>
-         min-y              <span style="color: #494949;">(</span>- <span style="color: #bbb;">(</span>/ <span style="color: #494949;">(</span><span style="color: #E53935;">q</span>/height<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-         max-y              <span style="color: #494949;">(</span>- <span style="color: #bbb;">(</span>/ <span style="color: #494949;">(</span><span style="color: #E53935;">q</span>/height<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span> 20<span style="color: #494949;">)</span>
-         speed              <span style="color: #494949;">(</span><span style="color: #E53935;">q</span>/sqrt <span style="color: #bbb;">(</span>+ <span style="color: #494949;">(</span><span style="color: #E53935;">q</span>/pow new-player-speed-x 2<span style="color: #494949;">)</span> <span style="color: #494949;">(</span><span style="color: #E53935;">q</span>/pow new-player-speed-y 2<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
+   <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>new-speed-x <span style="color: #494949;">(</span>+ speed-x <span style="color: #bbb;">(</span><span style="color: #E53935;">io</span>/get-x-accel<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+         new-speed-y <span style="color: #494949;">(</span>+ speed-y <span style="color: #bbb;">(</span><span style="color: #E53935;">io</span>/get-y-accel<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+         min-x       <span style="color: #494949;">(</span>- <span style="color: #bbb;">(</span>/ <span style="color: #494949;">(</span><span style="color: #E53935;">q</span>/width<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+         max-x       <span style="color: #494949;">(</span>- <span style="color: #bbb;">(</span>/ <span style="color: #494949;">(</span><span style="color: #E53935;">q</span>/width<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span> 20<span style="color: #494949;">)</span>
+         min-y       <span style="color: #494949;">(</span>- <span style="color: #bbb;">(</span>/ <span style="color: #494949;">(</span><span style="color: #E53935;">q</span>/height<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+         max-y       <span style="color: #494949;">(</span>- <span style="color: #bbb;">(</span>/ <span style="color: #494949;">(</span><span style="color: #E53935;">q</span>/height<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span> 20<span style="color: #494949;">)</span>
+         speed       <span style="color: #494949;">(</span><span style="color: #E53935;">q</span>/sqrt <span style="color: #bbb;">(</span>+ <span style="color: #494949;">(</span><span style="color: #E53935;">q</span>/pow new-speed-x 2<span style="color: #494949;">)</span> <span style="color: #494949;">(</span><span style="color: #E53935;">q</span>/pow new-speed-y 2<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
      <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span><span style="color: #E53935;">engine</span>/player-alive? player min-x max-x min-y max-y enemies<span style="color: #494949;">)</span>
        <span style="color: #494949;">{</span><span style="color: #E53935;">:text</span>          <span style="color: #bbb;">(</span>str <span style="color: #494949;">"Score: "</span> <span style="color: #494949;">(</span><span style="color: #E53935;">:score</span> state<span style="color: #494949;">)</span> <span style="color: #494949;">"</span><span style="color: #494949; font-weight: bold;">\n</span><span style="color: #494949;">"</span>
                             <span style="color: #494949;">"Frame: "</span> <span style="color: #494949;">(</span><span style="color: #E53935;">:time</span> state<span style="color: #494949;">)</span> <span style="color: #494949;">"</span><span style="color: #494949; font-weight: bold;">\n</span><span style="color: #494949;">"</span>
                             <span style="color: #494949;">"Speed: "</span> <span style="color: #494949;">(</span>.toFixed <span style="color: #bbb;">(</span><span style="color: #E53935;">:speed</span> state<span style="color: #bbb;">)</span> 1<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
         <span style="color: #E53935;">:speed</span>         speed
         <span style="color: #E53935;">:distance</span>      <span style="color: #bbb;">(</span>+ distance speed<span style="color: #bbb;">)</span>
-        <span style="color: #E53935;">:player</span>        <span style="color: #bbb;">(</span><span style="color: #E53935;">engine</span>/update-player new-player-speed-x new-player-speed-y player-x player-y<span style="color: #bbb;">)</span>
+        <span style="color: #E53935;">:player</span>        <span style="color: #bbb;">(</span><span style="color: #E53935;">engine</span>/update-player new-speed-x new-speed-y x y<span style="color: #bbb;">)</span>
         <span style="color: #E53935;">:enemies</span>       <span style="color: #bbb;">(</span><span style="color: #E53935;">engine</span>/gen-enemies min-x max-x min-y max-y time speed enemies<span style="color: #bbb;">)</span>
         <span style="color: #E53935;">:point-squares</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">engine</span>/gen-point-squares player min-x max-x min-y max-y point-squares speed time<span style="color: #bbb;">)</span>
         <span style="color: #E53935;">:time</span>          <span style="color: #bbb;">(</span>inc time<span style="color: #bbb;">)</span>
@@ -455,12 +449,8 @@ between the different stages. Future games will not use a stage system and inste
         <span style="color: #E53935;">:stage</span>           <span style="color: #494949;">"score"</span><span style="color: #494949;">}</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">score-stage</span>
-  <span style="color: #bbb;">[</span><span style="color: #494949;">{</span>ignore-keypress <span style="color: #E53935;">:ignore-keypress</span>
-    score           <span style="color: #E53935;">:score</span>
-    time            <span style="color: #E53935;">:time</span>
-    distance        <span style="color: #E53935;">:distance</span>
-    screen-time     <span style="color: #E53935;">:screen-time</span>
-    <span style="color: #E53935;">:as</span>             state<span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">[</span><span style="color: #494949;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #bbb;">[</span>ignore-keypress score time distance screen-time<span style="color: #bbb;">]</span>
+    <span style="color: #E53935;">:as</span>   state<span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span>merge
    state
    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>restart       <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if-not</span> ignore-keypress
@@ -475,7 +465,7 @@ between the different stages. Future games will not use a stage system and inste
                               <span style="color: #494949;">"Max score: "</span> new-max-score <span style="color: #494949;">"</span><span style="color: #494949; font-weight: bold;">\n</span><span style="color: #494949;">"</span>
                               <span style="color: #494949;">"Score: "</span> score
                               <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">when</span> <span style="color: #bbb;">(</span>&lt; 60 screen-time<span style="color: #bbb;">)</span>
-                                <span style="color: #494949;">"</span><span style="color: #494949; font-weight: bold;">\n\n</span><span style="color: #494949;">PRESS ANY KEY TO CONTINUE..."</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+                                <span style="color: #494949;">"</span><span style="color: #494949; font-weight: bold;">\n\n</span><span style="color: #494949;">Press any key to continue..."</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
         <span style="color: #E53935;">:screen-time</span>     <span style="color: #bbb;">(</span>inc screen-time<span style="color: #bbb;">)</span>
         <span style="color: #E53935;">:ignore-keypress</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">or</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">q</span>/key-pressed?<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>&gt; 30 screen-time<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
                            ignore-keypress
@@ -499,9 +489,12 @@ between the different stages. Future games will not use a stage system and inste
 </div>
 </div>
 </div>
-</div>
+<!-- Footnotes --><!-- 
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">I promise it will happen soon™. I just have a lot of other work and stuff I need to do.</p></div></div>
+
+ --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W51-4 23:47</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W51-6 02:33</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

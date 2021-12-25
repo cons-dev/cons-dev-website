@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-W51-6 02:14 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Implementing Hash Maps</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="A short introduction to bloom filters, how they work, and a short implementation thereof." />
+<meta name="generator" content="Org Mode" />
+<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">Implementing Hash Maps</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgfaabb3d">Introduction</a></li>
+<li><a href="#org646dc82">Algorithm</a></li>
+<li><a href="#orge6413c4">Implementation</a>
+<ul>
+<li><a href="#org4e4cf63">Hash Function</a></li>
+<li><a href="#org4d4b085">The Hashmap Constructor</a></li>
+<li><a href="#orgfb1c35d">Adding Items</a></li>
+<li><a href="#org171a8bf">Getting Items</a></li>
+</ul>
+</li>
+<li><a href="#orge7340b6">Conclusion</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgfaabb3d" class="outline-2">
+<h2 id="orgfaabb3d">Introduction</h2>
+<div class="outline-text-2" id="text-orgfaabb3d">
+<p>
+A hashmap is a type of key-value store that uses a hash function to index.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org646dc82" class="outline-2">
+<h2 id="org646dc82">Algorithm</h2>
+<div class="outline-text-2" id="text-org646dc82">
+<p>
+A hashmap is fairly simple, but in essence you have an array of 2-tuples with the first containing a key and the second containing a value. To insert into the array you first hash the key and then take the modulus of the key with respect to the length of the array.
+</p>
+
+
+<div id="org723628c" class="figure">
+<p><img src="./images/hashmap-adding_c8a4a74c-a139-45d5-a340-c2ed895b2e5a.png" alt="hashmap-adding_c8a4a74c-a139-45d5-a340-c2ed895b2e5a.png" />
+</p>
+</div>
+
+
+<p>
+However, as you might imagine, there can occasionally be collisions, like this.
+</p>
+
+<div id="orgbde5538" class="figure">
+<p><img src="./images/hashmap-collison_58e621d6-4ffd-4fed-87d3-592912398f2b.png" alt="hashmap-collison_58e621d6-4ffd-4fed-87d3-592912398f2b.png" />
+</p>
+</div>
+
+<p>
+To solve this you can either resize the array, shove the collided items in a sub-map <label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> Which will over time cause the hash map to have \(O(log(n))\) search times.</span>, or shift them over in some constant direction. Here we choose to resize the array, which is an \(O(n)\) operation.
+</p>
+
+
+<div id="org21f9ab7" class="figure">
+<p><img src="./images/hashmap-resizing_58e621d6-4ffd-4fed-87d3-592912398f2b.png" alt="hashmap-resizing_58e621d6-4ffd-4fed-87d3-592912398f2b.png" />
+</p>
+</div>
+
+<p>
+To find items in the array you first find the index of the key just like you did for insertion and then you compare the key to the key in the 2-tuple you stored at that index. If it is the same, then you return the value from the tuple.
+</p>
+
+
+
+<div id="org30e6fa8" class="figure">
+<p><img src="./images/hashmap-finding-key_251f9892-8648-4230-b99b-f8b50575f140.png" alt="hashmap-finding-key_251f9892-8648-4230-b99b-f8b50575f140.png" />
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orge6413c4" class="outline-2">
+<h2 id="orge6413c4">Implementation</h2>
+<div class="outline-text-2" id="text-orge6413c4">
+</div>
+<div id="outline-container-org4e4cf63" class="outline-3">
+<h3 id="org4e4cf63">Hash Function</h3>
+<div class="outline-text-3" id="text-org4e4cf63">
+<p>
+This function simply multiplies the list of numbers together with a pad, creating a somewhat random number. It is the exact same as the one in my <a href="impl-bloom-filters.html#ID-a2a663d2-d5be-4e28-a4df-8fd8e502ce1f">Implementing Bloom Filters</a> tutorial.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">hash-obj</span> <span style="color: #bbb;">[</span>obj<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">[</span>pad 3484115242153581271N<span style="color: #494949;">]</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #bbb;">(</span>str obj<span style="color: #bbb;">)</span>
+         <span style="color: #bbb;">(</span>map int<span style="color: #bbb;">)</span>
+         <span style="color: #bbb;">(</span>apply <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #bbb;">[</span>x &amp; xs<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span>cons <span style="color: #494949;">(</span>mod <span style="color: #bbb;">(</span>*' x pad<span style="color: #bbb;">)</span> <span style="color: #E53935;">Long</span>/MAX_VALUE<span style="color: #494949;">)</span> xs<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+         <span style="color: #bbb;">(</span>reduce #<span style="color: #494949;">(</span>mod <span style="color: #bbb;">(</span>*' <span style="font-style: italic;">%1</span> <span style="font-style: italic;">%2</span> pad<span style="color: #bbb;">)</span> <span style="color: #E53935;">Long</span>/MAX_VALUE<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+         long<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org4d4b085" class="outline-3">
+<h3 id="org4d4b085">The Hashmap Constructor</h3>
+<div class="outline-text-3" id="text-org4d4b085">
+<p>
+To define a hash map we first have to define a simple object for it and a constructor that creates an array of nils of the relevant size.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">HashMap</span> <span style="color: #bbb;">[</span>arr size<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">new-hashmap</span> <span style="color: #bbb;">[</span>size<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span>-&gt;HashMap <span style="color: #494949;">(</span>vec <span style="color: #bbb;">(</span>repeat size <span style="color: #E53935;">nil</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> size<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfb1c35d" class="outline-3">
+<h3 id="orgfb1c35d">Adding Items</h3>
+<div class="outline-text-3" id="text-orgfb1c35d">
+<p>
+Now that we can get stuff from the hashmap, let's consider adding stuff to it as well. Here we add a function that takes the map, a key, and a value, and then adds that to the hash map. Should a collision occur it resizes.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">add-hash</span>
+  <span style="color: #bbb;">[</span><span style="color: #494949;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #bbb;">[</span>arr size<span style="color: #bbb;">]</span> <span style="color: #E53935;">:as</span> map<span style="color: #494949;">}</span> key val<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>nil? <span style="color: #bbb;">(</span>nth arr <span style="color: #494949;">(</span>mod <span style="color: #bbb;">(</span>hash-obj key<span style="color: #bbb;">)</span> size<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span>assoc-in map <span style="color: #bbb;">[</span><span style="color: #E53935;">:arr</span> <span style="color: #494949;">(</span>mod <span style="color: #bbb;">(</span>hash-obj key<span style="color: #bbb;">)</span> size<span style="color: #494949;">)</span><span style="color: #bbb;">]</span> <span style="color: #bbb;">[</span>key val<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>new-hashmap <span style="color: #494949;">(</span>new-hashmap <span style="color: #bbb;">(</span>* 2 size<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
+      <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> arr
+           <span style="color: #494949;">(</span>filter identity<span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span>cons <span style="color: #bbb;">[</span>key val<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+           <span style="color: #494949;">(</span>reduce <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #494949;">[</span>new-map <span style="color: #bbb;">[</span>key val<span style="color: #bbb;">]</span><span style="color: #494949;">]</span> <span style="color: #494949;">(</span>add-hash new-map key val<span style="color: #494949;">)</span><span style="color: #bbb;">)</span> new-hashmap<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+Here we also see the sole weakness of the hash map, either resizing has to occur or you have to accept degraded performance once a certain size has been reached. Resizing is, while deterministic, not idempotent and it is absolutely possible that it could go on infinitely.<label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> This is because (ignoring for a moment that our hash function is terrible and probably not properly random) the probability of a collision should be equal to the fraction of the map that is filled. This probability is never exactly 0 for an insertion (and of course resizing itself involves insertions), leading to possible dramatic growth in some cases.</span> You also will not be able to fill <i>all</i> the indices in the hash map, meaning that each component will inevitably have only some set of the items.
+</p>
+
+<p>
+To demonstrate the resizing ability, consider the execution of the following.
+</p>
+
+<p>
+First we define a new map.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">hm</span> <span style="color: #bbb;">(</span>new-hashmap 5<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+Then we start adding opinions to it about different programming languages.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">hm-with-opinions</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> hm
+      <span style="color: #494949;">(</span>add-hash <span style="color: #494949;">"Clojure"</span> <span style="color: #494949;">"Is extremely awesome."</span><span style="color: #494949;">)</span>
+      <span style="color: #494949;">(</span>add-hash <span style="color: #494949;">"JavaScript"</span> <span style="color: #494949;">"Kind of sucks."</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+Which gives us this, and as you can see the two items have been added at their respective indices.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure">#hm-demo.HashMap<span style="color: #494949;">{</span><span style="color: #E53935;">:arr</span>
+                 <span style="color: #bbb;">[</span><span style="color: #494949;">[</span><span style="color: #494949;">"Clojure"</span> <span style="color: #494949;">"Is extremely awesome."</span><span style="color: #494949;">]</span>
+                  <span style="color: #E53935;">nil</span>
+                  <span style="color: #E53935;">nil</span>
+                  <span style="color: #494949;">[</span><span style="color: #494949;">"Javascript"</span> <span style="color: #494949;">"Kind of sucks."</span><span style="color: #494949;">]</span>
+                  <span style="color: #E53935;">nil</span><span style="color: #bbb;">]</span>,
+                 <span style="color: #E53935;">:size</span> 5<span style="color: #494949;">}</span>
+</pre>
+</div>
+
+<p>
+Then we just insert my opinion on PHP.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span>add-hash hm-with-opinions <span style="color: #494949;">"PHP"</span> <span style="color: #494949;">"Oh god no, please spare me from this hell."</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+<p>
+And now, as you can see, after adding the last element the hasmap automatically resizes, doubling in size.  
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">{</span><span style="color: #E53935;">:arr</span>
+ <span style="color: #bbb;">[</span><span style="color: #494949;">[</span><span style="color: #494949;">"PHP"</span> <span style="color: #494949;">"Oh god no, please spare me from this hell."</span><span style="color: #494949;">]</span>
+  <span style="color: #E53935;">nil</span>
+  <span style="color: #E53935;">nil</span>
+  <span style="color: #E53935;">nil</span>
+  <span style="color: #E53935;">nil</span>
+  <span style="color: #494949;">[</span><span style="color: #494949;">"Clojure"</span> <span style="color: #494949;">"Is extremely awesome."</span><span style="color: #494949;">]</span>
+  <span style="color: #E53935;">nil</span>
+  <span style="color: #E53935;">nil</span>
+  <span style="color: #494949;">[</span><span style="color: #494949;">"JavaScript"</span> <span style="color: #494949;">"Kind of sucks."</span><span style="color: #494949;">]</span>
+  <span style="color: #E53935;">nil</span><span style="color: #bbb;">]</span>,
+ <span style="color: #E53935;">:size</span> 10<span style="color: #494949;">}</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org171a8bf" class="outline-3">
+<h3 id="org171a8bf">Getting Items</h3>
+<div class="outline-text-3" id="text-org171a8bf">
+<p>
+The <code>get-hash</code> function simply takes the hahmap and a key. Should the key correspond with a value in the map it returns true, else <code>nil</code> or the value provided in <code>not-found</code>, which replicates the functionality of the native <code>get</code> function.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">get-hash</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>map key<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>get-hash map key <span style="color: #E53935;">nil</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span><span style="color: #bbb;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #494949;">[</span>arr size<span style="color: #494949;">]</span><span style="color: #bbb;">}</span> key not-found<span style="color: #494949;">]</span>
+   <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>idx  <span style="color: #494949;">(</span>mod <span style="color: #bbb;">(</span>hash-obj key<span style="color: #bbb;">)</span> size<span style="color: #494949;">)</span>
+         item <span style="color: #494949;">(</span>nth arr idx <span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
+     <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">or</span> <span style="color: #bbb;">(</span>nil? item<span style="color: #bbb;">)</span>
+             <span style="color: #bbb;">(</span>not= key <span style="color: #494949;">(</span>first item<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+       not-found
+       <span style="color: #494949;">(</span>second item<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orge7340b6" class="outline-2">
+<h2 id="orge7340b6">Conclusion</h2>
+<div class="outline-text-2" id="text-orge7340b6">
+<p>
+Hash maps are a great way to store key-value pairs with a constant lookup time. However, due to their limited size-efficiency they can have somewhat non-deterministic insertion times, which can be painful if you are working with very large maps. 
+</p>
+</div>
+</div>
+<!-- Footnotes --><!-- 
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Which will over time cause the hash map to have \(O(log(n))\) search times.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">This is because (ignoring for a moment that our hash function is terrible and probably not properly random) the probability of a collision should be equal to the fraction of the map that is filled. This probability is never exactly 0 for an insertion (and of course resizing itself involves insertions), leading to possible dramatic growth in some cases.</p></div></div>
+
+ --></div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2021-W51-5 22:51</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>

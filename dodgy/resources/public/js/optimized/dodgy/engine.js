@@ -33,7 +33,7 @@ return (((aymax >= bymin)) && ((aymin <= bymax)) && ((axmax >= bxmin)) && ((axmi
  * Returns whether the player has stayed clear of the walls and enemies.
  */
 dodgy.engine.player_alive_QMARK_ = (function dodgy$engine$player_alive_QMARK_(player,min_x,max_x,min_y,max_y,enemies){
-return ((dodgy.engine.intersect_QMARK_(new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.cst$kw$x.cljs$core$IFn$_invoke$arity$1(player),cljs.core.cst$kw$x.cljs$core$IFn$_invoke$arity$1(player),cljs.core.cst$kw$y.cljs$core$IFn$_invoke$arity$1(player),cljs.core.cst$kw$y.cljs$core$IFn$_invoke$arity$1(player)], null),new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [min_x,max_x,min_y,max_y], null))) && (cljs.core.not_any_QMARK_((function (enemy){
+return ((dodgy.engine.intersect_QMARK_(dodgy.engine.entity_bounds(player),new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [min_x,max_x,min_y,max_y], null))) && (cljs.core.not_any_QMARK_((function (enemy){
 return dodgy.engine.intersect_QMARK_(dodgy.engine.entity_bounds(player),dodgy.engine.entity_bounds(enemy));
 }),enemies)));
 });

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-W51-5 22:49 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Implementing Merge Sort</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="A short introduction to bloom filters, how they work, and a short implementation thereof." />
+<meta name="generator" content="Org Mode" />
+<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">Implementing Merge Sort</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orga6714c4">Introduction</a></li>
+<li><a href="#orgbc6b21c">Algorithm</a></li>
+<li><a href="#orgd9ec83d">Implementation</a>
+<ul>
+<li><a href="#orgf876430">Merge Function</a></li>
+<li><a href="#org79cc1ef">Sort function</a></li>
+</ul>
+</li>
+<li><a href="#orgb678e73">Conclusion</a></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-orga6714c4" class="outline-2">
+<h2 id="orga6714c4">Introduction</h2>
+<div class="outline-text-2" id="text-orga6714c4">
+<p>
+Mergesort is, in my opinion, the most elegant sorting algorithm out there and an early prelude the commonly used <a href="other/pessimal-algorithms-and-simplexity-analysis.pdf">multiply and surrender paradigm</a> which is extremely good at explaining things like the search time for a pair of glasses.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbc6b21c" class="outline-2">
+<h2 id="orgbc6b21c">Algorithm</h2>
+<div class="outline-text-2" id="text-orgbc6b21c">
+<p>
+So first let's imagine the easiest sort that we could possibly do, something so trivial even a computer could do it. That would be the case where you have to sort a list of two items, where you just compare one of the items to the other and then swap them if they are not correctly ordered. Therefore, to ensure we can work with this trivial case we simply reduce the entire list into a series of binary lists.
+</p>
+
+
+<div id="orgffabd4b" class="figure">
+<p><img src="./images/msort1_ebc14103-49df-4f80-9cd2-1c203f99932b.png" alt="msort1_ebc14103-49df-4f80-9cd2-1c203f99932b.png" />
+</p>
+</div>
+
+
+<p>
+From here it is also trivial to merge these lists while keeping them sorted! You basically have a function, <code>merge</code> that takes two lists, <code>a</code> and <code>b</code> and then compares the head of the two lists. If the head of <code>a</code> is greater than the head of <code>b</code> it adds <code>a</code> to the list and then merges the remaining lists.
+</p>
+
+
+
+<div id="org97d12c1" class="figure">
+<p><img src="./images/msort2_ebc14103-49df-4f80-9cd2-1c203f99932b.png" alt="msort2_ebc14103-49df-4f80-9cd2-1c203f99932b.png" />
+</p>
+</div>
+
+<p>
+As you may have noticed the tree produced by the execution is similar to a <a href="impl-bin-tree.html#ID-7944f7ee-c24c-4b0d-8a23-457368b762ab">binary tree</a> with the depth of one side of the tree being (of course) \(log_2(n)\), but of course traversal of the entire list occurs at each level, so the total execution of it will be \(O(n\ log(n))\), far faster than bubble sort or any other naive algorithm. Unfortunately it has a space complexity usually of \(O(n^2)\) as well.<label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> This also <i>can</i> be implemented as an in-place sort, with \(O(n)\) complexity, but it only really works with linked lists in that case, which is why <a href="impl-quicksort.html#ID-4c210f5a-7ba8-4715-8770-c5217dc6084a">quicksort</a> is far more popular in the real world, even if it is less beautiful.</span>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd9ec83d" class="outline-2">
+<h2 id="orgd9ec83d">Implementation</h2>
+<div class="outline-text-2" id="text-orgd9ec83d">
+<p>
+Now to implement it in code, in this case in clojure.
+</p>
+</div>
+<div id="outline-container-orgf876430" class="outline-3">
+<h3 id="orgf876430">Merge Function</h3>
+<div class="outline-text-3" id="text-orgf876430">
+<p>
+Here we define a simple variadic function that either takes the left and right lists (both assumed to be sorted) or takes a predicate that returns true should the first argument be lesser than the second. As you can see list destructuring is used to bind the various portions of the list to variables that can then be used.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">merge</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>left right<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>merge &lt; left right<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>comp <span style="color: #bbb;">[</span>left-head &amp; left-rest <span style="color: #E53935;">:as</span> left<span style="color: #bbb;">]</span> <span style="color: #bbb;">[</span>right-head &amp; right-rest <span style="color: #E53935;">:as</span> right<span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
+   <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">cond</span> <span style="color: #bbb;">(</span>nil? right-head<span style="color: #bbb;">)</span>           left
+         <span style="color: #bbb;">(</span>nil? left-head<span style="color: #bbb;">)</span>            right
+         <span style="color: #bbb;">(</span>comp left-head right-head<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>cons left-head <span style="color: #494949;">(</span>merge left-rest right<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+         <span style="color: #E53935;">:else</span>                       <span style="color: #bbb;">(</span>cons right-head <span style="color: #494949;">(</span>merge left right-rest<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+<p>
+Because of how the merge function works, even if the arguments provided are a list of one item and <code>nil</code> it will return the original list. Likewise, two lists of one item each are correctly processed and sorted.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org79cc1ef" class="outline-3">
+<h3 id="org79cc1ef">Sort function</h3>
+<div class="outline-text-3" id="text-org79cc1ef">
+<p>
+And now we come to the sorting function which, in essence, first recursively partitions the list into two groups until a state is reached in which the length of the list is one or zero, at which point it then returns the sorted list in that case and then merges the lists that it returns.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">mergesort</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>coll<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>mergesort &lt; coll<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>comp coll<span style="color: #494949;">]</span>
+   <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>left  <span style="color: #494949;">(</span>take <span style="color: #bbb;">(</span>/ <span style="color: #494949;">(</span>count coll<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span> coll<span style="color: #494949;">)</span>
+         right <span style="color: #494949;">(</span>drop <span style="color: #bbb;">(</span>count left<span style="color: #bbb;">)</span> coll<span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
+     <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>&gt; <span style="color: #bbb;">(</span>count coll<span style="color: #bbb;">)</span> 2<span style="color: #494949;">)</span>
+       <span style="color: #494949;">(</span>merge comp <span style="color: #bbb;">(</span>mergesort left<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>mergesort right<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+       <span style="color: #494949;">(</span>merge comp left right<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgb678e73" class="outline-2">
+<h2 id="orgb678e73">Conclusion</h2>
+<div class="outline-text-2" id="text-orgb678e73">
+<p>
+As you can see, merge sort is a very elegant and simple function that allows you to quickly sort lists. However, unfortunately, due to it's space complexity and inability to effectively sort arrays in place it has been largely relegated to the dustbin of histroy.
+</p>
+</div>
+</div>
+<!-- Footnotes --><!-- 
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">This also <i>can</i> be implemented as an in-place sort, with \(O(n)\) complexity, but it only really works with linked lists in that case, which is why <a href="impl-quicksort.html#ID-4c210f5a-7ba8-4715-8770-c5217dc6084a">quicksort</a> is far more popular in the real world, even if it is less beautiful.</p></div></div>
+
+ --></div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2021-W51-5 19:25</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>

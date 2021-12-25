@@ -7,7 +7,6 @@ goog.require('quil.middleware');
 goog.require('reagent.cookies');
 goog.require('dodgy.render');
 goog.require('dodgy.stages');
-dodgy.core.default_player_position = new cljs.core.PersistentArrayMap(null, 2, [cljs.core.cst$kw$x,(-20),cljs.core.cst$kw$y,(20)], null);
 dodgy.core.setup = (function dodgy$core$setup(){
 quil.core.frame_rate((30));
 
