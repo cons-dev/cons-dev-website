@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W52-1 18:03 -->
+<!-- 2021-W52-1 20:22 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Implementing Graphs</title>
@@ -26,17 +26,17 @@
 <li><a href="#orgfa56aa1">Implementation</a>
 <ul>
 <li><a href="#orgce2de01">The Graph Protocol</a></li>
-<li><a href="#org7de7907">Unweighted Graphs</a>
+<li><a href="#org8bb6cd6">Unweighted Graphs</a>
 <ul>
-<li><a href="#org8841f16">Undirected Graphs</a></li>
-<li><a href="#orgde6f2cf">Directed Graphs</a></li>
+<li><a href="#org07e9e06">Undirected Graphs</a></li>
+<li><a href="#org4393755">Directed Graphs</a></li>
 </ul>
 </li>
 <li><a href="#org823f17b">Weighted Graphs</a>
 <ul>
-<li><a href="#org07e9e06">Undirected Graphs</a></li>
-<li><a href="#org8bb6cd6">Unweighted Graphs</a></li>
-<li><a href="#org4393755">Directed Graphs</a></li>
+<li><a href="#org62fb6e2">Undirected Graphs</a></li>
+<li><a href="#org84ac615">Unweighted Graphs</a></li>
+<li><a href="#orge786e0c">Directed Graphs</a></li>
 <li><a href="#org4cdcc80">Utility Functions</a></li>
 </ul>
 </li>
@@ -83,15 +83,15 @@ To implement a graph we treat the graphs like a series of nodes.
 </div>
 
 
-<div id="outline-container-org7de7907" class="outline-3">
-<h3 id="org7de7907">Unweighted Graphs</h3>
-<div class="outline-text-3" id="text-org7de7907">
+<div id="outline-container-org8bb6cd6" class="outline-3">
+<h3 id="org8bb6cd6">Unweighted Graphs</h3>
+<div class="outline-text-3" id="text-org8bb6cd6">
 </div>
-<div id="outline-container-org8841f16" class="outline-4">
-<h4 id="org8841f16">Undirected Graphs</h4>
+<div id="outline-container-org07e9e06" class="outline-4">
+<h4 id="org07e9e06">Undirected Graphs</h4>
 </div>
-<div id="outline-container-orgde6f2cf" class="outline-4">
-<h4 id="orgde6f2cf">Directed Graphs</h4>
+<div id="outline-container-org4393755" class="outline-4">
+<h4 id="org4393755">Directed Graphs</h4>
 </div>
 </div>
 
@@ -108,9 +108,9 @@ class clojure.lang.Compiler$CompilerException
 </div>
 
 
-<div id="outline-container-org07e9e06" class="outline-4">
-<h4 id="org07e9e06">Undirected Graphs</h4>
-<div class="outline-text-4" id="text-org07e9e06">
+<div id="outline-container-org62fb6e2" class="outline-4">
+<h4 id="org62fb6e2">Undirected Graphs</h4>
+<div class="outline-text-4" id="text-org62fb6e2">
 <p>
 To start out we define an undirected graph. But first, let's ask the question, what <i>is</i> a graph? How do graphs work?
 </p>
@@ -150,9 +150,9 @@ From here we can also set up
 </div>
 
 
-<div id="outline-container-org8bb6cd6" class="outline-4">
-<h4 id="org8bb6cd6">Unweighted Graphs</h4>
-<div class="outline-text-4" id="text-org8bb6cd6">
+<div id="outline-container-org84ac615" class="outline-4">
+<h4 id="org84ac615">Unweighted Graphs</h4>
+<div class="outline-text-4" id="text-org84ac615">
 <p>
 An unweighted graph is implemented simply by ignoring the <code>:weight</code> value in the graph. In this graph the distance between nodes does not matter. Likewise.
 </p>
@@ -232,9 +232,9 @@ In a sense it is a more complicated version of the directed graph.
 </div>
 
 
-<div id="outline-container-org4393755" class="outline-4">
-<h4 id="org4393755">Directed Graphs</h4>
-<div class="outline-text-4" id="text-org4393755">
+<div id="outline-container-orge786e0c" class="outline-4">
+<h4 id="orge786e0c">Directed Graphs</h4>
+<div class="outline-text-4" id="text-orge786e0c">
 <p>
 So to start out we basically do the same thing as before, though this time.
 </p>
@@ -332,7 +332,7 @@ Now you may notice that the directed graph case is ultimately a superset of the 
 
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W52-1 18:00</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W52-1 18:04</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

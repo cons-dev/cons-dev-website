@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-5 19:16 -->
+<!-- 2021-W52-1 22:47 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>LC Language</title>
@@ -40,9 +40,9 @@
 <li><a href="#org255de4f">lc.sh</a></li>
 <li><a href="#orge1b8f5f">test.lc</a></li>
 <li><a href="#org4c30dab">src/main.py</a></li>
-<li><a href="#orgce1cd36">src/run<sub>exceptions.py</sub></a></li>
-<li><a href="#orgf4f84bc">src/lunar<sub>functions.py</sub></a></li>
-<li><a href="#org28289b9">src/test<sub>lunar</sub><sub>functions.py</sub></a></li>
+<li><a href="#orgce1cd36">src/run_exceptions.py</a></li>
+<li><a href="#orgf4f84bc">src/lunar_functions.py</a></li>
+<li><a href="#org28289b9">src/test_lunar_functions.py</a></li>
 <li><a href="#org36bd18a">src/calculator.py</a></li>
 </ul>
 </li>
@@ -115,7 +115,7 @@ To make programming easier all builtin functions in the lc language use ascii no
 <h3 id="org314a127">Control Flow</h3>
 <div class="outline-text-3" id="text-org314a127">
 <p>
-Control flow is conducted using the "come from" construct, conveniently shortened to <code>&lt;@</code> and <code>?&lt;@</code> for "come from" and "conditional come from" respectively. These constructs set a point in the CMFRM<sub>TAB</sub> lookup table and when the reference symbol is reached the program jumps back to the line with the CMFRM command. Other control flow options include <code>%$#@&amp;</code> which is the CRZY function,
+Control flow is conducted using the "come from" construct, conveniently shortened to <code>&lt;@</code> and <code>?&lt;@</code> for "come from" and "conditional come from" respectively. These constructs set a point in the CMFRM_TAB lookup table and when the reference symbol is reached the program jumps back to the line with the CMFRM command. Other control flow options include <code>%$#@&amp;</code> which is the CRZY function,
 </p>
 
 <p>
@@ -358,7 +358,7 @@ python3 $<span style="font-style: italic;">HOME</span>/.lc-src/main.py $<span st
 </div>
 
 <div id="outline-container-orgce1cd36" class="outline-3">
-<h3 id="orgce1cd36">src/run<sub>exceptions.py</sub></h3>
+<h3 id="orgce1cd36">src/run_exceptions.py</h3>
 <div class="outline-text-3" id="text-orgce1cd36">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #a4a4a4; font-style: italic;">"""Exceptions for the run module."""</span>
@@ -396,7 +396,7 @@ python3 $<span style="font-style: italic;">HOME</span>/.lc-src/main.py $<span st
 
 
 <div id="outline-container-orgf4f84bc" class="outline-3">
-<h3 id="orgf4f84bc">src/lunar<sub>functions.py</sub></h3>
+<h3 id="orgf4f84bc">src/lunar_functions.py</h3>
 <div class="outline-text-3" id="text-orgf4f84bc">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">ladd</span><span style="color: #494949;">(</span>a, b<span style="color: #494949;">)</span>:
@@ -501,7 +501,7 @@ python3 $<span style="font-style: italic;">HOME</span>/.lc-src/main.py $<span st
 </div>
 
 <div id="outline-container-org28289b9" class="outline-3">
-<h3 id="org28289b9">src/test<sub>lunar</sub><sub>functions.py</sub></h3>
+<h3 id="org28289b9">src/test_lunar_functions.py</h3>
 <div class="outline-text-3" id="text-org28289b9">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #a4a4a4; font-style: italic;">#</span><span style="color: #a4a4a4; font-style: italic;">!/usr/bin/env python3</span>
@@ -722,7 +722,7 @@ test_lpow<span style="color: #494949;">()</span>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W51-5 19:16</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W52-1 22:47</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

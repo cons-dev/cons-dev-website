@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-W52-1 23:22 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DIGRAPH</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="A program for defining graphs in clojure." />
+<meta name="generator" content="Org Mode" />
+<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">DIGRAPH</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgbb31e46">Introduction</a>
+<ul>
+<li><a href="#org11e865b">Filter Nodes</a></li>
+<li><a href="#org3a77dd6">Map Nodes</a></li>
+<li><a href="#org9ade991">Collection Nodes</a></li>
+<li><a href="#orgea5e141">State Nodes</a></li>
+<li><a href="#org9a4d5e7">I/O Nodes</a></li>
+<li><a href="#org5519380">A Note on Cyclic Graphs</a></li>
+</ul>
+</li>
+<li><a href="#orgb42a5b8">Plans</a>
+<ul>
+<li><a href="#orgba0376f">GraalVM Compilation</a></li>
+<li><a href="#orgc85ff15">Subgraphs</a></li>
+<li><a href="#org08bb015">Live Updates</a></li>
+</ul>
+</li>
+<li><a href="#orgb2907bd">Changelog</a></li>
+<li><a href="#org46f78be">Implementation</a>
+<ul>
+<li><a href="#orga9998ed">Server Functions</a></li>
+<li><a href="#org280c41e">Macros</a>
+<ul>
+<li><a href="#orgcb605a1">defgraph</a></li>
+<li><a href="#orgb7c8682">defdag</a></li>
+</ul>
+</li>
+<li><a href="#orge813263">Compilation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgbb31e46" class="outline-2">
+<h2 id="orgbb31e46">Introduction</h2>
+<div class="outline-text-2" id="text-orgbb31e46">
+<p>
+This is a toy project with Kubernetes to implement a series of macros using directed <i>cyclic</i> graphs to produce a deployment for Kubrenetes containers.
+</p>
+
+<p>
+The graph in essence represents where packets from the containers should be sent and should be received, with the edges of the graph being infinite lists of inputs and outputs from different nodes. Nodes are (mostly) assumed to be stateless <del>classless and moneyless, having thus achieved communism</del> to simplify the operation of the system.
+</p>
+</div>
+
+<div id="outline-container-org11e865b" class="outline-3">
+<h3 id="org11e865b">Filter Nodes</h3>
+<div class="outline-text-3" id="text-org11e865b">
+<p>
+Filter nodes take inputs and then produce outputs should the predicate be true. Should it be nil, they produce no output.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def-filter-node</span> <span style="font-weight: bold; font-style: italic;">name</span> <span style="color: #bbb;">[</span>arg<span style="color: #bbb;">]</span>
+  <span style="color: #494949;">"Docstring"</span>
+  <span style="color: #bbb;">()</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3a77dd6" class="outline-3">
+<h3 id="org3a77dd6">Map Nodes</h3>
+<div class="outline-text-3" id="text-org3a77dd6">
+<p>
+Map nodes simply apply the function that the node represents to all inputs and then returns the outputs to any of the nodes that it is meant to send data to.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def-map-node</span> <span style="font-weight: bold; font-style: italic;">name</span> <span style="color: #bbb;">[</span>arg<span style="color: #bbb;">]</span>
+  <span style="color: #494949;">"Docstring"</span>
+  <span style="color: #bbb;">()</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9ade991" class="outline-3">
+<h3 id="org9ade991">Collection Nodes</h3>
+<div class="outline-text-3" id="text-org9ade991">
+<p>
+Collection nodes work similarly to a reduction function, applying themselves to some list of values and then producing an accumulator.
+</p>
+
+<p>
+However, unlike a regular reduction function, rather than applying themselves to all elements they have received (since that would be an infinite list and not possible) they apply themselves to a specified number of those elements, or once the elements satisfy a predicate applied to them.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def-col-node</span> <span style="font-weight: bold; font-style: italic;">name</span> <span style="color: #bbb;">[</span>arg<span style="color: #bbb;">]</span> pred-or-num
+  <span style="color: #494949;">"Docstring"</span>
+  <span style="color: #bbb;">()</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+Collection nodes can be useful if certain requests are only efficient if they are batch-processed, or for collecting all elements within a set of a known size.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgea5e141" class="outline-3">
+<h3 id="orgea5e141">State Nodes</h3>
+<div class="outline-text-3" id="text-orgea5e141">
+<p>
+Now obviously you might want to store some state in this graph. So of course there are state nodes. State nodes act similarly to refs and simply serve to store some set of state such that it can be accessed (and modified) across the network.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defsnode</span> <span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9a4d5e7" class="outline-3">
+<h3 id="org9a4d5e7">I/O Nodes</h3>
+<div class="outline-text-3" id="text-org9a4d5e7">
+<p>
+I/O to DIGRAPH is represented as input and output nodes. Currently, since I have yet to implement the silicon version, DIGRAPH takes input and output nodes as follows.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">out</span> <span style="color: #bbb;">(</span>output-node <span style="color: #E53935;">:port</span> 80<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">in</span> <span style="color: #bbb;">(</span>input-node <span style="color: #E53935;">:port</span> 80<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+<p>
+By default inputs are parsed to EDNs, however, with the <code>:format</code> option you can receive them as strings, JSONs, XML, or any other such thing. Input and output nodes are also the only nodes visible to external computers so if you want to use log4j to helpfully add extra code, you might want to make a special output node. 
+</p>
+
+<p>
+Inputs in digraph look like this:
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">{</span><span style="color: #E53935;">:client</span> <span style="color: #494949;">"12.313.1212"</span> <span style="color: #E53935;">:request</span> some-data<span style="color: #494949;">}</span>
+</pre>
+</div>
+
+<p>
+Likewise, to output to something, you do the same:
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">{</span><span style="color: #E53935;">:client</span> <span style="color: #494949;">"12.313.1212"</span> <span style="color: #E53935;">:request</span> some-data<span style="color: #494949;">}</span>
+</pre>
+</div>
+
+<p>
+I/O operations are also, by default, all conducted through the same IP address. However, should you want to, you can have multiple I/O nodes with different IP addresses.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5519380" class="outline-3">
+<h3 id="org5519380">A Note on Cyclic Graphs</h3>
+<div class="outline-text-3" id="text-org5519380">
+<p>
+Should you create a cyclic graph, it's a good idea to envision it and the rest of your system as a control system. List elements passed through the graph can be considered a .
+</p>
+
+<p>
+Therefore, you want the total number of messages sent through the graph to approach zero as time goes to infinity. In the most basic sense this means that you should have filter or collection functions within each cycle, reducing the total number of messages.
+</p>
+
+<p>
+However, it is very possible that some set of messages may still exist.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb42a5b8" class="outline-2">
+<h2 id="orgb42a5b8">Plans</h2>
+<div class="outline-text-2" id="text-orgb42a5b8">
+</div>
+<div id="outline-container-orgba0376f" class="outline-3">
+<h3 id="orgba0376f">GraalVM Compilation</h3>
+<div class="outline-text-3" id="text-orgba0376f">
+<p>
+GraalVM has a much faster startup time than regular clojure, which is generally assumed to be something you sort of just start and leave running as a high-throughput server. This would allow me to cut down on buffer sizes and increase scaling rates.
+</p>
+</div>
+</div>
+<div id="outline-container-orgc85ff15" class="outline-3">
+<h3 id="orgc85ff15">Subgraphs</h3>
+<div class="outline-text-3" id="text-orgc85ff15">
+<p>
+I would like to add subgraphs as a feature, so you can treat graphs themselves as nodes.
+</p>
+</div>
+</div>
+<div id="outline-container-org08bb015" class="outline-3">
+<h3 id="org08bb015">Live Updates</h3>
+<div class="outline-text-3" id="text-org08bb015">
+<p>
+I would also like to have the system update live, with graph node.s2
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb2907bd" class="outline-2">
+<h2 id="orgb2907bd">Changelog</h2>
+</div>
+
+<div id="outline-container-org46f78be" class="outline-2">
+<h2 id="org46f78be">Implementation</h2>
+<div class="outline-text-2" id="text-org46f78be">
+</div>
+<div id="outline-container-orga9998ed" class="outline-3">
+<h3 id="orga9998ed">Server Functions</h3>
+<div class="outline-text-3" id="text-orga9998ed">
+<p>
+To start out we need to define some functions to process HTTPS requests. Currently I am using the http-kit library for this, though I might decide to go for something else.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure">
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org280c41e" class="outline-3">
+<h3 id="org280c41e">Macros</h3>
+<div class="outline-text-3" id="text-org280c41e">
+<p>
+Of course, no Clojure library would be complete without macros.
+</p>
+<pre class="example">
+
+</pre>
+</div>
+
+
+<div id="outline-container-orgcb605a1" class="outline-4">
+<h4 id="orgcb605a1">defgraph</h4>
+<div class="outline-text-4" id="text-orgcb605a1">
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defmacro</span> <span style="font-weight: bold; font-style: italic;">defgraph</span> <span style="color: #bbb;">[</span>graph-name &amp;args<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defgraph</span> <span style="font-weight: bold; font-style: italic;">graph-a</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> in a b c d<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> d c<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> c a b out<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb7c8682" class="outline-4">
+<h4 id="orgb7c8682">defdag</h4>
+<div class="outline-text-4" id="text-orgb7c8682">
+<p>
+Now of course you might want to restrict yourself a bit so you don't end up with endless feedback loops in your graphs. Therefore you can define a directed acyclic graph, which is a restricted set of the more general graph form and checks for cycles within your graph.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defmacro</span> <span style="font-weight: bold; font-style: italic;">defdag</span> <span style="color: #bbb;">[</span>graph-name &amp;args<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defgraph</span> <span style="font-weight: bold; font-style: italic;">graph-b</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> in a b c d<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> d c<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> c a b out<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge813263" class="outline-3">
+<h3 id="orge813263">Compilation</h3>
+<div class="outline-text-3" id="text-orge813263">
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defmacro</span> <span style="font-weight: bold; font-style: italic;">compile-project</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2021-W52-1 23:10</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>

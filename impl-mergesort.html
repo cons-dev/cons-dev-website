@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W52-1 16:31 -->
+<!-- 2021-W52-1 20:22 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Implementing Merge Sort</title>
@@ -74,7 +74,7 @@ So first let's imagine the easiest sort that we could possibly do, something so 
 </p>
 
 
-<div id="org1b8a65b" class="figure">
+<div id="org63dc23e" class="figure">
 <p><img src="./images/msort1_ebc14103-49df-4f80-9cd2-1c203f99932b.png" alt="msort1_ebc14103-49df-4f80-9cd2-1c203f99932b.png" />
 </p>
 </div>
@@ -86,7 +86,7 @@ From here it is also trivial to merge these lists while keeping them sorted! You
 
 
 
-<div id="org8c34137" class="figure">
+<div id="orgd5fa510" class="figure">
 <p><img src="./images/msort2_ebc14103-49df-4f80-9cd2-1c203f99932b.png" alt="msort2_ebc14103-49df-4f80-9cd2-1c203f99932b.png" />
 </p>
 </div>
@@ -138,9 +138,10 @@ And now we come to the sorting function which, in essence, first recursively par
   <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>comp coll<span style="color: #494949;">]</span>
    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>left  <span style="color: #494949;">(</span>take <span style="color: #bbb;">(</span>/ <span style="color: #494949;">(</span>count coll<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span> coll<span style="color: #494949;">)</span>
          right <span style="color: #494949;">(</span>drop <span style="color: #bbb;">(</span>count left<span style="color: #bbb;">)</span> coll<span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
-     <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>&gt; <span style="color: #bbb;">(</span>count coll<span style="color: #bbb;">)</span> 2<span style="color: #494949;">)</span>
-       <span style="color: #494949;">(</span>merge comp <span style="color: #bbb;">(</span>mergesort left<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>mergesort right<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-       <span style="color: #494949;">(</span>merge comp left right<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+     <span style="color: #bbb;">(</span>apply merge comp
+            <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span>&gt; <span style="color: #494949;">(</span>count coll<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span>
+              <span style="color: #bbb;">[</span><span style="color: #494949;">(</span>mergesort left<span style="color: #494949;">)</span> <span style="color: #494949;">(</span>mergesort right<span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
+              <span style="color: #bbb;">[</span>left right<span style="color: #bbb;">]</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 </div>
@@ -161,7 +162,7 @@ As you can see, merge sort is a very elegant and simple function that allows you
 
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W52-1 00:22</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W52-1 19:55</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>
