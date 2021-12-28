@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W52-1 16:31 -->
+<!-- 2021-W52-2 01:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>A Possibly Correct Solution to the Travling Salseman Trolly Problem</title>
@@ -35,7 +35,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">A Possibly Correct Solution to the Travling Salseman Trolly Problem</h1>
@@ -43,27 +43,27 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org8247bc0">Introduction</a></li>
-<li><a href="#org2677bd6">Algorithm Description</a></li>
-<li><a href="#org4ae2dad">Implementation</a>
+<li><a href="#orge929a5a">Introduction</a></li>
+<li><a href="#org2331503">Algorithm Description</a></li>
+<li><a href="#orgabf13e9">Implementation</a>
 <ul>
-<li><a href="#org1da5a6e">Defining the Graph</a></li>
-<li><a href="#orgfbed4f3">Traversing the Graph</a></li>
+<li><a href="#org0096f86">Defining the Graph</a></li>
+<li><a href="#org016848b">Traversing the Graph</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org8247bc0" class="outline-2">
-<h2 id="org8247bc0">Introduction</h2>
-<div class="outline-text-2" id="text-org8247bc0">
+<div id="outline-container-orge929a5a" class="outline-2">
+<h2 id="orge929a5a">Introduction</h2>
+<div class="outline-text-2" id="text-orge929a5a">
 <p>
 While on discord I saw this meme.
 </p>
 
 
-<div id="org1169c98" class="figure">
+<div id="org47f9563" class="figure">
 <p><img src="images/travling-salesman-trolley-problem.png" alt="travling-salesman-trolley-problem.png" />
 </p>
 </div>
@@ -74,9 +74,9 @@ I decided to write an optimal solution for it because I was bored. I also decide
 </div>
 </div>
 
-<div id="outline-container-org2677bd6" class="outline-2">
-<h2 id="org2677bd6">Algorithm Description</h2>
-<div class="outline-text-2" id="text-org2677bd6">
+<div id="outline-container-org2331503" class="outline-2">
+<h2 id="org2331503">Algorithm Description</h2>
+<div class="outline-text-2" id="text-org2331503">
 <p>
 In the case of an undirected graph you first consider a node, obtain the weights of the edges going from it and sort them in a list. Then you traverse along the lowest weighted edge in your list. Once you have reached this new edge you discard the previous edge, get the new edges, discard any edges that go to a visited node in both of your lists, sort them, and then merge them. You then proceed to again choose the lowest weighted edge from your list and visit the node that goes through that edge. You continue this until all nodes have been visited
 </p>
@@ -91,18 +91,18 @@ The proof is trivial and left as an exercise to the reader.<label class="sidenot
 </div>
 </div>
 
-<div id="outline-container-org4ae2dad" class="outline-2">
-<h2 id="org4ae2dad">Implementation</h2>
-<div class="outline-text-2" id="text-org4ae2dad">
+<div id="outline-container-orgabf13e9" class="outline-2">
+<h2 id="orgabf13e9">Implementation</h2>
+<div class="outline-text-2" id="text-orgabf13e9">
 <p>
 So to accompany the above description let's have a quick implementation in Clojure.
 </p>
 </div>
 
 
-<div id="outline-container-org1da5a6e" class="outline-3">
-<h3 id="org1da5a6e">Defining the Graph</h3>
-<div class="outline-text-3" id="text-org1da5a6e">
+<div id="outline-container-org0096f86" class="outline-3">
+<h3 id="org0096f86">Defining the Graph</h3>
+<div class="outline-text-3" id="text-org0096f86">
 <p>
 Now, to finish with the graphs and other such things, let's add a function to export everything to DOT so we can see what our graphs look like. To do so we basically map over each node, finding the edges.
 </p>
@@ -118,13 +118,13 @@ Now, to define the graph we first number the graph (to make it so I don't forget
 </p>
 
 
-<div id="org4169d96" class="figure">
+<div id="org870d198" class="figure">
 <p><img src="images/travling-salesman-trolley-problem-numbered.png" alt="travling-salesman-trolley-problem-numbered.png" />
 </p>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-clojure" id="org6413cee"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #bbb;">(</span>apply graph <span style="color: #494949;">(</span>range 29<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+<pre class="src src-clojure" id="org5367e9b"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #bbb;">(</span>apply graph <span style="color: #494949;">(</span>range 29<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
     <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">0</span>
     <span style="color: #bbb;">(</span>edge-&gt; 0 1 <span style="color: #E53935;">:weight</span> 10<span style="color: #bbb;">)</span>
     <span style="color: #bbb;">(</span>edge-&gt; 0 6 <span style="color: #E53935;">:weight</span> 15<span style="color: #bbb;">)</span>
@@ -204,7 +204,7 @@ Using our DOT code we can also check that our graph is correct visually by obtai
 </p>
 
 
-<div id="orgd36e670" class="figure">
+<div id="orgfb51219" class="figure">
 <p><img src="./images/graph_39d0b492-a701-4d8d-a7de-d854f3eda883.png" alt="graph_39d0b492-a701-4d8d-a7de-d854f3eda883.png" />
 </p>
 </div>
@@ -219,8 +219,8 @@ Given how <i>nice</i> it was to just get a DOT representation of a clojure datas
 </div>
 </div>
 
-<div id="outline-container-orgfbed4f3" class="outline-3">
-<h3 id="orgfbed4f3">Traversing the Graph</h3>
+<div id="outline-container-org016848b" class="outline-3">
+<h3 id="org016848b">Traversing the Graph</h3>
 </div>
 </div>
 <!-- Footnotes --><!-- 

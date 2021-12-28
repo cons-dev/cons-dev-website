@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W52-1 16:31 -->
+<!-- 2021-W52-2 01:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Implementing Binary Tree Sets</title>
@@ -35,7 +35,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Implementing Binary Tree Sets</h1>
@@ -43,40 +43,40 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org0feb9f1">Introduction</a></li>
-<li><a href="#org454f10c">Implementation</a>
+<li><a href="#org674e100">Introduction</a></li>
+<li><a href="#orgdf349a6">Implementation</a>
 <ul>
-<li><a href="#orgfe51b10">Object and Constructor</a></li>
-<li><a href="#org6ea2a0d">Insert</a></li>
-<li><a href="#org403748f">Contains</a></li>
-<li><a href="#orga88afa4">Removing an Element</a></li>
-<li><a href="#org343f351">Traversals</a></li>
-<li><a href="#org5201636">Set-theoretic</a>
+<li><a href="#orgfd85459">Object and Constructor</a></li>
+<li><a href="#org46759a5">Insert</a></li>
+<li><a href="#orgdbd1e51">Contains</a></li>
+<li><a href="#org0cf9365">Removing an Element</a></li>
+<li><a href="#org987dc56">Traversals</a></li>
+<li><a href="#org4ee5521">Set-theoretic</a>
 <ul>
-<li><a href="#org4ccb06a">Union</a></li>
-<li><a href="#org1ed7bdb">Intersection</a></li>
-<li><a href="#orgc585b20">Difference</a></li>
-<li><a href="#org01128ee">Subset</a></li>
+<li><a href="#orgbba7cb9">Union</a></li>
+<li><a href="#orge5d612b">Intersection</a></li>
+<li><a href="#org658848c">Difference</a></li>
+<li><a href="#org681c5b7">Subset</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org8cd3812">Python Code</a></li>
+<li><a href="#orgfa36cd6">Python Code</a></li>
 </ul>
 </div>
 </div>
 
 
-<div id="outline-container-org0feb9f1" class="outline-2">
-<h2 id="org0feb9f1">Introduction</h2>
-<div class="outline-text-2" id="text-org0feb9f1">
+<div id="outline-container-org674e100" class="outline-2">
+<h2 id="org674e100">Introduction</h2>
+<div class="outline-text-2" id="text-org674e100">
 <p>
 Binary trees are a classic datastructure, basically like a linked list but with two children nodes rather than one node. Each of the child nodes can then link to further child nodes and so on until they reach leaf nodes, which are traditionally <code>nil</code>.
 </p>
 
 
-<div id="orgaba0f53" class="figure">
-<p><img src="./images/bintree_17a848ae-1c8a-4a7c-8219-df9f2a794fb3.png" alt="bintree_17a848ae-1c8a-4a7c-8219-df9f2a794fb3.png" />
+<div id="org9e8b647" class="figure">
+<p><img src="./images/bintree_17a848ae-1c8a-4a7c-8219-df9f2a794fb3.png" alt="A binary tree." />
 </p>
 </div>
 
@@ -86,13 +86,13 @@ You can also use them for <a href="https://en.wikipedia.org/wiki/Set_(mathematic
 </div>
 </div>
 
-<div id="outline-container-org454f10c" class="outline-2">
-<h2 id="org454f10c">Implementation</h2>
-<div class="outline-text-2" id="text-org454f10c">
+<div id="outline-container-orgdf349a6" class="outline-2">
+<h2 id="orgdf349a6">Implementation</h2>
+<div class="outline-text-2" id="text-orgdf349a6">
 </div>
-<div id="outline-container-orgfe51b10" class="outline-3">
-<h3 id="orgfe51b10">Object and Constructor</h3>
-<div class="outline-text-3" id="text-orgfe51b10">
+<div id="outline-container-orgfd85459" class="outline-3">
+<h3 id="orgfd85459">Object and Constructor</h3>
+<div class="outline-text-3" id="text-orgfd85459">
 <p>
 To start it all off we define an object and a constructor. The constructor just takes a seq-able collection and converts it into a binary tree. This only works if elements within the collection can be compared with other elements, otherwise it will return an error.
 </p>
@@ -107,9 +107,9 @@ To start it all off we define an object and a constructor. The constructor just 
 </div>
 
 
-<div id="outline-container-org6ea2a0d" class="outline-3">
-<h3 id="org6ea2a0d">Insert</h3>
-<div class="outline-text-3" id="text-org6ea2a0d">
+<div id="outline-container-org46759a5" class="outline-3">
+<h3 id="org46759a5">Insert</h3>
+<div class="outline-text-3" id="text-org46759a5">
 <p>
 To insert an item we simply go down the binary tree until we find the item or nil.
 </p>
@@ -118,8 +118,8 @@ To insert an item we simply go down the binary tree until we find the item or ni
 So to illustrate, let's imagine we added <code>7</code> to the tree from above:
 </p>
 
-<div id="orga04de0e" class="figure">
-<p><img src="./images/bintree-insert_17a848ae-1c8a-4a7c-8219-df9f2a794fb3.png" alt="bintree-insert_17a848ae-1c8a-4a7c-8219-df9f2a794fb3.png" />
+<div id="orga6f1554" class="figure">
+<p><img src="./images/bintree-insert_17a848ae-1c8a-4a7c-8219-df9f2a794fb3.png" alt="A binary tree with the number 7 added to it." />
 </p>
 </div>
 
@@ -138,15 +138,15 @@ The algorithm is trivial. If a key is present nothing has to be done! It can jus
 </div>
 </div>
 
-<div id="outline-container-org403748f" class="outline-3">
-<h3 id="org403748f">Contains</h3>
-<div class="outline-text-3" id="text-org403748f">
+<div id="outline-container-orgdbd1e51" class="outline-3">
+<h3 id="orgdbd1e51">Contains</h3>
+<div class="outline-text-3" id="text-orgdbd1e51">
 <p>
 To determine if the value 23 is contained within our tree we can simply compare each node, if it returns true, also return true. But if not we continue down the tree, choosing the lesser side if it is lesser, greater side if it is greater.
 </p>
 
-<div id="org4c9d1bc" class="figure">
-<p><img src="./images/bintree-contains_17a848ae-1c8a-4a7c-8219-df9f2a794fb3.png" alt="bintree-contains_17a848ae-1c8a-4a7c-8219-df9f2a794fb3.png" />
+<div id="org39389a4" class="figure">
+<p><img src="./images/bintree-contains_17a848ae-1c8a-4a7c-8219-df9f2a794fb3.png" alt="A binary tree with the number 23 added to it." />
 </p>
 </div>
 
@@ -166,9 +166,9 @@ The implementation, therefore, is almost exactly the same as the way we inserted
 </div>
 </div>
 
-<div id="outline-container-orga88afa4" class="outline-3">
-<h3 id="orga88afa4">Removing an Element</h3>
-<div class="outline-text-3" id="text-orga88afa4">
+<div id="outline-container-org0cf9365" class="outline-3">
+<h3 id="org0cf9365">Removing an Element</h3>
+<div class="outline-text-3" id="text-org0cf9365">
 <p>
 Now you may wonder, how do we remove an element from the tree? Well it's pretty simple. First you find the element in the tree (as usual) and then you make one of the children of the node the node and insert the contents of the other child into that node. A good way to do this <i>would be</i> to simply take the leftmost branch of then new node and then insert there when you find a nil.
 </p>
@@ -187,9 +187,9 @@ Now you may wonder, how do we remove an element from the tree? Well it's pretty 
 </div>
 </div>
 
-<div id="outline-container-org343f351" class="outline-3">
-<h3 id="org343f351">Traversals</h3>
-<div class="outline-text-3" id="text-org343f351">
+<div id="outline-container-org987dc56" class="outline-3">
+<h3 id="org987dc56">Traversals</h3>
+<div class="outline-text-3" id="text-org987dc56">
 <p>
 Here we define some traversals for our tree. Traversals are simply functions that recursively visit all the nodes in the tree once.
 </p>
@@ -223,17 +223,17 @@ Finally, the in-order traversal returns a sorted list of all nodes by visiting t
 </div>
 </div>
 
-<div id="outline-container-org5201636" class="outline-3">
-<h3 id="org5201636">Set-theoretic</h3>
-<div class="outline-text-3" id="text-org5201636">
+<div id="outline-container-org4ee5521" class="outline-3">
+<h3 id="org4ee5521">Set-theoretic</h3>
+<div class="outline-text-3" id="text-org4ee5521">
 <p>
 Here we just implement the various set-theoretic functions.
 </p>
 </div>
 
-<div id="outline-container-org4ccb06a" class="outline-4">
-<h4 id="org4ccb06a">Union</h4>
-<div class="outline-text-4" id="text-org4ccb06a">
+<div id="outline-container-orgbba7cb9" class="outline-4">
+<h4 id="orgbba7cb9">Union</h4>
+<div class="outline-text-4" id="text-orgbba7cb9">
 <p>
 The union function is fairly simple, obtaining the post-order traversal of the first binary tree and then inserting all the elements into the second. It's time complexity is \(O(n\ log(n))\).
 </p>
@@ -247,9 +247,9 @@ The union function is fairly simple, obtaining the post-order traversal of the f
 </div>
 </div>
 
-<div id="outline-container-org1ed7bdb" class="outline-4">
-<h4 id="org1ed7bdb">Intersection</h4>
-<div class="outline-text-4" id="text-org1ed7bdb">
+<div id="outline-container-orge5d612b" class="outline-4">
+<h4 id="orge5d612b">Intersection</h4>
+<div class="outline-text-4" id="text-orge5d612b">
 <p>
 This just checks if a node is contained in the other tree, and if it is, adds it to the new set of nodes. It's time complexity is \(O(n\ log(n))\).
 </p>
@@ -263,9 +263,9 @@ This just checks if a node is contained in the other tree, and if it is, adds it
 </div>
 </div>
 
-<div id="outline-container-orgc585b20" class="outline-4">
-<h4 id="orgc585b20">Difference</h4>
-<div class="outline-text-4" id="text-orgc585b20">
+<div id="outline-container-org658848c" class="outline-4">
+<h4 id="org658848c">Difference</h4>
+<div class="outline-text-4" id="text-org658848c">
 <p>
 Lastly we find the difference between two binary trees by simply filtering out the set of nodes that are contained within the second binary tree. Like all set-theoretic functions it is variadic and accepts an arbitrary number of arguments. It's time complexity is \(O(n\ log(n))\).
 </p>
@@ -280,9 +280,9 @@ Lastly we find the difference between two binary trees by simply filtering out t
 </div>
 
 
-<div id="outline-container-org01128ee" class="outline-4">
-<h4 id="org01128ee">Subset</h4>
-<div class="outline-text-4" id="text-org01128ee">
+<div id="outline-container-org681c5b7" class="outline-4">
+<h4 id="org681c5b7">Subset</h4>
+<div class="outline-text-4" id="text-org681c5b7">
 <p>
 Lastly we have a simple function that determines if one tree is a subset of another tree by checking if each item is contained in the other tree. It's time complexity is (I know you will be shocked) \(O(n\ log(n))\).
 </p>
@@ -299,9 +299,9 @@ Lastly we have a simple function that determines if one tree is a subset of anot
 </div>
 
 
-<div id="outline-container-org8cd3812" class="outline-2">
-<h2 id="org8cd3812">Python Code</h2>
-<div class="outline-text-2" id="text-org8cd3812">
+<div id="outline-container-orgfa36cd6" class="outline-2">
+<h2 id="orgfa36cd6">Python Code</h2>
+<div class="outline-text-2" id="text-orgfa36cd6">
 <p>
 Below is also the code in python.
 </p>
@@ -417,7 +417,7 @@ Below is also the code in python.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W52-1 16:26</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W52-2 01:02</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

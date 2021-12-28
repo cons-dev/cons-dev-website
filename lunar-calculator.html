@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W52-1 22:47 -->
+<!-- 2021-W52-2 01:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>LC Language</title>
@@ -14,7 +14,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">LC Language
@@ -25,34 +25,34 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org7c599f9">Introduction</a></li>
-<li><a href="#org0c589df">Syntax Overview</a>
+<li><a href="#org1cc0fb2">Introduction</a></li>
+<li><a href="#org0c4b55b">Syntax Overview</a>
 <ul>
-<li><a href="#org314a127">Control Flow</a></li>
-<li><a href="#org7acab53">Boolean Logic</a></li>
-<li><a href="#org7697a69">Eval</a></li>
-<li><a href="#org8dbe1b0">Symbol Reference Table</a></li>
+<li><a href="#orgc08a213">Control Flow</a></li>
+<li><a href="#org84bdb10">Boolean Logic</a></li>
+<li><a href="#org08753cf">Eval</a></li>
+<li><a href="#org686a893">Symbol Reference Table</a></li>
 </ul>
 </li>
-<li><a href="#org9b5c96a">Source Code</a>
+<li><a href="#org4280686">Source Code</a>
 <ul>
-<li><a href="#org2add35c">makefile</a></li>
-<li><a href="#org255de4f">lc.sh</a></li>
-<li><a href="#orge1b8f5f">test.lc</a></li>
-<li><a href="#org4c30dab">src/main.py</a></li>
-<li><a href="#orgce1cd36">src/run_exceptions.py</a></li>
-<li><a href="#orgf4f84bc">src/lunar_functions.py</a></li>
-<li><a href="#org28289b9">src/test_lunar_functions.py</a></li>
-<li><a href="#org36bd18a">src/calculator.py</a></li>
+<li><a href="#org70f2b9e">makefile</a></li>
+<li><a href="#org8e83f13">lc.sh</a></li>
+<li><a href="#org8c80ea0">test.lc</a></li>
+<li><a href="#orgfd698fd">src/main.py</a></li>
+<li><a href="#orgf0a3932">src/run_exceptions.py</a></li>
+<li><a href="#org17900c1">src/lunar_functions.py</a></li>
+<li><a href="#orgcb0c437">src/test_lunar_functions.py</a></li>
+<li><a href="#org481a355">src/calculator.py</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org7c599f9" class="outline-2">
-<h2 id="org7c599f9">Introduction</h2>
-<div class="outline-text-2" id="text-org7c599f9">
+<div id="outline-container-org1cc0fb2" class="outline-2">
+<h2 id="org1cc0fb2">Introduction</h2>
+<div class="outline-text-2" id="text-org1cc0fb2">
 <p>
 Have you ever wished you had a command line calculator that could do all of your important base 10 lunar arithmetic based accounting?
 </p>
@@ -103,17 +103,17 @@ As you can see, <code>lc</code> has helpful, ed-like error reporting, not overwh
 </div>
 </div>
 
-<div id="outline-container-org0c589df" class="outline-2">
-<h2 id="org0c589df">Syntax Overview</h2>
-<div class="outline-text-2" id="text-org0c589df">
+<div id="outline-container-org0c4b55b" class="outline-2">
+<h2 id="org0c4b55b">Syntax Overview</h2>
+<div class="outline-text-2" id="text-org0c4b55b">
 <p>
 To make programming easier all builtin functions in the lc language use ascii non-alphanumeric characters to represent symbols in a terse, easy to understand syntax. The syntax for the lc language is designed to be compliant with the Linear Non-stopping Integrated System Environment (LINENOISE) syntax standard. Using the LINENOISE standard complex operators such as COMEFROM can be reduced to short instructions such as <code>&lt;@</code> allowing for terse, clear, TECO-like syntax. Many other languages such as most regular expression syntaxes, Mathematica, Perl, APL, and Python also follow the LINENOISE standard for syntax, allowing developers to feel right at home in <code>lc</code>.
 </p>
 </div>
 
-<div id="outline-container-org314a127" class="outline-3">
-<h3 id="org314a127">Control Flow</h3>
-<div class="outline-text-3" id="text-org314a127">
+<div id="outline-container-orgc08a213" class="outline-3">
+<h3 id="orgc08a213">Control Flow</h3>
+<div class="outline-text-3" id="text-orgc08a213">
 <p>
 Control flow is conducted using the "come from" construct, conveniently shortened to <code>&lt;@</code> and <code>?&lt;@</code> for "come from" and "conditional come from" respectively. These constructs set a point in the CMFRM_TAB lookup table and when the reference symbol is reached the program jumps back to the line with the CMFRM command. Other control flow options include <code>%$#@&amp;</code> which is the CRZY function,
 </p>
@@ -123,27 +123,27 @@ For further details on conditionals and boolean values, view the "Boolean Logic"
 </p>
 </div>
 </div>
-<div id="outline-container-org7acab53" class="outline-3">
-<h3 id="org7acab53">Boolean Logic</h3>
-<div class="outline-text-3" id="text-org7acab53">
+<div id="outline-container-org84bdb10" class="outline-3">
+<h3 id="org84bdb10">Boolean Logic</h3>
+<div class="outline-text-3" id="text-org84bdb10">
 <p>
 Note that the <code>lc</code> language uses binary logic based upon lunar primality where if a number is a decimal lunar prime it is true, else it is false. Lunar primes are the set of all numbers that contain the character <code>'9'</code> in their decimal representation. Thus 19, 1999, 9, 92, 29, and other values are considered to be equivalent to true by the language, whereas 1, 2, 3, 5, 7, 13 and so on are not true since they are all composite numbers.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org7697a69" class="outline-3">
-<h3 id="org7697a69">Eval</h3>
-<div class="outline-text-3" id="text-org7697a69">
+<div id="outline-container-org08753cf" class="outline-3">
+<h3 id="org08753cf">Eval</h3>
+<div class="outline-text-3" id="text-org08753cf">
 <p>
 Loved by security experts, eval is an essential feature in the <code>lc</code> language, used as the basis of all function calls in the language it allows you to evaluate a string from the input. 
 </p>
 </div>
 </div>
 
-<div id="outline-container-org8dbe1b0" class="outline-3">
-<h3 id="org8dbe1b0">Symbol Reference Table</h3>
-<div class="outline-text-3" id="text-org8dbe1b0">
+<div id="outline-container-org686a893" class="outline-3">
+<h3 id="org686a893">Symbol Reference Table</h3>
+<div class="outline-text-3" id="text-org686a893">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -282,13 +282,13 @@ Loved by security experts, eval is an essential feature in the <code>lc</code> l
 </div>
 
 
-<div id="outline-container-org9b5c96a" class="outline-2">
-<h2 id="org9b5c96a">Source Code</h2>
-<div class="outline-text-2" id="text-org9b5c96a">
+<div id="outline-container-org4280686" class="outline-2">
+<h2 id="org4280686">Source Code</h2>
+<div class="outline-text-2" id="text-org4280686">
 </div>
-<div id="outline-container-org2add35c" class="outline-3">
-<h3 id="org2add35c">makefile</h3>
-<div class="outline-text-3" id="text-org2add35c">
+<div id="outline-container-org70f2b9e" class="outline-3">
+<h3 id="org70f2b9e">makefile</h3>
+<div class="outline-text-3" id="text-org70f2b9e">
 <div class="org-src-container">
 <pre class="src src-makefile"><span style="color: #1976D2;">failure</span>:
         <span style="color: #E53935;">@</span>echo <span style="color: #494949;">"error, run make install or make uninstall"</span>
@@ -308,9 +308,9 @@ Loved by security experts, eval is an essential feature in the <code>lc</code> l
 </div>
 
 
-<div id="outline-container-org255de4f" class="outline-3">
-<h3 id="org255de4f">lc.sh</h3>
-<div class="outline-text-3" id="text-org255de4f">
+<div id="outline-container-org8e83f13" class="outline-3">
+<h3 id="org8e83f13">lc.sh</h3>
+<div class="outline-text-3" id="text-org8e83f13">
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #a4a4a4; font-style: italic;">#</span><span style="color: #a4a4a4; font-style: italic;">!/usr/bin/</span><span style="color: #E53935; font-style: italic;">env</span><span style="color: #a4a4a4; font-style: italic;"> bash</span>
 
@@ -321,13 +321,13 @@ python3 $<span style="font-style: italic;">HOME</span>/.lc-src/main.py $<span st
 </div>
 
 
-<div id="outline-container-orge1b8f5f" class="outline-3">
-<h3 id="orge1b8f5f">test.lc</h3>
+<div id="outline-container-org8c80ea0" class="outline-3">
+<h3 id="org8c80ea0">test.lc</h3>
 </div>
 
-<div id="outline-container-org4c30dab" class="outline-3">
-<h3 id="org4c30dab">src/main.py</h3>
-<div class="outline-text-3" id="text-org4c30dab">
+<div id="outline-container-orgfd698fd" class="outline-3">
+<h3 id="orgfd698fd">src/main.py</h3>
+<div class="outline-text-3" id="text-orgfd698fd">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #a4a4a4; font-style: italic;">#</span><span style="color: #a4a4a4; font-style: italic;">!/usr/bin/env python3</span>
 
@@ -357,9 +357,9 @@ python3 $<span style="font-style: italic;">HOME</span>/.lc-src/main.py $<span st
 </div>
 </div>
 
-<div id="outline-container-orgce1cd36" class="outline-3">
-<h3 id="orgce1cd36">src/run_exceptions.py</h3>
-<div class="outline-text-3" id="text-orgce1cd36">
+<div id="outline-container-orgf0a3932" class="outline-3">
+<h3 id="orgf0a3932">src/run_exceptions.py</h3>
+<div class="outline-text-3" id="text-orgf0a3932">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #a4a4a4; font-style: italic;">"""Exceptions for the run module."""</span>
 
@@ -395,9 +395,9 @@ python3 $<span style="font-style: italic;">HOME</span>/.lc-src/main.py $<span st
 </div>
 
 
-<div id="outline-container-orgf4f84bc" class="outline-3">
-<h3 id="orgf4f84bc">src/lunar_functions.py</h3>
-<div class="outline-text-3" id="text-orgf4f84bc">
+<div id="outline-container-org17900c1" class="outline-3">
+<h3 id="org17900c1">src/lunar_functions.py</h3>
+<div class="outline-text-3" id="text-org17900c1">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">ladd</span><span style="color: #494949;">(</span>a, b<span style="color: #494949;">)</span>:
     <span style="color: #a4a4a4; font-style: italic;">"""</span>
@@ -500,9 +500,9 @@ python3 $<span style="font-style: italic;">HOME</span>/.lc-src/main.py $<span st
 </div>
 </div>
 
-<div id="outline-container-org28289b9" class="outline-3">
-<h3 id="org28289b9">src/test_lunar_functions.py</h3>
-<div class="outline-text-3" id="text-org28289b9">
+<div id="outline-container-orgcb0c437" class="outline-3">
+<h3 id="orgcb0c437">src/test_lunar_functions.py</h3>
+<div class="outline-text-3" id="text-orgcb0c437">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #a4a4a4; font-style: italic;">#</span><span style="color: #a4a4a4; font-style: italic;">!/usr/bin/env python3</span>
 
@@ -546,9 +546,9 @@ test_lpow<span style="color: #494949;">()</span>
 </div>
 </div>
 
-<div id="outline-container-org36bd18a" class="outline-3">
-<h3 id="org36bd18a">src/calculator.py</h3>
-<div class="outline-text-3" id="text-org36bd18a">
+<div id="outline-container-org481a355" class="outline-3">
+<h3 id="org481a355">src/calculator.py</h3>
+<div class="outline-text-3" id="text-org481a355">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #a4a4a4; font-style: italic;">"""This is a calculator."""</span>
 

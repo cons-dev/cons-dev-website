@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-5 00:05 -->
+<!-- 2021-W52-2 01:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Emacs Configuration</title>
@@ -14,7 +14,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Emacs Configuration</h1>
@@ -22,34 +22,34 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org39297db">Introduction</a></li>
-<li><a href="#orge72bb2e">Components</a></li>
-<li><a href="#org9f69239">Plans</a>
+<li><a href="#orgeb4f42b">Introduction</a></li>
+<li><a href="#org6d493bf">Components</a></li>
+<li><a href="#org0723467">Plans</a>
 <ul>
-<li><a href="#org312c389"><span class="todo TODO">TODO</span> Memex</a></li>
-<li><a href="#org28297b7"><span class="todo TODO">TODO</span> Core Feature Code</a></li>
-<li><a href="#org1cef843"><span class="todo TODO">TODO</span> Aesthetics Code</a></li>
-<li><a href="#org26b7316"><span class="todo TODO">TODO</span> Unify Lookup Code</a></li>
+<li><a href="#orgfc29723"><span class="todo TODO">TODO</span> Memex</a></li>
+<li><a href="#org59f429a"><span class="todo TODO">TODO</span> Core Feature Code</a></li>
+<li><a href="#org941d764"><span class="todo TODO">TODO</span> Aesthetics Code</a></li>
+<li><a href="#orgc54ff82"><span class="todo TODO">TODO</span> Unify Lookup Code</a></li>
 </ul>
 </li>
-<li><a href="#org744c1e2">Fancy Loading</a>
+<li><a href="#orgb19733b">Fancy Loading</a>
 <ul>
-<li><a href="#org31cc285">org-bable-execute:org</a></li>
-<li><a href="#orgefc3f11">ec-load-deps</a></li>
-<li><a href="#org74914ae">ec-set-variables</a></li>
-<li><a href="#org1dd7642">ec-bind-keys</a></li>
-<li><a href="#org12df9e6">ec-literate-load</a></li>
+<li><a href="#org3131a7f">org-bable-execute:org</a></li>
+<li><a href="#org48fe7a6">ec-load-deps</a></li>
+<li><a href="#org819eac4">ec-set-variables</a></li>
+<li><a href="#org31e6c43">ec-bind-keys</a></li>
+<li><a href="#org971e8c5">ec-literate-load</a></li>
 </ul>
 </li>
-<li><a href="#orga1a6fc8">Initialization Code</a></li>
+<li><a href="#org8b4a3a9">Initialization Code</a></li>
 </ul>
 </div>
 </div>
 
 
-<div id="outline-container-org39297db" class="outline-2">
-<h2 id="org39297db">Introduction</h2>
-<div class="outline-text-2" id="text-org39297db">
+<div id="outline-container-orgeb4f42b" class="outline-2">
+<h2 id="orgeb4f42b">Introduction</h2>
+<div class="outline-text-2" id="text-orgeb4f42b">
 <p>
 I like Emacs, but slowly I have accumulated around 15 000 lines of code written in Emacs lisp in my personal configuration. I have also added (some) unit tests and broke it into a file tree. This works rather well, but this is also sort of limited and troublesome as it 
 </p>
@@ -60,13 +60,13 @@ This will basically comprise the public section of my Emacs configuration. Curre
 </div>
 </div>
 
-<div id="outline-container-orge72bb2e" class="outline-2">
-<h2 id="orge72bb2e">Components</h2>
-<div class="outline-text-2" id="text-orge72bb2e">
+<div id="outline-container-org6d493bf" class="outline-2">
+<h2 id="org6d493bf">Components</h2>
+<div class="outline-text-2" id="text-org6d493bf">
 <p>
 Here's a quick listing of the various components to my setup. This list is comprised of various sets of features that I want loaded, in essence a list of porcelains. These then go on to load the various libraries I have written to actually execute the code.
 </p>
-<table id="orga620357" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="orgb6df191" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
 <colgroup>
@@ -95,37 +95,37 @@ Here's a quick listing of the various components to my setup. This list is compr
 </div>
 </div>
 
-<div id="outline-container-org9f69239" class="outline-2">
-<h2 id="org9f69239">Plans</h2>
-<div class="outline-text-2" id="text-org9f69239">
+<div id="outline-container-org0723467" class="outline-2">
+<h2 id="org0723467">Plans</h2>
+<div class="outline-text-2" id="text-org0723467">
 </div>
-<div id="outline-container-org312c389" class="outline-3">
-<h3 id="org312c389"><span class="todo TODO">TODO</span> Memex</h3>
-<div class="outline-text-3" id="text-org312c389">
+<div id="outline-container-orgfc29723" class="outline-3">
+<h3 id="orgfc29723"><span class="todo TODO">TODO</span> Memex</h3>
+<div class="outline-text-3" id="text-orgfc29723">
 <p>
 Personal wiki (Memex) source code added to the public portion of my website.
 </p>
 </div>
 </div>
-<div id="outline-container-org28297b7" class="outline-3">
-<h3 id="org28297b7"><span class="todo TODO">TODO</span> Core Feature Code</h3>
-<div class="outline-text-3" id="text-org28297b7">
+<div id="outline-container-org59f429a" class="outline-3">
+<h3 id="org59f429a"><span class="todo TODO">TODO</span> Core Feature Code</h3>
+<div class="outline-text-3" id="text-org59f429a">
 <p>
 Core features of my configuration including package loading, <code>EXWM</code>, and other similar things.
 </p>
 </div>
 </div>
-<div id="outline-container-org1cef843" class="outline-3">
-<h3 id="org1cef843"><span class="todo TODO">TODO</span> Aesthetics Code</h3>
-<div class="outline-text-3" id="text-org1cef843">
+<div id="outline-container-org941d764" class="outline-3">
+<h3 id="org941d764"><span class="todo TODO">TODO</span> Aesthetics Code</h3>
+<div class="outline-text-3" id="text-org941d764">
 <p>
 The rest of the code covering the aesthetics of my development environment.
 </p>
 </div>
 </div>
-<div id="outline-container-org26b7316" class="outline-3">
-<h3 id="org26b7316"><span class="todo TODO">TODO</span> Unify Lookup Code</h3>
-<div class="outline-text-3" id="text-org26b7316">
+<div id="outline-container-orgc54ff82" class="outline-3">
+<h3 id="orgc54ff82"><span class="todo TODO">TODO</span> Unify Lookup Code</h3>
+<div class="outline-text-3" id="text-orgc54ff82">
 <p>
 I would like to eventually unify all of my lookup code into one set of lookup code. 
 </p>
@@ -134,18 +134,18 @@ I would like to eventually unify all of my lookup code into one set of lookup co
 </div>
 
 
-<div id="outline-container-org744c1e2" class="outline-2">
-<h2 id="org744c1e2">Fancy Loading</h2>
-<div class="outline-text-2" id="text-org744c1e2">
+<div id="outline-container-orgb19733b" class="outline-2">
+<h2 id="orgb19733b">Fancy Loading</h2>
+<div class="outline-text-2" id="text-orgb19733b">
 <p>
 This is currently a work in progress, but basically it provides a fancy function that uses tables in org-mode buffers to define certain common tasks such as variable assignment or dependency specification for a file.
 </p>
 </div>
 
 
-<div id="outline-container-org31cc285" class="outline-3">
-<h3 id="org31cc285">org-bable-execute:org</h3>
-<div class="outline-text-3" id="text-org31cc285">
+<div id="outline-container-org3131a7f" class="outline-3">
+<h3 id="org3131a7f">org-bable-execute:org</h3>
+<div class="outline-text-3" id="text-org3131a7f">
 <p>
 I like to occasionally include org-mode blocks as variables for my configuration (mostly for templates) so I have written a little function that basically just returns a string containing the body.
 </p>
@@ -157,9 +157,9 @@ I like to occasionally include org-mode blocks as variables for my configuration
 </div>
 </div>
 
-<div id="outline-container-orgefc3f11" class="outline-3">
-<h3 id="orgefc3f11">ec-load-deps</h3>
-<div class="outline-text-3" id="text-orgefc3f11">
+<div id="outline-container-org48fe7a6" class="outline-3">
+<h3 id="org48fe7a6">ec-load-deps</h3>
+<div class="outline-text-3" id="text-org48fe7a6">
 <p>
 Generally I like to declare my dependencies in a table at the start of my file (as you can see above) because it allows me to link to them, have commentary on what they do, and generally looks nicer than a list of strings. However, to make this possible I need to process the list a little bit.
 </p>
@@ -191,9 +191,9 @@ This also returns a list of the loaded dependencies to allow me to wrap the load
 </div>
 </div>
 
-<div id="outline-container-org74914ae" class="outline-3">
-<h3 id="org74914ae">ec-set-variables</h3>
-<div class="outline-text-3" id="text-org74914ae">
+<div id="outline-container-org819eac4" class="outline-3">
+<h3 id="org819eac4">ec-set-variables</h3>
+<div class="outline-text-3" id="text-org819eac4">
 <p>
 This parses the contents of a table to a series of setq statements which will be joined together into a function that is then evaluated.
 </p>
@@ -212,9 +212,9 @@ This parses the contents of a table to a series of setq statements which will be
 </div>
 
 
-<div id="outline-container-org1dd7642" class="outline-3">
-<h3 id="org1dd7642">ec-bind-keys</h3>
-<div class="outline-text-3" id="text-org1dd7642">
+<div id="outline-container-org31e6c43" class="outline-3">
+<h3 id="org31e6c43">ec-bind-keys</h3>
+<div class="outline-text-3" id="text-org31e6c43">
 <p>
 Another function for processing tables, in this case binding keys in the tables.
 </p>
@@ -226,9 +226,9 @@ Another function for processing tables, in this case binding keys in the tables.
 </div>
 </div>
 
-<div id="outline-container-org12df9e6" class="outline-3">
-<h3 id="org12df9e6">ec-literate-load</h3>
-<div class="outline-text-3" id="text-org12df9e6">
+<div id="outline-container-org971e8c5" class="outline-3">
+<h3 id="org971e8c5">ec-literate-load</h3>
+<div class="outline-text-3" id="text-org971e8c5">
 <p>
 Now for the literate loading function.<label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> Note that this is heavily WIP and doesn't work right now</span> This goes over the list of different functions and then evaluates them if they are src blocks and processes them if they are a table into.
 </p>
@@ -269,9 +269,9 @@ Now for the literate loading function.<label class="sidenote-number" for="1"><su
 </div>
 </div>
 
-<div id="outline-container-orga1a6fc8" class="outline-2">
-<h2 id="orga1a6fc8">Initialization Code</h2>
-<div class="outline-text-2" id="text-orga1a6fc8">
+<div id="outline-container-org8b4a3a9" class="outline-2">
+<h2 id="org8b4a3a9">Initialization Code</h2>
+<div class="outline-text-2" id="text-org8b4a3a9">
 <p>
 This code is used to load the code in the components list automatically.
 </p>

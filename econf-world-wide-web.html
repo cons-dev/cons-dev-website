@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-5 00:05 -->
+<!-- 2021-W52-2 01:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Econf World Wide Web</title>
@@ -14,7 +14,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Econf World Wide Web</h1>
@@ -22,58 +22,58 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org73f9396">Introduction</a></li>
-<li><a href="#orgab2bd12">Dependencies</a></li>
-<li><a href="#org42d38f3">Variables</a>
+<li><a href="#org033b4fa">Introduction</a></li>
+<li><a href="#org18eb131">Dependencies</a></li>
+<li><a href="#orgb6f5fcb">Variables</a>
 <ul>
-<li><a href="#orga2f6772">Setting Browsers (and stuff)</a></li>
-<li><a href="#org3955360">The w3m Directory</a></li>
-<li><a href="#orgd0e9070">Further Customizations</a></li>
+<li><a href="#orga060223">Setting Browsers (and stuff)</a></li>
+<li><a href="#orgb026291">The w3m Directory</a></li>
+<li><a href="#orgde77ec1">Further Customizations</a></li>
 </ul>
 </li>
-<li><a href="#org30e388f">Playing Videos Without JS</a>
+<li><a href="#org7cc0feb">Playing Videos Without JS</a>
 <ul>
-<li><a href="#org3cd8dad">Playing Videos</a>
+<li><a href="#orgfe46d0b">Playing Videos</a>
 <ul>
-<li><a href="#org4abe062">ec-w3m-view-video</a></li>
-<li><a href="#org8c30cd2">ec-w3m-video-url?</a></li>
+<li><a href="#org704cf34">ec-w3m-view-video</a></li>
+<li><a href="#org2625945">ec-w3m-video-url?</a></li>
 </ul>
 </li>
-<li><a href="#org4f33b39">Redefining Some Functions</a>
+<li><a href="#org881f76f">Redefining Some Functions</a>
 <ul>
-<li><a href="#org24ad6ee">w3m-goto-url-new-session-or-video</a></li>
-<li><a href="#org8605145">w3m-view-this-url</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#orgbb4d542">Search Engine Suggestions</a>
-<ul>
-<li><a href="#orgb197f75">Variables</a></li>
-<li><a href="#org2d39642">Functions</a>
-<ul>
-<li><a href="#org369c113">ec-ddg-suggest-fetch</a></li>
-<li><a href="#org0618719">ec-ddg-get-suggestions</a></li>
-<li><a href="#org7ffeed9">ec-wikipedia-suggest-fetch</a></li>
-<li><a href="#org85b5426">ec-get-region</a></li>
-<li><a href="#org280f5d0">ec-ddg-search-interactive-arg</a></li>
+<li><a href="#orgb71b301">w3m-goto-url-new-session-or-video</a></li>
+<li><a href="#orgbacb33c">w3m-view-this-url</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgcb1e076">Saving Stuff</a>
+<li><a href="#org6a9bb47">Search Engine Suggestions</a>
 <ul>
-<li><a href="#org0896226">ec-clone-website</a></li>
-<li><a href="#org0237caf">ec-download-video</a></li>
+<li><a href="#org34b4e95">Variables</a></li>
+<li><a href="#org1f04a8d">Functions</a>
+<ul>
+<li><a href="#orgd888343">ec-ddg-suggest-fetch</a></li>
+<li><a href="#org75c12df">ec-ddg-get-suggestions</a></li>
+<li><a href="#orgb85cc8c">ec-wikipedia-suggest-fetch</a></li>
+<li><a href="#org0144f6a">ec-get-region</a></li>
+<li><a href="#org734aba7">ec-ddg-search-interactive-arg</a></li>
 </ul>
 </li>
-<li><a href="#org5cb50f7">User Interface</a>
+</ul>
+</li>
+<li><a href="#org970a2d4">Saving Stuff</a>
 <ul>
-<li><a href="#org47f4b0b">Buffer Names</a></li>
-<li><a href="#org16bff4a">Hydra Interface</a></li>
-<li><a href="#org40a072a">Binding Keys</a></li>
-<li><a href="#org0ddc534">Browser Functions</a></li>
-<li><a href="#org58aeb1f">Ace Link</a></li>
+<li><a href="#org0f41e1b">ec-clone-website</a></li>
+<li><a href="#org26599f6">ec-download-video</a></li>
+</ul>
+</li>
+<li><a href="#org0adf467">User Interface</a>
+<ul>
+<li><a href="#org5e54e78">Buffer Names</a></li>
+<li><a href="#org470ff93">Hydra Interface</a></li>
+<li><a href="#orgbe92e75">Binding Keys</a></li>
+<li><a href="#org102275a">Browser Functions</a></li>
+<li><a href="#orgec9244b">Ace Link</a></li>
 </ul>
 </li>
 </ul>
@@ -81,19 +81,19 @@
 </div>
 
 
-<div id="outline-container-org73f9396" class="outline-2">
-<h2 id="org73f9396">Introduction</h2>
-<div class="outline-text-2" id="text-org73f9396">
+<div id="outline-container-org033b4fa" class="outline-2">
+<h2 id="org033b4fa">Introduction</h2>
+<div class="outline-text-2" id="text-org033b4fa">
 <p>
 This is some fo the code I use for search engine stuff in Emacs.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgab2bd12" class="outline-2">
-<h2 id="orgab2bd12">Dependencies</h2>
-<div class="outline-text-2" id="text-orgab2bd12">
-<table id="org42aeff4" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<div id="outline-container-org18eb131" class="outline-2">
+<h2 id="org18eb131">Dependencies</h2>
+<div class="outline-text-2" id="text-org18eb131">
+<table id="org2f5fa9b" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
 <colgroup>
@@ -132,16 +132,16 @@ This is some fo the code I use for search engine stuff in Emacs.
 </div>
 </div>
 
-<div id="outline-container-org42d38f3" class="outline-2">
-<h2 id="org42d38f3">Variables</h2>
-<div class="outline-text-2" id="text-org42d38f3">
+<div id="outline-container-orgb6f5fcb" class="outline-2">
+<h2 id="orgb6f5fcb">Variables</h2>
+<div class="outline-text-2" id="text-orgb6f5fcb">
 <p>
 Here I set up a bunch of variables that are used in the rest of the package. However, I do not set all my variables here and do make some closer to where they are used. <label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> I am not sure that this is the best practice, but I am so far from the "best practices" zone with this configuration that I may as well just go with it.</span>
 </p>
 </div>
-<div id="outline-container-orga2f6772" class="outline-3">
-<h3 id="orga2f6772">Setting Browsers (and stuff)</h3>
-<div class="outline-text-3" id="text-orga2f6772">
+<div id="outline-container-orga060223" class="outline-3">
+<h3 id="orga060223">Setting Browsers (and stuff)</h3>
+<div class="outline-text-3" id="text-orga060223">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defvar</span> <span style="font-style: italic;">ec-graphical-browser</span> <span style="color: #494949;">"firefox"</span>
     <span style="color: #a4a4a4; font-style: italic;">"The browser and options used to browse the web when a non-gui browser will not work."</span><span style="color: #494949;">)</span>
@@ -162,14 +162,14 @@ Here I set up a bunch of variables that are used in the rest of the package. How
 </div>
 </div>
 
-<div id="outline-container-org3955360" class="outline-3">
-<h3 id="org3955360">The w3m Directory</h3>
-<div class="outline-text-3" id="text-org3955360">
+<div id="outline-container-orgb026291" class="outline-3">
+<h3 id="orgb026291">The w3m Directory</h3>
+<div class="outline-text-3" id="text-orgb026291">
 <p>
 Like everything else I like to keep the data for w3m in my data directory instead of randomly floating around in the dotfiles, so I change it to the data directory here.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="org797e6b1">  <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defvar</span> <span style="font-style: italic;">ec-w3m-dir</span> <span style="color: #bbb;">(</span>concat ec-data-dir <span style="color: #494949;">"w3m/"</span><span style="color: #bbb;">)</span>
+<pre class="src src-emacs-lisp" id="orga003a66">  <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defvar</span> <span style="font-style: italic;">ec-w3m-dir</span> <span style="color: #bbb;">(</span>concat ec-data-dir <span style="color: #494949;">"w3m/"</span><span style="color: #bbb;">)</span>
     <span style="color: #a4a4a4; font-style: italic;">"Directory where all w3m files are located."</span><span style="color: #494949;">)</span>
 </pre>
 </div>
@@ -177,7 +177,7 @@ Like everything else I like to keep the data for w3m in my data directory instea
 <p>
 Here I set the variables that I have found that need a directory to dump their files in.
 </p>
-<table id="org0989e5e" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="orgb611d2d" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
 <colgroup>
@@ -226,13 +226,13 @@ Here I set the variables that I have found that need a directory to dump their f
 </div>
 </div>
 
-<div id="outline-container-orgd0e9070" class="outline-3">
-<h3 id="orgd0e9070">Further Customizations</h3>
-<div class="outline-text-3" id="text-orgd0e9070">
+<div id="outline-container-orgde77ec1" class="outline-3">
+<h3 id="orgde77ec1">Further Customizations</h3>
+<div class="outline-text-3" id="text-orgde77ec1">
 <p>
 Now I just add some further quick customizations to make the browser a little nicer to work with and to conform more with my standard interface.
 </p>
-<table id="orga158ae4" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="org820464e" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
 <colgroup>
@@ -288,20 +288,20 @@ Now I just add some further quick customizations to make the browser a little ni
 </div>
 </div>
 
-<div id="outline-container-org30e388f" class="outline-2">
-<h2 id="org30e388f">Playing Videos Without JS</h2>
-<div class="outline-text-2" id="text-org30e388f">
+<div id="outline-container-org7cc0feb" class="outline-2">
+<h2 id="org7cc0feb">Playing Videos Without JS</h2>
+<div class="outline-text-2" id="text-org7cc0feb">
 <p>
 Now I don't really like exiting Emacs, so I have added some features to view videos without javascript.
 </p>
 </div>
-<div id="outline-container-org3cd8dad" class="outline-3">
-<h3 id="org3cd8dad">Playing Videos</h3>
-<div class="outline-text-3" id="text-org3cd8dad">
+<div id="outline-container-orgfe46d0b" class="outline-3">
+<h3 id="orgfe46d0b">Playing Videos</h3>
+<div class="outline-text-3" id="text-orgfe46d0b">
 </div>
-<div id="outline-container-org4abe062" class="outline-4">
-<h4 id="org4abe062">ec-w3m-view-video</h4>
-<div class="outline-text-4" id="text-org4abe062">
+<div id="outline-container-org704cf34" class="outline-4">
+<h4 id="org704cf34">ec-w3m-view-video</h4>
+<div class="outline-text-4" id="text-org704cf34">
 <p>
 This function simply calls the view video function on the video.
 </p>
@@ -316,9 +316,9 @@ This function simply calls the view video function on the video.
 </div>
 </div>
 
-<div id="outline-container-org8c30cd2" class="outline-4">
-<h4 id="org8c30cd2">ec-w3m-video-url?</h4>
-<div class="outline-text-4" id="text-org8c30cd2">
+<div id="outline-container-org2625945" class="outline-4">
+<h4 id="org2625945">ec-w3m-video-url?</h4>
+<div class="outline-text-4" id="text-org2625945">
 <p>
 Checks if the video is on a streaming website or if the video content type is something playable with w3m. This way I can directly view videos from download links.
 </p>
@@ -341,17 +341,17 @@ Checks if the video is on a streaming website or if the video content type is so
 
 
 
-<div id="outline-container-org4f33b39" class="outline-3">
-<h3 id="org4f33b39">Redefining Some Functions</h3>
-<div class="outline-text-3" id="text-org4f33b39">
+<div id="outline-container-org881f76f" class="outline-3">
+<h3 id="org881f76f">Redefining Some Functions</h3>
+<div class="outline-text-3" id="text-org881f76f">
 <p>
 Unfortunately, depending on how a video is reached, a different function may be called. I used to just advise the relevant functions, but I have (against the usual recommendations of the Emacs community) come to prefer redefining functions as redefinition ensures that the function at hand works as expected. <label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> Basically advices are weird and difficult to parse when you get too many of them whereas redefinition is pretty clear and simple.</span>
 </p>
 </div>
 
-<div id="outline-container-org24ad6ee" class="outline-4">
-<h4 id="org24ad6ee">w3m-goto-url-new-session-or-video</h4>
-<div class="outline-text-4" id="text-org24ad6ee">
+<div id="outline-container-orgb71b301" class="outline-4">
+<h4 id="orgb71b301">w3m-goto-url-new-session-or-video</h4>
+<div class="outline-text-4" id="text-orgb71b301">
 <p>
 This opens a buffer in w3m, a graphical web browser, or vlc intelligently. Exciting.
 </p>
@@ -369,9 +369,9 @@ This opens a buffer in w3m, a graphical web browser, or vlc intelligently. Excit
 </div>
 </div>
 
-<div id="outline-container-org8605145" class="outline-4">
-<h4 id="org8605145">w3m-view-this-url</h4>
-<div class="outline-text-4" id="text-org8605145">
+<div id="outline-container-orgbacb33c" class="outline-4">
+<h4 id="orgbacb33c">w3m-view-this-url</h4>
+<div class="outline-text-4" id="text-orgbacb33c">
 <p>
 This just redefines the w3m URL thing entirely, checking if it is a video in the first portion of the cond predicate <code>cond</code> macro.
 </p>
@@ -425,16 +425,16 @@ This just redefines the w3m URL thing entirely, checking if it is a video in the
 </div>
 </div>
 
-<div id="outline-container-orgbb4d542" class="outline-2">
-<h2 id="orgbb4d542">Search Engine Suggestions</h2>
-<div class="outline-text-2" id="text-orgbb4d542">
+<div id="outline-container-org6a9bb47" class="outline-2">
+<h2 id="org6a9bb47">Search Engine Suggestions</h2>
+<div class="outline-text-2" id="text-org6a9bb47">
 <p>
 To add search engine suggestions
 </p>
 </div>
-<div id="outline-container-orgb197f75" class="outline-3">
-<h3 id="orgb197f75">Variables</h3>
-<div class="outline-text-3" id="text-orgb197f75">
+<div id="outline-container-org34b4e95" class="outline-3">
+<h3 id="org34b4e95">Variables</h3>
+<div class="outline-text-3" id="text-org34b4e95">
 <p>
 Here I set a list of variables for the search engine suggestions that.
 </p>
@@ -452,13 +452,13 @@ Here I set a list of variables for the search engine suggestions that.
 </div>
 </div>
 
-<div id="outline-container-org2d39642" class="outline-3">
-<h3 id="org2d39642">Functions</h3>
-<div class="outline-text-3" id="text-org2d39642">
+<div id="outline-container-org1f04a8d" class="outline-3">
+<h3 id="org1f04a8d">Functions</h3>
+<div class="outline-text-3" id="text-org1f04a8d">
 </div>
-<div id="outline-container-org369c113" class="outline-4">
-<h4 id="org369c113">ec-ddg-suggest-fetch</h4>
-<div class="outline-text-4" id="text-org369c113">
+<div id="outline-container-orgd888343" class="outline-4">
+<h4 id="orgd888343">ec-ddg-suggest-fetch</h4>
+<div class="outline-text-4" id="text-orgd888343">
 <p>
 This asynchronously fetches suggestions from the <a href="https://duckduckgo.com">duckduckgo</a> API, using a variable to pass the suggestions to the display function.
 </p>
@@ -481,9 +481,9 @@ This asynchronously fetches suggestions from the <a href="https://duckduckgo.com
 </div>
 
 
-<div id="outline-container-org0618719" class="outline-4">
-<h4 id="org0618719">ec-ddg-get-suggestions</h4>
-<div class="outline-text-4" id="text-org0618719">
+<div id="outline-container-org75c12df" class="outline-4">
+<h4 id="org75c12df">ec-ddg-get-suggestions</h4>
+<div class="outline-text-4" id="text-org75c12df">
 <p>
 Here we define a pretty simple function to get the list of suggestions for the search engine and merge them with the search history. It also starts a new request for suggestions.<label class="sidenote-number" for="3"><sup>3</sup></label><input checked="checked" id="3" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 3</span> Unfortunately this doesn't actually work fully</span>
 </p>
@@ -505,9 +505,9 @@ I also use the rx-macro to dynamically filter out suggestions that don't contain
 </div>
 </div>
 
-<div id="outline-container-org7ffeed9" class="outline-4">
-<h4 id="org7ffeed9">ec-wikipedia-suggest-fetch</h4>
-<div class="outline-text-4" id="text-org7ffeed9">
+<div id="outline-container-orgb85cc8c" class="outline-4">
+<h4 id="orgb85cc8c">ec-wikipedia-suggest-fetch</h4>
+<div class="outline-text-4" id="text-orgb85cc8c">
 <p>
 I also like to browse wikipedia. <label class="sidenote-number" for="4"><sup>4</sup></label><input checked="checked" id="4" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 4</span> Unfortunately this function doesn't work yet, but soon™, it will.</span>
 </p>
@@ -527,9 +527,9 @@ I also like to browse wikipedia. <label class="sidenote-number" for="4"><sup>4</
 </div>
 </div>
 
-<div id="outline-container-org85b5426" class="outline-4">
-<h4 id="org85b5426">ec-get-region</h4>
-<div class="outline-text-4" id="text-org85b5426">
+<div id="outline-container-org0144f6a" class="outline-4">
+<h4 id="org0144f6a">ec-get-region</h4>
+<div class="outline-text-4" id="text-org0144f6a">
 <p>
 This is a simple function to grab a region if it is highlighted, else return nil. IDK if it is defined in emacs elsewhere or not, but I decided to add it anyways because it might not be. <label class="sidenote-number" for="5"><sup>5</sup></label><input checked="checked" id="5" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 5</span> Yes, I know that is a terrible idea.</span>
 </p>
@@ -544,9 +544,9 @@ This is a simple function to grab a region if it is highlighted, else return nil
 </div>
 </div>
 
-<div id="outline-container-org280f5d0" class="outline-4">
-<h4 id="org280f5d0">ec-ddg-search-interactive-arg</h4>
-<div class="outline-text-4" id="text-org280f5d0">
+<div id="outline-container-org734aba7" class="outline-4">
+<h4 id="org734aba7">ec-ddg-search-interactive-arg</h4>
+<div class="outline-text-4" id="text-org734aba7">
 <p>
 This searches using my suggestions. I use it mostly to build more complex functions for searching the web.
 </p>
@@ -568,16 +568,16 @@ This searches using my suggestions. I use it mostly to build more complex functi
 
 
 
-<div id="outline-container-orgcb1e076" class="outline-2">
-<h2 id="orgcb1e076">Saving Stuff</h2>
-<div class="outline-text-2" id="text-orgcb1e076">
+<div id="outline-container-org970a2d4" class="outline-2">
+<h2 id="org970a2d4">Saving Stuff</h2>
+<div class="outline-text-2" id="text-org970a2d4">
 <p>
 I also like to occasionally save documentation, so I have written some functions to make that easier.
 </p>
 </div>
-<div id="outline-container-org0896226" class="outline-3">
-<h3 id="org0896226">ec-clone-website</h3>
-<div class="outline-text-3" id="text-org0896226">
+<div id="outline-container-org0f41e1b" class="outline-3">
+<h3 id="org0f41e1b">ec-clone-website</h3>
+<div class="outline-text-3" id="text-org0f41e1b">
 <p>
 This just clones a website fully and places it in a directory with the name of the website.
 </p>
@@ -593,9 +593,9 @@ This just clones a website fully and places it in a directory with the name of t
 </div>
 </div>
 
-<div id="outline-container-org0237caf" class="outline-3">
-<h3 id="org0237caf">ec-download-video</h3>
-<div class="outline-text-3" id="text-org0237caf">
+<div id="outline-container-org26599f6" class="outline-3">
+<h3 id="org26599f6">ec-download-video</h3>
+<div class="outline-text-3" id="text-org26599f6">
 <p>
 Sometimes while watching videos from C3 I like to download them, so this is a small, easy function that allows me to do just that.
 </p>
@@ -613,17 +613,17 @@ Sometimes while watching videos from C3 I like to download them, so this is a sm
 </div>
 
 
-<div id="outline-container-org5cb50f7" class="outline-2">
-<h2 id="org5cb50f7">User Interface</h2>
-<div class="outline-text-2" id="text-org5cb50f7">
+<div id="outline-container-org0adf467" class="outline-2">
+<h2 id="org0adf467">User Interface</h2>
+<div class="outline-text-2" id="text-org0adf467">
 <p>
 This is the porcelain of the system. Eventually I think I will separate this into multiple different porcelains (which won't be unit-tested) and libraries (which will).
 </p>
 </div>
 
-<div id="outline-container-org47f4b0b" class="outline-3">
-<h3 id="org47f4b0b">Buffer Names</h3>
-<div class="outline-text-3" id="text-org47f4b0b">
+<div id="outline-container-org5e54e78" class="outline-3">
+<h3 id="org5e54e78">Buffer Names</h3>
+<div class="outline-text-3" id="text-org5e54e78">
 <p>
 Here we add a function to rename the buffers to the current title to make them both more manageable and searchable than they were otherwise. <label class="sidenote-number" for="6"><sup>6</sup></label><input checked="checked" id="6" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 6</span> One of my pet-peeves was that w3m didn't really have good names for buffers, instead giving them the usual numeric names which sucked.</span>
 </p>
@@ -638,9 +638,9 @@ Here we add a function to rename the buffers to the current title to make them b
 </div>
 </div>
 
-<div id="outline-container-org16bff4a" class="outline-3">
-<h3 id="org16bff4a">Hydra Interface</h3>
-<div class="outline-text-3" id="text-org16bff4a">
+<div id="outline-container-org470ff93" class="outline-3">
+<h3 id="org470ff93">Hydra Interface</h3>
+<div class="outline-text-3" id="text-org470ff93">
 <p>
 We also throw in a hydra interface to make all of this much easier to work with.
 </p>
@@ -665,14 +665,14 @@ We also throw in a hydra interface to make all of this much easier to work with.
 </div>
 
 
-<div id="outline-container-org40a072a" class="outline-3">
-<h3 id="org40a072a">Binding Keys</h3>
-<div class="outline-text-3" id="text-org40a072a">
+<div id="outline-container-orgbe92e75" class="outline-3">
+<h3 id="orgbe92e75">Binding Keys</h3>
+<div class="outline-text-3" id="text-orgbe92e75">
 <p>
 To regularize the user interface we bind a bunch of keys that are, for some ineffable reason, not bound in a standard way. To rebind the keys in the mode I use the table and function call below.
 </p>
 
-<table id="org99b7257" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="org291af0e" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
 <colgroup>
@@ -796,9 +796,9 @@ I also add my system for creating epubs from websites automatically so I can wri
 </div>
 </div>
 
-<div id="outline-container-org0ddc534" class="outline-3">
-<h3 id="org0ddc534">Browser Functions</h3>
-<div class="outline-text-3" id="text-org0ddc534">
+<div id="outline-container-org102275a" class="outline-3">
+<h3 id="org102275a">Browser Functions</h3>
+<div class="outline-text-3" id="text-org102275a">
 <p>
 To make all of it work I also have to define a series of browser functions that will be called in the hydra.
 </p>
@@ -831,9 +831,9 @@ To make all of it work I also have to define a series of browser functions that 
 </div>
 
 
-<div id="outline-container-org58aeb1f" class="outline-3">
-<h3 id="org58aeb1f">Ace Link</h3>
-<div class="outline-text-3" id="text-org58aeb1f">
+<div id="outline-container-orgec9244b" class="outline-3">
+<h3 id="orgec9244b">Ace Link</h3>
+<div class="outline-text-3" id="text-orgec9244b">
 <p>
 Now I just add <a href="https://github.com/abo-abo/ace-link">ace-link</a> to make traversing documents much nicer. 
 </p>

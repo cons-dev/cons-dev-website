@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-5 00:05 -->
+<!-- 2021-W52-2 01:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Namespaces in My Emacs? It's More Likely than you think!</title>
@@ -35,7 +35,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Namespaces in My Emacs? It's More Likely than you think!
@@ -46,57 +46,57 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org3ac5435">Summary</a></li>
-<li><a href="#org32fa20e">Implementation</a>
+<li><a href="#org162c91f">Summary</a></li>
+<li><a href="#org57fa3c3">Implementation</a>
 <ul>
-<li><a href="#orgd53003f">The <code>ns</code> Macro</a></li>
-<li><a href="#org94b197f">Finding Private Definitions</a>
+<li><a href="#orge06026a">The <code>ns</code> Macro</a></li>
+<li><a href="#org6386a2a">Finding Private Definitions</a>
 <ul>
-<li><a href="#org056a1ea">ns-find-private-refs</a></li>
-<li><a href="#orgeedf7c8">ns-private?</a></li>
+<li><a href="#orgacedb9a">ns-find-private-refs</a></li>
+<li><a href="#org6b2666b">ns-private?</a></li>
 </ul>
 </li>
-<li><a href="#org6ab6971">Structure Transformers</a>
+<li><a href="#org39d8e10">Structure Transformers</a>
 <ul>
-<li><a href="#org7494d92">ns-transform-private-refs</a></li>
-<li><a href="#org65116d1">ns-create-private-binds</a></li>
-<li><a href="#org676247e">ns-remove-private-defs</a></li>
+<li><a href="#org031516a">ns-transform-private-refs</a></li>
+<li><a href="#orge2c9152">ns-create-private-binds</a></li>
+<li><a href="#org8f4288d">ns-remove-private-defs</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org4f7a6e7">Limitations</a>
+<li><a href="#org56a8695">Limitations</a>
 <ul>
-<li><a href="#orgd2820ce">Lexical Binding Needs to be On</a></li>
-<li><a href="#org82265db">Private Functions / Macros Cannot Be Called to Set Private Variables</a></li>
+<li><a href="#orgb7b4cb7">Lexical Binding Needs to be On</a></li>
+<li><a href="#orga1f8fd8">Private Functions / Macros Cannot Be Called to Set Private Variables</a></li>
 </ul>
 </li>
-<li><a href="#orgf85c23d">Possible Improvements</a>
+<li><a href="#orgd659852">Possible Improvements</a>
 <ul>
-<li><a href="#org7fbcdbf">Making Lexical Binding Default</a></li>
-<li><a href="#org2aca74f">Higher Order Macros</a></li>
+<li><a href="#org03f2fc7">Making Lexical Binding Default</a></li>
+<li><a href="#orgdb98a79">Higher Order Macros</a></li>
 </ul>
 </li>
-<li><a href="#org16c3d77">Further Thoughts</a>
+<li><a href="#org5144993">Further Thoughts</a>
 <ul>
-<li><a href="#orgcbbf4b1">Namespaces and Objects</a></li>
-<li><a href="#org7e89e10">Inheritance</a></li>
-<li><a href="#orga4dc5f3">Doing Without <code>let</code></a></li>
+<li><a href="#org28c5c6a">Namespaces and Objects</a></li>
+<li><a href="#org6b7483c">Inheritance</a></li>
+<li><a href="#orge74026d">Doing Without <code>let</code></a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org3ac5435" class="outline-2">
-<h2 id="org3ac5435">Summary</h2>
-<div class="outline-text-2" id="text-org3ac5435">
+<div id="outline-container-org162c91f" class="outline-2">
+<h2 id="org162c91f">Summary</h2>
+<div class="outline-text-2" id="text-org162c91f">
 <p>
 So it's commonly said that Emacs does not have namespaces, everything is in one global mess of functions. This works because people create pseudo-namespaces by simply adding the name of the package onto the beginning of a function. This sadly leads to <i>really</i> long function names that can be an impediment to comprehension.
 </p>
 
 <p>
-But I realized while working on this blog <label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> Specifically when using it to avoid polluting the global namespace <a href="source-code.html#org0d904f2">here</a>.</span> that lexical binding and lexical closures were basically private functions and namespaces, if ugly looking. Therefore, if you just used something akin to this:
+But I realized while working on this blog <label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> Specifically when using it to avoid polluting the global namespace <a href="source-code.html#org11417e5">here</a>.</span> that lexical binding and lexical closures were basically private functions and namespaces, if ugly looking. Therefore, if you just used something akin to this:
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">setq</span> lexical-binding t<span style="color: #494949;">)</span>
@@ -122,7 +122,7 @@ So I began to wonder, what if I could <i>make</i> a namespace macro that solves 
 </div>
 
 <p>
-This is a much more natural way to write everything and, as implied, creates public functions based upon the inclusion of the namsepace symbol in the beginning of the function. This is pretty easy and the details of this implementation are provided <a href="#org94b197f">here</a>.
+This is a much more natural way to write everything and, as implied, creates public functions based upon the inclusion of the namsepace symbol in the beginning of the function. This is pretty easy and the details of this implementation are provided <a href="#org6386a2a">here</a>.
 </p>
 
 <p>
@@ -135,9 +135,9 @@ After talking to some people about this I realized that this is similar to some 
 </div>
 </div>
 
-<div id="outline-container-org32fa20e" class="outline-2">
-<h2 id="org32fa20e">Implementation</h2>
-<div class="outline-text-2" id="text-org32fa20e">
+<div id="outline-container-org57fa3c3" class="outline-2">
+<h2 id="org57fa3c3">Implementation</h2>
+<div class="outline-text-2" id="text-org57fa3c3">
 <p>
 The implementation is broken into a few helper functions and the macro. Because this is a demo (and not meant for RL code) I can use the helper functions since I can rely on them being expanded and loaded before the macro. However, if this were not a toy implementation then I would have to be fairly careful to ensure they are loaded in the proper order.
 </p>
@@ -155,13 +155,13 @@ atomic
 </p>
 
 <p>
-Following this process private symbols are "collected" in order and transformed into the let syntax which results in execution <i>mostly</i> equivalent to the previous state. Currently I use the <code>let</code> rather than <code>let*</code> for reasons discussed in the <a href="#org82265db">limitations</a> section.
+Following this process private symbols are "collected" in order and transformed into the let syntax which results in execution <i>mostly</i> equivalent to the previous state. Currently I use the <code>let</code> rather than <code>let*</code> for reasons discussed in the <a href="#orga1f8fd8">limitations</a> section.
 </p>
 </div>
 
-<div id="outline-container-orgd53003f" class="outline-3">
-<h3 id="orgd53003f">The <code>ns</code> Macro</h3>
-<div class="outline-text-3" id="text-orgd53003f">
+<div id="outline-container-orge06026a" class="outline-3">
+<h3 id="orge06026a">The <code>ns</code> Macro</h3>
+<div class="outline-text-3" id="text-orge06026a">
 <p>
 This is the macro itself and
 </p>
@@ -190,9 +190,9 @@ This is the macro itself and
 </div>
 </div>
 
-<div id="outline-container-org94b197f" class="outline-3">
-<h3 id="org94b197f">Finding Private Definitions</h3>
-<div class="outline-text-3" id="text-org94b197f">
+<div id="outline-container-org6386a2a" class="outline-3">
+<h3 id="org6386a2a">Finding Private Definitions</h3>
+<div class="outline-text-3" id="text-org6386a2a">
 <p>
 To start off everything we search for definitions, value setting, and other similar things to ensure the values are captured in the current namespace. Currently this is only done on the top level because dealing with internal functions gets rather irritating rather quickly. For the purposes of this definition search only <a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Defining-Variables.html">defvar</a>, <a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Defining-Variables.html">defconst</a>, <a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Defining-Macros.html">defmacro</a>, defun, and defalias will be counted.
 </p>
@@ -213,14 +213,14 @@ Thus we also filter out the definitions that begin with the same symbol as the n
 </p>
 </div>
 
-<div id="outline-container-org056a1ea" class="outline-4">
-<h4 id="org056a1ea">ns-find-private-refs</h4>
-<div class="outline-text-4" id="text-org056a1ea">
+<div id="outline-container-orgacedb9a" class="outline-4">
+<h4 id="orgacedb9a">ns-find-private-refs</h4>
+<div class="outline-text-4" id="text-orgacedb9a">
 <p>
-This filters the top level forms of the namespace using the <a href="#org4ea427f">ns-private?</a> predicate function and then returns the list of all top level functions.
+This filters the top level forms of the namespace using the <a href="#orgc5c638c">ns-private?</a> predicate function and then returns the list of all top level functions.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="org4bce5ea"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-find-private-refs</span> <span style="color: #bbb;">(</span>namespace forms<span style="color: #bbb;">)</span>
+<pre class="src src-emacs-lisp" id="org98c1b5d"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-find-private-refs</span> <span style="color: #bbb;">(</span>namespace forms<span style="color: #bbb;">)</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> forms
        <span style="color: #494949;">(</span>-filter <span style="color: #bbb;">(</span>-partial #'ns-private? namespace<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
        <span style="color: #494949;">(</span>-map 'second<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
@@ -233,14 +233,14 @@ ns-find-private-refs
 </div>
 </div>
 
-<div id="outline-container-orgeedf7c8" class="outline-4">
-<h4 id="orgeedf7c8">ns-private?</h4>
-<div class="outline-text-4" id="text-orgeedf7c8">
+<div id="outline-container-org6b2666b" class="outline-4">
+<h4 id="org6b2666b">ns-private?</h4>
+<div class="outline-text-4" id="text-org6b2666b">
 <p>
 Here we define a small function that checks if our top level form is public. This simply grabs the first value of the form, then checks the second to see if it is the form has enough symbols to be a definition, then checks if it is top level or not.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="org4ea427f"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-private?</span> <span style="color: #bbb;">(</span>namespace top-level-form<span style="color: #bbb;">)</span>
+<pre class="src src-emacs-lisp" id="orgc5c638c"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-private?</span> <span style="color: #bbb;">(</span>namespace top-level-form<span style="color: #bbb;">)</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span><span style="color: #494949;">(</span><span style="color: #bbb;">(</span>form-fun <span style="color: #494949;">(</span>first top-level-form<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
     <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">and</span> <span style="color: #bbb;">(</span>&gt; <span style="color: #494949;">(</span>length top-level-form<span style="color: #494949;">)</span> 2<span style="color: #bbb;">)</span>
          <span style="color: #bbb;">(</span>-contains?
@@ -256,22 +256,22 @@ Here we define a small function that checks if our top level form is public. Thi
 </div>
 </div>
 
-<div id="outline-container-org6ab6971" class="outline-3">
-<h3 id="org6ab6971">Structure Transformers</h3>
-<div class="outline-text-3" id="text-org6ab6971">
+<div id="outline-container-org39d8e10" class="outline-3">
+<h3 id="org39d8e10">Structure Transformers</h3>
+<div class="outline-text-3" id="text-org39d8e10">
 <p>
 Once we have a list of private definitions, we need to transform regular calls into the <code>funcall</code> syntax and unquote quoted names of our functions since our function symbols are actually variables. Now Emacs Lisp is a functional programming language, but the way the functions are defined is through the <code>fset</code> special form rather than simply setting a variable to a lambda, which gives their symbols a different syntax than that of a lambda simply bound to a symbol.
 </p>
 </div>
 
-<div id="outline-container-org7494d92" class="outline-4">
-<h4 id="org7494d92">ns-transform-private-refs</h4>
-<div class="outline-text-4" id="text-org7494d92">
+<div id="outline-container-org031516a" class="outline-4">
+<h4 id="org031516a">ns-transform-private-refs</h4>
+<div class="outline-text-4" id="text-org031516a">
 <p>
 This is a recursive function that conducts a depth first search of the tree created by the s-expressions, modifying them so that they are properly referred to as variables. It unfortunately has a lot of special cases / repeated structure which indicates to me that it is not as elegant as it could be, though I decided to not focus too much effort on refactoring it since this is both a toy example and irritatingly fragile code.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="org87312e7"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-transform-private-refs</span> <span style="color: #bbb;">(</span>namespace private-refs forms<span style="color: #bbb;">)</span>
+<pre class="src src-emacs-lisp" id="org0c05004"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-transform-private-refs</span> <span style="color: #bbb;">(</span>namespace private-refs forms<span style="color: #bbb;">)</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">cond</span> <span style="color: #494949;">(</span><span style="color: #bbb;">(</span>not <span style="color: #494949;">(</span>eq <span style="color: #bbb;">(</span>type-of forms<span style="color: #bbb;">)</span> 'cons<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
          forms<span style="color: #494949;">)</span>
         <span style="color: #494949;">(</span><span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">and</span> <span style="color: #494949;">(</span>eq <span style="color: #bbb;">(</span>first forms<span style="color: #bbb;">)</span> 'quote<span style="color: #494949;">)</span>
@@ -294,14 +294,14 @@ This is a recursive function that conducts a depth first search of the tree crea
 </div>
 </div>
 
-<div id="outline-container-org65116d1" class="outline-4">
-<h4 id="org65116d1">ns-create-private-binds</h4>
-<div class="outline-text-4" id="text-org65116d1">
+<div id="outline-container-orge2c9152" class="outline-4">
+<h4 id="orge2c9152">ns-create-private-binds</h4>
+<div class="outline-text-4" id="text-orge2c9152">
 <p>
 This transforms private bindings into a listing of symbols value two length lists as used by the <code>let</code> special form. The only tricky bit is pulling symbols from defalias.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="orgc01028a"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-create-private-binds</span> <span style="color: #bbb;">(</span>namespace forms<span style="color: #bbb;">)</span>
+<pre class="src src-emacs-lisp" id="org3cc99d7"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-create-private-binds</span> <span style="color: #bbb;">(</span>namespace forms<span style="color: #bbb;">)</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> forms
        <span style="color: #494949;">(</span>-filter <span style="color: #bbb;">(</span>-partial #'ns-private? namespace<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
        <span style="color: #494949;">(</span>-map <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #494949;">(</span>form<span style="color: #494949;">)</span>
@@ -315,14 +315,14 @@ This transforms private bindings into a listing of symbols value two length list
 </div>
 </div>
 
-<div id="outline-container-org676247e" class="outline-4">
-<h4 id="org676247e">ns-remove-private-defs</h4>
-<div class="outline-text-4" id="text-org676247e">
+<div id="outline-container-org8f4288d" class="outline-4">
+<h4 id="org8f4288d">ns-remove-private-defs</h4>
+<div class="outline-text-4" id="text-org8f4288d">
 <p>
 This removes the private references from the list that is located in the public portion of the <code>let</code> special form, preventing their definition in the global lexical scope.
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="orgaec0d32"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-remove-private-defs</span> <span style="color: #bbb;">(</span>namespace forms<span style="color: #bbb;">)</span>
+<pre class="src src-emacs-lisp" id="org8225cc1"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">ns-remove-private-defs</span> <span style="color: #bbb;">(</span>namespace forms<span style="color: #bbb;">)</span>
   <span style="color: #bbb;">(</span>-filter <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">lambda</span> <span style="color: #bbb;">(</span>form<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>not <span style="color: #494949;">(</span>ns-private? namespace form<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> forms<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
@@ -331,22 +331,22 @@ This removes the private references from the list that is located in the public 
 </div>
 </div>
 
-<div id="outline-container-org4f7a6e7" class="outline-2">
-<h2 id="org4f7a6e7">Limitations</h2>
-<div class="outline-text-2" id="text-org4f7a6e7">
+<div id="outline-container-org56a8695" class="outline-2">
+<h2 id="org56a8695">Limitations</h2>
+<div class="outline-text-2" id="text-org56a8695">
 </div>
-<div id="outline-container-orgd2820ce" class="outline-3">
-<h3 id="orgd2820ce">Lexical Binding Needs to be On</h3>
-<div class="outline-text-3" id="text-orgd2820ce">
+<div id="outline-container-orgb7b4cb7" class="outline-3">
+<h3 id="orgb7b4cb7">Lexical Binding Needs to be On</h3>
+<div class="outline-text-3" id="text-orgb7b4cb7">
 <p>
 Lexical binding is not active by default and is buffer-local. This is actually pretty bad as it basically causes the lexical closures to suddenly disappear in a puff of smoke. I could use the <code>lexical-let</code> or <code>lexical-let*</code> functions in the <code>cl</code> library, which would solve the problem, though they are specified as being deprecated.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org82265db" class="outline-3">
-<h3 id="org82265db">Private Functions / Macros Cannot Be Called to Set Private Variables</h3>
-<div class="outline-text-3" id="text-org82265db">
+<div id="outline-container-orga1f8fd8" class="outline-3">
+<h3 id="orga1f8fd8">Private Functions / Macros Cannot Be Called to Set Private Variables</h3>
+<div class="outline-text-3" id="text-orga1f8fd8">
 <p>
 Unfortunately, because the <code>let*</code> special form does not produce lexical closures even with <code>lexical-binding</code> set to <code>t</code>, I cannot effectively use it. This means that all <code>let</code> forms are bound at the same time (rather than sequentially) and therefore cannot be called to set private variables or generate private code.
 </p>
@@ -358,26 +358,26 @@ I could write my own <code>let*</code> replacement to bind them sequentially, wh
 </div>
 </div>
 
-<div id="outline-container-orgf85c23d" class="outline-2">
-<h2 id="orgf85c23d">Possible Improvements</h2>
-<div class="outline-text-2" id="text-orgf85c23d">
+<div id="outline-container-orgd659852" class="outline-2">
+<h2 id="orgd659852">Possible Improvements</h2>
+<div class="outline-text-2" id="text-orgd659852">
 <p>
 Though it does show that Emacs has the fundamental components needed for private variables / functions already I think that some improvements could be made, namely the addition of the ability to import namespaces. I also might want to think beyond namespaces and look at implementing something altogether more general (though I don't want to simply write another object system for Emacs).
 </p>
 </div>
 
-<div id="outline-container-org7fbcdbf" class="outline-3">
-<h3 id="org7fbcdbf">Making Lexical Binding Default</h3>
-<div class="outline-text-3" id="text-org7fbcdbf">
+<div id="outline-container-org03f2fc7" class="outline-3">
+<h3 id="org03f2fc7">Making Lexical Binding Default</h3>
+<div class="outline-text-3" id="text-org03f2fc7">
 <p>
 There is also a major issue when dealing with code without lexical binding as in those cases the functions suddenly break as they are no longer lexical closures, and since <code>lexical-binding</code> is buffer-local, that kind of messes up a lot of code. Therefore I think the next step is to take a deep dive into Emacs Lisp code and look at how I could make lexical binding the default for all new files and the user environment.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org2aca74f" class="outline-3">
-<h3 id="org2aca74f">Higher Order Macros</h3>
-<div class="outline-text-3" id="text-org2aca74f">
+<div id="outline-container-orgdb98a79" class="outline-3">
+<h3 id="orgdb98a79">Higher Order Macros</h3>
+<div class="outline-text-3" id="text-orgdb98a79">
 <p>
 Another interesting possibility with namespaces is to drop the whole lexical closure thing instead make them macros that provide access to a list of lambdas indexed by the symbol provided. So for example:
 </p>
@@ -413,13 +413,13 @@ I might try it out sometime soon and will link to the blog post, regardless of h
 </div>
 </div>
 
-<div id="outline-container-org16c3d77" class="outline-2">
-<h2 id="org16c3d77">Further Thoughts</h2>
-<div class="outline-text-2" id="text-org16c3d77">
+<div id="outline-container-org5144993" class="outline-2">
+<h2 id="org5144993">Further Thoughts</h2>
+<div class="outline-text-2" id="text-org5144993">
 </div>
-<div id="outline-container-orgcbbf4b1" class="outline-3">
-<h3 id="orgcbbf4b1">Namespaces and Objects</h3>
-<div class="outline-text-3" id="text-orgcbbf4b1">
+<div id="outline-container-org28c5c6a" class="outline-3">
+<h3 id="org28c5c6a">Namespaces and Objects</h3>
+<div class="outline-text-3" id="text-org28c5c6a">
 <p>
 One interesting thing that I found while implementing this is that namespaces are in essence singlton static classes, and that it is really more proper to say that classes are the general case of namespaces. This actually makes me respect the python approach to namespaces a little more.
 </p>
@@ -434,18 +434,18 @@ Namespaces however, do not obviously make it so that you can couple state and da
 </div>
 </div>
 
-<div id="outline-container-org7e89e10" class="outline-3">
-<h3 id="org7e89e10">Inheritance</h3>
-<div class="outline-text-3" id="text-org7e89e10">
+<div id="outline-container-org6b7483c" class="outline-3">
+<h3 id="org6b7483c">Inheritance</h3>
+<div class="outline-text-3" id="text-org6b7483c">
 <p>
 It also became apparent that you can fairly easily implement all object oriented programming concepts including inheritance (contrary as to what is implied with <i>Let Over Lambda</i>) with lexical closures and lambdas. One simply makes it such that the closure will evaluate another closure within it's environment and then returns that closure, creating a sort of tower of lexical closures.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orga4dc5f3" class="outline-3">
-<h3 id="orga4dc5f3">Doing Without <code>let</code></h3>
-<div class="outline-text-3" id="text-orga4dc5f3">
+<div id="outline-container-orge74026d" class="outline-3">
+<h3 id="orge74026d">Doing Without <code>let</code></h3>
+<div class="outline-text-3" id="text-orge74026d">
 <p>
 It is possible to do this all without let, assuming you permit a modification of how <code>lambda</code> works. Instead of having <code>lambda</code> merely producing an anonymous function, imagine if it creates a new lexical scope and that a <code>set</code> function exists that can bind variables within that scope. Using this it is trivial to construct a <code>let</code> function using <code>set</code> and <code>lambda</code> alone. This has pretty much no practical application, though I thought the idea was somewhat cool.
 </p>
@@ -453,7 +453,7 @@ It is possible to do this all without let, assuming you permit a modification of
 </div>
 </div>
 <!-- Footnotes --><!-- 
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Specifically when using it to avoid polluting the global namespace <a href="source-code.html#org0d904f2">here</a>.</p></div></div>
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Specifically when using it to avoid polluting the global namespace <a href="source-code.html#org11417e5">here</a>.</p></div></div>
 
 <div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">This is very fun.</p></div></div>
 

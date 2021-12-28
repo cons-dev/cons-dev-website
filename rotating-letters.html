@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-5 00:05 -->
+<!-- 2021-W52-2 01:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Rotating Letters</title>
@@ -14,7 +14,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Rotating Letters
@@ -25,19 +25,19 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgda1e3c4">Idea</a>
+<li><a href="#org4268d5b">Idea</a>
 <ul>
-<li><a href="#orgf34bfb8">What Do I Mean By "Rotating Letters"?</a></li>
-<li><a href="#org604b142">A Digression on XOR Ciphers</a></li>
-<li><a href="#orgfd7f29f">The <code>rot-n</code> Function</a></li>
+<li><a href="#org0c6d6f3">What Do I Mean By "Rotating Letters"?</a></li>
+<li><a href="#orgd410c70">A Digression on XOR Ciphers</a></li>
+<li><a href="#org578a9f2">The <code>rot-n</code> Function</a></li>
 </ul>
 </li>
-<li><a href="#orgabb6766">English Words</a>
+<li><a href="#orgeca7e24">English Words</a>
 <ul>
-<li><a href="#orgc13dbda">Rot 13</a></li>
-<li><a href="#org170f278">Generalized Rotation</a>
+<li><a href="#org10f406f">Rot 13</a></li>
+<li><a href="#org04432c6">Generalized Rotation</a>
 <ul>
-<li><a href="#org3dce59f">Rot Cycles</a></li>
+<li><a href="#org0119cae">Rot Cycles</a></li>
 </ul>
 </li>
 </ul>
@@ -46,9 +46,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgda1e3c4" class="outline-2">
-<h2 id="orgda1e3c4">Idea</h2>
-<div class="outline-text-2" id="text-orgda1e3c4">
+<div id="outline-container-org4268d5b" class="outline-2">
+<h2 id="org4268d5b">Idea</h2>
+<div class="outline-text-2" id="text-org4268d5b">
 <p>
 When viewing Greg Egan's twitter he <a href="https://twitter.com/gregeganSF/status/1369228278599278599">mentioned</a> words that were the Rot-13 of each other and.
 </p>
@@ -58,9 +58,9 @@ Now I have a much more comprehensive list of words (obtained when looking for lo
 </p>
 </div>
 
-<div id="outline-container-orgf34bfb8" class="outline-3">
-<h3 id="orgf34bfb8">What Do I Mean By "Rotating Letters"?</h3>
-<div class="outline-text-3" id="text-orgf34bfb8">
+<div id="outline-container-org0c6d6f3" class="outline-3">
+<h3 id="org0c6d6f3">What Do I Mean By "Rotating Letters"?</h3>
+<div class="outline-text-3" id="text-org0c6d6f3">
 <p>
 When I say "rotating words" I simply mean.
 </p>
@@ -72,23 +72,23 @@ If you are used to modular arithmetic you could imagine it as simply adding 13 t
 </div>
 
 
-<div id="outline-container-org604b142" class="outline-3">
-<h3 id="org604b142">A Digression on XOR Ciphers</h3>
-<div class="outline-text-3" id="text-org604b142">
+<div id="outline-container-orgd410c70" class="outline-3">
+<h3 id="orgd410c70">A Digression on XOR Ciphers</h3>
+<div class="outline-text-3" id="text-orgd410c70">
 <p>
 Another interesting way to do this with actual encryption is the <code>XOR</code> cipher with a key. The rot-13 system is also in essence <code>XOR</code> though without any key.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgfd7f29f" class="outline-3">
-<h3 id="orgfd7f29f">The <code>rot-n</code> Function</h3>
-<div class="outline-text-3" id="text-orgfd7f29f">
+<div id="outline-container-org578a9f2" class="outline-3">
+<h3 id="org578a9f2">The <code>rot-n</code> Function</h3>
+<div class="outline-text-3" id="text-org578a9f2">
 <p>
 This shifts a word n letter to the right (or left) through modular addition and subtraction.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org5b18e38"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">rot-n</span>
+<pre class="src src-clojure" id="org102f0e2"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">rot-n</span>
   <span style="color: #a4a4a4; font-style: italic;">"Rotate or shift a word `</span><span style="color: #E53935; font-style: italic;">n</span><span style="color: #a4a4a4; font-style: italic;">` letters."</span>
   <span style="color: #bbb;">[</span>word shift<span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> word
@@ -104,13 +104,13 @@ This shifts a word n letter to the right (or left) through modular addition and 
 </div>
 </div>
 
-<div id="outline-container-orgabb6766" class="outline-2">
-<h2 id="orgabb6766">English Words</h2>
-<div class="outline-text-2" id="text-orgabb6766">
+<div id="outline-container-orgeca7e24" class="outline-2">
+<h2 id="orgeca7e24">English Words</h2>
+<div class="outline-text-2" id="text-orgeca7e24">
 </div>
-<div id="outline-container-orgc13dbda" class="outline-3">
-<h3 id="orgc13dbda">Rot 13</h3>
-<div class="outline-text-3" id="text-orgc13dbda">
+<div id="outline-container-org10f406f" class="outline-3">
+<h3 id="org10f406f">Rot 13</h3>
+<div class="outline-text-3" id="text-org10f406f">
 <p>
 Rot-13 is a classic example of english.
 </p>
@@ -167,9 +167,9 @@ This is fun, though not terribly interesting, to try to make it fun I will genra
 </div>
 </div>
 
-<div id="outline-container-org170f278" class="outline-3">
-<h3 id="org170f278">Generalized Rotation</h3>
-<div class="outline-text-3" id="text-org170f278">
+<div id="outline-container-org04432c6" class="outline-3">
+<h3 id="org04432c6">Generalized Rotation</h3>
+<div class="outline-text-3" id="text-org04432c6">
 <p>
 Rot 13 is a rather elegant because it, as mentioned before, allows you to return to the original value rather quickly. But now we may begin to wonder what we were evaluating there.
 </p>
@@ -179,9 +179,9 @@ What if we allowed for other values like rot-2 or rot-5? What would that look li
 </p>
 </div>
 
-<div id="outline-container-org3dce59f" class="outline-4">
-<h4 id="org3dce59f">Rot Cycles</h4>
-<div class="outline-text-4" id="text-org3dce59f">
+<div id="outline-container-org0119cae" class="outline-4">
+<h4 id="org0119cae">Rot Cycles</h4>
+<div class="outline-text-4" id="text-org0119cae">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 

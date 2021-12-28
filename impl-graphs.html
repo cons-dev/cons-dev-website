@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W52-1 20:22 -->
+<!-- 2021-W52-2 01:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Implementing Graphs</title>
@@ -14,7 +14,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Implementing Graphs</h1>
@@ -22,22 +22,22 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org1d48519">Introduction</a></li>
-<li><a href="#orgfa56aa1">Implementation</a>
+<li><a href="#org12b1d27">Introduction</a></li>
+<li><a href="#org1a4081a">Implementation</a>
 <ul>
-<li><a href="#orgce2de01">The Graph Protocol</a></li>
-<li><a href="#org8bb6cd6">Unweighted Graphs</a>
+<li><a href="#org1edd360">The Graph Protocol</a></li>
+<li><a href="#orgeaae7a5">Unweighted Graphs</a>
 <ul>
-<li><a href="#org07e9e06">Undirected Graphs</a></li>
-<li><a href="#org4393755">Directed Graphs</a></li>
+<li><a href="#orgef4c295">Undirected Graphs</a></li>
+<li><a href="#org1d314ca">Directed Graphs</a></li>
 </ul>
 </li>
-<li><a href="#org823f17b">Weighted Graphs</a>
+<li><a href="#orgdbbe7cf">Weighted Graphs</a>
 <ul>
-<li><a href="#org62fb6e2">Undirected Graphs</a></li>
-<li><a href="#org84ac615">Unweighted Graphs</a></li>
-<li><a href="#orge786e0c">Directed Graphs</a></li>
-<li><a href="#org4cdcc80">Utility Functions</a></li>
+<li><a href="#org1381f1d">Undirected Graphs</a></li>
+<li><a href="#org63ce27b">Unweighted Graphs</a></li>
+<li><a href="#org893b788">Directed Graphs</a></li>
+<li><a href="#org3b02209">Utility Functions</a></li>
 </ul>
 </li>
 </ul>
@@ -46,20 +46,20 @@
 </div>
 </div>
 
-<div id="outline-container-org1d48519" class="outline-2">
-<h2 id="org1d48519">Introduction</h2>
+<div id="outline-container-org12b1d27" class="outline-2">
+<h2 id="org12b1d27">Introduction</h2>
 </div>
 
-<div id="outline-container-orgfa56aa1" class="outline-2">
-<h2 id="orgfa56aa1">Implementation</h2>
-<div class="outline-text-2" id="text-orgfa56aa1">
+<div id="outline-container-org1a4081a" class="outline-2">
+<h2 id="org1a4081a">Implementation</h2>
+<div class="outline-text-2" id="text-org1a4081a">
 <p>
 To implement a graph we treat the graphs like a series of nodes.
 </p>
 </div>
-<div id="outline-container-orgce2de01" class="outline-3">
-<h3 id="orgce2de01">The Graph Protocol</h3>
-<div class="outline-text-3" id="text-orgce2de01">
+<div id="outline-container-org1edd360" class="outline-3">
+<h3 id="org1edd360">The Graph Protocol</h3>
+<div class="outline-text-3" id="text-org1edd360">
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defprotocol</span> <span style="color: #E53935;">BasicGraph</span>
   <span style="color: #a4a4a4; font-style: italic;">"A protocol defining a weighted or unweighted graph."</span>
@@ -83,21 +83,21 @@ To implement a graph we treat the graphs like a series of nodes.
 </div>
 
 
-<div id="outline-container-org8bb6cd6" class="outline-3">
-<h3 id="org8bb6cd6">Unweighted Graphs</h3>
-<div class="outline-text-3" id="text-org8bb6cd6">
+<div id="outline-container-orgeaae7a5" class="outline-3">
+<h3 id="orgeaae7a5">Unweighted Graphs</h3>
+<div class="outline-text-3" id="text-orgeaae7a5">
 </div>
-<div id="outline-container-org07e9e06" class="outline-4">
-<h4 id="org07e9e06">Undirected Graphs</h4>
+<div id="outline-container-orgef4c295" class="outline-4">
+<h4 id="orgef4c295">Undirected Graphs</h4>
 </div>
-<div id="outline-container-org4393755" class="outline-4">
-<h4 id="org4393755">Directed Graphs</h4>
+<div id="outline-container-org1d314ca" class="outline-4">
+<h4 id="org1d314ca">Directed Graphs</h4>
 </div>
 </div>
 
-<div id="outline-container-org823f17b" class="outline-3">
-<h3 id="org823f17b">Weighted Graphs</h3>
-<div class="outline-text-3" id="text-org823f17b">
+<div id="outline-container-orgdbbe7cf" class="outline-3">
+<h3 id="orgdbbe7cf">Weighted Graphs</h3>
+<div class="outline-text-3" id="text-orgdbbe7cf">
 <p>
 So let's start by defining a
 </p>
@@ -108,9 +108,9 @@ class clojure.lang.Compiler$CompilerException
 </div>
 
 
-<div id="outline-container-org62fb6e2" class="outline-4">
-<h4 id="org62fb6e2">Undirected Graphs</h4>
-<div class="outline-text-4" id="text-org62fb6e2">
+<div id="outline-container-org1381f1d" class="outline-4">
+<h4 id="org1381f1d">Undirected Graphs</h4>
+<div class="outline-text-4" id="text-org1381f1d">
 <p>
 To start out we define an undirected graph. But first, let's ask the question, what <i>is</i> a graph? How do graphs work?
 </p>
@@ -150,9 +150,9 @@ From here we can also set up
 </div>
 
 
-<div id="outline-container-org84ac615" class="outline-4">
-<h4 id="org84ac615">Unweighted Graphs</h4>
-<div class="outline-text-4" id="text-org84ac615">
+<div id="outline-container-org63ce27b" class="outline-4">
+<h4 id="org63ce27b">Unweighted Graphs</h4>
+<div class="outline-text-4" id="text-org63ce27b">
 <p>
 An unweighted graph is implemented simply by ignoring the <code>:weight</code> value in the graph. In this graph the distance between nodes does not matter. Likewise.
 </p>
@@ -232,9 +232,9 @@ In a sense it is a more complicated version of the directed graph.
 </div>
 
 
-<div id="outline-container-orge786e0c" class="outline-4">
-<h4 id="orge786e0c">Directed Graphs</h4>
-<div class="outline-text-4" id="text-orge786e0c">
+<div id="outline-container-org893b788" class="outline-4">
+<h4 id="org893b788">Directed Graphs</h4>
+<div class="outline-text-4" id="text-org893b788">
 <p>
 So to start out we basically do the same thing as before, though this time.
 </p>
@@ -308,9 +308,9 @@ Now you may notice that the directed graph case is ultimately a superset of the 
 </div>
 </div>
 
-<div id="outline-container-org4cdcc80" class="outline-4">
-<h4 id="org4cdcc80">Utility Functions</h4>
-<div class="outline-text-4" id="text-org4cdcc80">
+<div id="outline-container-org3b02209" class="outline-4">
+<h4 id="org3b02209">Utility Functions</h4>
+<div class="outline-text-4" id="text-org3b02209">
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">add-node</span> <span style="color: #bbb;">[</span>graph node-sym<span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span>assoc graph node-sym <span style="color: #494949;">(</span>-&gt;GraphNode node-sym <span style="color: #E53935;">nil</span> 0<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>

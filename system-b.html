@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-5 19:18 -->
+<!-- 2021-W52-2 01:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>system/b</title>
@@ -14,7 +14,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">system/b
@@ -25,41 +25,41 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org565d039">Introduction</a></li>
-<li><a href="#org9177068">Example Programs</a>
+<li><a href="#orgd326edd">Introduction</a></li>
+<li><a href="#orgc1887ad">Example Programs</a>
 <ul>
-<li><a href="#orgf69e44a">mult.sba</a></li>
-<li><a href="#org4f4b712">subEX.sba</a></li>
+<li><a href="#orgf4dea26">mult.sba</a></li>
+<li><a href="#org0a70a5b">subEX.sba</a></li>
 </ul>
 </li>
-<li><a href="#org1e2dade">Source Code</a>
+<li><a href="#org5883bbb">Source Code</a>
 <ul>
-<li><a href="#org7e6e30a">systemBshell.cpp</a></li>
-<li><a href="#orgdb82a0d">SystemBvm.h</a></li>
-<li><a href="#org4d25e41">ioStrings.h</a></li>
-<li><a href="#org6df7fac">assembler.h</a></li>
+<li><a href="#org2d91f4d">systemBshell.cpp</a></li>
+<li><a href="#org56b8142">SystemBvm.h</a></li>
+<li><a href="#orgfc07c3f">ioStrings.h</a></li>
+<li><a href="#orgad034be">assembler.h</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org565d039" class="outline-2">
-<h2 id="org565d039">Introduction</h2>
-<div class="outline-text-2" id="text-org565d039">
+<div id="outline-container-orgd326edd" class="outline-2">
+<h2 id="orgd326edd">Introduction</h2>
+<div class="outline-text-2" id="text-orgd326edd">
 <p>
 Another project from my early days in programming <label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> About three years ago now, wow! Amazing how time flies.</span>, a simple memory-to-memory virtual machine written in C++. I currently intend to upgrade it a bit eventually with interrupt codes, though maybe I will wait until I write a proper LISP machine with tagged memory / typed instructions. To compile it simply run GCC on systemBshell.cpp.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org9177068" class="outline-2">
-<h2 id="org9177068">Example Programs</h2>
-<div class="outline-text-2" id="text-org9177068">
+<div id="outline-container-orgc1887ad" class="outline-2">
+<h2 id="orgc1887ad">Example Programs</h2>
+<div class="outline-text-2" id="text-orgc1887ad">
 </div>
-<div id="outline-container-orgf69e44a" class="outline-3">
-<h3 id="orgf69e44a">mult.sba</h3>
-<div class="outline-text-3" id="text-orgf69e44a">
+<div id="outline-container-orgf4dea26" class="outline-3">
+<h3 id="orgf4dea26">mult.sba</h3>
+<div class="outline-text-3" id="text-orgf4dea26">
 <div class="org-src-container">
 <pre class="src src-asm"><span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">this is a program that finds c for ;</span>
 <span style="color: #a4a4a4; font-style: italic;">;             </span><span style="color: #a4a4a4; font-style: italic;">a * b = c              ;</span>
@@ -77,9 +77,9 @@ Another project from my early days in programming <label class="sidenote-number"
 </div>
 </div>
 </div>
-<div id="outline-container-org4f4b712" class="outline-3">
-<h3 id="org4f4b712">subEX.sba</h3>
-<div class="outline-text-3" id="text-org4f4b712">
+<div id="outline-container-org0a70a5b" class="outline-3">
+<h3 id="org0a70a5b">subEX.sba</h3>
+<div class="outline-text-3" id="text-org0a70a5b">
 <div class="org-src-container">
 <pre class="src src-asm"><span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">this is a program that finds c for ;</span>
 <span style="color: #a4a4a4; font-style: italic;">;             </span><span style="color: #a4a4a4; font-style: italic;">a - b = c              ;</span>
@@ -98,13 +98,13 @@ Another project from my early days in programming <label class="sidenote-number"
 </div>
 
 
-<div id="outline-container-org1e2dade" class="outline-2">
-<h2 id="org1e2dade">Source Code</h2>
-<div class="outline-text-2" id="text-org1e2dade">
+<div id="outline-container-org5883bbb" class="outline-2">
+<h2 id="org5883bbb">Source Code</h2>
+<div class="outline-text-2" id="text-org5883bbb">
 </div>
-<div id="outline-container-org7e6e30a" class="outline-3">
-<h3 id="org7e6e30a">systemBshell.cpp</h3>
-<div class="outline-text-3" id="text-org7e6e30a">
+<div id="outline-container-org2d91f4d" class="outline-3">
+<h3 id="org2d91f4d">systemBshell.cpp</h3>
+<div class="outline-text-3" id="text-org2d91f4d">
 <div class="org-src-container">
 <pre class="src src-C++"><span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">iostream</span><span style="color: #494949;">&gt;</span>
 <span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">string</span><span style="color: #494949;">&gt;</span>
@@ -252,9 +252,9 @@ Another project from my early days in programming <label class="sidenote-number"
 </div>
 </div>
 </div>
-<div id="outline-container-orgdb82a0d" class="outline-3">
-<h3 id="orgdb82a0d">SystemBvm.h</h3>
-<div class="outline-text-3" id="text-orgdb82a0d">
+<div id="outline-container-org56b8142" class="outline-3">
+<h3 id="org56b8142">SystemBvm.h</h3>
+<div class="outline-text-3" id="text-org56b8142">
 <div class="org-src-container">
 <pre class="src src-C++"><span style="color: #000; font-weight: bold;">#pragma</span> once
 
@@ -675,9 +675,9 @@ Another project from my early days in programming <label class="sidenote-number"
 </div>
 </div>
 </div>
-<div id="outline-container-org4d25e41" class="outline-3">
-<h3 id="org4d25e41">ioStrings.h</h3>
-<div class="outline-text-3" id="text-org4d25e41">
+<div id="outline-container-orgfc07c3f" class="outline-3">
+<h3 id="orgfc07c3f">ioStrings.h</h3>
+<div class="outline-text-3" id="text-orgfc07c3f">
 <p>
 This is a file that I used to store functions that would return strings. Honestly I probably should have just had a file of constant functions, but these were the old days when I didn't know better and wanted everything to be "functional" regardless of how good an idea that was. <label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> Be glad I have spared you from the worst of it where I wrote several C++ programs with only recursion and constants, no loops or mutable variables. I probably gave my algorithms teacher nightmares.</span> As a consequence I did things a bit weirdly.
 </p>
@@ -856,9 +856,9 @@ This is a file that I used to store functions that would return strings. Honestl
 </div>
 </div>
 
-<div id="outline-container-org6df7fac" class="outline-3">
-<h3 id="org6df7fac">assembler.h</h3>
-<div class="outline-text-3" id="text-org6df7fac">
+<div id="outline-container-orgad034be" class="outline-3">
+<h3 id="orgad034be">assembler.h</h3>
+<div class="outline-text-3" id="text-orgad034be">
 <div class="org-src-container">
 <pre class="src src-C++"><span style="color: #000; font-weight: bold;">#pragma</span> once
 

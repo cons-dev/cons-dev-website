@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-5 00:05 -->
+<!-- 2021-W52-2 01:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Control Block Diagram Syntax</title>
@@ -35,7 +35,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Control Block Diagram Syntax</h1>
@@ -43,42 +43,42 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org86da886">Introduction</a></li>
-<li><a href="#orga35a0b3">Nodes</a></li>
-<li><a href="#orgc060565">Edges</a>
+<li><a href="#orgf7c9d9d">Introduction</a></li>
+<li><a href="#org0665606">Nodes</a></li>
+<li><a href="#org68dbc9d">Edges</a>
 <ul>
-<li><a href="#org889a697">Process Nodes</a></li>
+<li><a href="#org7ba3962">Process Nodes</a></li>
 </ul>
 </li>
-<li><a href="#orgbf3cec1">Text</a></li>
-<li><a href="#org7b45ddd">Example Diagrams</a>
+<li><a href="#org5a4b1c0">Text</a></li>
+<li><a href="#org5076fac">Example Diagrams</a>
 <ul>
-<li><a href="#org6c0b43e">Thermostat</a></li>
-<li><a href="#orge313947">Sailboat</a></li>
+<li><a href="#orgefb2083">Thermostat</a></li>
+<li><a href="#org4394ee1">Sailboat</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org86da886" class="outline-2">
-<h2 id="org86da886">Introduction</h2>
-<div class="outline-text-2" id="text-org86da886">
+<div id="outline-container-orgf7c9d9d" class="outline-2">
+<h2 id="orgf7c9d9d">Introduction</h2>
+<div class="outline-text-2" id="text-orgf7c9d9d">
 <p>
 Control diagrams are a useful tool for representing control systems. However, there doesn't appear to be any standard for syntax highlighting . Therefore, I have decided to come up with a little syntax highlighting document of sorts, as well as a standardized 
 </p>
 </div>
 </div>
 
-<div id="outline-container-orga35a0b3" class="outline-2">
-<h2 id="orga35a0b3">Nodes</h2>
-<div class="outline-text-2" id="text-orga35a0b3">
+<div id="outline-container-org0665606" class="outline-2">
+<h2 id="org0665606">Nodes</h2>
+<div class="outline-text-2" id="text-org0665606">
 <dl class="org-dl">
 <dt>actuators</dt><dd><p>
 red and in boxes
 </p>
 
-<div id="orgcaf3840" class="figure">
+<div id="org1120786" class="figure">
 <p><img src="images/block-diagram-actuator_96ae0f8e-df0f-4160-8f38-5fa3281a3ae3.png" alt="block-diagram-actuator_96ae0f8e-df0f-4160-8f38-5fa3281a3ae3.png" />
 </p>
 </div></dd>
@@ -97,7 +97,7 @@ Summing points and other similar regions (where multiple signals are added toget
 Likewise, other similar, simple functions with multiple inputs can be drawn similarly.
 </p>
 
-<div id="org201b772" class="figure">
+<div id="org43d6736" class="figure">
 <p><img src="./images/actuator-input-edges_0d80255a-8ff5-4e31-9d0c-10eec4ff5efc.png" alt="actuator-input-edges_0d80255a-8ff5-4e31-9d0c-10eec4ff5efc.png" />
 </p>
 </div></dd>
@@ -112,23 +112,23 @@ Likewise, other similar, simple functions with multiple inputs can be drawn simi
 </div>
 </div>
 
-<div id="outline-container-orgc060565" class="outline-2">
-<h2 id="orgc060565">Edges</h2>
-<div class="outline-text-2" id="text-orgc060565">
+<div id="outline-container-org68dbc9d" class="outline-2">
+<h2 id="org68dbc9d">Edges</h2>
+<div class="outline-text-2" id="text-org68dbc9d">
 <dl class="org-dl">
 <dt>actuator and input edges</dt><dd>red, similarly to actuators, to indicate action</dd>
 </dl>
 
-<div id="orge3c6574" class="figure">
+<div id="org3509f55" class="figure">
 <p><img src="./images/actuator-input-edges_0d80255a-8ff5-4e31-9d0c-10eec4ff5efc.png" alt="actuator-input-edges_0d80255a-8ff5-4e31-9d0c-10eec4ff5efc.png" />
 </p>
 </div>
 </div>
 
 
-<div id="outline-container-org889a697" class="outline-3">
-<h3 id="org889a697">Process Nodes</h3>
-<div class="outline-text-3" id="text-org889a697">
+<div id="outline-container-org7ba3962" class="outline-3">
+<h3 id="org7ba3962">Process Nodes</h3>
+<div class="outline-text-3" id="text-org7ba3962">
 <p>
 Process nodes are 
 </p>
@@ -137,9 +137,9 @@ Process nodes are
 </div>
 
 
-<div id="outline-container-orgbf3cec1" class="outline-2">
-<h2 id="orgbf3cec1">Text</h2>
-<div class="outline-text-2" id="text-orgbf3cec1">
+<div id="outline-container-org5a4b1c0" class="outline-2">
+<h2 id="org5a4b1c0">Text</h2>
+<div class="outline-text-2" id="text-org5a4b1c0">
 <p>
 This is a collection of .
 </p>
@@ -156,15 +156,15 @@ Along with color schemes, the font choices also impact the control diagram. Name
 </div>
 
 
-<div id="outline-container-org7b45ddd" class="outline-2">
-<h2 id="org7b45ddd">Example Diagrams</h2>
-<div class="outline-text-2" id="text-org7b45ddd">
+<div id="outline-container-org5076fac" class="outline-2">
+<h2 id="org5076fac">Example Diagrams</h2>
+<div class="outline-text-2" id="text-org5076fac">
 </div>
-<div id="outline-container-org6c0b43e" class="outline-3">
-<h3 id="org6c0b43e">Thermostat</h3>
-<div class="outline-text-3" id="text-org6c0b43e">
+<div id="outline-container-orgefb2083" class="outline-3">
+<h3 id="orgefb2083">Thermostat</h3>
+<div class="outline-text-3" id="text-orgefb2083">
 <div class="org-src-container">
-<pre class="src src-dot" id="org1ff65ba"><span style="color: #E53935; font-style: italic;">digraph</span> <span style="font-weight: bold; font-style: italic;">feedback</span> <span style="color: #494949;">{</span>
+<pre class="src src-dot" id="org16e43ae"><span style="color: #E53935; font-style: italic;">digraph</span> <span style="font-weight: bold; font-style: italic;">feedback</span> <span style="color: #494949;">{</span>
         <span style="font-style: italic;">splines=</span>ortho;
         <span style="font-style: italic;">size=</span><span style="color: #494949;">"15,15!"</span>;
         <span style="font-style: italic;">fontpath=</span><span style="color: #494949;">"~/.local/share/fonts"</span>;
@@ -209,15 +209,15 @@ Here we define a simple thermostat with a set point that
 </p>
 
 
-<div id="org7dcfbff" class="figure">
+<div id="org1c5f5d3" class="figure">
 <p><img src="./images/thermostaht-example_df43ffb6-638b-46e5-a46e-215e72f4cfcc.png" alt="thermostaht-example_df43ffb6-638b-46e5-a46e-215e72f4cfcc.png" />
 </p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orge313947" class="outline-3">
-<h3 id="orge313947">Sailboat</h3>
+<div id="outline-container-org4394ee1" class="outline-3">
+<h3 id="org4394ee1">Sailboat</h3>
 </div>
 </div>
 <!-- Footnotes --><!-- 

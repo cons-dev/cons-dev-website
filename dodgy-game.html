@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W52-1 23:22 -->
+<!-- 2021-W52-2 01:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Dodgy Game</title>
@@ -14,7 +14,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Dodgy Game
@@ -25,26 +25,26 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgae79a48">Introduction</a></li>
-<li><a href="#orge891f3c">Basic Setup</a>
+<li><a href="#org7f96cfb">Introduction</a></li>
+<li><a href="#org1804c97">Basic Setup</a>
 <ul>
-<li><a href="#org36a62df">Project Configuration</a></li>
-<li><a href="#org1c003aa">Index File</a></li>
-<li><a href="#org3bb3520">Build/Deploy Script</a></li>
+<li><a href="#org86215bf">Project Configuration</a></li>
+<li><a href="#orgf2b413b">Index File</a></li>
+<li><a href="#orgc305a0b">Build/Deploy Script</a></li>
 </ul>
 </li>
-<li><a href="#org62ff68a">Core</a></li>
-<li><a href="#org077ea97">Engine</a></li>
-<li><a href="#org8fd9af6">Input</a></li>
-<li><a href="#orgfc5b6a9">Render</a></li>
-<li><a href="#orgf1be744">Stages</a></li>
+<li><a href="#org99d56f2">Core</a></li>
+<li><a href="#org8f40727">Engine</a></li>
+<li><a href="#org1b8eadd">Input</a></li>
+<li><a href="#org117d1db">Render</a></li>
+<li><a href="#org46d4c75">Stages</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgae79a48" class="outline-2">
-<h2 id="orgae79a48">Introduction</h2>
-<div class="outline-text-2" id="text-orgae79a48">
+<div id="outline-container-org7f96cfb" class="outline-2">
+<h2 id="org7f96cfb">Introduction</h2>
+<div class="outline-text-2" id="text-org7f96cfb">
 <p>
 This is a small game I wrote a while back when I wanted to mess around with clojurescript. I am currently working on rewriting it with clara-rules. You can expect this file to be a WIP. You can play it <a href="dodgy/resources/public/index.html">here</a>.
 </p>
@@ -55,13 +55,13 @@ I think that, when I do refactor it <label class="sidenote-number" for="1"><sup>
 </div>
 </div>
 
-<div id="outline-container-orge891f3c" class="outline-2">
-<h2 id="orge891f3c">Basic Setup</h2>
-<div class="outline-text-2" id="text-orge891f3c">
+<div id="outline-container-org1804c97" class="outline-2">
+<h2 id="org1804c97">Basic Setup</h2>
+<div class="outline-text-2" id="text-org1804c97">
 </div>
-<div id="outline-container-org36a62df" class="outline-3">
-<h3 id="org36a62df">Project Configuration</h3>
-<div class="outline-text-3" id="text-org36a62df">
+<div id="outline-container-org86215bf" class="outline-3">
+<h3 id="org86215bf">Project Configuration</h3>
+<div class="outline-text-3" id="text-org86215bf">
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defproject</span> <span style="font-weight: bold; font-style: italic;">dodgy</span> <span style="color: #494949;">"0.1.0-SNAPSHOT"</span>
   <span style="color: #E53935;">:description</span> <span style="color: #494949;">"FIXME: write description"</span>
@@ -104,9 +104,9 @@ I think that, when I do refactor it <label class="sidenote-number" for="1"><sup>
 </div>
 </div>
 </div>
-<div id="outline-container-org1c003aa" class="outline-3">
-<h3 id="org1c003aa">Index File</h3>
-<div class="outline-text-3" id="text-org1c003aa">
+<div id="outline-container-orgf2b413b" class="outline-3">
+<h3 id="orgf2b413b">Index File</h3>
+<div class="outline-text-3" id="text-orgf2b413b">
 <p>
 This is the file used as the index of the game.
 </p>
@@ -132,9 +132,9 @@ This is the file used as the index of the game.
 </div>
 </div>
 
-<div id="outline-container-org3bb3520" class="outline-3">
-<h3 id="org3bb3520">Build/Deploy Script</h3>
-<div class="outline-text-3" id="text-org3bb3520">
+<div id="outline-container-orgc305a0b" class="outline-3">
+<h3 id="orgc305a0b">Build/Deploy Script</h3>
+<div class="outline-text-3" id="text-orgc305a0b">
 <p>
 A small script that builds the game. Deployments copy the code to the public directory using the Emacs project interface.
 </p>
@@ -148,9 +148,9 @@ lein cljsbuild once optimized
 </div>
 </div>
 
-<div id="outline-container-org62ff68a" class="outline-2">
-<h2 id="org62ff68a">Core</h2>
-<div class="outline-text-2" id="text-org62ff68a">
+<div id="outline-container-org99d56f2" class="outline-2">
+<h2 id="org99d56f2">Core</h2>
+<div class="outline-text-2" id="text-org99d56f2">
 <p>
 The core of the game which sets the initial state.
 </p>
@@ -206,9 +206,9 @@ The core of the game which sets the initial state.
 </div>
 </div>
 </div>
-<div id="outline-container-org077ea97" class="outline-2">
-<h2 id="org077ea97">Engine</h2>
-<div class="outline-text-2" id="text-org077ea97">
+<div id="outline-container-org8f40727" class="outline-2">
+<h2 id="org8f40727">Engine</h2>
+<div class="outline-text-2" id="text-org8f40727">
 <p>
 The engine behind the game. It provides utility functions that are used in the state update function. I will be rewriting these as I refactor the code-base of the game.
 </p>
@@ -319,9 +319,9 @@ The engine behind the game. It provides utility functions that are used in the s
 </div>
 </div>
 </div>
-<div id="outline-container-org8fd9af6" class="outline-2">
-<h2 id="org8fd9af6">Input</h2>
-<div class="outline-text-2" id="text-org8fd9af6">
+<div id="outline-container-org1b8eadd" class="outline-2">
+<h2 id="org1b8eadd">Input</h2>
+<div class="outline-text-2" id="text-org1b8eadd">
 <p>
 A small collection of input wrappers.
 </p>
@@ -350,9 +350,9 @@ A small collection of input wrappers.
 </div>
 </div>
 </div>
-<div id="outline-container-orgfc5b6a9" class="outline-2">
-<h2 id="orgfc5b6a9">Render</h2>
-<div class="outline-text-2" id="text-orgfc5b6a9">
+<div id="outline-container-org117d1db" class="outline-2">
+<h2 id="org117d1db">Render</h2>
+<div class="outline-text-2" id="text-org117d1db">
 <p>
 The rendering utilities. It renders the game regardless of the stage.
 </p>
@@ -395,9 +395,9 @@ The rendering utilities. It renders the game regardless of the stage.
 </div>
 </div>
 
-<div id="outline-container-orgf1be744" class="outline-2">
-<h2 id="orgf1be744">Stages</h2>
-<div class="outline-text-2" id="text-orgf1be744">
+<div id="outline-container-org46d4c75" class="outline-2">
+<h2 id="org46d4c75">Stages</h2>
+<div class="outline-text-2" id="text-org46d4c75">
 <p>
 A series of different functions that serves to manage the state of the game, splitting it into a number of different stages that are synchronized with the rendering function. Each stage manages the state of the code and changes
 between the different stages. Future games will not use a stage system and instead endeavor for a more simple mono-stage rule-based system.

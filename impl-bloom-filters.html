@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-5 22:49 -->
+<!-- 2021-W52-2 01:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Implementing Bloom Filters</title>
@@ -35,7 +35,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img id="site-logo" src="images/website-logo.png" /></a></div>
+<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Implementing Bloom Filters</h1>
@@ -43,62 +43,62 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org343a0b2">Introduction</a></li>
-<li><a href="#orgcff1b5b">Algorithm</a>
+<li><a href="#org34fcf71">Introduction</a></li>
+<li><a href="#org3918e70">Algorithm</a>
 <ul>
-<li><a href="#orgb698c3a">Example</a></li>
+<li><a href="#orgff72c28">Example</a></li>
 </ul>
 </li>
-<li><a href="#org683b428">Implementation</a>
+<li><a href="#org702e665">Implementation</a>
 <ul>
-<li><a href="#org693d01e">Hash Function</a>
+<li><a href="#orga1fd184">Hash Function</a>
 <ul>
-<li><a href="#orgff2920c">pads</a></li>
-<li><a href="#orgc027a75">hash-obj</a></li>
-<li><a href="#org6749d9c">bloom-hash</a></li>
+<li><a href="#org8d9d571">pads</a></li>
+<li><a href="#orgdd94e19">hash-obj</a></li>
+<li><a href="#org1fdc717">bloom-hash</a></li>
 </ul>
 </li>
-<li><a href="#org7b73372">optimal-k</a></li>
-<li><a href="#org2d7907a">Bloom Filter Objects</a>
+<li><a href="#org1c38b5a">optimal-k</a></li>
+<li><a href="#org2b152c2">Bloom Filter Objects</a>
 <ul>
-<li><a href="#org0a67f68">The BasicBloomFilter Record</a></li>
-<li><a href="#org9ff6e36">The CountingBloomFilter Record</a></li>
+<li><a href="#org0864881">The BasicBloomFilter Record</a></li>
+<li><a href="#orge6b3655">The CountingBloomFilter Record</a></li>
 </ul>
 </li>
-<li><a href="#org8a800de">Tangled Code Block</a></li>
+<li><a href="#orgf967194">Tangled Code Block</a></li>
 </ul>
 </li>
-<li><a href="#org9aeb400">Conclusion</a></li>
+<li><a href="#org8fcea50">Conclusion</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org343a0b2" class="outline-2">
-<h2 id="org343a0b2">Introduction</h2>
-<div class="outline-text-2" id="text-org343a0b2">
+<div id="outline-container-org34fcf71" class="outline-2">
+<h2 id="org34fcf71">Introduction</h2>
+<div class="outline-text-2" id="text-org34fcf71">
 <p>
 This will be the first post in my "Implementing" series of tutorials, where I implement a common (or not so common) algorithm and describe how to use it. Bloom filters quickly give you an answer of if something is probably in a set, or definitely not in a set. This can be used to reduce search times for high volume but low access speed media.<label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> A good example would be a collection of backup disk or (gasp) tape drives.</span>
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgcff1b5b" class="outline-2">
-<h2 id="orgcff1b5b">Algorithm</h2>
-<div class="outline-text-2" id="text-orgcff1b5b">
+<div id="outline-container-org3918e70" class="outline-2">
+<h2 id="org3918e70">Algorithm</h2>
+<div class="outline-text-2" id="text-org3918e70">
 <p>
 Bloom filters are really simple if you know how hash functions work. You create a series of \(k\) hash functions who output numbers from \(0\) to \(m\), the size of the filter array. To insert items into the filter you hash the item with the functions and set the indices provided to true<label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> Or 1, or incrementing a number.</span>. To check that an element is probably contained in the set or definitely not contained in the set you simply check that all the indices are set to a truth-y value.
 </p>
 </div>
 
-<div id="outline-container-orgb698c3a" class="outline-3">
-<h3 id="orgb698c3a">Example</h3>
-<div class="outline-text-3" id="text-orgb698c3a">
+<div id="outline-container-orgff72c28" class="outline-3">
+<h3 id="orgff72c28">Example</h3>
+<div class="outline-text-3" id="text-orgff72c28">
 <p>
 The string <code>"Bloom filters are awesome!"</code> is hashed in a simple bloom filter of \(m=16\), \(k=4\) and converted into a list of indicies who are set to the <code>true</code>, or in this case <code>1</code>.
 </p>
 
-<div id="orgd1f604d" class="figure">
-<p><img src="./images/bloom-filter-add-1_6a931db0-db9f-4ea8-8f88-7fba73d52576.png" alt="bloom-filter-add-1_6a931db0-db9f-4ea8-8f88-7fba73d52576.png" />
+<div id="org44e3f7a" class="figure">
+<p><img src="./images/bloom-filter-add-1_6a931db0-db9f-4ea8-8f88-7fba73d52576.png" alt="The string 'Bloom filters are awesome!' being added to a bloom filter." />
 </p>
 </div>
 
@@ -106,8 +106,8 @@ The string <code>"Bloom filters are awesome!"</code> is hashed in a simple bloom
 Next we add the string <code>"Hello World."</code> to our bloom filter.
 </p>
 
-<div id="orgbfdbecf" class="figure">
-<p><img src="./images/bloom-filter-add-2_6a931db0-db9f-4ea8-8f88-7fba73d52576.png" alt="bloom-filter-add-2_6a931db0-db9f-4ea8-8f88-7fba73d52576.png" />
+<div id="orgf60dc74" class="figure">
+<p><img src="./images/bloom-filter-add-2_6a931db0-db9f-4ea8-8f88-7fba73d52576.png" alt="The string 'Hello World.' being added to a blom filter." />
 </p>
 </div>
 
@@ -115,8 +115,8 @@ Next we add the string <code>"Hello World."</code> to our bloom filter.
 To determine if something is in the set we can check the indices output by our hash functions are set to 1 when we hash an object. If all of them are set to <code>1</code> it is <i>probably</i> within the bloom filter. If any one of them is <code>0</code> then it is <i>definitely not</i> in the bloom filter.
 </p>
 
-<div id="org4be7522" class="figure">
-<p><img src="./images/bloom-filter-add-3_6a931db0-db9f-4ea8-8f88-7fba73d52576.png" alt="bloom-filter-add-3_6a931db0-db9f-4ea8-8f88-7fba73d52576.png" />
+<div id="org3468bc1" class="figure">
+<p><img src="./images/bloom-filter-add-3_6a931db0-db9f-4ea8-8f88-7fba73d52576.png" alt="CHecking if the number 27 is in our bloom filter, leading to a false-postiive." />
 </p>
 </div>
 
@@ -128,25 +128,25 @@ And now we can clearly see that <code>27</code> is in the bloom fitler&#x2026; o
 </div>
 
 
-<div id="outline-container-org683b428" class="outline-2">
-<h2 id="org683b428">Implementation</h2>
-<div class="outline-text-2" id="text-org683b428">
+<div id="outline-container-org702e665" class="outline-2">
+<h2 id="org702e665">Implementation</h2>
+<div class="outline-text-2" id="text-org702e665">
 </div>
-<div id="outline-container-org693d01e" class="outline-3">
-<h3 id="org693d01e">Hash Function</h3>
-<div class="outline-text-3" id="text-org693d01e">
+<div id="outline-container-orga1fd184" class="outline-3">
+<h3 id="orga1fd184">Hash Function</h3>
+<div class="outline-text-3" id="text-orga1fd184">
 <p>
 Here we implement a simple folding hash function that takes arguments and then folds them over a list.
 </p>
 </div>
-<div id="outline-container-orgff2920c" class="outline-4">
-<h4 id="orgff2920c">pads</h4>
-<div class="outline-text-4" id="text-orgff2920c">
+<div id="outline-container-org8d9d571" class="outline-4">
+<h4 id="org8d9d571">pads</h4>
+<div class="outline-text-4" id="text-org8d9d571">
 <p>
 The bloom filter requires a series of different hash functions. To generate them we simply use a list of large prime number <code>pads</code> that produce hash functions that yield wildly different outputs.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org5e875f0"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> ^<span style="color: #E53935;">:private</span> <span style="font-style: italic;">pads</span> <span style="color: #bbb;">[</span>3484115242153581271N
+<pre class="src src-clojure" id="org70e684f"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> ^<span style="color: #E53935;">:private</span> <span style="font-style: italic;">pads</span> <span style="color: #bbb;">[</span>3484115242153581271N
                      8024590393702697081N
                      4268910574050118391N
                      5802681426294560369N
@@ -159,14 +159,14 @@ The bloom filter requires a series of different hash functions. To generate them
 </div>
 </div>
 
-<div id="outline-container-orgc027a75" class="outline-4">
-<h4 id="orgc027a75">hash-obj</h4>
-<div class="outline-text-4" id="text-orgc027a75">
+<div id="outline-container-orgdd94e19" class="outline-4">
+<h4 id="orgdd94e19">hash-obj</h4>
+<div class="outline-text-4" id="text-orgdd94e19">
 <p>
 Now here's the simple hash function that I was talking about earlier. As you can see it simply converts the object into a string, the string into a series of numbers, and then folds the string over itself with modular multiplication, basically ignoring overflows.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="orgde3bf74"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">hash-obj</span> <span style="color: #bbb;">[</span>obj pad<span style="color: #bbb;">]</span>
+<pre class="src src-clojure" id="orgf625f96"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">hash-obj</span> <span style="color: #bbb;">[</span>obj pad<span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">(</span>str obj<span style="color: #494949;">)</span>
        <span style="color: #494949;">(</span>map int<span style="color: #494949;">)</span>
        <span style="color: #494949;">(</span>apply <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #494949;">[</span>x &amp; xs<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>cons <span style="color: #bbb;">(</span>mod <span style="color: #494949;">(</span>*' x pad<span style="color: #494949;">)</span> <span style="color: #E53935;">Long</span>/MAX_VALUE<span style="color: #bbb;">)</span> xs<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
@@ -177,14 +177,14 @@ Now here's the simple hash function that I was talking about earlier. As you can
 </div>
 </div>
 
-<div id="outline-container-org6749d9c" class="outline-4">
-<h4 id="org6749d9c">bloom-hash</h4>
-<div class="outline-text-4" id="text-org6749d9c">
+<div id="outline-container-org1fdc717" class="outline-4">
+<h4 id="org1fdc717">bloom-hash</h4>
+<div class="outline-text-4" id="text-org1fdc717">
 <p>
 The <code>bloom-hash</code> function is trivial and <del>is left as an exercise to the reader</del> simply generates a hash function using the prime numbers and then hashes the object for each one. Following that it takes the modulus of \(m\) to produce the index. There are up to 7 pads that may be used for the number, meaning the maximum value of \(k\) is 7.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="orgb0fb800"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">bloom-hash</span>
+<pre class="src src-clojure" id="org1b8c182"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">bloom-hash</span>
   <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>obj<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>bloom-hash obj 1000<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
   <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>obj m<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>bloom-hash obj m 4<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
   <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>obj m k<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>map #<span style="color: #bbb;">(</span>mod <span style="color: #494949;">(</span>hash-obj obj <span style="font-style: italic;">%</span><span style="color: #494949;">)</span> m<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>take k pads<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
@@ -194,9 +194,9 @@ The <code>bloom-hash</code> function is trivial and <del>is left as an exercise 
 </div>
 </div>
 
-<div id="outline-container-org7b73372" class="outline-3">
-<h3 id="org7b73372">optimal-k</h3>
-<div class="outline-text-3" id="text-org7b73372">
+<div id="outline-container-org1c38b5a" class="outline-3">
+<h3 id="org1c38b5a">optimal-k</h3>
+<div class="outline-text-3" id="text-org1c38b5a">
 <p>
 To find the optimal \(k\) we use the following equation
 </p>
@@ -210,7 +210,7 @@ To find the optimal \(k\) we use the following equation
 Where \(k\) is the number of hash functions, \(m\) is the size of the filter, and \(n\) is the number items that are expected to be added to the filter. This must be computed before the filter is used, and therefore likely will be slightly inaccurate.<label class="sidenote-number" for="3"><sup>3</sup></label><input checked="checked" id="3" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 3</span> I think that you probably could use some sort of very simple adaptive control system to minimize the error over many uses. (yes, I am intentionally avoiding saying "AI".)</span> This may be a problem should the sets be an unexpected size.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org72eccfa"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">optimal-k</span>
+<pre class="src src-clojure" id="orga705b3f"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">optimal-k</span>
   <span style="color: #bbb;">[</span>m n<span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #494949;">(</span>/ m n<span style="color: #494949;">)</span>
       <span style="color: #494949;">(</span>* <span style="color: #bbb;">(</span><span style="color: #E53935;">Math</span>/log 2.0<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
@@ -220,18 +220,18 @@ Where \(k\) is the number of hash functions, \(m\) is the size of the filter, an
 </div>
 </div>
 
-<div id="outline-container-org2d7907a" class="outline-3">
-<h3 id="org2d7907a">Bloom Filter Objects</h3>
-<div class="outline-text-3" id="text-org2d7907a">
+<div id="outline-container-org2b152c2" class="outline-3">
+<h3 id="org2b152c2">Bloom Filter Objects</h3>
+<div class="outline-text-3" id="text-org2b152c2">
 </div>
-<div id="outline-container-org0a67f68" class="outline-4">
-<h4 id="org0a67f68">The BasicBloomFilter Record</h4>
-<div class="outline-text-4" id="text-org0a67f68">
+<div id="outline-container-org0864881" class="outline-4">
+<h4 id="org0864881">The BasicBloomFilter Record</h4>
+<div class="outline-text-4" id="text-org0864881">
 <p>
 And now the <code>BasicBloomFilter</code> type, our solution is fairly simple, we use a boolean array and check if the values in the array are true.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org4483c90"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">BasicBloomFilter</span> <span style="color: #bbb;">[</span>m k filter<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<pre class="src src-clojure" id="orge5617d9"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">BasicBloomFilter</span> <span style="color: #bbb;">[</span>m k filter<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">contains?</span> <span style="color: #bbb;">[</span>filter-obj obj<span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">(</span>bloom-hash obj m k<span style="color: #494949;">)</span>
@@ -253,14 +253,14 @@ The drawback to this basic bloom filter is that you can't delete items from it. 
 </div>
 </div>
 
-<div id="outline-container-org9ff6e36" class="outline-4">
-<h4 id="org9ff6e36">The CountingBloomFilter Record</h4>
-<div class="outline-text-4" id="text-org9ff6e36">
+<div id="outline-container-orge6b3655" class="outline-4">
+<h4 id="orge6b3655">The CountingBloomFilter Record</h4>
+<div class="outline-text-4" id="text-orge6b3655">
 <p>
 The counting bloom filter extends the <code>BasicBloomFilter</code> with the <code>delete</code> operation by using numbers instead of boolean values. This is basically the same as storing
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org234bae7">
+<pre class="src src-clojure" id="org5d82095">
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">CountingBloomFilter</span> <span style="color: #bbb;">[</span>m k filter<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">contains?</span> <span style="color: #bbb;">[</span><span style="color: #494949;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #bbb;">[</span>m k<span style="color: #bbb;">]</span> <span style="color: #E53935;">:as</span> filter-obj<span style="color: #494949;">}</span> obj<span style="color: #bbb;">]</span>
@@ -285,9 +285,9 @@ The counting bloom filter extends the <code>BasicBloomFilter</code> with the <co
 </div>
 
 
-<div id="outline-container-org8a800de" class="outline-3">
-<h3 id="org8a800de">Tangled Code Block</h3>
-<div class="outline-text-3" id="text-org8a800de">
+<div id="outline-container-orgf967194" class="outline-3">
+<h3 id="orgf967194">Tangled Code Block</h3>
+<div class="outline-text-3" id="text-orgf967194">
 <p>
 Here is where the code is tangled, producing a single file.
 </p>
@@ -310,9 +310,9 @@ Here is where the code is tangled, producing a single file.
 </div>
 
 
-<div id="outline-container-org9aeb400" class="outline-2">
-<h2 id="org9aeb400">Conclusion</h2>
-<div class="outline-text-2" id="text-org9aeb400">
+<div id="outline-container-org8fcea50" class="outline-2">
+<h2 id="org8fcea50">Conclusion</h2>
+<div class="outline-text-2" id="text-org8fcea50">
 <p>
 Now you should have a rough idea on how a bloom filter works and how to implement one, as well as (presumably) some idea of how hash functions work.
 </p>
@@ -329,7 +329,7 @@ Now you should have a rough idea on how a bloom filter works and how to implemen
 
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W51-5 19:49</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W52-2 01:02</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>
