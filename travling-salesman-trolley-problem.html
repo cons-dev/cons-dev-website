@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-5 19:16 -->
+<!-- 2021-W52-1 16:31 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>A Possibly Correct Solution to the Travling Salseman Trolly Problem</title>
@@ -11,6 +11,27 @@
 <meta name="description" content="Backtracking and travling salseman with linear programming." />
 <meta name="generator" content="Org Mode" />
 <link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="preamble" class="status">
@@ -26,12 +47,8 @@
 <li><a href="#org2677bd6">Algorithm Description</a></li>
 <li><a href="#org4ae2dad">Implementation</a>
 <ul>
-<li><a href="#org9b3e42a">Weighted Graphs</a>
-<ul>
-<li><a href="#org75198d1">Macros</a></li>
-</ul>
-</li>
-<li><a href="#org702ac26">BFS</a></li>
+<li><a href="#org1da5a6e">Defining the Graph</a></li>
+<li><a href="#orgfbed4f3">Traversing the Graph</a></li>
 </ul>
 </li>
 </ul>
@@ -46,13 +63,13 @@ While on discord I saw this meme.
 </p>
 
 
-<div id="orgf468a6b" class="figure">
-<p><img src="images/travling-salesman-trolley-problem.webp" alt="travling-salesman-trolley-problem.webp" />
+<div id="org1169c98" class="figure">
+<p><img src="images/travling-salesman-trolley-problem.png" alt="travling-salesman-trolley-problem.png" />
 </p>
 </div>
 
 <p>
-I decided to write an optimal solution for it because I was bored. I also decided to add this to my website because why not. I have yet to prove that it actually works, and I probably should do that.
+I decided to write an optimal solution for it because I was bored. I also decided to add this to my website because why not. I have yet to formally prove that it actually works, and I probably should do that, but it seems that it should in fact work just fine. Basically I take the problem to be finding the optimal route through the graph with free backtracking.
 </p>
 </div>
 </div>
@@ -65,7 +82,11 @@ In the case of an undirected graph you first consider a node, obtain the weights
 </p>
 
 <p>
-So long as the graph is not fully connected I think the time complexity should tend towards O(n log(n)), should it be more fully connected I think the time complexity will be more similar to O(n<sup>2</sup>) for the optimal solution. 
+So long as the graph is not fully connected I the time complexity should tend towards \(O(n\ log(n))\), should it be more fully connected I think the time complexity will be more similar to \(O(n^2)\) for the optimal solution.
+</p>
+
+<p>
+The proof is trivial and left as an exercise to the reader.<label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> I am lazy. I might prove it eventually. Please talk to me later</span>
 </p>
 </div>
 </div>
@@ -78,32 +99,136 @@ So to accompany the above description let's have a quick implementation in Cloju
 </p>
 </div>
 
-<div id="outline-container-org9b3e42a" class="outline-3">
-<h3 id="org9b3e42a">Weighted Graphs</h3>
-<div class="outline-text-3" id="text-org9b3e42a">
+
+<div id="outline-container-org1da5a6e" class="outline-3">
+<h3 id="org1da5a6e">Defining the Graph</h3>
+<div class="outline-text-3" id="text-org1da5a6e">
+<p>
+Now, to finish with the graphs and other such things, let's add a function to export everything to DOT so we can see what our graphs look like. To do so we basically map over each node, finding the edges.
+</p>
 <div class="org-src-container">
-<pre class="src src-clojure">
+<pre class="src src-clojure"><span style="color: #494949;">(</span>requre '<span style="color: #bbb;">[</span>clojure.string <span style="color: #E53935;">:as</span> str<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+
+
 </pre>
 </div>
+
+<p>
+Now, to define the graph we first number the graph (to make it so I don't forget nodes and edges) and then we proceed to define the graph using our functions from earlier.
+</p>
+
+
+<div id="org4169d96" class="figure">
+<p><img src="images/travling-salesman-trolley-problem-numbered.png" alt="travling-salesman-trolley-problem-numbered.png" />
+</p>
 </div>
 
-<div id="outline-container-org75198d1" class="outline-4">
-<h4 id="org75198d1">Macros</h4>
-<div class="outline-text-4" id="text-org75198d1">
+<div class="org-src-container">
+<pre class="src src-clojure" id="org6413cee"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #bbb;">(</span>apply graph <span style="color: #494949;">(</span>range 29<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">0</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 0 1 <span style="color: #E53935;">:weight</span> 10<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 0 6 <span style="color: #E53935;">:weight</span> 15<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">1</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 1 2 <span style="color: #E53935;">:weight</span> 6<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">2</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 2 3 <span style="color: #E53935;">:weight</span> 1<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 2 8 <span style="color: #E53935;">:weight</span> 1<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 2 7 <span style="color: #E53935;">:weight</span> 10<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">3</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 3 4 <span style="color: #E53935;">:weight</span> 1<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">4</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 4 5 <span style="color: #E53935;">:weight</span> 0<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 4 10 <span style="color: #E53935;">:weight</span> 1<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">5</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 5 11 <span style="color: #E53935;">:weight</span> 0<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">6</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 6 7 <span style="color: #E53935;">:weight</span> 1<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 6 12 <span style="color: #E53935;">:weight</span> 5<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">7</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 7 8 <span style="color: #E53935;">:weight</span> 10<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 7 14 <span style="color: #E53935;">:weight</span> 10<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 7 13 <span style="color: #E53935;">:weight</span> 1<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">8</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 8 9 <span style="color: #E53935;">:weight</span> 5<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 8 14 <span style="color: #E53935;">:weight</span> 1<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 8 15 <span style="color: #E53935;">:weight</span> 10<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">9</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 9 10 <span style="color: #E53935;">:weight</span> 0<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 9 17 <span style="color: #E53935;">:weight</span> 1<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">10</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 10 11 <span style="color: #E53935;">:weight</span> 1<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">11</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 11 18 <span style="color: #E53935;">:weight</span> 5<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">12</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 12 13 <span style="color: #E53935;">:weight</span> 2<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 12 26 <span style="color: #E53935;">:weight</span> 5<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 12 28 <span style="color: #E53935;">:weight</span> 1<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">13</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 13 24 <span style="color: #E53935;">:weight</span> 10<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">14</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 14 24 <span style="color: #E53935;">:weight</span> 1<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">15</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 15 16 <span style="color: #E53935;">:weight</span> 1<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 15 21 <span style="color: #E53935;">:weight</span> 1<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 15 22 <span style="color: #E53935;">:weight</span> 4<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">16</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 16 17 <span style="color: #E53935;">:weight</span> 1<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 16 20 <span style="color: #E53935;">:weight</span> 5<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 16 21 <span style="color: #E53935;">:weight</span> 5<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">17</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 17 18 <span style="color: #E53935;">:weight</span> 0<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">18</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 18 19 <span style="color: #E53935;">:weight</span> 5<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">19</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 19 20 <span style="color: #E53935;">:weight</span> 0<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">20</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 20 21 <span style="color: #E53935;">:weight</span> 1<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">22</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 22 23 <span style="color: #E53935;">:weight</span> 1<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">23</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 23 24 <span style="color: #E53935;">:weight</span> 5<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">24</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 24 25 <span style="color: #E53935;">:weight</span> 0<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">25</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 25 26 <span style="color: #E53935;">:weight</span> 0<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">26</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 26 27 <span style="color: #E53935;">:weight</span> 1<span style="color: #bbb;">)</span>
+    <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">27</span>
+    <span style="color: #bbb;">(</span>edge-&gt; 27 28 <span style="color: #E53935;">:weight</span> 1<span style="color: #bbb;">)</span>
+    dot-repr<span style="color: #494949;">)</span>
+</pre>
+</div>
+
 <p>
-To make it easier to define the graph we will also define a very small DOT-like DSL to define the graph.
+Using our DOT code we can also check that our graph is correct visually by obtaining the DOT representation (plus the DOT representation is prettier).
+</p>
+
+
+<div id="orgd36e670" class="figure">
+<p><img src="./images/graph_39d0b492-a701-4d8d-a7de-d854f3eda883.png" alt="graph_39d0b492-a701-4d8d-a7de-d854f3eda883.png" />
+</p>
+</div>
+
+<p>
+It doesn't look exactly like the original, but honestly that doesn't matter, it contains all the nodes of the original.
+</p>
+
+<p>
+Given how <i>nice</i> it was to just get a DOT representation of a clojure datastructure I think I might end up writing some code to automatically spit out DOT code for various Clojure objects. I think it will, by default, probably just spit out DOT code, but it will also allow you to define custom handling code for different datastructures.
 </p>
 </div>
 </div>
-</div>
 
-<div id="outline-container-org702ac26" class="outline-3">
-<h3 id="org702ac26">BFS</h3>
+<div id="outline-container-orgfbed4f3" class="outline-3">
+<h3 id="orgfbed4f3">Traversing the Graph</h3>
 </div>
 </div>
-</div>
+<!-- Footnotes --><!-- 
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">I am lazy. I might prove it eventually. Please talk to me later</p></div></div>
+
+ --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W51-5 15:16</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W52-1 00:24</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

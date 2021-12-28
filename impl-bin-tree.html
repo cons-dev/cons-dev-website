@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-6 02:14 -->
+<!-- 2021-W52-1 16:31 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Implementing Binary Tree Sets</title>
@@ -49,8 +49,16 @@
 <li><a href="#orgfe51b10">Object and Constructor</a></li>
 <li><a href="#org6ea2a0d">Insert</a></li>
 <li><a href="#org403748f">Contains</a></li>
+<li><a href="#orga88afa4">Removing an Element</a></li>
 <li><a href="#org343f351">Traversals</a></li>
-<li><a href="#org5201636">Set-theoretic</a></li>
+<li><a href="#org5201636">Set-theoretic</a>
+<ul>
+<li><a href="#org4ccb06a">Union</a></li>
+<li><a href="#org1ed7bdb">Intersection</a></li>
+<li><a href="#orgc585b20">Difference</a></li>
+<li><a href="#org01128ee">Subset</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#org8cd3812">Python Code</a></li>
@@ -67,7 +75,7 @@ Binary trees are a classic datastructure, basically like a linked list but with 
 </p>
 
 
-<div id="org3bfd4ca" class="figure">
+<div id="orgaba0f53" class="figure">
 <p><img src="./images/bintree_17a848ae-1c8a-4a7c-8219-df9f2a794fb3.png" alt="bintree_17a848ae-1c8a-4a7c-8219-df9f2a794fb3.png" />
 </p>
 </div>
@@ -98,11 +106,26 @@ To start it all off we define an object and a constructor. The constructor just 
 </div>
 </div>
 
+
 <div id="outline-container-org6ea2a0d" class="outline-3">
 <h3 id="org6ea2a0d">Insert</h3>
 <div class="outline-text-3" id="text-org6ea2a0d">
 <p>
-Insertion in the binary tree is easy. If a key is present nothing has to be done! It can just return. If the node is nil, then it is at a leaf node and it can insert a new node. Lastly, if it is at a node it checks itself against the value of the node and chooses the lesser (left) side if it is lesser, else the right side and applies itself.
+To insert an item we simply go down the binary tree until we find the item or nil.
+</p>
+
+<p>
+So to illustrate, let's imagine we added <code>7</code> to the tree from above:
+</p>
+
+<div id="orga04de0e" class="figure">
+<p><img src="./images/bintree-insert_17a848ae-1c8a-4a7c-8219-df9f2a794fb3.png" alt="bintree-insert_17a848ae-1c8a-4a7c-8219-df9f2a794fb3.png" />
+</p>
+</div>
+
+
+<p>
+The algorithm is trivial. If a key is present nothing has to be done! It can just return. If the node is nil, then it is at a leaf node and it can insert a new node. Lastly, if it is at a node it checks itself against the value of the node and chooses the lesser (left) side if it is lesser, else the right side and applies itself.
 </p>
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">bintree-insert</span> <span style="color: #bbb;">[</span><span style="color: #494949;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #bbb;">[</span>val lesser greater<span style="color: #bbb;">]</span> <span style="color: #E53935;">:as</span> node<span style="color: #494949;">}</span> key<span style="color: #bbb;">]</span>
@@ -119,14 +142,46 @@ Insertion in the binary tree is easy. If a key is present nothing has to be done
 <h3 id="org403748f">Contains</h3>
 <div class="outline-text-3" id="text-org403748f">
 <p>
-Here we define a predicate to check if an element is contained within the binary tree. This function is implemented in almost exactly the same way as the above, traversing until it hits the key itself or nil.
+To determine if the value 23 is contained within our tree we can simply compare each node, if it returns true, also return true. But if not we continue down the tree, choosing the lesser side if it is lesser, greater side if it is greater.
 </p>
+
+<div id="org4c9d1bc" class="figure">
+<p><img src="./images/bintree-contains_17a848ae-1c8a-4a7c-8219-df9f2a794fb3.png" alt="bintree-contains_17a848ae-1c8a-4a7c-8219-df9f2a794fb3.png" />
+</p>
+</div>
+
+
+<p>
+The implementation, therefore, is almost exactly the same as the way we inserted an element into the tree, traversing until it hits the key itself or nil.
+</p>
+
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">bintree-contains?</span> <span style="color: #bbb;">[</span><span style="color: #494949;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #bbb;">[</span>val lesser greater<span style="color: #bbb;">]</span><span style="color: #494949;">}</span> key<span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">cond</span> <span style="color: #494949;">(</span>= val key<span style="color: #494949;">)</span> <span style="color: #E53935;">true</span>
-        <span style="color: #494949;">(</span>nil? val<span style="color: #494949;">)</span>     <span style="color: #E53935;">false</span>
+        <span style="color: #494949;">(</span>nil? val<span style="color: #494949;">)</span>  <span style="color: #E53935;">false</span>
         <span style="color: #494949;">(</span>&lt; key val<span style="color: #494949;">)</span> <span style="color: #494949;">(</span>bintree-contains? lesser key<span style="color: #494949;">)</span>
-        <span style="color: #E53935;">:else</span>          <span style="color: #494949;">(</span>bintree-contains? greater key<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        <span style="color: #E53935;">:else</span>       <span style="color: #494949;">(</span>bintree-contains? greater key<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga88afa4" class="outline-3">
+<h3 id="orga88afa4">Removing an Element</h3>
+<div class="outline-text-3" id="text-orga88afa4">
+<p>
+Now you may wonder, how do we remove an element from the tree? Well it's pretty simple. First you find the element in the tree (as usual) and then you make one of the children of the node the node and insert the contents of the other child into that node. A good way to do this <i>would be</i> to simply take the leftmost branch of then new node and then insert there when you find a nil.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure">
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">bintree-demo</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">bintree-remove</span> <span style="color: #bbb;">[</span><span style="color: #494949;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #bbb;">[</span>val lesser greater<span style="color: #bbb;">]</span> <span style="color: #E53935;">:as</span> node<span style="color: #494949;">}</span> key<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">letfn</span> <span style="color: #494949;">[</span><span style="color: #bbb;">(</span>insert-least <span style="color: #494949;">[</span><span style="color: #bbb;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #494949;">[</span>lesser<span style="color: #494949;">]</span> <span style="color: #E53935;">:as</span> node<span style="color: #bbb;">}</span> tree<span style="color: #494949;">]</span>
+            <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> lesser <span style="color: #bbb;">(</span>assoc node <span style="color: #E53935;">:lesser</span>  <span style="color: #494949;">(</span>insert-least lesser tree<span style="color: #494949;">)</span><span style="color: #bbb;">)</span> tree<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">cond</span> <span style="color: #bbb;">(</span>nil? val<span style="color: #bbb;">)</span>  <span style="color: #E53935;">nil</span>
+          <span style="color: #bbb;">(</span>= val key<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>insert-least greater lesser<span style="color: #bbb;">)</span>
+          <span style="color: #bbb;">(</span>&lt; key val<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>assoc node <span style="color: #E53935;">:lesser</span> <span style="color: #494949;">(</span>bintree-remove lesser key<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+          <span style="color: #E53935;">:else</span>       <span style="color: #bbb;">(</span>assoc node <span style="color: #E53935;">:greater</span> <span style="color: #494949;">(</span>bintree-remove greater key<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 </div>
@@ -140,13 +195,11 @@ Here we define some traversals for our tree. Traversals are simply functions tha
 </p>
 
 <p>
-The pre-order traversal returns a list of all nodes with the visited node first, followed by it's lesser and then greater children.
+The pre-order traversal returns a list of all nodes with the visited node first, followed by it's lesser and then greater children. This in essence provides the order of insertions needed to generate another tree of the same structure.
 </p>
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">pre-order</span> <span style="color: #bbb;">[</span><span style="color: #494949;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #bbb;">[</span>val lesser greater<span style="color: #bbb;">]</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
-  <span style="color: #bbb;">(</span>concat <span style="color: #494949;">[</span>val<span style="color: #494949;">]</span>
-          <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">when</span> lesser <span style="color: #bbb;">(</span>pre-order lesser<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-          <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">when</span> greater <span style="color: #bbb;">(</span>pre-order greater<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">when</span> val <span style="color: #494949;">(</span>concat <span style="color: #bbb;">[</span>val<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span>pre-order lesser<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>pre-order greater<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 
@@ -155,9 +208,7 @@ The post-order traversal does the same, but with the node last.
 </p>
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">post-order</span> <span style="color: #bbb;">[</span><span style="color: #494949;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #bbb;">[</span>val lesser greater<span style="color: #bbb;">]</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
-  <span style="color: #bbb;">(</span>concat <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">when</span> lesser <span style="color: #bbb;">(</span>pre-order lesser<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-          <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">when</span> greater <span style="color: #bbb;">(</span>pre-order greater<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-          <span style="color: #494949;">[</span>val<span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">when</span> val <span style="color: #494949;">(</span>concat <span style="color: #bbb;">(</span>pre-order lesser<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>pre-order greater<span style="color: #bbb;">)</span> <span style="color: #bbb;">[</span>val<span style="color: #bbb;">]</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 
@@ -166,9 +217,7 @@ Finally, the in-order traversal returns a sorted list of all nodes by visiting t
 </p>
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">in-order</span> <span style="color: #bbb;">[</span><span style="color: #494949;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #bbb;">[</span>val lesser greater<span style="color: #bbb;">]</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
-  <span style="color: #bbb;">(</span>concat <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">when</span> lesser <span style="color: #bbb;">(</span>in-order lesser<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-          <span style="color: #494949;">[</span>val<span style="color: #494949;">]</span>
-          <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">when</span> greater <span style="color: #bbb;">(</span>in-order greater<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">when</span> val <span style="color: #494949;">(</span>concat <span style="color: #bbb;">(</span>in-order lesser<span style="color: #bbb;">)</span> <span style="color: #bbb;">[</span>val<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span>in-order greater<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 </div>
@@ -180,7 +229,11 @@ Finally, the in-order traversal returns a sorted list of all nodes by visiting t
 <p>
 Here we just implement the various set-theoretic functions.
 </p>
+</div>
 
+<div id="outline-container-org4ccb06a" class="outline-4">
+<h4 id="org4ccb06a">Union</h4>
+<div class="outline-text-4" id="text-org4ccb06a">
 <p>
 The union function is fairly simple, obtaining the post-order traversal of the first binary tree and then inserting all the elements into the second. It's time complexity is \(O(n\ log(n))\).
 </p>
@@ -191,7 +244,12 @@ The union function is fairly simple, obtaining the post-order traversal of the f
    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> a post-order <span style="color: #bbb;">(</span>reduce bintree-insert b<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
+</div>
+</div>
 
+<div id="outline-container-org1ed7bdb" class="outline-4">
+<h4 id="org1ed7bdb">Intersection</h4>
+<div class="outline-text-4" id="text-org1ed7bdb">
 <p>
 This just checks if a node is contained in the other tree, and if it is, adds it to the new set of nodes. It's time complexity is \(O(n\ log(n))\).
 </p>
@@ -202,7 +260,12 @@ This just checks if a node is contained in the other tree, and if it is, adds it
    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> a post-order <span style="color: #bbb;">(</span>filter <span style="color: #494949;">(</span>partial bintree-contains? b<span style="color: #494949;">)</span><span style="color: #bbb;">)</span> bintree-set<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
+</div>
+</div>
 
+<div id="outline-container-orgc585b20" class="outline-4">
+<h4 id="orgc585b20">Difference</h4>
+<div class="outline-text-4" id="text-orgc585b20">
 <p>
 Lastly we find the difference between two binary trees by simply filtering out the set of nodes that are contained within the second binary tree. Like all set-theoretic functions it is variadic and accepts an arbitrary number of arguments. It's time complexity is \(O(n\ log(n))\).
 </p>
@@ -213,7 +276,13 @@ Lastly we find the difference between two binary trees by simply filtering out t
    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> a post-order <span style="color: #bbb;">(</span>filter #<span style="color: #494949;">(</span>not <span style="color: #bbb;">(</span>bintree-contains? b <span style="font-style: italic;">%</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span> bintree-set<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
+</div>
+</div>
 
+
+<div id="outline-container-org01128ee" class="outline-4">
+<h4 id="org01128ee">Subset</h4>
+<div class="outline-text-4" id="text-org01128ee">
 <p>
 Lastly we have a simple function that determines if one tree is a subset of another tree by checking if each item is contained in the other tree. It's time complexity is (I know you will be shocked) \(O(n\ log(n))\).
 </p>
@@ -223,6 +292,7 @@ Lastly we have a simple function that determines if one tree is a subset of anot
   <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>a b<span style="color: #494949;">]</span>
    <span style="color: #494949;">(</span>not <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> a post-order <span style="color: #494949;">(</span>some #<span style="color: #bbb;">(</span>not <span style="color: #494949;">(</span>bintree-contains? b <span style="font-style: italic;">%</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
+</div>
 </div>
 </div>
 </div>
@@ -347,7 +417,7 @@ Below is also the code in python.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W51-6 02:14</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W52-1 16:26</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

@@ -3,12 +3,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W51-6 02:14 -->
+<!-- 2021-W52-1 16:31 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Implementing Hash Maps</title>
 <meta name="author" content="Inanna" />
-<meta name="description" content="A short introduction to bloom filters, how they work, and a short implementation thereof." />
+<meta name="description" content="A short introduction to hash maps, how they work, and a short implementation thereof." />
 <meta name="generator" content="Org Mode" />
 <link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
 <script type="text/x-mathjax-config">
@@ -75,7 +75,7 @@ A hashmap is fairly simple, but in essence you have an array of 2-tuples with th
 </p>
 
 
-<div id="org723628c" class="figure">
+<div id="org6053e62" class="figure">
 <p><img src="./images/hashmap-adding_c8a4a74c-a139-45d5-a340-c2ed895b2e5a.png" alt="hashmap-adding_c8a4a74c-a139-45d5-a340-c2ed895b2e5a.png" />
 </p>
 </div>
@@ -85,7 +85,7 @@ A hashmap is fairly simple, but in essence you have an array of 2-tuples with th
 However, as you might imagine, there can occasionally be collisions, like this.
 </p>
 
-<div id="orgbde5538" class="figure">
+<div id="org4bf76d7" class="figure">
 <p><img src="./images/hashmap-collison_58e621d6-4ffd-4fed-87d3-592912398f2b.png" alt="hashmap-collison_58e621d6-4ffd-4fed-87d3-592912398f2b.png" />
 </p>
 </div>
@@ -95,7 +95,7 @@ To solve this you can either resize the array, shove the collided items in a sub
 </p>
 
 
-<div id="org21f9ab7" class="figure">
+<div id="orgbbadccb" class="figure">
 <p><img src="./images/hashmap-resizing_58e621d6-4ffd-4fed-87d3-592912398f2b.png" alt="hashmap-resizing_58e621d6-4ffd-4fed-87d3-592912398f2b.png" />
 </p>
 </div>
@@ -106,7 +106,7 @@ To find items in the array you first find the index of the key just like you did
 
 
 
-<div id="org30e6fa8" class="figure">
+<div id="org4f8dec4" class="figure">
 <p><img src="./images/hashmap-finding-key_251f9892-8648-4230-b99b-f8b50575f140.png" alt="hashmap-finding-key_251f9892-8648-4230-b99b-f8b50575f140.png" />
 </p>
 </div>
@@ -280,7 +280,7 @@ Hash maps are a great way to store key-value pairs with a constant lookup time. 
 
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W51-5 22:51</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2021-W52-1 00:22</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>
