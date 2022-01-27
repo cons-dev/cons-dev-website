@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W52-2 01:13 -->
+<!-- 2022-W04-4 05:11 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Dodgy Game</title>
@@ -14,7 +14,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="images/website-logo.png" /></a></div>
+<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="/images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Dodgy Game
@@ -233,7 +233,7 @@ The engine behind the game. It provides utility functions that are used in the s
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">player-alive?</span>
   <span style="color: #a4a4a4; font-style: italic;">"Returns whether the player has stayed clear of the walls and enemies."</span>
   <span style="color: #bbb;">[</span>player min-x max-x min-y max-y enemies<span style="color: #bbb;">]</span>
-  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">and</span> <span style="color: #494949;">(</span>intersect? <span style="color: #bbb;">(</span>entity-bounds player<span style="color: #bbb;">)</span> <span style="color: #bbb;">[</span>min-x max-x min-y max-y<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">and</span> <span style="color: #494949;">(</span>intersect? <span style="color: #bbb;">(</span>entity-bounds player<span style="color: #bbb;">)</span> <span style="color: #bbb;">[</span><span style="color: #494949;">(</span>- min-x 20 <span style="color: #494949;">)</span> <span style="color: #494949;">(</span>+ max-x 20<span style="color: #494949;">)</span> <span style="color: #494949;">(</span>- min-y 20<span style="color: #494949;">)</span> max-y<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
        <span style="color: #494949;">(</span>not-any? <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #494949;">[</span>enemy<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>intersect? <span style="color: #bbb;">(</span>entity-bounds player<span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>entity-bounds enemy<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span> enemies<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">gc-entities</span>
@@ -280,8 +280,8 @@ The engine behind the game. It provides utility functions that are used in the s
              <span style="color: #494949;">(</span>&lt; 100 time<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
       <span style="color: #bbb;">(</span>concat <span style="color: #494949;">(</span>update-enemy-pos max-y enemies speed<span style="color: #494949;">)</span>
               <span style="color: #494949;">(</span>map <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #494949;">[]</span>
-                     <span style="color: #494949;">{</span><span style="color: #E53935;">:x</span>       <span style="color: #bbb;">(</span><span style="color: #E53935;">q</span>/random min-x max-x<span style="color: #bbb;">)</span>
-                      <span style="color: #E53935;">:y</span>       <span style="color: #bbb;">(</span>- min-y 20<span style="color: #bbb;">)</span>
+                     <span style="color: #494949;">{</span><span style="color: #E53935;">:x</span>      <span style="color: #bbb;">(</span><span style="color: #E53935;">q</span>/random min-x max-x<span style="color: #bbb;">)</span>
+                      <span style="color: #E53935;">:y</span>      <span style="color: #bbb;">(</span>- min-y 20<span style="color: #bbb;">)</span>
                       <span style="color: #E53935;">:mov-fn</span> <span style="color: #bbb;">(</span>gen-mov-fn<span style="color: #bbb;">)</span><span style="color: #494949;">}</span><span style="color: #bbb;">)</span>
                    <span style="color: #bbb;">(</span>repeat <span style="color: #494949;">(</span>max 1 <span style="color: #bbb;">(</span>int <span style="color: #494949;">(</span>/ 1 spawn-freq<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> 1<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
       <span style="color: #bbb;">(</span>update-enemy-pos max-y enemies speed<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
@@ -494,7 +494,7 @@ between the different stages. Future games will not use a stage system and inste
 
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W52-1 23:19</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2022-W01-3 22:09</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

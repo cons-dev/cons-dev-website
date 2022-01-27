@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W52-2 01:13 -->
+<!-- 2022-W04-4 05:11 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Implementing Graphs</title>
@@ -14,7 +14,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="images/website-logo.png" /></a></div>
+<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="/images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Implementing Graphs</h1>
@@ -25,19 +25,28 @@
 <li><a href="#org12b1d27">Introduction</a></li>
 <li><a href="#org1a4081a">Implementation</a>
 <ul>
-<li><a href="#org1edd360">The Graph Protocol</a></li>
-<li><a href="#orgeaae7a5">Unweighted Graphs</a>
+<li><a href="#org5969419">Common Features</a>
 <ul>
-<li><a href="#orgef4c295">Undirected Graphs</a></li>
-<li><a href="#org1d314ca">Directed Graphs</a></li>
+<li><a href="#org3d341d1">Killing Orphans</a></li>
+<li><a href="#orgf404ce3">Killing Nodes</a></li>
+<li><a href="#org0bbd906">Killing Edges</a></li>
+<li><a href="#org9ecc790">Creating Edges</a></li>
+<li><a href="#orga1c84da">Creating Nodes</a></li>
+<li><a href="#orge9088c8">Getting Nodes</a></li>
+</ul>
+</li>
+<li><a href="#org0f52b53">Unweighted Graphs</a>
+<ul>
+<li><a href="#org2716193">BasicGraph</a></li>
+<li><a href="#org4000215">Undirected Graphs</a></li>
+<li><a href="#org893b788">Directed Graphs</a></li>
 </ul>
 </li>
 <li><a href="#orgdbbe7cf">Weighted Graphs</a>
 <ul>
-<li><a href="#org1381f1d">Undirected Graphs</a></li>
-<li><a href="#org63ce27b">Unweighted Graphs</a></li>
-<li><a href="#org893b788">Directed Graphs</a></li>
-<li><a href="#org3b02209">Utility Functions</a></li>
+<li><a href="#org871f444">BasicWeightedGraph Protocol</a></li>
+<li><a href="#org95868a7">Undirected Graph</a></li>
+<li><a href="#orgdfb5826">Weighted Directed Graph</a></li>
 </ul>
 </li>
 </ul>
@@ -48,75 +57,34 @@
 
 <div id="outline-container-org12b1d27" class="outline-2">
 <h2 id="org12b1d27">Introduction</h2>
+<div class="outline-text-2" id="text-org12b1d27">
+<p>
+<a href="https://en.wikipedia.org/wiki/Graph_%28discrete_mathematics%29">Graphs</a> are a fairly common mathematical structure that represents a series of nodes with edges that connect them to other nodes. Here we will implement some code that implements graphs as well as code to produce representations of graphs. <label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> Which I think I will extend to representing arbitrary Clojure code in general</span> The code was mostly developed for my <a href="travling-salesman-trolley-problem.html#ID-1e544a78-076c-4448-8af5-45f5d317fadf">possibly correct solution to the travling saleseman trolly problem</a>, so check that out as well. 
+</p>
+</div>
 </div>
 
 <div id="outline-container-org1a4081a" class="outline-2">
 <h2 id="org1a4081a">Implementation</h2>
 <div class="outline-text-2" id="text-org1a4081a">
 <p>
-To implement a graph we treat the graphs like a series of nodes.
-</p>
-</div>
-<div id="outline-container-org1edd360" class="outline-3">
-<h3 id="org1edd360">The Graph Protocol</h3>
-<div class="outline-text-3" id="text-org1edd360">
-<div class="org-src-container">
-<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defprotocol</span> <span style="color: #E53935;">BasicGraph</span>
-  <span style="color: #a4a4a4; font-style: italic;">"A protocol defining a weighted or unweighted graph."</span>
-  <span style="color: #bbb;">(</span>edge <span style="color: #494949;">[</span>graph from to<span style="color: #494949;">]</span>
-    <span style="color: #494949;">"Add an edge to the graph."</span><span style="color: #bbb;">)</span>
-  <span style="color: #bbb;">(</span>node <span style="color: #494949;">[</span>graph node<span style="color: #494949;">]</span>
-    <span style="color: #494949;">"Add a node to the graph (node must be a unique identifier)."</span><span style="color: #bbb;">)</span>
-  <span style="color: #bbb;">(</span>get-node <span style="color: #494949;">[</span>graph node<span style="color: #494949;">]</span>
-    <span style="color: #494949;">"Get a node from the graph (including edges)."</span><span style="color: #bbb;">)</span>
-  <span style="color: #bbb;">(</span>kill-orphans <span style="color: #494949;">[</span>graph<span style="color: #494949;">]</span>
-    <span style="color: #494949;">"Remove all orphans from the graph."</span><span style="color: #bbb;">)</span>
-  <span style="color: #bbb;">(</span>kill-edge <span style="color: #494949;">[</span>graph to from<span style="color: #494949;">]</span>
-    <span style="color: #494949;">"Kill an edge given it's description."</span><span style="color: #bbb;">)</span>
-  <span style="color: #bbb;">(</span>kill-node <span style="color: #494949;">[</span>graph node<span style="color: #494949;">]</span>
-    <span style="color: #494949;">"Kill a node within the graph."</span><span style="color: #bbb;">)</span>
-  <span style="color: #bbb;">(</span>dot-repr <span style="color: #494949;">[</span>graph<span style="color: #494949;">]</span>
-    <span style="color: #494949;">"Produce DOT code representing the graph"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-</pre>
-</div>
-</div>
-</div>
-
-
-<div id="outline-container-orgeaae7a5" class="outline-3">
-<h3 id="orgeaae7a5">Unweighted Graphs</h3>
-<div class="outline-text-3" id="text-orgeaae7a5">
-</div>
-<div id="outline-container-orgef4c295" class="outline-4">
-<h4 id="orgef4c295">Undirected Graphs</h4>
-</div>
-<div id="outline-container-org1d314ca" class="outline-4">
-<h4 id="org1d314ca">Directed Graphs</h4>
-</div>
-</div>
-
-<div id="outline-container-orgdbbe7cf" class="outline-3">
-<h3 id="orgdbbe7cf">Weighted Graphs</h3>
-<div class="outline-text-3" id="text-orgdbbe7cf">
-<p>
-So let's start by defining a
-</p>
-
-<pre class="example">
-class clojure.lang.Compiler$CompilerException
-</pre>
-</div>
-
-
-<div id="outline-container-org1381f1d" class="outline-4">
-<h4 id="org1381f1d">Undirected Graphs</h4>
-<div class="outline-text-4" id="text-org1381f1d">
-<p>
-To start out we define an undirected graph. But first, let's ask the question, what <i>is</i> a graph? How do graphs work?
+So we want to define a graph. But first, let's ask the question, what <i>is</i> a graph? How do graphs work?
 </p>
 
 <p>
-Now, of course, the obvious approach would be to create nodes as little objects with pointers to other nodes as edges. However, I'm not doing that<label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> Searching piles of pointers is irritating no matter how you do it and tends to make any operations a lot messier. It's also, in this case, much slower as you can't just pick any node as easily.</span> and instead I will be implementing the graph as a map of nodes that sets of edges indicating where they go to and where they go from.
+A graph is simply a series of points called nodes that have links between them called edges. Edges in the most basic form of graph are undirected and unweighted, which is usually interpreted <label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> As with any abstract structure it is an interpretation, and many others exist. The rules in math are made up anyways, so feel free to add some more!</span> as them either costing nothing to traverse (or providing nothing) and being possible to traverse in either direction.
+</p>
+
+<p>
+The weighted case is the more interesting one, in which many of the most exciting optimization problems and algorithms in computer science exist, form the traveling salesman problem to Dijkstra's algorithm for the shortest path.
+</p>
+
+<p>
+The directed case is even more complicated, with each edge serving as a one-way path to another edge. This also has a ton of really exciting applications in the analysis of program states and category theory where the edges are called arrows and map morphisms between categories.
+</p>
+
+<p>
+Now, of course, the obvious approach would be to create nodes as little objects with pointers to other nodes as edges. However, I'm not doing that<label class="sidenote-number" for="3"><sup>3</sup></label><input checked="checked" id="3" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 3</span> Searching piles of pointers is irritating no matter how you do it and tends to make any operations a lot messier. It's also, in this case, much slower as you can't just pick any node as easily.</span> and instead I will be implementing the graph as a map of nodes that sets of edges indicating where they go to and where they go from.
 </p>
 
 
@@ -134,9 +102,16 @@ So a graph might have this sort of structure. The <code>edges-to</code> set is t
 </div>
 
 <p>
-So to start out we create the various records that will exist within our graph, and we then also set up
+So with the structure out of the way, let's start defining things.
 </p>
+</div>
 
+<div id="outline-container-org5969419" class="outline-3">
+<h3 id="org5969419">Common Features</h3>
+<div class="outline-text-3" id="text-org5969419">
+<p>
+All our graphs will use a collection of standard edges and nodes. In fact the structure of the graph will also be exactly the same too! The only differences will be in interpretation and how the various methods act.
+</p>
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">Edge</span> <span style="color: #bbb;">[</span>src dest weight<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">Node</span> <span style="color: #bbb;">[</span>edges-to edges-from<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
@@ -144,145 +119,206 @@ So to start out we create the various records that will exist within our graph, 
 </div>
 
 <p>
-From here we can also set up 
+Unfortunately (<i>and</i> fortunately) Clojure doesn't have multiple inheritance, so you have to define the inherited functions with separate functions and then call these functions from your new thing. Alternatively you can use multimethods, but I don't like those so here we just define a ton of functions.
 </p>
 </div>
-</div>
 
-
-<div id="outline-container-org63ce27b" class="outline-4">
-<h4 id="org63ce27b">Unweighted Graphs</h4>
-<div class="outline-text-4" id="text-org63ce27b">
+<div id="outline-container-org3d341d1" class="outline-4">
+<h4 id="org3d341d1">Killing Orphans</h4>
+<div class="outline-text-4" id="text-org3d341d1">
 <p>
-An unweighted graph is implemented simply by ignoring the <code>:weight</code> value in the graph. In this graph the distance between nodes does not matter. Likewise.
-</p>
-
-<p>
-In a sense it is a more complicated version of the directed graph.
+We also want to be assured that we can kill any orphans that exist in the graph. Since they have no support one might imagine that they will naturally be garbage collected, but it turns out that we must go and do it ourselves.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">graph-demo</span><span style="color: #494949;">)</span>
-<span style="color: #494949;">(</span>require '<span style="color: #bbb;">[</span>clojure.string <span style="color: #E53935;">:as</span> str<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
-
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">Graph</span> <span style="color: #bbb;">[</span>nodes<span style="color: #bbb;">]</span>
-  BasicGraph
-  <span style="color: #bbb;">(</span>edge <span style="color: #494949;">[</span>graph from to<span style="color: #494949;">]</span>
-    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>from-&gt;to <span style="color: #494949;">(</span>-&gt;Edge from to 0<span style="color: #494949;">)</span>
-          to-&gt;from <span style="color: #494949;">(</span>-&gt;Edge to from 0<span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
-      <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> graph
-          <span style="color: #494949;">(</span>update-in <span style="color: #bbb;">[</span><span style="color: #E53935;">:nodes</span> from <span style="color: #E53935;">:edges-to</span><span style="color: #bbb;">]</span> conj from-&gt;to<span style="color: #494949;">)</span>
-          <span style="color: #494949;">(</span>update-in <span style="color: #bbb;">[</span><span style="color: #E53935;">:nodes</span> to <span style="color: #E53935;">:edges-from</span><span style="color: #bbb;">]</span> conj from-&gt;to<span style="color: #494949;">)</span>
-          <span style="color: #494949;">(</span>update-in <span style="color: #bbb;">[</span><span style="color: #E53935;">:nodes</span> to <span style="color: #E53935;">:edges-to</span><span style="color: #bbb;">]</span> conj to-&gt;from<span style="color: #494949;">)</span>
-          <span style="color: #494949;">(</span>update-in <span style="color: #bbb;">[</span><span style="color: #E53935;">:nodes</span> from <span style="color: #E53935;">:edges-from</span><span style="color: #bbb;">]</span> conj to-&gt;from<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-
-  <span style="color: #bbb;">(</span>node <span style="color: #494949;">[</span>graph node<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>assoc-in graph <span style="color: #bbb;">[</span><span style="color: #E53935;">:nodes</span> node<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span>-&gt;Node #<span style="color: #494949;">{}</span> #<span style="color: #494949;">{}</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-
-  <span style="color: #bbb;">(</span>kill-orphans <span style="color: #494949;">[</span>graph<span style="color: #494949;">]</span>
-    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span>  graph
-         <span style="color: #E53935;">:nodes</span>
-         <span style="color: #bbb;">(</span>remove #<span style="color: #494949;">(</span>empty? <span style="color: #bbb;">(</span>get <span style="font-style: italic;">%</span> <span style="color: #E53935;">:edges-to</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-         <span style="color: #bbb;">(</span>apply concat<span style="color: #bbb;">)</span>
-         <span style="color: #bbb;">(</span>apply hash-map<span style="color: #bbb;">)</span>
-         -&gt;Graph<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-  
-  <span style="color: #bbb;">(</span>kill-edge <span style="color: #494949;">[</span><span style="color: #bbb;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #494949;">[</span>nodes<span style="color: #494949;">]</span> <span style="color: #E53935;">:as</span> graph<span style="color: #bbb;">}</span> from to<span style="color: #494949;">]</span>
-    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>from-&gt;to <span style="color: #494949;">(</span>-&gt;Edge from to 0<span style="color: #494949;">)</span>
-          to-&gt;from <span style="color: #494949;">(</span>-&gt;Edge to from 0<span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
-      <span style="color: #bbb;">(</span>assoc graph
-             <span style="color: #E53935;">:nodes</span>
-             <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> nodes
-                  <span style="color: #bbb;">(</span>update-in <span style="color: #494949;">[</span>to <span style="color: #E53935;">:edges-from</span><span style="color: #494949;">]</span> remove #<span style="color: #494949;">{</span>from-&gt;to<span style="color: #494949;">}</span><span style="color: #bbb;">)</span>
-                  <span style="color: #bbb;">(</span>update-in <span style="color: #494949;">[</span>to <span style="color: #E53935;">:edges-to</span><span style="color: #494949;">]</span> remove #<span style="color: #494949;">{</span>to-&gt;from<span style="color: #494949;">}</span><span style="color: #bbb;">)</span>
-                  <span style="color: #bbb;">(</span>dissoc from<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-  
-  <span style="color: #bbb;">(</span>get-node <span style="color: #494949;">[</span>graph node<span style="color: #494949;">]</span>
-    <span style="color: #494949;">(</span>get-in graph <span style="color: #bbb;">[</span><span style="color: #E53935;">:nodes</span> node<span style="color: #bbb;">]</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-  
-  <span style="color: #bbb;">(</span>kill-node <span style="color: #494949;">[</span><span style="color: #bbb;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #494949;">[</span>nodes<span style="color: #494949;">]</span> <span style="color: #E53935;">:as</span> graph<span style="color: #bbb;">}</span> node-sym<span style="color: #494949;">]</span>
-    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #bbb;">(</span>reduce kill-edge graph <span style="color: #494949;">(</span>get-in nodes <span style="color: #bbb;">[</span>node <span style="color: #E53935;">:edges-to</span><span style="color: #bbb;">]</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-         <span style="color: #bbb;">(</span>assoc graph <span style="color: #E53935;">:nodes</span> <span style="color: #494949;">(</span>dissoc nodes node-sym<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-  
-  <span style="color: #bbb;">(</span>dot-repr <span style="color: #494949;">[</span>graph<span style="color: #494949;">]</span>
-    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">letfn</span> <span style="color: #bbb;">[</span><span style="color: #494949;">(</span>remove-dups <span style="color: #bbb;">[</span><span style="color: #494949;">[</span>edge &amp; edge-tuples<span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
-              <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">when</span> edge <span style="color: #494949;">(</span>cons edge <span style="color: #bbb;">(</span>remove-dups <span style="color: #494949;">(</span>remove #<span style="color: #bbb;">{</span>edge<span style="color: #bbb;">}</span> <span style="color: #bbb;">(</span>map reverse edge-tuples<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
-      <span style="color: #bbb;">(</span>str <span style="color: #494949;">"digraph G {"</span>
-           <span style="color: #494949;">"rankdir=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">LR</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
-           <span style="color: #494949;">"size=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">15,7.5!</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
-           <span style="color: #494949;">"fontpath=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">~/.local/share/fonts</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
-           <span style="color: #494949;">"node[shape=record,"</span>
-           <span style="color: #494949;">"fontname=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">Jura Bold</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">,"</span>
-           <span style="color: #494949;">"penwidth=0,"</span>
-           <span style="color: #494949;">"style=filled,"</span>
-           <span style="color: #494949;">"fillcolor=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #000000; background-color: #f5f5f5;">#f5f5f5</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">];"</span>
-           <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> graph
-                <span style="color: #E53935;">:nodes</span>
-                <span style="color: #bbb;">(</span>mapcat <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span>name <span style="color: #bbb;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #494949;">[</span>edges-to<span style="color: #494949;">]</span><span style="color: #bbb;">}</span><span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
-                          <span style="color: #bbb;">(</span>map <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #bbb;">[</span>e<span style="color: #bbb;">]</span> <span style="color: #bbb;">[</span>name <span style="color: #494949;">(</span><span style="color: #E53935;">:dest</span> e<span style="color: #494949;">)</span><span style="color: #bbb;">]</span><span style="color: #494949;">)</span> edges-to<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-                remove-dups
-                <span style="color: #bbb;">(</span>map #<span style="color: #494949;">(</span>format <span style="color: #494949;">"</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">%s</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">--</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">%s</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span> <span style="color: #bbb;">(</span>first <span style="font-style: italic;">%</span><span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>second <span style="font-style: italic;">%</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-                flatten
-                <span style="color: #E53935;">str</span>/join<span style="color: #494949;">)</span>
-           <span style="color: #494949;">"}"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">graph</span> <span style="color: #bbb;">[</span>&amp; nodes<span style="color: #bbb;">]</span>
-  <span style="color: #bbb;">(</span>reduce node <span style="color: #494949;">(</span>-&gt;Graph <span style="color: #bbb;">{}</span><span style="color: #494949;">)</span> nodes<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn-</span> <span style="font-weight: bold; font-style: italic;">kill-orphans-impl</span> <span style="color: #bbb;">[</span>graph graph-ctor<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span>  graph
+        <span style="color: #E53935;">:node-syms</span>
+        <span style="color: #494949;">(</span>remove #<span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">and</span> <span style="color: #494949;">(</span>empty? <span style="color: #bbb;">(</span>get <span style="font-style: italic;">%</span> <span style="color: #E53935;">:edges-to</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> <span style="color: #494949;">(</span>empty? <span style="color: #bbb;">(</span>get <span style="font-style: italic;">%</span> <span style="color: #E53935;">:edges-from</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span> <span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+        <span style="color: #494949;">(</span>apply concat<span style="color: #494949;">)</span>
+        <span style="color: #494949;">(</span>apply hash-map<span style="color: #494949;">)</span>
+        graph-ctor<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 </div>
 </div>
 
-
-<div id="outline-container-org893b788" class="outline-4">
-<h4 id="org893b788">Directed Graphs</h4>
-<div class="outline-text-4" id="text-org893b788">
+<div id="outline-container-orgf404ce3" class="outline-4">
+<h4 id="orgf404ce3">Killing Nodes</h4>
+<div class="outline-text-4" id="text-orgf404ce3">
 <p>
-So to start out we basically do the same thing as before, though this time.
+Killing nodes is also something that can be done in all cases through this function. It kills all edges to the node and then kills the node itself.
 </p>
 
 <p>
-Now you may notice that the directed graph case is ultimately a superset of the undirected graph case. While in the case of the undirected graph the nodes.
+Unfortunately first we have to define a dummy-function so that it can compile before we have a function to kill edges for that specific case.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure"><span style="color: #494949;">(</span>require '<span style="color: #bbb;">[</span>clojure.string <span style="color: #E53935;">:as</span> str<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn-</span> <span style="font-weight: bold; font-style: italic;">kill-edge</span> <span style="color: #bbb;">[</span>graph from to<span style="color: #bbb;">]</span> <span style="color: #E53935;">nil</span><span style="color: #494949;">)</span>
+</pre>
+</div>
 
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">DiGraph</span> <span style="color: #bbb;">[</span>nodes<span style="color: #bbb;">]</span>
+<p>
+Then we define the function itself.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn-</span> <span style="font-weight: bold; font-style: italic;">kill-node-impl</span> <span style="color: #bbb;">[</span>graph node-sym<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">as-&gt;</span> graph g
+ <span style="color: #494949;">(</span>reduce #<span style="color: #bbb;">(</span>kill-edge <span style="font-style: italic;">%1</span> <span style="font-style: italic;">%2</span> node-sym<span style="color: #bbb;">)</span> g
+            <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">(</span>get-in graph <span style="color: #bbb;">[</span><span style="color: #E53935;">:nodes</span> node-sym <span style="color: #E53935;">:edges-from</span><span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+                 <span style="color: #494949;">(</span>map #<span style="color: #bbb;">(</span><span style="color: #E53935;">:src</span> <span style="font-style: italic;">%</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span>reduce #<span style="color: #bbb;">(</span>kill-edge <span style="font-style: italic;">%1</span> node-sym <span style="font-style: italic;">%2</span><span style="color: #bbb;">)</span> g
+            <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">(</span>get-in graph <span style="color: #bbb;">[</span><span style="color: #E53935;">:nodes</span> node-sym <span style="color: #E53935;">:edges-to</span><span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+                 <span style="color: #494949;">(</span>map #<span style="color: #bbb;">(</span><span style="color: #E53935;">:dest</span> <span style="font-style: italic;">%</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935;">:nodes</span> g<span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span>dissoc g node-sym<span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span>assoc graph <span style="color: #E53935;">:nodes</span> g<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0bbd906" class="outline-4">
+<h4 id="org0bbd906">Killing Edges</h4>
+<div class="outline-text-4" id="text-org0bbd906">
+<p>
+We also define a simple function too kill edges as well. This will have to be done twice for the undirected graph case, but can be trivially wrapped in the undirected graph case.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn-</span> <span style="font-weight: bold; font-style: italic;">kill-edge-impl</span> <span style="color: #bbb;">[</span>graph from to<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">[</span>from-&gt;to <span style="color: #bbb;">(</span>-&gt;Edge from to 0<span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> graph
+        <span style="color: #bbb;">(</span>update-in <span style="color: #494949;">[</span><span style="color: #E53935;">:nodes</span> from <span style="color: #E53935;">:edges-to</span><span style="color: #494949;">]</span> remove #<span style="color: #494949;">{</span>from-&gt;to<span style="color: #494949;">}</span><span style="color: #bbb;">)</span>
+        <span style="color: #bbb;">(</span>update-in <span style="color: #494949;">[</span><span style="color: #E53935;">:nodes</span> to <span style="color: #E53935;">:edges-from</span><span style="color: #494949;">]</span> remove #<span style="color: #494949;">{</span>from-&gt;to<span style="color: #494949;">}</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9ecc790" class="outline-4">
+<h4 id="org9ecc790">Creating Edges</h4>
+<div class="outline-text-4" id="text-org9ecc790">
+<p>
+We can also define a function to create an edge given a source and a destination. This is useful as even in the directed graph case it will call this function.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn-</span> <span style="font-weight: bold; font-style: italic;">add-edge-impl</span> <span style="color: #bbb;">[</span>graph from to weight<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">[</span>from-&gt;to <span style="color: #bbb;">(</span>-&gt;Edge from to weight<span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> graph
+        <span style="color: #bbb;">(</span>update-in <span style="color: #494949;">[</span><span style="color: #E53935;">:nodes</span> from <span style="color: #E53935;">:edges-to</span><span style="color: #494949;">]</span> conj from-&gt;to<span style="color: #bbb;">)</span>
+        <span style="color: #bbb;">(</span>update-in <span style="color: #494949;">[</span><span style="color: #E53935;">:nodes</span> to <span style="color: #E53935;">:edges-from</span><span style="color: #494949;">]</span> conj from-&gt;to<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga1c84da" class="outline-4">
+<h4 id="orga1c84da">Creating Nodes</h4>
+<div class="outline-text-4" id="text-orga1c84da">
+<p>
+Adding nodes is also trivial, with this adding a node with no name.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn-</span> <span style="font-weight: bold; font-style: italic;">add-node-impl</span> <span style="color: #bbb;">[</span>graph node-sym<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span>assoc-in graph <span style="color: #494949;">[</span><span style="color: #E53935;">:nodes</span> node-sym<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>-&gt;Node #<span style="color: #bbb;">{}</span> #<span style="color: #bbb;">{}</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge9088c8" class="outline-4">
+<h4 id="orge9088c8">Getting Nodes</h4>
+<div class="outline-text-4" id="text-orge9088c8">
+<p>
+To get node you just grab it from the map of nodes the graph has. Easy!
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn-</span> <span style="font-weight: bold; font-style: italic;">get-node-impl</span> <span style="color: #bbb;">[</span>graph node-sym<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span>get-in graph <span style="color: #494949;">[</span><span style="color: #E53935;">:nodes</span> node-sym<span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0f52b53" class="outline-3">
+<h3 id="org0f52b53">Unweighted Graphs</h3>
+<div class="outline-text-3" id="text-org0f52b53">
+<p>
+The most basic case is the unweighted class, which we implement below.
+</p>
+</div>
+<div id="outline-container-org2716193" class="outline-4">
+<h4 id="org2716193">BasicGraph</h4>
+<div class="outline-text-4" id="text-org2716193">
+<p>
+We define a protocol for basic, undirected graphs. To avoid name collisions we call the protocol <code>BasicGraph</code>. It defines the various functions we can expect to call on any graph.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defprotocol</span> <span style="color: #E53935;">BasicGraph</span>
+  <span style="color: #a4a4a4; font-style: italic;">"A protocol defining a weighted or unweighted graph."</span>
+  <span style="color: #bbb;">(</span>edge <span style="color: #494949;">[</span>graph from to<span style="color: #494949;">]</span>
+    <span style="color: #494949;">"Add an edge to the graph."</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>node <span style="color: #494949;">[</span>graph node-sym<span style="color: #494949;">]</span>
+    <span style="color: #494949;">"Add a node to the graph (node must be a unique identifier)."</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>get-node <span style="color: #494949;">[</span>graph node-sym<span style="color: #494949;">]</span>
+    <span style="color: #494949;">"Get a node from the graph (including edges)."</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>kill-orphans <span style="color: #494949;">[</span>graph<span style="color: #494949;">]</span>
+    <span style="color: #494949;">"Remove all orphans from the graph."</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>kill-edge <span style="color: #494949;">[</span>graph to from<span style="color: #494949;">]</span>
+    <span style="color: #494949;">"Kill an edge given it's description."</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>kill-node <span style="color: #494949;">[</span>graph node-sym<span style="color: #494949;">]</span>
+    <span style="color: #494949;">"Kill a node within the graph."</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>dot-repr <span style="color: #494949;">[</span>graph<span style="color: #494949;">]</span>
+    <span style="color: #494949;">"Produce DOT code representing the graph"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4000215" class="outline-4">
+<h4 id="org4000215">Undirected Graphs</h4>
+<div class="outline-text-4" id="text-org4000215">
+<p>
+An unweighted graph is implemented simply by ignoring the <code>:weight</code> value in the graph. In this graph the distance between nodes does not matter. We can also construct an unweighted, undirected graph which is in description the simplest, but ironically, due to how we defined the nodes and edges above (and set it up) the most complicated here.
+</p>
+
+<p>
+However, using the functions we defined above we can simplify it quite a bit. Adding an edge, as you can see, is simply
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">graph-demo</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935;">:require</span> <span style="color: #494949;">[</span>clojure.string <span style="color: #E53935;">:as</span> str<span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">Graph</span> <span style="color: #bbb;">[</span>nodes<span style="color: #bbb;">]</span>
   BasicGraph
   <span style="color: #bbb;">(</span>edge <span style="color: #494949;">[</span>graph from to<span style="color: #494949;">]</span>
-    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>from-&gt;to <span style="color: #494949;">(</span>-&gt;Edge from to 0<span style="color: #494949;">)</span>
-          to-&gt;from <span style="color: #494949;">(</span>-&gt;Edge to from 0<span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
-      <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> graph
-          <span style="color: #494949;">(</span>update-in <span style="color: #bbb;">[</span><span style="color: #E53935;">:nodes</span> from <span style="color: #E53935;">:edges-to</span><span style="color: #bbb;">]</span> conj from-&gt;to<span style="color: #494949;">)</span>
-          <span style="color: #494949;">(</span>update-in <span style="color: #bbb;">[</span><span style="color: #E53935;">:nodes</span> to <span style="color: #E53935;">:edges-from</span><span style="color: #bbb;">]</span> conj from-&gt;to<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> graph
+        <span style="color: #bbb;">(</span>add-edge-impl from to 0<span style="color: #bbb;">)</span>
+        <span style="color: #bbb;">(</span>add-edge-impl to from 0<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>node <span style="color: #494949;">[</span>graph node-sym<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>add-node-impl graph node-sym<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>kill-orphans <span style="color: #494949;">[</span>graph<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>kill-orphans-impl graph -&gt;Graph<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>kill-edge <span style="color: #494949;">[</span>graph from to<span style="color: #494949;">]</span>
+    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> graph
+        <span style="color: #bbb;">(</span>kill-edge-impl from to<span style="color: #bbb;">)</span>
+        <span style="color: #bbb;">(</span>kill-edge-impl to from<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>kill-node <span style="color: #494949;">[</span>graph node-sym<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>kill-node-impl graph node-sym<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>get-node <span style="color: #494949;">[</span>graph node-sym<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>get-node-impl graph node-sym<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  &lt;&lt;graph-dot-repr&gt;&gt;<span style="color: #494949;">)</span>
 
-  <span style="color: #bbb;">(</span>node <span style="color: #494949;">[</span>graph node<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>assoc-in graph <span style="color: #bbb;">[</span><span style="color: #E53935;">:nodes</span> node<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span>-&gt;Node #<span style="color: #494949;">{}</span> #<span style="color: #494949;">{}</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">graph</span> <span style="color: #bbb;">[</span>&amp; nodes<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span>reduce node <span style="color: #494949;">(</span>-&gt;Graph <span style="color: #bbb;">{}</span><span style="color: #494949;">)</span> nodes<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
 
-  <span style="color: #bbb;">(</span>kill-orphans <span style="color: #494949;">[</span>graph<span style="color: #494949;">]</span>
-    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span>  graph
-         <span style="color: #E53935;">:nodes</span>
-         <span style="color: #bbb;">(</span>remove #<span style="color: #494949;">(</span>empty? <span style="color: #bbb;">(</span>get <span style="font-style: italic;">%</span> <span style="color: #E53935;">:edges-to</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-         <span style="color: #bbb;">(</span>apply concat<span style="color: #bbb;">)</span>
-         <span style="color: #bbb;">(</span>apply hash-map<span style="color: #bbb;">)</span>
-         -&gt;DiGraph<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-  
-  <span style="color: #bbb;">(</span>kill-edge <span style="color: #494949;">[</span><span style="color: #bbb;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #494949;">[</span>nodes<span style="color: #494949;">]</span> <span style="color: #E53935;">:as</span> graph<span style="color: #bbb;">}</span> from to<span style="color: #494949;">]</span>
-    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>from-&gt;to <span style="color: #494949;">(</span>-&gt;Edge from to 0<span style="color: #494949;">)</span>
-          to-&gt;from <span style="color: #494949;">(</span>-&gt;Edge to from 0<span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
-      <span style="color: #bbb;">(</span>assoc graph
-             <span style="color: #E53935;">:nodes</span>
-             <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> nodes
-                  <span style="color: #bbb;">(</span>update-in <span style="color: #494949;">[</span>to <span style="color: #E53935;">:edges-from</span><span style="color: #494949;">]</span> remove #<span style="color: #494949;">{</span>from-&gt;to<span style="color: #494949;">}</span><span style="color: #bbb;">)</span>
-                  <span style="color: #bbb;">(</span>update-in <span style="color: #494949;">[</span>to <span style="color: #E53935;">:edges-to</span><span style="color: #494949;">]</span> remove #<span style="color: #494949;">{</span>to-&gt;from<span style="color: #494949;">}</span><span style="color: #bbb;">)</span>
-                  <span style="color: #bbb;">(</span>dissoc from<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-  
-  <span style="color: #bbb;">(</span>get-node <span style="color: #494949;">[</span>graph node<span style="color: #494949;">]</span>
-    <span style="color: #494949;">(</span>get-in graph <span style="color: #bbb;">[</span><span style="color: #E53935;">:nodes</span> node<span style="color: #bbb;">]</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-  
-  <span style="color: #bbb;">(</span>kill-node <span style="color: #494949;">[</span><span style="color: #bbb;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #494949;">[</span>nodes<span style="color: #494949;">]</span> <span style="color: #E53935;">:as</span> graph<span style="color: #bbb;">}</span> node-sym<span style="color: #494949;">]</span>
-    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #bbb;">(</span>reduce <span style="font-style: italic;">%</span><span style="color: #494949;">(</span>kill-edge<span style="color: #494949;">)</span> graph <span style="color: #494949;">(</span>zipmap <span style="color: #bbb;">(</span>get-in nodes <span style="color: #494949;">[</span>node <span style="color: #E53935;">:edges-to</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-         <span style="color: #bbb;">(</span>assoc graph <span style="color: #E53935;">:nodes</span> <span style="color: #494949;">(</span>dissoc nodes node-sym<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-  
-  <span style="color: #bbb;">(</span>dot-repr <span style="color: #494949;">[</span>this<span style="color: #494949;">]</span>
-    <span style="color: #494949;">(</span>str <span style="color: #494949;">"digraph G {"</span>
+<p>
+The only really messy bit of code is the DOT representation generator, but even that is fairly simple.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="org4cbd73d"><span style="color: #494949;">(</span>dot-repr <span style="color: #bbb;">[</span>graph<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">letfn</span> <span style="color: #494949;">[</span><span style="color: #bbb;">(</span>remove-dups <span style="color: #494949;">[</span><span style="color: #bbb;">[</span>edge &amp; edge-tuples<span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
+            <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">when</span> edge <span style="color: #bbb;">(</span>cons edge <span style="color: #494949;">(</span>remove-dups <span style="color: #bbb;">(</span>remove #<span style="color: #494949;">{</span>edge<span style="color: #494949;">}</span> <span style="color: #494949;">(</span>map reverse edge-tuples<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
+    <span style="color: #494949;">(</span>str <span style="color: #494949;">"graph G {"</span>
          <span style="color: #494949;">"rankdir=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">LR</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
          <span style="color: #494949;">"size=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">15,7.5!</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
          <span style="color: #494949;">"fontpath=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">~/.local/share/fonts</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
@@ -291,48 +327,355 @@ Now you may notice that the directed graph case is ultimately a superset of the 
          <span style="color: #494949;">"penwidth=0,"</span>
          <span style="color: #494949;">"style=filled,"</span>
          <span style="color: #494949;">"fillcolor=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #000000; background-color: #f5f5f5;">#f5f5f5</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">];"</span>
-         <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> this
+         <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> graph
               <span style="color: #E53935;">:nodes</span>
-              <span style="color: #494949;">(</span>map <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #494949;">[</span><span style="color: #bbb;">[</span>_ <span style="color: #494949;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #bbb;">[</span>name to-edges<span style="color: #bbb;">]</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
-                     <span style="color: #494949;">(</span>map #<span style="color: #bbb;">(</span>format <span style="color: #494949;">"</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">%s</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">-&gt;</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">%s</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">[label=%s];"</span> name <span style="color: #494949;">(</span><span style="color: #E53935;">:node</span> <span style="font-style: italic;">%</span><span style="color: #494949;">)</span> <span style="color: #494949;">(</span><span style="color: #E53935;">:weight</span> <span style="font-style: italic;">%</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
-                          edges<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+              <span style="color: #494949;">(</span>mapcat <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #494949;">[</span><span style="color: #bbb;">[</span>name <span style="color: #494949;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #bbb;">[</span>edges-to<span style="color: #bbb;">]</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
+                        <span style="color: #494949;">(</span>map <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #494949;">[</span>e<span style="color: #494949;">]</span> <span style="color: #494949;">[</span>name <span style="color: #bbb;">(</span><span style="color: #E53935;">:dest</span> e<span style="color: #bbb;">)</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span> edges-to<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+              remove-dups
+              <span style="color: #494949;">(</span>map #<span style="color: #bbb;">(</span>format <span style="color: #494949;">"</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">%s</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">--</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">%s</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span> <span style="color: #494949;">(</span>first <span style="font-style: italic;">%</span><span style="color: #494949;">)</span> <span style="color: #494949;">(</span>second <span style="font-style: italic;">%</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
               flatten
               <span style="color: #E53935;">str</span>/join<span style="color: #bbb;">)</span>
          <span style="color: #494949;">"}"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+From here we can just use the code and display the graph.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="org272fc4e"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #bbb;">(</span>graph <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:b</span> <span style="color: #E53935;">:c</span> <span style="color: #E53935;">:d</span> <span style="color: #E53935;">:e</span> <span style="color: #E53935;">:f</span> <span style="color: #E53935;">:g</span> <span style="color: #E53935;">:h</span> <span style="color: #E53935;">:i</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:b</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:c</span> <span style="color: #E53935;">:d</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:g</span> <span style="color: #E53935;">:h</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:b</span> <span style="color: #E53935;">:d</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:g</span> <span style="color: #E53935;">:a</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:c</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:h</span> <span style="color: #E53935;">:d</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>dot-repr<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
 
 
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">graph</span> <span style="color: #bbb;">[</span>&amp; nodes<span style="color: #bbb;">]</span>
+<div id="org30494c7" class="figure">
+<p><img src="./images/graph-demo_66094608-5e0c-4abc-a82f-e3b1ed172e49.png" alt="graph-demo_66094608-5e0c-4abc-a82f-e3b1ed172e49.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org893b788" class="outline-4">
+<h4 id="org893b788">Directed Graphs</h4>
+<div class="outline-text-4" id="text-org893b788">
+<p>
+So to start out we basically do the same thing as before, though this time we do less of it. Pretty much all the code is reused.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">graph-demo</span>
+   <span style="color: #bbb;">(</span><span style="color: #E53935;">:require</span> <span style="color: #494949;">[</span>clojure.string <span style="color: #E53935;">:as</span> str<span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">DiGraph</span> <span style="color: #bbb;">[</span>nodes<span style="color: #bbb;">]</span>
+  BasicGraph
+  <span style="color: #bbb;">(</span>edge <span style="color: #494949;">[</span>graph from to<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>add-edge-impl graph from to 0<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>node <span style="color: #494949;">[</span>graph node-sym<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>add-node-impl graph node-sym<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>kill-orphans <span style="color: #494949;">[</span>graph<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>kill-orphans-impl graph -&gt;DiGraph<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>kill-edge <span style="color: #494949;">[</span>graph from to<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>kill-edge-impl graph from to<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>kill-node <span style="color: #494949;">[</span>graph node-sym<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>kill-node-impl graph node-sym<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>get-node <span style="color: #494949;">[</span>graph node-sym<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>get-node-impl graph node-sym<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  &lt;&lt;digraph-dot-repr&gt;&gt;<span style="color: #494949;">)</span>
+
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">digraph</span> <span style="color: #bbb;">[</span>&amp; nodes<span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span>reduce node <span style="color: #494949;">(</span>-&gt;DiGraph <span style="color: #bbb;">{}</span><span style="color: #494949;">)</span> nodes<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
-</div>
-</div>
 
-<div id="outline-container-org3b02209" class="outline-4">
-<h4 id="org3b02209">Utility Functions</h4>
-<div class="outline-text-4" id="text-org3b02209">
+<p>
+Like before the only thing we have to really define is the actual DOT representation code and a slight modification to the edge generation code. Pretty much everything is entirely standard.
+</p>
+
 <div class="org-src-container">
-<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">add-node</span> <span style="color: #bbb;">[</span>graph node-sym<span style="color: #bbb;">]</span>
-  <span style="color: #bbb;">(</span>assoc graph node-sym <span style="color: #494949;">(</span>-&gt;GraphNode node-sym <span style="color: #E53935;">nil</span> 0<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
-
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="color: #494949;">)</span>
-
-<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">traverse-edge</span>
-  <span style="color: #a4a4a4; font-style: italic;">"Get the node related to the edge of the current node"</span>
-  <span style="color: #bbb;">[</span>graph edge<span style="color: #bbb;">]</span>
-  <span style="color: #bbb;">(</span>get-in graph <span style="color: #494949;">[</span><span style="color: #E53935;">:nodes</span> <span style="color: #bbb;">(</span><span style="color: #E53935;">:node</span> edge<span style="color: #bbb;">)</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+<pre class="src src-clojure" id="orgb6e7f41"><span style="color: #494949;">(</span>dot-repr <span style="color: #bbb;">[</span>graph<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span>str <span style="color: #494949;">"digraph G {"</span>
+       <span style="color: #494949;">"rankdir=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">LR</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
+       <span style="color: #494949;">"size=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">15,7.5!</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
+       <span style="color: #494949;">"fontpath=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">~/.local/share/fonts</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
+       <span style="color: #494949;">"node[shape=record,"</span>
+       <span style="color: #494949;">"fontname=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">Jura Bold</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">,"</span>
+       <span style="color: #494949;">"penwidth=0,"</span>
+       <span style="color: #494949;">"style=filled,"</span>
+       <span style="color: #494949;">"fillcolor=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #000000; background-color: #f5f5f5;">#f5f5f5</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">];"</span>
+       <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> graph
+            <span style="color: #E53935;">:nodes</span>
+            <span style="color: #bbb;">(</span>mapcat <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span>name <span style="color: #bbb;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #494949;">[</span>edges-to<span style="color: #494949;">]</span><span style="color: #bbb;">}</span><span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+                      <span style="color: #bbb;">(</span>map <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #bbb;">[</span>e<span style="color: #bbb;">]</span> <span style="color: #bbb;">[</span>name <span style="color: #494949;">(</span><span style="color: #E53935;">:dest</span> e<span style="color: #494949;">)</span><span style="color: #bbb;">]</span><span style="color: #494949;">)</span> edges-to<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+            
+            <span style="color: #bbb;">(</span>map #<span style="color: #494949;">(</span>format <span style="color: #494949;">"</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">%s</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">-&gt;</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">%s</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span> <span style="color: #bbb;">(</span>first <span style="font-style: italic;">%</span><span style="color: #bbb;">)</span> <span style="color: #bbb;">(</span>second <span style="font-style: italic;">%</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+            flatten
+            <span style="color: #E53935;">str</span>/join<span style="color: #494949;">)</span>
+       <span style="color: #494949;">"}"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
+
+<p>
+Finally we can see the fruits of our labor and define a graph that we can also visualize.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="org7394474"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">graph-demo</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #bbb;">(</span>digraph <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:b</span> <span style="color: #E53935;">:c</span> <span style="color: #E53935;">:d</span> <span style="color: #E53935;">:e</span> <span style="color: #E53935;">:f</span> <span style="color: #E53935;">:g</span> <span style="color: #E53935;">:h</span> <span style="color: #E53935;">:i</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:b</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:c</span> <span style="color: #E53935;">:d</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:g</span> <span style="color: #E53935;">:h</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:b</span> <span style="color: #E53935;">:d</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:g</span> <span style="color: #E53935;">:a</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:c</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>kill-edge <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:c</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:h</span> <span style="color: #E53935;">:d</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>dot-repr<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+
+<div id="org1b54de3" class="figure">
+<p><img src="./images/graph-digraph_92bc97e7-deb7-4d5f-a21a-2918d62b0a4f.png" alt="graph-digraph_92bc97e7-deb7-4d5f-a21a-2918d62b0a4f.png" />
+</p>
+</div>
+
+<p>
+Now you may notice that the directed graph case is ultimately a superset of the undirected graph case. While in the case of the undirected graph the nodes pointed at each other, they don't do that here.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdbbe7cf" class="outline-3">
+<h3 id="orgdbbe7cf">Weighted Graphs</h3>
+<div class="outline-text-3" id="text-orgdbbe7cf">
+<p>
+Now we get to weighted graphs, something that truly weighs heavily on my conscience. To implement them is pretty trivial and a minor extension of the previous.
+</p>
+</div>
+
+<div id="outline-container-org871f444" class="outline-4">
+<h4 id="org871f444">BasicWeightedGraph Protocol</h4>
+<div class="outline-text-4" id="text-org871f444">
+<p>
+We also define a protocol for weighted graphs, that is to say graphs where the individual nodes have a weight to them. This is an obvious and trivial development on the previous protocol.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defprotocol</span> <span style="color: #E53935;">BasicWeightedGraph</span>
+  <span style="color: #a4a4a4; font-style: italic;">"A protocol defining a weighted or unweighted graph."</span>
+  <span style="color: #bbb;">(</span>edge <span style="color: #494949;">[</span>graph from to weight<span style="color: #494949;">]</span>
+    <span style="color: #494949;">"Add an edge to the graph."</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>node <span style="color: #494949;">[</span>graph node-sym<span style="color: #494949;">]</span>
+    <span style="color: #494949;">"Add a node to the graph (node must be a unique identifier)."</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>get-node <span style="color: #494949;">[</span>graph node-sym<span style="color: #494949;">]</span>
+    <span style="color: #494949;">"Get a node from the graph (including edges)."</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>kill-orphans <span style="color: #494949;">[</span>graph<span style="color: #494949;">]</span>
+    <span style="color: #494949;">"Remove all orphans from the graph."</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>kill-edge <span style="color: #494949;">[</span>graph to from<span style="color: #494949;">]</span>
+    <span style="color: #494949;">"Kill an edge given it's description."</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>kill-node <span style="color: #494949;">[</span>graph node-sym<span style="color: #494949;">]</span>
+    <span style="color: #494949;">"Kill a node within the graph."</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>dot-repr <span style="color: #494949;">[</span>graph<span style="color: #494949;">]</span>
+    <span style="color: #494949;">"Produce DOT code representing the graph"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-org95868a7" class="outline-4">
+<h4 id="org95868a7">Undirected Graph</h4>
+<div class="outline-text-4" id="text-org95868a7">
+<p>
+Finally, a weighted graph is defined. Code is reused from the undirected case with only the weighted graph edge and dot-repr being redefined.
+</p>
+
+<p>
+Unfortunately though, 
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">graph-demo</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935;">:require</span> <span style="color: #494949;">[</span>clojure.string <span style="color: #E53935;">:as</span> str<span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">WeightedGraph</span> <span style="color: #bbb;">[</span>nodes<span style="color: #bbb;">]</span>
+  BasicWeightedGraph
+<span style="color: #bbb;">(</span>edge <span style="color: #494949;">[</span>graph from to weight<span style="color: #494949;">]</span>
+    <span style="color: #494949;">(</span>add-edge-impl graph from to weight<span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span>add-edge-impl graph to from weight<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>node <span style="color: #494949;">[</span>graph node-sym<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>add-node-impl graph node-sym<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>kill-orphans <span style="color: #494949;">[</span>graph<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>kill-orphans-impl graph -&gt;WeightedGraph<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>kill-edge <span style="color: #494949;">[</span>graph from to<span style="color: #494949;">]</span>
+    <span style="color: #494949;">(</span>kill-edge-impl graph from to<span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span>kill-edge-impl graph to from<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>kill-node <span style="color: #494949;">[</span>graph node-sym<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>kill-node-impl graph node-sym<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>get-node <span style="color: #494949;">[</span>graph node-sym<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>get-node-impl graph node-sym<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  &lt;&lt;weighted-graph-dot-repr&gt;&gt;<span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">weighted-graph</span> <span style="color: #bbb;">[</span>&amp; nodes<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span>reduce node <span style="color: #494949;">(</span>-&gt;WeightedGraph <span style="color: #bbb;">{}</span><span style="color: #494949;">)</span> nodes<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+The production of a weighted DOT representation is an extra challenge due to the duplication of the edges. However, by reversing only the first two we can effectively remove the edges.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="orge74c1f5"><span style="color: #494949;">(</span>dot-repr <span style="color: #bbb;">[</span>graph<span style="color: #bbb;">]</span>
+          <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">letfn</span> <span style="color: #494949;">[</span><span style="color: #bbb;">(</span>remove-dups <span style="color: #494949;">[</span><span style="color: #bbb;">[</span>edge &amp; edge-tuples<span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
+                    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">when</span> edge
+                      <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> edge-tuples
+                           <span style="color: #494949;">(</span>map #<span style="color: #bbb;">(</span>concat <span style="color: #494949;">(</span>reverse
+                                          <span style="color: #bbb;">(</span>take 2 <span style="font-style: italic;">%</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                                         <span style="color: #494949;">[</span><span style="color: #bbb;">(</span>last <span style="font-style: italic;">%</span><span style="color: #bbb;">)</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                           <span style="color: #494949;">(</span>remove #<span style="color: #bbb;">{</span>edge<span style="color: #bbb;">}</span><span style="color: #494949;">)</span>
+                           remove-dups
+                           <span style="color: #494949;">(</span>cons edge<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
+            <span style="color: #494949;">(</span>str <span style="color: #494949;">"graph G {"</span>
+                 <span style="color: #494949;">"rankdir=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">LR</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
+                 <span style="color: #494949;">"size=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">15,7.5!</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
+                 <span style="color: #494949;">"fontpath=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">~/.local/share/fonts</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
+                 <span style="color: #494949;">"edge[fontname=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">Jura Bold</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">]""node[shape=record,"</span>
+                 <span style="color: #494949;">"fontname=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">Jura Bold</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">,"</span>
+                 <span style="color: #494949;">"penwidth=0,"</span>
+                 <span style="color: #494949;">"style=filled,"</span>
+                 <span style="color: #494949;">"fillcolor=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #000000; background-color: #f5f5f5;">#f5f5f5</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">];"</span>
+                 <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> graph
+                      <span style="color: #E53935;">:nodes</span>
+                      <span style="color: #494949;">(</span>mapcat <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #494949;">[</span><span style="color: #bbb;">[</span>name <span style="color: #494949;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #bbb;">[</span>edges-to<span style="color: #bbb;">]</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
+                                <span style="color: #494949;">(</span>map <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #494949;">[</span><span style="color: #bbb;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #494949;">[</span>src dest weight<span style="color: #494949;">]</span><span style="color: #bbb;">}</span><span style="color: #494949;">]</span> <span style="color: #494949;">[</span>src dest weight<span style="color: #494949;">]</span><span style="color: #bbb;">)</span> edges-to<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                      remove-dups
+                      <span style="color: #494949;">(</span>map <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #494949;">[</span><span style="color: #bbb;">[</span>name dest weight<span style="color: #bbb;">]</span><span style="color: #494949;">]</span> <span style="color: #494949;">(</span>format <span style="color: #494949;">"</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">%s</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">--</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">%s</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">[label=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">%s</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">];"</span> name dest weight<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                      flatten
+                      <span style="color: #E53935;">str</span>/join<span style="color: #bbb;">)</span>
+                 <span style="color: #494949;">"}"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+Now just to visualize it.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure" id="org5694c62"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">graph-demo</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #bbb;">(</span>weighted-graph <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:b</span> <span style="color: #E53935;">:c</span> <span style="color: #E53935;">:d</span> <span style="color: #E53935;">:e</span> <span style="color: #E53935;">:f</span> <span style="color: #E53935;">:g</span> <span style="color: #E53935;">:h</span> <span style="color: #E53935;">:i</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:b</span> 3<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:c</span> <span style="color: #E53935;">:d</span> 6<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:g</span> <span style="color: #E53935;">:h</span> 9<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:b</span> <span style="color: #E53935;">:d</span> 5<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:g</span> <span style="color: #E53935;">:a</span> 3<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:h</span> 42<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:h</span> <span style="color: #E53935;">:d</span> 3<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>dot-repr<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+
+<div id="orgaf74d82" class="figure">
+<p><img src="./images/graph-weighted-digraph_92bc97e7-deb7-4d5f-a21a-2918d62b0a4f.png" alt="graph-weighted-digraph_92bc97e7-deb7-4d5f-a21a-2918d62b0a4f.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdfb5826" class="outline-4">
+<h4 id="orgdfb5826">Weighted Directed Graph</h4>
+<div class="outline-text-4" id="text-orgdfb5826">
+<p>
+Now, onto the weighted directed graph comrades. Can you imagine what it contains? You guessed it right! A graph that is weighted <i>and</i> directed. Shocking I know. You will also be (not) surprised to learn that the implementation of the weighted directed graph is fundamentally the same as the regular digraph, just with the addition of weights. Truly a revelation.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">graph-demo</span>
+   <span style="color: #bbb;">(</span><span style="color: #E53935;">:require</span> <span style="color: #494949;">[</span>clojure.string <span style="color: #E53935;">:as</span> str<span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">WeightedDiGraph</span> <span style="color: #bbb;">[</span>nodes<span style="color: #bbb;">]</span>
+  BasicGraph
+  <span style="color: #bbb;">(</span>edge <span style="color: #494949;">[</span>graph from to weight<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>add-edge-impl graph from to weight<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>node <span style="color: #494949;">[</span>graph node-sym<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>add-node-impl graph node-sym<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>kill-orphans <span style="color: #494949;">[</span>graph<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>kill-orphans-impl graph -&gt;WeightedDiGraph<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>kill-edge <span style="color: #494949;">[</span>graph from to<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>kill-edge-impl graph from to<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>kill-node <span style="color: #494949;">[</span>graph node-sym<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>kill-node-impl graph node-sym<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>get-node <span style="color: #494949;">[</span>graph node-sym<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>get-node-impl graph node-sym<span style="color: #494949;">)</span>
+  &lt;&lt;weighted-digraph-dot-repr&gt;&gt;<span style="color: #bbb;">)</span>
+
+
+<span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">weighted-digraph</span> <span style="color: #494949;">[</span>&amp; nodes<span style="color: #494949;">]</span>
+  <span style="color: #494949;">(</span>reduce node <span style="color: #bbb;">(</span>-&gt;WeightedDiGraph <span style="color: #494949;">{}</span><span style="color: #bbb;">)</span> nodes<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+</pre>
+</div>
+
+<p>
+We also modify our dot representation code to also add the weight to it, just like with the code above.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure" id="org364400a"><span style="color: #494949;">(</span>dot-repr <span style="color: #bbb;">[</span>graph<span style="color: #bbb;">]</span>
+          <span style="color: #bbb;">(</span>str <span style="color: #494949;">"digraph G {"</span>
+               <span style="color: #494949;">"rankdir=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">LR</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
+               <span style="color: #494949;">"size=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">15,7.5!</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
+               <span style="color: #494949;">"fontpath=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">~/.local/share/fonts</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
+               <span style="color: #494949;">"node[shape=record,"</span>
+               <span style="color: #494949;">"fontname=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">Jura Bold</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">,"</span>
+               <span style="color: #494949;">"penwidth=0,"</span>
+               <span style="color: #494949;">"style=filled,"</span>
+               <span style="color: #494949;">"fillcolor=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #000000; background-color: #f5f5f5;">#f5f5f5</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">];"</span>
+               <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> graph
+                    <span style="color: #E53935;">:nodes</span>
+                    <span style="color: #bbb;">(</span>mapcat <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span>name <span style="color: #bbb;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #494949;">[</span>edges-to<span style="color: #494949;">]</span><span style="color: #bbb;">}</span><span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+                              <span style="color: #bbb;">(</span>map <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #bbb;">[</span><span style="color: #494949;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #bbb;">[</span>dest weight<span style="color: #bbb;">]</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span> <span style="color: #bbb;">[</span>name dest weight<span style="color: #bbb;">]</span><span style="color: #494949;">)</span> edges-to<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+                    <span style="color: #bbb;">(</span>map <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #bbb;">[</span><span style="color: #494949;">[</span>name dest weight<span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+                           <span style="color: #bbb;">(</span>format <span style="color: #494949;">"</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">%s</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">-&gt;</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">%s</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">[label=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">%s</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">];"</span> name dest weight<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+                    flatten
+                    <span style="color: #E53935;">str</span>/join<span style="color: #494949;">)</span>
+               <span style="color: #494949;">"}"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+Finally we can see the fruits of our labor and define a graph that we can also visualize.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure" id="orgbd1fbe8"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">graph-demo</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #bbb;">(</span>weighted-digraph <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:b</span> <span style="color: #E53935;">:c</span> <span style="color: #E53935;">:d</span> <span style="color: #E53935;">:e</span> <span style="color: #E53935;">:f</span> <span style="color: #E53935;">:g</span> <span style="color: #E53935;">:h</span> <span style="color: #E53935;">:i</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:b</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:c</span> <span style="color: #E53935;">:d</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:g</span> <span style="color: #E53935;">:h</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:b</span> <span style="color: #E53935;">:d</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:g</span> <span style="color: #E53935;">:a</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:c</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>kill-edge <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:c</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:h</span> <span style="color: #E53935;">:d</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>dot-repr<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+
+<div id="orgf7824b0" class="figure">
+<p><img src="./images/graph-digraph_92bc97e7-deb7-4d5f-a21a-2918d62b0a4f.png" alt="graph-digraph_92bc97e7-deb7-4d5f-a21a-2918d62b0a4f.png" />
+</p>
+</div>
+
+<p>
+Now you may notice that the directed graph case is ultimately a superset of the undirected graph case. While in the case of the undirected graph the nodes pointed at each other, they don't do that here.
+</p>
 </div>
 </div>
 </div>
 </div>
 <!-- Footnotes --><!-- 
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Searching piles of pointers is irritating no matter how you do it and tends to make any operations a lot messier. It's also, in this case, much slower as you can't just pick any node as easily.</p></div></div>
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Which I think I will extend to representing arbitrary Clojure code in general</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">As with any abstract structure it is an interpretation, and many others exist. The rules in math are made up anyways, so feel free to add some more!</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Searching piles of pointers is irritating no matter how you do it and tends to make any operations a lot messier. It's also, in this case, much slower as you can't just pick any node as easily.</p></div></div>
 
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W52-1 18:04</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2022-W01-6 04:29</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

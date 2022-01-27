@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-W04-4 05:11 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rule Based Systems</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="What expert systems are, what they are good for, and how they work." />
+<meta name="generator" content="Org Mode" />
+<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="/images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">Rule Based Systems
+<br />
+<span class="subtitle">Problems DESTROYED with FACTS and LOGIC!</span>
+</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org6c1d33a">Introduction</a></li>
+<li><a href="#org046c292">The Problem Domain</a></li>
+<li><a href="#orgd08c9ac">A Naive Implementation</a>
+<ul>
+<li><a href="#orgd738954">Basic Chaining</a></li>
+<li><a href="#org5d4e0d2">EAV Triplets</a>
+<ul>
+<li><a href="#orgcb414f2">Multi-Clause Matching</a></li>
+<li><a href="#org70935f7">Multi-Entity Matching</a></li>
+</ul>
+</li>
+<li><a href="#orgeac6aa7">Destructuring</a></li>
+</ul>
+</li>
+<li><a href="#org14d1681">Rete Algorithm</a></li>
+<li><a href="#orgf2d3069">Parallel Execution</a></li>
+<li><a href="#org5a49921">Conclusions</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org6c1d33a" class="outline-2">
+<h2 id="org6c1d33a">Introduction</h2>
+<div class="outline-text-2" id="text-org6c1d33a">
+<p>
+Expert systems are probably something you have heard of but have never actually messed with. You might have written some PROLOG in college, heard about horn clauses, been awfully confused and wondered why anyone would want to do that. But, I am here to tell you that not only are the useful, but they actually are extremely useful. They also have been my job for the last year and a half. I have written code for them, tested them, build a CI pipeline for testing them, and so on.
+</p>
+
+<p>
+Fundamentally expert systems excel when your problems have a complex domain with many exceptions, can be unambiguously described, and require correctness. That is to say problems like determining if a computer is misconfigured (and the steps to fix that), if some budget request meets the requirements, and even how a program should build and install another program. These problems are not <i>all problems</i>, but they are a large section of problems and expert systems simplify them and make for a very maintainable process.
+</p>
+
+<p>
+Now of course, usually, people will provide very small toy examples of expert systems. Often people will then look at them and (presumably) respond "well this looks very nice and all but I don't see why I can't just use a <code>cond</code> or <code>switch</code> macro to do it". These don't really communicate why expert systems are great because what expert systems do is <i>scale</i> well. While you might have no problem managing 5 exceptions with polymorphism, you will have a problem managing a hundred different ones.
+</p>
+
+<p>
+So in this tutorial we will develop an expert system with over a hundred rules that will hopefully provide a better introduction to why rule based systems are useful and how they can be used.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org046c292" class="outline-2">
+<h2 id="org046c292">The Problem Domain</h2>
+<div class="outline-text-2" id="text-org046c292">
+<p>
+Imagine you want to determine if 
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd08c9ac" class="outline-2">
+<h2 id="orgd08c9ac">A Naive Implementation</h2>
+<div class="outline-text-2" id="text-orgd08c9ac">
+</div>
+<div id="outline-container-orgd738954" class="outline-3">
+<h3 id="orgd738954">Basic Chaining</h3>
+<div class="outline-text-3" id="text-orgd738954">
+<p>
+We can implement a very simple (though inefficient) expert system by simply applying every rule to every fact in the set, with each new fact run against all new rules. This <i>works</i>, but obviously will become very inefficient as the complexity of the rule engine increases.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">fire-rules</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>rules <span style="color: #bbb;">[</span>head &amp; rest<span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
+   <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">when-not</span> <span style="color: #bbb;">(</span>nil? head<span style="color: #bbb;">)</span>
+     <span style="color: #bbb;">(</span>cons head
+           <span style="color: #494949;">(</span>fire-rules rules
+                       <span style="color: #bbb;">(</span>reduce <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #bbb;">[</span>facts <span style="color: #494949;">[</span>lhs _ rhs<span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+                                 <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>= head lhs<span style="color: #494949;">)</span>
+                                   <span style="color: #494949;">(</span>cons rhs facts<span style="color: #494949;">)</span>
+                                   facts<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                               rest
+                               rules<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+<p>
+Overall, as you can see, the implementation is <i>incredibly</i> simple. While I implemented this in a lisp in 11 lines of code, you could just as well do it in any other language in a similar amount of code. <label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> I am mentioning this since a wikipeida article on rule engines seems to think that early rule engines were implemented in Lisp since it has better "symbolic manipulation" utilities, which should strike anyone as  meaningless phrase when it comes to programming.</span> Really the lisp is just me being a nerd that really likes s-expressions code-as-data stuff. However, from this initial iteration we can add some stuff for destructuring, binding, and the production of new facts.
+</p>
+
+<p>
+Here is how we might encode the fritz the frog in our system.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span>fire-rules
+ <span style="color: #bbb;">[</span><span style="color: #494949;">[</span><span style="color: #bbb;">[</span><span style="color: #E53935;">:croaks</span> <span style="color: #E53935;">:eats-flies</span><span style="color: #bbb;">]</span> <span style="color: #E53935;">:frog</span><span style="color: #494949;">]</span>
+  <span style="color: #494949;">[</span><span style="color: #E53935;">:frog</span> <span style="color: #E53935;">:&gt;&gt;</span> <span style="color: #E53935;">:green</span><span style="color: #494949;">]</span>
+  <span style="color: #494949;">[</span><span style="color: #bbb;">[</span><span style="color: #E53935;">:chirps</span> <span style="color: #E53935;">:sings</span><span style="color: #bbb;">]</span> <span style="color: #E53935;">:&gt;&gt;</span> <span style="color: #E53935;">:canary</span><span style="color: #494949;">]</span>
+  <span style="color: #494949;">[</span><span style="color: #E53935;">:canary</span> <span style="color: #E53935;">:&gt;&gt;</span> <span style="color: #E53935;">:yellow</span><span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+ 
+ <span style="color: #bbb;">[</span><span style="color: #494949;">[</span><span style="color: #E53935;">:croaks</span> <span style="color: #E53935;">:eats-flies</span><span style="color: #494949;">]</span><span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+As you can see, this is quite limited as it only matches against one thing and cannot use more complex predicates than equality. Obviously there are some ways this can be improved.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5d4e0d2" class="outline-3">
+<h3 id="org5d4e0d2">EAV Triplets</h3>
+<div class="outline-text-3" id="text-org5d4e0d2">
+<p>
+To start out we will move to using EAV triplets for representing our data when executing our program and matching patterns, to do so we first define a little function to convert Clojure maps into EAV triplets. The specific reason I use them is because they allow me to easily match subsets of the initial rule.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">objs-&gt;eav</span> <span style="color: #bbb;">[</span>objs<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span>map <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #bbb;">[</span>obj<span style="color: #bbb;">]</span>
+         <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">[</span>entity <span style="color: #bbb;">(</span><span style="color: #E53935;">java.util.UUID</span>/randomUUID<span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
+           <span style="color: #494949;">(</span>map <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #494949;">[</span><span style="color: #bbb;">[</span>k v<span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
+                  <span style="color: #494949;">[</span>entity k v<span style="color: #494949;">]</span><span style="color: #bbb;">)</span>
+                obj<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+       objs<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgcb414f2" class="outline-4">
+<h4 id="orgcb414f2">Multi-Clause Matching</h4>
+<div class="outline-text-4" id="text-orgcb414f2">
+<p>
+Now we can write some functions to allow for multiple clauses to be matched within a single entity as well as functions to add additional facts to / update the entity and predicates applied to specific entities.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">match</span> <span style="color: #bbb;">[</span>lhs head<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>= clojure.lang.PersistentList <span style="color: #bbb;">(</span>type lhs<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+    <span style="color: #494949;">()</span>
+    <span style="color: #494949;">(</span>= lhs <span style="color: #bbb;">(</span>rest head<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-clojure">
+</pre>
+</div>
+
+<p>
+We also modify the initial function slightly to use the "match" function.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">fire-rules</span>
+  <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>rules <span style="color: #bbb;">[</span>head &amp; rest<span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
+   <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">when-not</span> <span style="color: #bbb;">(</span>nil? head<span style="color: #bbb;">)</span>
+     <span style="color: #bbb;">(</span>cons head
+           <span style="color: #494949;">(</span>fire-rules rules
+                       <span style="color: #bbb;">(</span>reduce <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #bbb;">[</span>facts <span style="color: #494949;">[</span>lhs _ rhs<span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+                                 <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>match lhs head<span style="color: #494949;">)</span>
+                                   <span style="color: #494949;">(</span>cons rhs facts<span style="color: #494949;">)</span>
+                                   facts<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                               rest
+                               rules<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org70935f7" class="outline-4">
+<h4 id="org70935f7">Multi-Entity Matching</h4>
+<div class="outline-text-4" id="text-org70935f7">
+<p>
+To match multiple entities of different types we simply extend the functions slightly 
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgeac6aa7" class="outline-3">
+<h3 id="orgeac6aa7">Destructuring</h3>
+</div>
+</div>
+
+<div id="outline-container-org14d1681" class="outline-2">
+<h2 id="org14d1681">Rete Algorithm</h2>
+<div class="outline-text-2" id="text-org14d1681">
+<p>
+Now that we have our syntax and a little code done, let's start adding some upgrades. To make things better, let's 
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf2d3069" class="outline-2">
+<h2 id="orgf2d3069">Parallel Execution</h2>
+<div class="outline-text-2" id="text-orgf2d3069">
+<p>
+Finally, now that we can define the execution of each fact separately, let's make it run in parallel.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5a49921" class="outline-2">
+<h2 id="org5a49921">Conclusions</h2>
+<div class="outline-text-2" id="text-org5a49921">
+<p>
+I think that, in the future, I might want to consider developing a distributed rule engine of some sort, possibly using directed acyclic graphs. Expert systems also can be integrated with machine learning components (and handle ambiguity through them), which I think would also make an interesting tutorial.
+</p>
+</div>
+</div>
+<!-- Footnotes --><!-- 
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">I am mentioning this since a wikipeida article on rule engines seems to think that early rule engines were implemented in Lisp since it has better "symbolic manipulation" utilities, which should strike anyone as  meaningless phrase when it comes to programming.</p></div></div>
+
+ --></div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2022-W01-4 09:04</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>

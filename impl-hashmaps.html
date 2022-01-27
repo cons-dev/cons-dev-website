@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-W52-2 01:13 -->
+<!-- 2022-W04-4 05:11 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Implementing Hash Maps</title>
@@ -35,7 +35,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="images/website-logo.png" /></a></div>
+<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="/images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Implementing Hash Maps</h1>
@@ -75,7 +75,7 @@ A hashmap is fairly simple, but in essence you have an array of 2-tuples with th
 </p>
 
 
-<div id="org5074fca" class="figure">
+<div id="org1376552" class="figure">
 <p><img src="./images/hashmap-adding_c8a4a74c-a139-45d5-a340-c2ed895b2e5a.png" alt="Two items being added to a hashmap." />
 </p>
 </div>
@@ -85,7 +85,7 @@ A hashmap is fairly simple, but in essence you have an array of 2-tuples with th
 However, as you might imagine, there can occasionally be collisions, like this.
 </p>
 
-<div id="org3edd811" class="figure">
+<div id="orge5a590f" class="figure">
 <p><img src="./images/hashmap-collison_58e621d6-4ffd-4fed-87d3-592912398f2b.png" alt="A third item being added to a hash map but experiencing a hash collision." />
 </p>
 </div>
@@ -95,7 +95,7 @@ To solve this you can either resize the array, shove the collided items in a sub
 </p>
 
 
-<div id="org597492b" class="figure">
+<div id="org165c775" class="figure">
 <p><img src="./images/hashmap-resizing_58e621d6-4ffd-4fed-87d3-592912398f2b.png" alt="All three itmes being added again to the newly resized has hmap." />
 </p>
 </div>
@@ -106,7 +106,7 @@ To find items in the array you first find the index of the key just like you did
 
 
 
-<div id="org2da02cf" class="figure">
+<div id="org717273b" class="figure">
 <p><img src="./images/hashmap-finding-key_251f9892-8648-4230-b99b-f8b50575f140.png" alt="The value of foo being obtained from the hash map." />
 </p>
 </div>
