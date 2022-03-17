@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-W11-4 02:13 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Implementing Paxos</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="A short introduction to the paxos algorithm and an implmentation in python." />
+<meta name="generator" content="Org Mode" />
+<link href="/site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="/index.html"><img alt="An abstract logo representing a series of three assembly line stamping machines with the words CONS, DEV, and  embalzoned in white on each machine." id="site-logo" src="/images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">Implementing Paxos</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org1d14594">Introduction</a></li>
+<li><a href="#org66c746b">Why?</a></li>
+<li><a href="#org976d55b">Algorithm</a>
+<ul>
+<li><a href="#orgec86062">Phase 1</a>
+<ul>
+<li><a href="#orgf167090">1a Prepare</a></li>
+<li><a href="#orge538cc0">1b Promise</a></li>
+</ul>
+</li>
+<li><a href="#org88646df">Phase 2</a>
+<ul>
+<li><a href="#orge5b42b3">2a Accept</a></li>
+<li><a href="#org3391e63">2b Accepted</a></li>
+</ul>
+</li>
+<li><a href="#org73739c5">Instability</a></li>
+<li><a href="#orgc68312e">Paxos and Consistency</a></li>
+</ul>
+</li>
+<li><a href="#org1ef5153">Implementation</a>
+<ul>
+<li><a href="#org6b00097">The Algorithm</a></li>
+<li><a href="#orgd03e62a">Our Little Server</a></li>
+</ul>
+</li>
+<li><a href="#orga5512dc">Conclusion</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org1d14594" class="outline-2">
+<h2 id="org1d14594">Introduction</h2>
+<div class="outline-text-2" id="text-org1d14594">
+<p>
+The paxos algorithm is the basis of nearly all large scale distributed storage systems used in industry today. Here we will implement a simple python based in-memory store for data.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org66c746b" class="outline-2">
+<h2 id="org66c746b">Why?</h2>
+<div class="outline-text-2" id="text-org66c746b">
+<p>
+I am also currently interviewing at a few companies, and one of the things I received mentioned the Paxos algorithm. I am also a bit out of date with Python, so in order to quickly get back into the groove with python and to learn some distributed computing stuff, I have decided to implement the Paxos algorithm.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org976d55b" class="outline-2">
+<h2 id="org976d55b">Algorithm</h2>
+<div class="outline-text-2" id="text-org976d55b">
+<p>
+So the algorithm itself is actually really simple. The only knowledge that is required before hand is the number of nodes within the system.
+</p>
+</div>
+<div id="outline-container-orgec86062" class="outline-3">
+<h3 id="orgec86062">Phase 1</h3>
+<div class="outline-text-3" id="text-orgec86062">
+</div>
+<div id="outline-container-orgf167090" class="outline-4">
+<h4 id="orgf167090">1a Prepare</h4>
+<div class="outline-text-4" id="text-orgf167090">
+<p>
+A node (proposer) sends a series of messages to other nodes (acceptors) telling them to prepare to receive a message with a given unique ordinal ID \(n\) which must be greater than any previous \(n\).
+</p>
+</div>
+</div>
+<div id="outline-container-orge538cc0" class="outline-4">
+<h4 id="orge538cc0">1b Promise</h4>
+<div class="outline-text-4" id="text-orge538cc0">
+<p>
+If these nodes have not <span class="underline">accepted</span> or <span class="underline">promised</span> a greater ID than \(n\), then they send a promise stating that they will reject messages with an ID less than \(n\).
+</p>
+
+<p>
+If the acceptor <span class="underline">accepted</span> a proposal at some point in the past with an ID greater than \(n\), then it will return the proposal number and the corresponding accepted value in response.
+</p>
+
+<p>
+In this case the acceptor will also send a denial response to tell the proposer to halt any further attempts to achieve consensus with the current proposal.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org88646df" class="outline-3">
+<h3 id="org88646df">Phase 2</h3>
+<div class="outline-text-3" id="text-org88646df">
+</div>
+<div id="outline-container-orge5b42b3" class="outline-4">
+<h4 id="orge5b42b3">2a Accept</h4>
+<div class="outline-text-4" id="text-orge5b42b3">
+<p>
+If the proposer receives promises from a quorum of acceptors, it sets a value for its proposal. If any acceptors have accepted another proposal then they will send their values to the proposer who must set the value of its proposal \(v\) to the value associated with the highest proposal number reported by the acceptors.
+</p>
+
+<p>
+If none of the acceptors have accepted a proposal up to this point then the proposer may choose the value \(x\) it wants to send.
+</p>
+</div>
+</div>
+<div id="outline-container-org3391e63" class="outline-4">
+<h4 id="org3391e63">2b Accepted</h4>
+<div class="outline-text-4" id="text-org3391e63">
+<p>
+Finally, when an acceptor receives an accept message it must accept it IFF it has not promised to only consider proposals with an identifier greater than \(n\).
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org73739c5" class="outline-3">
+<h3 id="org73739c5">Instability</h3>
+<div class="outline-text-3" id="text-org73739c5">
+<p>
+Now obviously this can be a bit unstable during regular operations.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc68312e" class="outline-3">
+<h3 id="orgc68312e">Paxos and Consistency</h3>
+<div class="outline-text-3" id="text-orgc68312e">
+<p>
+Now as you can see this merely ensures that the 
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1ef5153" class="outline-2">
+<h2 id="org1ef5153">Implementation</h2>
+<div class="outline-text-2" id="text-org1ef5153">
+<p>
+To implement Paxos we will design a simple series of HTTP servers which will be able to communicate with each other using a basic "swarm configuration" which will list a series of different ports that it will operate on. Then the primary process spawns the subprocesses, which then communicate with each other to obtain some state.
+</p>
+</div>
+
+<div id="outline-container-org6b00097" class="outline-3">
+<h3 id="org6b00097">The Algorithm</h3>
+<div class="outline-text-3" id="text-org6b00097">
+<p>
+To implement it we basically define our program as a class, <code>PaxosAgent</code> which will serve as acceptor and proposer if need be. Here we use the time in nanoseconds as the ID for each message since it will ensure that 
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #E53935; font-style: italic;">import</span> time
+
+<span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">broadcast</span><span style="color: #494949;">(</span>targets, message<span style="color: #494949;">)</span>:
+    <span style="color: #a4a4a4; font-style: italic;">"Send a message to the set of the targets."</span>
+    
+
+
+<span style="color: #E53935; font-style: italic;">class</span> <span style="color: #E53935;">PaxosAgent</span>:
+    <span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">__init__</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span><span style="color: #494949;">)</span>:
+        <span style="font-style: italic;">max_id</span> = 0
+        <span style="font-style: italic;">state</span> = <span style="color: #E53935;">None</span>
+    <span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">propose</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span>, value<span style="color: #494949;">)</span>:
+
+    <span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">accept</span><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">self</span> value<span style="color: #494949;">)</span>:
+    
+<span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">paxos</span><span style="color: #494949;">(</span>v, <span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd03e62a" class="outline-3">
+<h3 id="orgd03e62a">Our Little Server</h3>
+<div class="outline-text-3" id="text-orgd03e62a">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #E53935; font-style: italic;">import</span> http.server <span style="color: #E53935; font-style: italic;">as</span> server
+<span style="color: #E53935; font-style: italic;">import</span> http.client <span style="color: #E53935; font-style: italic;">as</span> client
+</pre>
+</div>
+
+<p>
+Finally we define our main process which will serve as the entry system for our datastore.
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">signal</span> <span style="color: #494949;">()</span>:
+
+<span style="color: #E53935; font-style: italic;">def</span> <span style="font-weight: bold; font-style: italic;">sig_err</span>
+
+<span style="color: #E53935; font-style: italic;">class</span> 
+
+
+<span style="color: #E53935; font-style: italic;">if</span> <span style="color: #E53935;">__name__</span> == <span style="color: #494949;">'__main__'</span>:
+    <span style="font-style: italic;">p</span> = mp.Process<span style="color: #494949;">(</span>target=f, args=<span style="color: #bbb;">(</span><span style="color: #494949;">'bob'</span>,<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+    p.start<span style="color: #494949;">()</span>
+    p.join<span style="color: #494949;">()</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga5512dc" class="outline-2">
+<h2 id="orga5512dc">Conclusion</h2>
+<div class="outline-text-2" id="text-orga5512dc">
+<p>
+As we can see Paxos is great&#x2026;. assuming you actually need a system to obtain consensus consistently. However, Paxos doesn't really solve the issue of parallel processing. It merely ensures that all nodes receive updates on the values they are supposed to have and ensures consensus among nodes about the state of the world.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2022-W08-3 18:11</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>

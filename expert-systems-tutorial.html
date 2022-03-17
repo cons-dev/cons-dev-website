@@ -3,18 +3,18 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-W04-4 05:11 -->
+<!-- 2022-W11-4 02:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Rule Based Systems</title>
 <meta name="author" content="Inanna" />
 <meta name="description" content="What expert systems are, what they are good for, and how they work." />
 <meta name="generator" content="Org Mode" />
-<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<link href="/site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="/images/website-logo.png" /></a></div>
+<div><a href="/index.html"><img alt="An abstract logo representing a series of three assembly line stamping machines with the words CONS, DEV, and  embalzoned in white on each machine." id="site-logo" src="/images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Rule Based Systems
@@ -25,30 +25,30 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org6c1d33a">Introduction</a></li>
-<li><a href="#org046c292">The Problem Domain</a></li>
-<li><a href="#orgd08c9ac">A Naive Implementation</a>
+<li><a href="#org25317d2">Introduction</a></li>
+<li><a href="#orgaf9cd78">The Problem Domain</a></li>
+<li><a href="#org71ebf4f">A Naive Implementation</a>
 <ul>
-<li><a href="#orgd738954">Basic Chaining</a></li>
-<li><a href="#org5d4e0d2">EAV Triplets</a>
+<li><a href="#org3ed1ab9">Basic Chaining</a></li>
+<li><a href="#orgfc553c4">EAV Triplets</a>
 <ul>
-<li><a href="#orgcb414f2">Multi-Clause Matching</a></li>
-<li><a href="#org70935f7">Multi-Entity Matching</a></li>
+<li><a href="#org6bdb870">Multi-Clause Matching</a></li>
+<li><a href="#orgdbfb459">Multi-Entity Matching</a></li>
 </ul>
 </li>
-<li><a href="#orgeac6aa7">Destructuring</a></li>
+<li><a href="#org05e38fc">Destructuring</a></li>
 </ul>
 </li>
-<li><a href="#org14d1681">Rete Algorithm</a></li>
-<li><a href="#orgf2d3069">Parallel Execution</a></li>
-<li><a href="#org5a49921">Conclusions</a></li>
+<li><a href="#org021f434">Rete Algorithm</a></li>
+<li><a href="#org8b191a7">Parallel Execution</a></li>
+<li><a href="#org6b28dc2">Conclusions</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org6c1d33a" class="outline-2">
-<h2 id="org6c1d33a">Introduction</h2>
-<div class="outline-text-2" id="text-org6c1d33a">
+<div id="outline-container-org25317d2" class="outline-2">
+<h2 id="org25317d2">Introduction</h2>
+<div class="outline-text-2" id="text-org25317d2">
 <p>
 Expert systems are probably something you have heard of but have never actually messed with. You might have written some PROLOG in college, heard about horn clauses, been awfully confused and wondered why anyone would want to do that. But, I am here to tell you that not only are the useful, but they actually are extremely useful. They also have been my job for the last year and a half. I have written code for them, tested them, build a CI pipeline for testing them, and so on.
 </p>
@@ -67,22 +67,22 @@ So in this tutorial we will develop an expert system with over a hundred rules t
 </div>
 </div>
 
-<div id="outline-container-org046c292" class="outline-2">
-<h2 id="org046c292">The Problem Domain</h2>
-<div class="outline-text-2" id="text-org046c292">
+<div id="outline-container-orgaf9cd78" class="outline-2">
+<h2 id="orgaf9cd78">The Problem Domain</h2>
+<div class="outline-text-2" id="text-orgaf9cd78">
 <p>
 Imagine you want to determine if 
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgd08c9ac" class="outline-2">
-<h2 id="orgd08c9ac">A Naive Implementation</h2>
-<div class="outline-text-2" id="text-orgd08c9ac">
+<div id="outline-container-org71ebf4f" class="outline-2">
+<h2 id="org71ebf4f">A Naive Implementation</h2>
+<div class="outline-text-2" id="text-org71ebf4f">
 </div>
-<div id="outline-container-orgd738954" class="outline-3">
-<h3 id="orgd738954">Basic Chaining</h3>
-<div class="outline-text-3" id="text-orgd738954">
+<div id="outline-container-org3ed1ab9" class="outline-3">
+<h3 id="org3ed1ab9">Basic Chaining</h3>
+<div class="outline-text-3" id="text-org3ed1ab9">
 <p>
 We can implement a very simple (though inefficient) expert system by simply applying every rule to every fact in the set, with each new fact run against all new rules. This <i>works</i>, but obviously will become very inefficient as the complexity of the rule engine increases.
 </p>
@@ -124,9 +124,9 @@ As you can see, this is quite limited as it only matches against one thing and c
 </div>
 </div>
 
-<div id="outline-container-org5d4e0d2" class="outline-3">
-<h3 id="org5d4e0d2">EAV Triplets</h3>
-<div class="outline-text-3" id="text-org5d4e0d2">
+<div id="outline-container-orgfc553c4" class="outline-3">
+<h3 id="orgfc553c4">EAV Triplets</h3>
+<div class="outline-text-3" id="text-orgfc553c4">
 <p>
 To start out we will move to using EAV triplets for representing our data when executing our program and matching patterns, to do so we first define a little function to convert Clojure maps into EAV triplets. The specific reason I use them is because they allow me to easily match subsets of the initial rule.
 </p>
@@ -142,9 +142,9 @@ To start out we will move to using EAV triplets for representing our data when e
 </div>
 </div>
 
-<div id="outline-container-orgcb414f2" class="outline-4">
-<h4 id="orgcb414f2">Multi-Clause Matching</h4>
-<div class="outline-text-4" id="text-orgcb414f2">
+<div id="outline-container-org6bdb870" class="outline-4">
+<h4 id="org6bdb870">Multi-Clause Matching</h4>
+<div class="outline-text-4" id="text-org6bdb870">
 <p>
 Now we can write some functions to allow for multiple clauses to be matched within a single entity as well as functions to add additional facts to / update the entity and predicates applied to specific entities.
 </p>
@@ -183,9 +183,9 @@ We also modify the initial function slightly to use the "match" function.
 </div>
 </div>
 
-<div id="outline-container-org70935f7" class="outline-4">
-<h4 id="org70935f7">Multi-Entity Matching</h4>
-<div class="outline-text-4" id="text-org70935f7">
+<div id="outline-container-orgdbfb459" class="outline-4">
+<h4 id="orgdbfb459">Multi-Entity Matching</h4>
+<div class="outline-text-4" id="text-orgdbfb459">
 <p>
 To match multiple entities of different types we simply extend the functions slightly 
 </p>
@@ -193,32 +193,32 @@ To match multiple entities of different types we simply extend the functions sli
 </div>
 </div>
 
-<div id="outline-container-orgeac6aa7" class="outline-3">
-<h3 id="orgeac6aa7">Destructuring</h3>
+<div id="outline-container-org05e38fc" class="outline-3">
+<h3 id="org05e38fc">Destructuring</h3>
 </div>
 </div>
 
-<div id="outline-container-org14d1681" class="outline-2">
-<h2 id="org14d1681">Rete Algorithm</h2>
-<div class="outline-text-2" id="text-org14d1681">
+<div id="outline-container-org021f434" class="outline-2">
+<h2 id="org021f434">Rete Algorithm</h2>
+<div class="outline-text-2" id="text-org021f434">
 <p>
 Now that we have our syntax and a little code done, let's start adding some upgrades. To make things better, let's 
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgf2d3069" class="outline-2">
-<h2 id="orgf2d3069">Parallel Execution</h2>
-<div class="outline-text-2" id="text-orgf2d3069">
+<div id="outline-container-org8b191a7" class="outline-2">
+<h2 id="org8b191a7">Parallel Execution</h2>
+<div class="outline-text-2" id="text-org8b191a7">
 <p>
 Finally, now that we can define the execution of each fact separately, let's make it run in parallel.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org5a49921" class="outline-2">
-<h2 id="org5a49921">Conclusions</h2>
-<div class="outline-text-2" id="text-org5a49921">
+<div id="outline-container-org6b28dc2" class="outline-2">
+<h2 id="org6b28dc2">Conclusions</h2>
+<div class="outline-text-2" id="text-org6b28dc2">
 <p>
 I think that, in the future, I might want to consider developing a distributed rule engine of some sort, possibly using directed acyclic graphs. Expert systems also can be integrated with machine learning components (and handle ambiguity through them), which I think would also make an interesting tutorial.
 </p>

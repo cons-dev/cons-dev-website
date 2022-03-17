@@ -3,18 +3,18 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-W04-4 05:11 -->
+<!-- 2022-W11-4 02:12 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>system/b</title>
 <meta name="author" content="Inanna" />
 <meta name="description" content="A simple memory-to-memory virtual machine implemented in C++." />
 <meta name="generator" content="Org Mode" />
-<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<link href="/site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="/images/website-logo.png" /></a></div>
+<div><a href="/index.html"><img alt="An abstract logo representing a series of three assembly line stamping machines with the words CONS, DEV, and  embalzoned in white on each machine." id="site-logo" src="/images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">system/b
@@ -25,41 +25,41 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgd326edd">Introduction</a></li>
-<li><a href="#orgc1887ad">Example Programs</a>
+<li><a href="#orga2bd7e5">Introduction</a></li>
+<li><a href="#orga54f3a6">Example Programs</a>
 <ul>
-<li><a href="#orgf4dea26">mult.sba</a></li>
-<li><a href="#org0a70a5b">subEX.sba</a></li>
+<li><a href="#org8e2cd13">mult.sba</a></li>
+<li><a href="#org14f9cc7">subEX.sba</a></li>
 </ul>
 </li>
-<li><a href="#org5883bbb">Source Code</a>
+<li><a href="#orgca9234c">Source Code</a>
 <ul>
-<li><a href="#org2d91f4d">systemBshell.cpp</a></li>
-<li><a href="#org56b8142">SystemBvm.h</a></li>
-<li><a href="#orgfc07c3f">ioStrings.h</a></li>
-<li><a href="#orgad034be">assembler.h</a></li>
+<li><a href="#orgfd32513">systemBshell.cpp</a></li>
+<li><a href="#orgddb254e">SystemBvm.h</a></li>
+<li><a href="#org3d05a37">ioStrings.h</a></li>
+<li><a href="#org559422c">assembler.h</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgd326edd" class="outline-2">
-<h2 id="orgd326edd">Introduction</h2>
-<div class="outline-text-2" id="text-orgd326edd">
+<div id="outline-container-orga2bd7e5" class="outline-2">
+<h2 id="orga2bd7e5">Introduction</h2>
+<div class="outline-text-2" id="text-orga2bd7e5">
 <p>
 Another project from my early days in programming <label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> About three years ago now, wow! Amazing how time flies.</span>, a simple memory-to-memory virtual machine written in C++. I currently intend to upgrade it a bit eventually with interrupt codes, though maybe I will wait until I write a proper LISP machine with tagged memory / typed instructions. To compile it simply run GCC on systemBshell.cpp.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgc1887ad" class="outline-2">
-<h2 id="orgc1887ad">Example Programs</h2>
-<div class="outline-text-2" id="text-orgc1887ad">
+<div id="outline-container-orga54f3a6" class="outline-2">
+<h2 id="orga54f3a6">Example Programs</h2>
+<div class="outline-text-2" id="text-orga54f3a6">
 </div>
-<div id="outline-container-orgf4dea26" class="outline-3">
-<h3 id="orgf4dea26">mult.sba</h3>
-<div class="outline-text-3" id="text-orgf4dea26">
+<div id="outline-container-org8e2cd13" class="outline-3">
+<h3 id="org8e2cd13">mult.sba</h3>
+<div class="outline-text-3" id="text-org8e2cd13">
 <div class="org-src-container">
 <pre class="src src-asm"><span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">this is a program that finds c for ;</span>
 <span style="color: #a4a4a4; font-style: italic;">;             </span><span style="color: #a4a4a4; font-style: italic;">a * b = c              ;</span>
@@ -77,9 +77,9 @@ Another project from my early days in programming <label class="sidenote-number"
 </div>
 </div>
 </div>
-<div id="outline-container-org0a70a5b" class="outline-3">
-<h3 id="org0a70a5b">subEX.sba</h3>
-<div class="outline-text-3" id="text-org0a70a5b">
+<div id="outline-container-org14f9cc7" class="outline-3">
+<h3 id="org14f9cc7">subEX.sba</h3>
+<div class="outline-text-3" id="text-org14f9cc7">
 <div class="org-src-container">
 <pre class="src src-asm"><span style="color: #a4a4a4; font-style: italic;">; </span><span style="color: #a4a4a4; font-style: italic;">this is a program that finds c for ;</span>
 <span style="color: #a4a4a4; font-style: italic;">;             </span><span style="color: #a4a4a4; font-style: italic;">a - b = c              ;</span>
@@ -98,13 +98,13 @@ Another project from my early days in programming <label class="sidenote-number"
 </div>
 
 
-<div id="outline-container-org5883bbb" class="outline-2">
-<h2 id="org5883bbb">Source Code</h2>
-<div class="outline-text-2" id="text-org5883bbb">
+<div id="outline-container-orgca9234c" class="outline-2">
+<h2 id="orgca9234c">Source Code</h2>
+<div class="outline-text-2" id="text-orgca9234c">
 </div>
-<div id="outline-container-org2d91f4d" class="outline-3">
-<h3 id="org2d91f4d">systemBshell.cpp</h3>
-<div class="outline-text-3" id="text-org2d91f4d">
+<div id="outline-container-orgfd32513" class="outline-3">
+<h3 id="orgfd32513">systemBshell.cpp</h3>
+<div class="outline-text-3" id="text-orgfd32513">
 <div class="org-src-container">
 <pre class="src src-C++"><span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">iostream</span><span style="color: #494949;">&gt;</span>
 <span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">string</span><span style="color: #494949;">&gt;</span>
@@ -252,9 +252,9 @@ Another project from my early days in programming <label class="sidenote-number"
 </div>
 </div>
 </div>
-<div id="outline-container-org56b8142" class="outline-3">
-<h3 id="org56b8142">SystemBvm.h</h3>
-<div class="outline-text-3" id="text-org56b8142">
+<div id="outline-container-orgddb254e" class="outline-3">
+<h3 id="orgddb254e">SystemBvm.h</h3>
+<div class="outline-text-3" id="text-orgddb254e">
 <div class="org-src-container">
 <pre class="src src-C++"><span style="color: #000; font-weight: bold;">#pragma</span> once
 
@@ -675,9 +675,9 @@ Another project from my early days in programming <label class="sidenote-number"
 </div>
 </div>
 </div>
-<div id="outline-container-orgfc07c3f" class="outline-3">
-<h3 id="orgfc07c3f">ioStrings.h</h3>
-<div class="outline-text-3" id="text-orgfc07c3f">
+<div id="outline-container-org3d05a37" class="outline-3">
+<h3 id="org3d05a37">ioStrings.h</h3>
+<div class="outline-text-3" id="text-org3d05a37">
 <p>
 This is a file that I used to store functions that would return strings. Honestly I probably should have just had a file of constant functions, but these were the old days when I didn't know better and wanted everything to be "functional" regardless of how good an idea that was. <label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> Be glad I have spared you from the worst of it where I wrote several C++ programs with only recursion and constants, no loops or mutable variables. I probably gave my algorithms teacher nightmares.</span> As a consequence I did things a bit weirdly.
 </p>
@@ -856,9 +856,9 @@ This is a file that I used to store functions that would return strings. Honestl
 </div>
 </div>
 
-<div id="outline-container-orgad034be" class="outline-3">
-<h3 id="orgad034be">assembler.h</h3>
-<div class="outline-text-3" id="text-orgad034be">
+<div id="outline-container-org559422c" class="outline-3">
+<h3 id="org559422c">assembler.h</h3>
+<div class="outline-text-3" id="text-org559422c">
 <div class="org-src-container">
 <pre class="src src-C++"><span style="color: #000; font-weight: bold;">#pragma</span> once
 

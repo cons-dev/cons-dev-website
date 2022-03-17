@@ -3,14 +3,14 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-W04-4 05:11 -->
+<!-- 2022-W11-4 02:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Making Control Block Diagrams in DOT</title>
 <meta name="author" content="Inanna" />
 <meta name="description" content="A tutorial on implementing control block diagrams for the beginner." />
 <meta name="generator" content="Org Mode" />
-<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<link href="/site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -35,7 +35,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="/images/website-logo.png" /></a></div>
+<div><a href="/index.html"><img alt="An abstract logo representing a series of three assembly line stamping machines with the words CONS, DEV, and  embalzoned in white on each machine." id="site-logo" src="/images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Making Control Block Diagrams in DOT</h1>
@@ -43,16 +43,16 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orga87a0b7">Introduction</a></li>
-<li><a href="#org47635c3">Styling Setup</a></li>
-<li><a href="#org83d8073">Basic Control Diagram</a></li>
+<li><a href="#orgdb59666">Introduction</a></li>
+<li><a href="#org7a63534">Styling Setup</a></li>
+<li><a href="#org805c53b">Basic Control Diagram</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orga87a0b7" class="outline-2">
-<h2 id="orga87a0b7">Introduction</h2>
-<div class="outline-text-2" id="text-orga87a0b7">
+<div id="outline-container-orgdb59666" class="outline-2">
+<h2 id="orgdb59666">Introduction</h2>
+<div class="outline-text-2" id="text-orgdb59666">
 <p>
 Control diagrams are vitally important for modeling the interaction of various control systems, but at the same time drawing them is often a bit of a pain. You either have to fire up \(\displaystyle \LaTeX\) which always sucks the joy right out of every room it is contained in or you have to.
 </p>
@@ -61,23 +61,23 @@ Control diagrams are vitally important for modeling the interaction of various c
 
 
 
-<div id="outline-container-org47635c3" class="outline-2">
-<h2 id="org47635c3">Styling Setup</h2>
-<div class="outline-text-2" id="text-org47635c3">
+<div id="outline-container-org7a63534" class="outline-2">
+<h2 id="org7a63534">Styling Setup</h2>
+<div class="outline-text-2" id="text-org7a63534">
 <p>
 This is styled according to the color schemes in my <a href="control-block-diagram-syntax.html#ID-f33796f7-2cdb-4110-81ee-be035021659b">Control Block Diagram Syntax</a> document. There is no official standard for control block diagram syntax coloring (or, indeed, much of the design of control diagrams), so I decided to create my own little approach for this blog. If you want to use it, feel free to do so.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org83d8073" class="outline-2">
-<h2 id="org83d8073">Basic Control Diagram</h2>
-<div class="outline-text-2" id="text-org83d8073">
+<div id="outline-container-org805c53b" class="outline-2">
+<h2 id="org805c53b">Basic Control Diagram</h2>
+<div class="outline-text-2" id="text-org805c53b">
 <p>
 A basic control diagram representing the output of a system might be drawn as follows:
 </p>
 <div class="org-src-container">
-<pre class="src src-dot" id="orgcceff6a"><span style="color: #E53935; font-style: italic;">digraph</span> <span style="font-weight: bold; font-style: italic;">feedfowards</span> <span style="color: #494949;">{</span>
+<pre class="src src-dot" id="org0d492d6"><span style="color: #E53935; font-style: italic;">digraph</span> <span style="font-weight: bold; font-style: italic;">feedfowards</span> <span style="color: #494949;">{</span>
         <span style="font-style: italic;">splines=</span>ortho;
         <span style="font-style: italic;">size=</span><span style="color: #494949;">"15,15!"</span>
         <span style="font-style: italic;">fontpath=</span><span style="color: #494949;">"~/.local/share/fonts"</span>
@@ -106,7 +106,7 @@ A basic control diagram representing the output of a system might be drawn as fo
 Which will output:
 </p>
 
-<div id="orgd3fa94e" class="figure">
+<div id="org1e80488" class="figure">
 <p><img src="images/feedforward-diagram_bafbaf01-494c-453d-9a3b-819dcc678a14.png" alt="feedforward-diagram_bafbaf01-494c-453d-9a3b-819dcc678a14.png" />
 </p>
 </div>
@@ -120,7 +120,7 @@ Here there are a few tricks. To indicate an input (or indeed an output) to the c
 A more complex system might look like this:
 </p>
 <div class="org-src-container">
-<pre class="src src-dot" id="org2eee218"><span style="color: #E53935; font-style: italic;">digraph</span> <span style="font-weight: bold; font-style: italic;">feedback</span> <span style="color: #494949;">{</span>
+<pre class="src src-dot" id="org708a105"><span style="color: #E53935; font-style: italic;">digraph</span> <span style="font-weight: bold; font-style: italic;">feedback</span> <span style="color: #494949;">{</span>
         <span style="font-style: italic;">splines=</span>ortho;
         <span style="font-style: italic;">size=</span><span style="color: #494949;">"15,15!"</span>;
         <span style="font-style: italic;">fontpath=</span><span style="color: #494949;">"~/.local/share/fonts"</span>;
@@ -167,7 +167,7 @@ Which outputs this:
 </p>
 
 
-<div id="org716317e" class="figure">
+<div id="org2068af8" class="figure">
 <p><img src="images/feedback-diagram_b0c03ade-86fa-4c4f-999e-de13476ee1db.png" alt="feedback-diagram_b0c03ade-86fa-4c4f-999e-de13476ee1db.png" />
 </p>
 </div>
@@ -185,7 +185,7 @@ Subgraphs can also be used to restrict the scope of style choices, allowing you 
 We can also draw a simple multi-loop control model as follows:
 </p>
 <div class="org-src-container">
-<pre class="src src-dot" id="org187a0ef"><span style="color: #E53935; font-style: italic;">digraph</span> <span style="font-weight: bold; font-style: italic;">multi_loop</span> <span style="color: #494949;">{</span>
+<pre class="src src-dot" id="orgd8febde"><span style="color: #E53935; font-style: italic;">digraph</span> <span style="font-weight: bold; font-style: italic;">multi_loop</span> <span style="color: #494949;">{</span>
         <span style="font-style: italic;">splines=</span>ortho;
         <span style="font-style: italic;">fontpath=</span><span style="color: #494949;">"~/.local/share/fonts"</span>
         <span style="color: #E53935; font-style: italic;">node</span><span style="color: #bbb;">[</span><span style="font-style: italic;">shape=</span><span style="color: #E53935;">record</span>,
@@ -252,7 +252,7 @@ We can also draw a simple multi-loop control model as follows:
 </div>
 
 
-<div id="orgd6cfab1" class="figure">
+<div id="org2d92591" class="figure">
 <p><img src="images/multiloop-diagram_b0c03ade-86fa-4c4f-999e-de13476ee1db.png" alt="multiloop-diagram_b0c03ade-86fa-4c4f-999e-de13476ee1db.png" />
 </p>
 </div>

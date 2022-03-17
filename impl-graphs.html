@@ -3,18 +3,18 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-W04-4 05:11 -->
+<!-- 2022-W11-4 02:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Implementing Graphs</title>
 <meta name="author" content="Inanna" />
 <meta name="description" content="Implementing simple graphs in Clojure, along with some code to output representations." />
 <meta name="generator" content="Org Mode" />
-<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<link href="/site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="/images/website-logo.png" /></a></div>
+<div><a href="/index.html"><img alt="An abstract logo representing a series of three assembly line stamping machines with the words CONS, DEV, and  embalzoned in white on each machine." id="site-logo" src="/images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Implementing Graphs</h1>
@@ -22,31 +22,31 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org12b1d27">Introduction</a></li>
-<li><a href="#org1a4081a">Implementation</a>
+<li><a href="#org2ef1c22">Introduction</a></li>
+<li><a href="#org72bc7a4">Implementation</a>
 <ul>
-<li><a href="#org5969419">Common Features</a>
+<li><a href="#org8c3b9cd">Common Features</a>
 <ul>
-<li><a href="#org3d341d1">Killing Orphans</a></li>
-<li><a href="#orgf404ce3">Killing Nodes</a></li>
-<li><a href="#org0bbd906">Killing Edges</a></li>
-<li><a href="#org9ecc790">Creating Edges</a></li>
-<li><a href="#orga1c84da">Creating Nodes</a></li>
-<li><a href="#orge9088c8">Getting Nodes</a></li>
+<li><a href="#org25190fe">Killing Orphans</a></li>
+<li><a href="#org1d81179">Killing Nodes</a></li>
+<li><a href="#org9aaaef3">Killing Edges</a></li>
+<li><a href="#org5f556ad">Creating Edges</a></li>
+<li><a href="#org9fe54af">Creating Nodes</a></li>
+<li><a href="#orge54089a">Getting Nodes</a></li>
 </ul>
 </li>
-<li><a href="#org0f52b53">Unweighted Graphs</a>
+<li><a href="#orgd356a56">Unweighted Graphs</a>
 <ul>
-<li><a href="#org2716193">BasicGraph</a></li>
-<li><a href="#org4000215">Undirected Graphs</a></li>
-<li><a href="#org893b788">Directed Graphs</a></li>
+<li><a href="#orgc90be2c">BasicGraph</a></li>
+<li><a href="#orgbe09b0e">Undirected Graphs</a></li>
+<li><a href="#org3c32186">Directed Graphs</a></li>
 </ul>
 </li>
-<li><a href="#orgdbbe7cf">Weighted Graphs</a>
+<li><a href="#orga3b840c">Weighted Graphs</a>
 <ul>
-<li><a href="#org871f444">BasicWeightedGraph Protocol</a></li>
-<li><a href="#org95868a7">Undirected Graph</a></li>
-<li><a href="#orgdfb5826">Weighted Directed Graph</a></li>
+<li><a href="#orge360acc">BasicWeightedGraph Protocol</a></li>
+<li><a href="#org22906aa">Undirected Graph</a></li>
+<li><a href="#orgf7fba76">Weighted Directed Graph</a></li>
 </ul>
 </li>
 </ul>
@@ -55,18 +55,18 @@
 </div>
 </div>
 
-<div id="outline-container-org12b1d27" class="outline-2">
-<h2 id="org12b1d27">Introduction</h2>
-<div class="outline-text-2" id="text-org12b1d27">
+<div id="outline-container-org2ef1c22" class="outline-2">
+<h2 id="org2ef1c22">Introduction</h2>
+<div class="outline-text-2" id="text-org2ef1c22">
 <p>
 <a href="https://en.wikipedia.org/wiki/Graph_%28discrete_mathematics%29">Graphs</a> are a fairly common mathematical structure that represents a series of nodes with edges that connect them to other nodes. Here we will implement some code that implements graphs as well as code to produce representations of graphs. <label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> Which I think I will extend to representing arbitrary Clojure code in general</span> The code was mostly developed for my <a href="travling-salesman-trolley-problem.html#ID-1e544a78-076c-4448-8af5-45f5d317fadf">possibly correct solution to the travling saleseman trolly problem</a>, so check that out as well. 
 </p>
 </div>
 </div>
 
-<div id="outline-container-org1a4081a" class="outline-2">
-<h2 id="org1a4081a">Implementation</h2>
-<div class="outline-text-2" id="text-org1a4081a">
+<div id="outline-container-org72bc7a4" class="outline-2">
+<h2 id="org72bc7a4">Implementation</h2>
+<div class="outline-text-2" id="text-org72bc7a4">
 <p>
 So we want to define a graph. But first, let's ask the question, what <i>is</i> a graph? How do graphs work?
 </p>
@@ -106,9 +106,9 @@ So with the structure out of the way, let's start defining things.
 </p>
 </div>
 
-<div id="outline-container-org5969419" class="outline-3">
-<h3 id="org5969419">Common Features</h3>
-<div class="outline-text-3" id="text-org5969419">
+<div id="outline-container-org8c3b9cd" class="outline-3">
+<h3 id="org8c3b9cd">Common Features</h3>
+<div class="outline-text-3" id="text-org8c3b9cd">
 <p>
 All our graphs will use a collection of standard edges and nodes. In fact the structure of the graph will also be exactly the same too! The only differences will be in interpretation and how the various methods act.
 </p>
@@ -123,9 +123,9 @@ Unfortunately (<i>and</i> fortunately) Clojure doesn't have multiple inheritance
 </p>
 </div>
 
-<div id="outline-container-org3d341d1" class="outline-4">
-<h4 id="org3d341d1">Killing Orphans</h4>
-<div class="outline-text-4" id="text-org3d341d1">
+<div id="outline-container-org25190fe" class="outline-4">
+<h4 id="org25190fe">Killing Orphans</h4>
+<div class="outline-text-4" id="text-org25190fe">
 <p>
 We also want to be assured that we can kill any orphans that exist in the graph. Since they have no support one might imagine that they will naturally be garbage collected, but it turns out that we must go and do it ourselves.
 </p>
@@ -142,9 +142,9 @@ We also want to be assured that we can kill any orphans that exist in the graph.
 </div>
 </div>
 
-<div id="outline-container-orgf404ce3" class="outline-4">
-<h4 id="orgf404ce3">Killing Nodes</h4>
-<div class="outline-text-4" id="text-orgf404ce3">
+<div id="outline-container-org1d81179" class="outline-4">
+<h4 id="org1d81179">Killing Nodes</h4>
+<div class="outline-text-4" id="text-org1d81179">
 <p>
 Killing nodes is also something that can be done in all cases through this function. It kills all edges to the node and then kills the node itself.
 </p>
@@ -177,9 +177,9 @@ Then we define the function itself.
 </div>
 </div>
 
-<div id="outline-container-org0bbd906" class="outline-4">
-<h4 id="org0bbd906">Killing Edges</h4>
-<div class="outline-text-4" id="text-org0bbd906">
+<div id="outline-container-org9aaaef3" class="outline-4">
+<h4 id="org9aaaef3">Killing Edges</h4>
+<div class="outline-text-4" id="text-org9aaaef3">
 <p>
 We also define a simple function too kill edges as well. This will have to be done twice for the undirected graph case, but can be trivially wrapped in the undirected graph case.
 </p>
@@ -194,9 +194,9 @@ We also define a simple function too kill edges as well. This will have to be do
 </div>
 </div>
 
-<div id="outline-container-org9ecc790" class="outline-4">
-<h4 id="org9ecc790">Creating Edges</h4>
-<div class="outline-text-4" id="text-org9ecc790">
+<div id="outline-container-org5f556ad" class="outline-4">
+<h4 id="org5f556ad">Creating Edges</h4>
+<div class="outline-text-4" id="text-org5f556ad">
 <p>
 We can also define a function to create an edge given a source and a destination. This is useful as even in the directed graph case it will call this function.
 </p>
@@ -211,9 +211,9 @@ We can also define a function to create an edge given a source and a destination
 </div>
 </div>
 
-<div id="outline-container-orga1c84da" class="outline-4">
-<h4 id="orga1c84da">Creating Nodes</h4>
-<div class="outline-text-4" id="text-orga1c84da">
+<div id="outline-container-org9fe54af" class="outline-4">
+<h4 id="org9fe54af">Creating Nodes</h4>
+<div class="outline-text-4" id="text-org9fe54af">
 <p>
 Adding nodes is also trivial, with this adding a node with no name.
 </p>
@@ -225,9 +225,9 @@ Adding nodes is also trivial, with this adding a node with no name.
 </div>
 </div>
 
-<div id="outline-container-orge9088c8" class="outline-4">
-<h4 id="orge9088c8">Getting Nodes</h4>
-<div class="outline-text-4" id="text-orge9088c8">
+<div id="outline-container-orge54089a" class="outline-4">
+<h4 id="orge54089a">Getting Nodes</h4>
+<div class="outline-text-4" id="text-orge54089a">
 <p>
 To get node you just grab it from the map of nodes the graph has. Easy!
 </p>
@@ -240,16 +240,16 @@ To get node you just grab it from the map of nodes the graph has. Easy!
 </div>
 </div>
 
-<div id="outline-container-org0f52b53" class="outline-3">
-<h3 id="org0f52b53">Unweighted Graphs</h3>
-<div class="outline-text-3" id="text-org0f52b53">
+<div id="outline-container-orgd356a56" class="outline-3">
+<h3 id="orgd356a56">Unweighted Graphs</h3>
+<div class="outline-text-3" id="text-orgd356a56">
 <p>
 The most basic case is the unweighted class, which we implement below.
 </p>
 </div>
-<div id="outline-container-org2716193" class="outline-4">
-<h4 id="org2716193">BasicGraph</h4>
-<div class="outline-text-4" id="text-org2716193">
+<div id="outline-container-orgc90be2c" class="outline-4">
+<h4 id="orgc90be2c">BasicGraph</h4>
+<div class="outline-text-4" id="text-orgc90be2c">
 <p>
 We define a protocol for basic, undirected graphs. To avoid name collisions we call the protocol <code>BasicGraph</code>. It defines the various functions we can expect to call on any graph.
 </p>
@@ -275,9 +275,9 @@ We define a protocol for basic, undirected graphs. To avoid name collisions we c
 </div>
 </div>
 
-<div id="outline-container-org4000215" class="outline-4">
-<h4 id="org4000215">Undirected Graphs</h4>
-<div class="outline-text-4" id="text-org4000215">
+<div id="outline-container-orgbe09b0e" class="outline-4">
+<h4 id="orgbe09b0e">Undirected Graphs</h4>
+<div class="outline-text-4" id="text-orgbe09b0e">
 <p>
 An unweighted graph is implemented simply by ignoring the <code>:weight</code> value in the graph. In this graph the distance between nodes does not matter. We can also construct an unweighted, undirected graph which is in description the simplest, but ironically, due to how we defined the nodes and edges above (and set it up) the most complicated here.
 </p>
@@ -315,7 +315,7 @@ However, using the functions we defined above we can simplify it quite a bit. Ad
 The only really messy bit of code is the DOT representation generator, but even that is fairly simple.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org4cbd73d"><span style="color: #494949;">(</span>dot-repr <span style="color: #bbb;">[</span>graph<span style="color: #bbb;">]</span>
+<pre class="src src-clojure" id="org61242e0"><span style="color: #494949;">(</span>dot-repr <span style="color: #bbb;">[</span>graph<span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">letfn</span> <span style="color: #494949;">[</span><span style="color: #bbb;">(</span>remove-dups <span style="color: #494949;">[</span><span style="color: #bbb;">[</span>edge &amp; edge-tuples<span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
             <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">when</span> edge <span style="color: #bbb;">(</span>cons edge <span style="color: #494949;">(</span>remove-dups <span style="color: #bbb;">(</span>remove #<span style="color: #494949;">{</span>edge<span style="color: #494949;">}</span> <span style="color: #494949;">(</span>map reverse edge-tuples<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
     <span style="color: #494949;">(</span>str <span style="color: #494949;">"graph G {"</span>
@@ -343,7 +343,7 @@ The only really messy bit of code is the DOT representation generator, but even 
 From here we can just use the code and display the graph.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org272fc4e"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #bbb;">(</span>graph <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:b</span> <span style="color: #E53935;">:c</span> <span style="color: #E53935;">:d</span> <span style="color: #E53935;">:e</span> <span style="color: #E53935;">:f</span> <span style="color: #E53935;">:g</span> <span style="color: #E53935;">:h</span> <span style="color: #E53935;">:i</span><span style="color: #bbb;">)</span>
+<pre class="src src-clojure" id="orgd6a769d"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #bbb;">(</span>graph <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:b</span> <span style="color: #E53935;">:c</span> <span style="color: #E53935;">:d</span> <span style="color: #E53935;">:e</span> <span style="color: #E53935;">:f</span> <span style="color: #E53935;">:g</span> <span style="color: #E53935;">:h</span> <span style="color: #E53935;">:i</span><span style="color: #bbb;">)</span>
     <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:b</span><span style="color: #bbb;">)</span>
     <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:c</span> <span style="color: #E53935;">:d</span><span style="color: #bbb;">)</span>
     <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:g</span> <span style="color: #E53935;">:h</span><span style="color: #bbb;">)</span>
@@ -356,16 +356,16 @@ From here we can just use the code and display the graph.
 </div>
 
 
-<div id="org30494c7" class="figure">
+<div id="orgb89f2bf" class="figure">
 <p><img src="./images/graph-demo_66094608-5e0c-4abc-a82f-e3b1ed172e49.png" alt="graph-demo_66094608-5e0c-4abc-a82f-e3b1ed172e49.png" />
 </p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org893b788" class="outline-4">
-<h4 id="org893b788">Directed Graphs</h4>
-<div class="outline-text-4" id="text-org893b788">
+<div id="outline-container-org3c32186" class="outline-4">
+<h4 id="org3c32186">Directed Graphs</h4>
+<div class="outline-text-4" id="text-org3c32186">
 <p>
 So to start out we basically do the same thing as before, though this time we do less of it. Pretty much all the code is reused.
 </p>
@@ -394,7 +394,7 @@ Like before the only thing we have to really define is the actual DOT representa
 </p>
 
 <div class="org-src-container">
-<pre class="src src-clojure" id="orgb6e7f41"><span style="color: #494949;">(</span>dot-repr <span style="color: #bbb;">[</span>graph<span style="color: #bbb;">]</span>
+<pre class="src src-clojure" id="org4ea909f"><span style="color: #494949;">(</span>dot-repr <span style="color: #bbb;">[</span>graph<span style="color: #bbb;">]</span>
   <span style="color: #bbb;">(</span>str <span style="color: #494949;">"digraph G {"</span>
        <span style="color: #494949;">"rankdir=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">LR</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
        <span style="color: #494949;">"size=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">15,7.5!</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
@@ -420,7 +420,7 @@ Like before the only thing we have to really define is the actual DOT representa
 Finally we can see the fruits of our labor and define a graph that we can also visualize.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org7394474"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">graph-demo</span><span style="color: #494949;">)</span>
+<pre class="src src-clojure" id="org466cc0a"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">graph-demo</span><span style="color: #494949;">)</span>
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #bbb;">(</span>digraph <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:b</span> <span style="color: #E53935;">:c</span> <span style="color: #E53935;">:d</span> <span style="color: #E53935;">:e</span> <span style="color: #E53935;">:f</span> <span style="color: #E53935;">:g</span> <span style="color: #E53935;">:h</span> <span style="color: #E53935;">:i</span><span style="color: #bbb;">)</span>
     <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:b</span><span style="color: #bbb;">)</span>
@@ -436,7 +436,7 @@ Finally we can see the fruits of our labor and define a graph that we can also v
 </div>
 
 
-<div id="org1b54de3" class="figure">
+<div id="org36c77f9" class="figure">
 <p><img src="./images/graph-digraph_92bc97e7-deb7-4d5f-a21a-2918d62b0a4f.png" alt="graph-digraph_92bc97e7-deb7-4d5f-a21a-2918d62b0a4f.png" />
 </p>
 </div>
@@ -448,17 +448,17 @@ Now you may notice that the directed graph case is ultimately a superset of the 
 </div>
 </div>
 
-<div id="outline-container-orgdbbe7cf" class="outline-3">
-<h3 id="orgdbbe7cf">Weighted Graphs</h3>
-<div class="outline-text-3" id="text-orgdbbe7cf">
+<div id="outline-container-orga3b840c" class="outline-3">
+<h3 id="orga3b840c">Weighted Graphs</h3>
+<div class="outline-text-3" id="text-orga3b840c">
 <p>
 Now we get to weighted graphs, something that truly weighs heavily on my conscience. To implement them is pretty trivial and a minor extension of the previous.
 </p>
 </div>
 
-<div id="outline-container-org871f444" class="outline-4">
-<h4 id="org871f444">BasicWeightedGraph Protocol</h4>
-<div class="outline-text-4" id="text-org871f444">
+<div id="outline-container-orge360acc" class="outline-4">
+<h4 id="orge360acc">BasicWeightedGraph Protocol</h4>
+<div class="outline-text-4" id="text-orge360acc">
 <p>
 We also define a protocol for weighted graphs, that is to say graphs where the individual nodes have a weight to them. This is an obvious and trivial development on the previous protocol.
 </p>
@@ -486,9 +486,9 @@ We also define a protocol for weighted graphs, that is to say graphs where the i
 
 
 
-<div id="outline-container-org95868a7" class="outline-4">
-<h4 id="org95868a7">Undirected Graph</h4>
-<div class="outline-text-4" id="text-org95868a7">
+<div id="outline-container-org22906aa" class="outline-4">
+<h4 id="org22906aa">Undirected Graph</h4>
+<div class="outline-text-4" id="text-org22906aa">
 <p>
 Finally, a weighted graph is defined. Code is reused from the undirected case with only the weighted graph edge and dot-repr being redefined.
 </p>
@@ -523,7 +523,7 @@ Unfortunately though,
 The production of a weighted DOT representation is an extra challenge due to the duplication of the edges. However, by reversing only the first two we can effectively remove the edges.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="orge74c1f5"><span style="color: #494949;">(</span>dot-repr <span style="color: #bbb;">[</span>graph<span style="color: #bbb;">]</span>
+<pre class="src src-clojure" id="org9869dd2"><span style="color: #494949;">(</span>dot-repr <span style="color: #bbb;">[</span>graph<span style="color: #bbb;">]</span>
           <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">letfn</span> <span style="color: #494949;">[</span><span style="color: #bbb;">(</span>remove-dups <span style="color: #494949;">[</span><span style="color: #bbb;">[</span>edge &amp; edge-tuples<span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
                     <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">when</span> edge
                       <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> edge-tuples
@@ -559,7 +559,7 @@ Now just to visualize it.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-clojure" id="org5694c62"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">graph-demo</span><span style="color: #494949;">)</span>
+<pre class="src src-clojure" id="org6892d65"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">graph-demo</span><span style="color: #494949;">)</span>
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #bbb;">(</span>weighted-graph <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:b</span> <span style="color: #E53935;">:c</span> <span style="color: #E53935;">:d</span> <span style="color: #E53935;">:e</span> <span style="color: #E53935;">:f</span> <span style="color: #E53935;">:g</span> <span style="color: #E53935;">:h</span> <span style="color: #E53935;">:i</span><span style="color: #bbb;">)</span>
     <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:b</span> 3<span style="color: #bbb;">)</span>
@@ -574,16 +574,16 @@ Now just to visualize it.
 </div>
 
 
-<div id="orgaf74d82" class="figure">
+<div id="orgfda4796" class="figure">
 <p><img src="./images/graph-weighted-digraph_92bc97e7-deb7-4d5f-a21a-2918d62b0a4f.png" alt="graph-weighted-digraph_92bc97e7-deb7-4d5f-a21a-2918d62b0a4f.png" />
 </p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgdfb5826" class="outline-4">
-<h4 id="orgdfb5826">Weighted Directed Graph</h4>
-<div class="outline-text-4" id="text-orgdfb5826">
+<div id="outline-container-orgf7fba76" class="outline-4">
+<h4 id="orgf7fba76">Weighted Directed Graph</h4>
+<div class="outline-text-4" id="text-orgf7fba76">
 <p>
 Now, onto the weighted directed graph comrades. Can you imagine what it contains? You guessed it right! A graph that is weighted <i>and</i> directed. Shocking I know. You will also be (not) surprised to learn that the implementation of the weighted directed graph is fundamentally the same as the regular digraph, just with the addition of weights. Truly a revelation.
 </p>
@@ -612,7 +612,7 @@ We also modify our dot representation code to also add the weight to it, just li
 </p>
 
 <div class="org-src-container">
-<pre class="src src-clojure" id="org364400a"><span style="color: #494949;">(</span>dot-repr <span style="color: #bbb;">[</span>graph<span style="color: #bbb;">]</span>
+<pre class="src src-clojure" id="org4b905f1"><span style="color: #494949;">(</span>dot-repr <span style="color: #bbb;">[</span>graph<span style="color: #bbb;">]</span>
           <span style="color: #bbb;">(</span>str <span style="color: #494949;">"digraph G {"</span>
                <span style="color: #494949;">"rankdir=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">LR</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
                <span style="color: #494949;">"size=</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">15,7.5!</span><span style="color: #494949; font-weight: bold;">\"</span><span style="color: #494949;">;"</span>
@@ -638,7 +638,7 @@ We also modify our dot representation code to also add the weight to it, just li
 Finally we can see the fruits of our labor and define a graph that we can also visualize.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="orgbd1fbe8"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">graph-demo</span><span style="color: #494949;">)</span>
+<pre class="src src-clojure" id="orgd8ecb1e"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">graph-demo</span><span style="color: #494949;">)</span>
 
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #bbb;">(</span>weighted-digraph <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:b</span> <span style="color: #E53935;">:c</span> <span style="color: #E53935;">:d</span> <span style="color: #E53935;">:e</span> <span style="color: #E53935;">:f</span> <span style="color: #E53935;">:g</span> <span style="color: #E53935;">:h</span> <span style="color: #E53935;">:i</span><span style="color: #bbb;">)</span>
     <span style="color: #bbb;">(</span>edge <span style="color: #E53935;">:a</span> <span style="color: #E53935;">:b</span><span style="color: #bbb;">)</span>
@@ -654,7 +654,7 @@ Finally we can see the fruits of our labor and define a graph that we can also v
 </div>
 
 
-<div id="orgf7824b0" class="figure">
+<div id="org36976ca" class="figure">
 <p><img src="./images/graph-digraph_92bc97e7-deb7-4d5f-a21a-2918d62b0a4f.png" alt="graph-digraph_92bc97e7-deb7-4d5f-a21a-2918d62b0a4f.png" />
 </p>
 </div>

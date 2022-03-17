@@ -3,14 +3,14 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-W04-4 05:11 -->
+<!-- 2022-W11-4 02:12 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Project Euler Answers</title>
 <meta name="author" content="Inanna" />
 <meta name="description" content="Answers to project euler problems." />
 <meta name="generator" content="Org Mode" />
-<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<link href="/site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -35,7 +35,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="/images/website-logo.png" /></a></div>
+<div><a href="/index.html"><img alt="An abstract logo representing a series of three assembly line stamping machines with the words CONS, DEV, and  embalzoned in white on each machine." id="site-logo" src="/images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Project Euler Answers</h1>
@@ -43,21 +43,21 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org138cecd">Summary</a></li>
-<li><a href="#org5742475">1: Multiples of 3 or 5</a>
+<li><a href="#org4bd1646">Summary</a></li>
+<li><a href="#org68d76ed">1: Multiples of 3 or 5</a>
 <ul>
-<li><a href="#org25d104a">Brute Force Answer</a></li>
-<li><a href="#orga228597">Optimized Answer</a></li>
+<li><a href="#org742b2d9">Brute Force Answer</a></li>
+<li><a href="#org8dd4943">Optimized Answer</a></li>
 </ul>
 </li>
-<li><a href="#org211579d">2: Even Fibonacci Numbers</a></li>
-<li><a href="#org1093d19">3: Largest Prime Factor</a>
+<li><a href="#orgc747142">2: Even Fibonacci Numbers</a></li>
+<li><a href="#org8555275">3: Largest Prime Factor</a>
 <ul>
-<li><a href="#orgd635a35">Finding Prime Numbers</a>
+<li><a href="#orgedc7a57">Finding Prime Numbers</a>
 <ul>
-<li><a href="#org73b177c">Checking for Divisibility</a></li>
-<li><a href="#org3d45c10">Sieve of Eratosthenes</a></li>
-<li><a href="#org597aa29">A More Ugly Approach</a></li>
+<li><a href="#org162fcdc">Checking for Divisibility</a></li>
+<li><a href="#orgbb7789a">Sieve of Eratosthenes</a></li>
+<li><a href="#orgba66997">A More Ugly Approach</a></li>
 </ul>
 </li>
 </ul>
@@ -67,9 +67,9 @@
 </div>
 
 
-<div id="outline-container-org138cecd" class="outline-2">
-<h2 id="org138cecd">Summary</h2>
-<div class="outline-text-2" id="text-org138cecd">
+<div id="outline-container-org4bd1646" class="outline-2">
+<h2 id="org4bd1646">Summary</h2>
+<div class="outline-text-2" id="text-org4bd1646">
 <p>
 My answers to various project Euler problems. I occasionally will be doing these because they are fun and pretty entertaining.
 </p>
@@ -77,16 +77,16 @@ My answers to various project Euler problems. I occasionally will be doing these
 </div>
 
 
-<div id="outline-container-org5742475" class="outline-2">
-<h2 id="org5742475">1: Multiples of 3 or 5</h2>
-<div class="outline-text-2" id="text-org5742475">
+<div id="outline-container-org68d76ed" class="outline-2">
+<h2 id="org68d76ed">1: Multiples of 3 or 5</h2>
+<div class="outline-text-2" id="text-org68d76ed">
 <dl class="org-dl">
 <dt>source</dt><dd><a href="https://projecteuler.net/problem=1">https://projecteuler.net/problem=1</a></dd>
 </dl>
 </div>
-<div id="outline-container-org25d104a" class="outline-3">
-<h3 id="org25d104a">Brute Force Answer</h3>
-<div class="outline-text-3" id="text-org25d104a">
+<div id="outline-container-org742b2d9" class="outline-3">
+<h3 id="org742b2d9">Brute Force Answer</h3>
+<div class="outline-text-3" id="text-org742b2d9">
 <p>
 Here I use the simple brute force answer, which is to generate a list to 1000 and then get the multiples of three and five in that list using the modulus operator. It's pretty short but I probably can code golf-it and optimize it quite a bit.
 </p>
@@ -100,9 +100,9 @@ Here I use the simple brute force answer, which is to generate a list to 1000 an
 </div>
 </div>
 
-<div id="outline-container-orga228597" class="outline-3">
-<h3 id="orga228597">Optimized Answer</h3>
-<div class="outline-text-3" id="text-orga228597">
+<div id="outline-container-org8dd4943" class="outline-3">
+<h3 id="org8dd4943">Optimized Answer</h3>
+<div class="outline-text-3" id="text-org8dd4943">
 <p>
 So instead of that approach there's a much faster one using recursion.<label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> the n-ary function syntax for Clojure is really nice here, allowing me to use default arguments.</span>
 </p>
@@ -127,9 +127,9 @@ This answer unfortunately only really shows improvements in efficiency when the 
 </div>
 </div>
 
-<div id="outline-container-org211579d" class="outline-2">
-<h2 id="org211579d">2: Even Fibonacci Numbers</h2>
-<div class="outline-text-2" id="text-org211579d">
+<div id="outline-container-orgc747142" class="outline-2">
+<h2 id="orgc747142">2: Even Fibonacci Numbers</h2>
+<div class="outline-text-2" id="text-orgc747142">
 <dl class="org-dl">
 <dt>source</dt><dd><a href="https://projecteuler.net/problem=3">https://projecteuler.net/problem=3</a></dd>
 </dl>
@@ -155,9 +155,9 @@ This just gets even fib numbers. There's not much to optimize here because the p
 </div>
 
 
-<div id="outline-container-org1093d19" class="outline-2">
-<h2 id="org1093d19">3: Largest Prime Factor</h2>
-<div class="outline-text-2" id="text-org1093d19">
+<div id="outline-container-org8555275" class="outline-2">
+<h2 id="org8555275">3: Largest Prime Factor</h2>
+<div class="outline-text-2" id="text-org8555275">
 <dl class="org-dl">
 <dt>source</dt><dd><a href="https://projecteuler.net/problem=2">https://projecteuler.net/problem=2</a></dd>
 </dl>
@@ -166,30 +166,30 @@ The goal is to find the largest prime factor of a number. To start we will first
 </p>
 </div>
 
-<div id="outline-container-orgd635a35" class="outline-3">
-<h3 id="orgd635a35">Finding Prime Numbers</h3>
-<div class="outline-text-3" id="text-orgd635a35">
+<div id="outline-container-orgedc7a57" class="outline-3">
+<h3 id="orgedc7a57">Finding Prime Numbers</h3>
+<div class="outline-text-3" id="text-orgedc7a57">
 <p>
 To start out we find a list of prime numbers. A neat feature of prime numbers is that to test a number for primality you both only need to test for the division of a number by other prime numbers up to the square root of the value, for the largest number will be at most the square root.
 </p>
 </div>
 
-<div id="outline-container-org73b177c" class="outline-4">
-<h4 id="org73b177c">Checking for Divisibility</h4>
-<div class="outline-text-4" id="text-org73b177c">
+<div id="outline-container-org162fcdc" class="outline-4">
+<h4 id="org162fcdc">Checking for Divisibility</h4>
+<div class="outline-text-4" id="text-org162fcdc">
 <p>
 To start off, and to make our code more clear, we define a small predicate called <code>divisible?</code> which checks if a number is divisible by some other number. While it doesn't really shorten the code all that much, it adds clarity to the code
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org1f40e28"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">divisible?</span> <span style="color: #bbb;">[</span>num div<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span>zero? <span style="color: #494949;">(</span>mod num div<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+<pre class="src src-clojure" id="org2013107"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">divisible?</span> <span style="color: #bbb;">[</span>num div<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span>zero? <span style="color: #494949;">(</span>mod num div<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org3d45c10" class="outline-4">
-<h4 id="org3d45c10">Sieve of Eratosthenes</h4>
-<div class="outline-text-4" id="text-org3d45c10">
+<div id="outline-container-orgbb7789a" class="outline-4">
+<h4 id="orgbb7789a">Sieve of Eratosthenes</h4>
+<div class="outline-text-4" id="text-orgbb7789a">
 <p>
 The most elegant solution would be the sieve of Eratosthenes. The logic behind it is fairly simple:
 </p>
@@ -207,7 +207,7 @@ As you can see, it follows that the list generated will be entirely comprised of
 To solve this we can implement a lazy sieve of Eratosthenes. Lazy in that the resulting sequence will be infinite.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="org2fcff06"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">seive</span>
+<pre class="src src-clojure" id="orgfd069df"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">seive</span>
   <span style="color: #bbb;">(</span><span style="color: #494949;">[]</span> <span style="color: #494949;">(</span>seive <span style="color: #bbb;">(</span>drop 2 <span style="color: #494949;">(</span>range<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
   <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>l<span style="color: #494949;">]</span>
    <span style="color: #494949;">(</span>lazy-seq
@@ -230,9 +230,9 @@ However, because of the lazy list semantics you can take a nearly infinite serie
 </div>
 </div>
 
-<div id="outline-container-org597aa29" class="outline-4">
-<h4 id="org597aa29">A More Ugly Approach</h4>
-<div class="outline-text-4" id="text-org597aa29">
+<div id="outline-container-orgba66997" class="outline-4">
+<h4 id="orgba66997">A More Ugly Approach</h4>
+<div class="outline-text-4" id="text-orgba66997">
 <p>
 So in order to solve this we can rewrite the is-prime function to, rather than generating a list from 0 to \(n\) and then filtering it, simply loop until a value at the range of the prime number is found. This ensures that the space complexity of it is \(O(\log(n))\) rather than \(O(n)\), though does not change the time complexity.
 </p>
@@ -241,7 +241,7 @@ So in order to solve this we can rewrite the is-prime function to, rather than g
 First we define an <a href="https://clojure.org/reference/atoms">atom</a> to <a href="https://en.wikipedia.org/wiki/Memoization">memoize</a> our primes called <code>found-primes</code>, and initialize it with the first prime number, 2.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="orge9be96b"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> ^<span style="color: #E53935;">:private</span> <span style="font-style: italic;">found-primes</span>
+<pre class="src src-clojure" id="orgb208c28"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> ^<span style="color: #E53935;">:private</span> <span style="font-style: italic;">found-primes</span>
   <span style="color: #a4a4a4; font-style: italic;">"A map of all primes that have been found thus far by the system"</span>
   <span style="color: #bbb;">(</span>atom #<span style="color: #494949;">{</span>2<span style="color: #494949;">}</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> ^<span style="color: #E53935;">:private</span> <span style="font-style: italic;">max-prime</span> <span style="color: #bbb;">(</span>atom 2<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
@@ -253,7 +253,7 @@ Next we define an <code>is-prime?</code> predicate which will test if a value is
 </p>
 
 <div class="org-src-container">
-<pre class="src src-clojure" id="orgf3f20b6"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">is-prime?</span>
+<pre class="src src-clojure" id="org8572985"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">is-prime?</span>
   <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>n<span style="color: #494949;">]</span> <span style="color: #494949;">(</span>is-prime? n <span style="color: #E53935;">false</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
   <span style="color: #bbb;">(</span><span style="color: #494949;">[</span>n contiguous?<span style="color: #494949;">]</span>
    <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #bbb;">[</span>max-div <span style="color: #494949;">(</span>int <span style="color: #bbb;">(</span>inc <span style="color: #494949;">(</span><span style="color: #E53935;">Math</span>/sqrt n<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">]</span>

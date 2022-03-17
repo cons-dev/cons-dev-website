@@ -3,18 +3,18 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-W04-4 05:11 -->
+<!-- 2022-W11-4 02:12 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Emblematics</title>
 <meta name="author" content="Inanna" />
 <meta name="description" content="A game" />
 <meta name="generator" content="Org Mode" />
-<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<link href="/site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="/images/website-logo.png" /></a></div>
+<div><a href="/index.html"><img alt="An abstract logo representing a series of three assembly line stamping machines with the words CONS, DEV, and  embalzoned in white on each machine." id="site-logo" src="/images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Emblematics
@@ -25,34 +25,34 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org40c69d6">Introduction</a></li>
-<li><a href="#org7f8c22c">ATTENTION, SPOILERS AHEAD</a></li>
-<li><a href="#orge68d81e">Machine Language and Architecture</a>
+<li><a href="#org1658d08">Introduction</a></li>
+<li><a href="#org3b52427">ATTENTION, SPOILERS AHEAD</a></li>
+<li><a href="#org6f50658">Machine Language and Architecture</a>
 <ul>
-<li><a href="#orgbd9e6be">Registers</a></li>
-<li><a href="#orgac442f2">Memory Tags</a></li>
-<li><a href="#org1ca6061">Instruction Set Architecture</a>
+<li><a href="#org4f94d8e">Registers</a></li>
+<li><a href="#org103eb68">Memory Tags</a></li>
+<li><a href="#org329da97">Instruction Set Architecture</a>
 <ul>
-<li><a href="#orga38b90c">Processing Instructions</a></li>
-<li><a href="#org638242b">Microcode</a></li>
-<li><a href="#org7819d6e">definstruction macro</a></li>
-<li><a href="#org9f9b70e">SYMBOL</a></li>
-<li><a href="#orgf0303ac">VHEAD</a></li>
-<li><a href="#org33f407d">CONS</a></li>
+<li><a href="#org78492be">Processing Instructions</a></li>
+<li><a href="#org1427680">Microcode</a></li>
+<li><a href="#org16f80a0">definstruction macro</a></li>
+<li><a href="#orgb517efb">SYMBOL</a></li>
+<li><a href="#org93431f7">VHEAD</a></li>
+<li><a href="#orge9de901">CONS</a></li>
 </ul>
 </li>
-<li><a href="#org9020897">Memory</a></li>
-<li><a href="#orgd3be323">Process Isolation</a></li>
-<li><a href="#orgc0920c7">Virtual Pages</a></li>
+<li><a href="#org2333647">Memory</a></li>
+<li><a href="#org3badb42">Process Isolation</a></li>
+<li><a href="#orgab37722">Virtual Pages</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org40c69d6" class="outline-2">
-<h2 id="org40c69d6">Introduction</h2>
-<div class="outline-text-2" id="text-org40c69d6">
+<div id="outline-container-org1658d08" class="outline-2">
+<h2 id="org1658d08">Introduction</h2>
+<div class="outline-text-2" id="text-org1658d08">
 <p>
 Emblematics is a simple ARG based around a fictional LISP machine that is connected to the web. The game is implemented in Clojurescript and lives exclusively in the browser. This is the source code for it, and contains all the text in the game (so far). I might break it into multiple files eventually, and should that happen this will contain the core functionality of the game.
 </p>
@@ -63,9 +63,9 @@ If you want to contribute to the game, please contact me on twitter <a href="htt
 </div>
 </div>
 
-<div id="outline-container-org7f8c22c" class="outline-2">
-<h2 id="org7f8c22c">ATTENTION, SPOILERS AHEAD</h2>
-<div class="outline-text-2" id="text-org7f8c22c">
+<div id="outline-container-org3b52427" class="outline-2">
+<h2 id="org3b52427">ATTENTION, SPOILERS AHEAD</h2>
+<div class="outline-text-2" id="text-org3b52427">
 <p>
 This file is the source code of the game, therefore spoilers are ahead. You have been warned.
 </p>
@@ -73,9 +73,9 @@ This file is the source code of the game, therefore spoilers are ahead. You have
 </div>
 
 
-<div id="outline-container-orge68d81e" class="outline-2">
-<h2 id="orge68d81e">Machine Language and Architecture</h2>
-<div class="outline-text-2" id="text-orge68d81e">
+<div id="outline-container-org6f50658" class="outline-2">
+<h2 id="org6f50658">Machine Language and Architecture</h2>
+<div class="outline-text-2" id="text-org6f50658">
 <p>
 To implement the game I also  implement a simple lisp machine. Sources used as inspiration include <a href="https://www.cs.utah.edu/~mflatt/past-courses/cs6510/public_html/lispm.pdf">this slideshow</a> on lisp machine architectures and <a href="https://core.ac.uk/download/pdf/225209295.pdf">this paper</a>, and of course the <a href="https://en.wikipedia.org/wiki/SECD_machine">SECD machine</a>. Overall the machine is 
 </p>
@@ -89,9 +89,9 @@ This adds a type system to the assembly language as well as several other featur
 </p>
 </div>
 
-<div id="outline-container-orgbd9e6be" class="outline-3">
-<h3 id="orgbd9e6be">Registers</h3>
-<div class="outline-text-3" id="text-orgbd9e6be">
+<div id="outline-container-org4f94d8e" class="outline-3">
+<h3 id="org4f94d8e">Registers</h3>
+<div class="outline-text-3" id="text-org4f94d8e">
 <p>
 There are a number of registers
 </p>
@@ -152,13 +152,13 @@ There are a number of registers
 </div>
 </div>
 
-<div id="outline-container-orgac442f2" class="outline-3">
-<h3 id="orgac442f2">Memory Tags</h3>
-<div class="outline-text-3" id="text-orgac442f2">
+<div id="outline-container-org103eb68" class="outline-3">
+<h3 id="org103eb68">Memory Tags</h3>
+<div class="outline-text-3" id="text-org103eb68">
 <p>
 All memory within Emblematics is tagged with a four bit code indicating the type of the object. Following that is a single byte containing 
 </p>
-<table id="org0f29d4e" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="org4c9e5a5" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
 <colgroup>
@@ -247,9 +247,9 @@ A few little functions are defined to extract the memory cells and tags as well.
 </div>
 
 
-<div id="outline-container-org1ca6061" class="outline-3">
-<h3 id="org1ca6061">Instruction Set Architecture</h3>
-<div class="outline-text-3" id="text-org1ca6061">
+<div id="outline-container-org329da97" class="outline-3">
+<h3 id="org329da97">Instruction Set Architecture</h3>
+<div class="outline-text-3" id="text-org329da97">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -313,9 +313,9 @@ A few little functions are defined to extract the memory cells and tags as well.
 </table>
 </div>
 
-<div id="outline-container-orga38b90c" class="outline-4">
-<h4 id="orga38b90c">Processing Instructions</h4>
-<div class="outline-text-4" id="text-orga38b90c">
+<div id="outline-container-org78492be" class="outline-4">
+<h4 id="org78492be">Processing Instructions</h4>
+<div class="outline-text-4" id="text-org78492be">
 <p>
 To interpret instructions they are stored in a table with the binary representation of the instruction being the address of the function storing the instruction. Therefore to access the NOP instruction you simply access it at.
 </p>
@@ -330,9 +330,9 @@ All instructions are offset by 0x42.
 </div>
 </div>
 
-<div id="outline-container-org638242b" class="outline-4">
-<h4 id="org638242b">Microcode</h4>
-<div class="outline-text-4" id="text-org638242b">
+<div id="outline-container-org1427680" class="outline-4">
+<h4 id="org1427680">Microcode</h4>
+<div class="outline-text-4" id="text-org1427680">
 <p>
 To define the various instructions some more atomic instructions are defined.
 </p>
@@ -348,9 +348,9 @@ To define the various instructions some more atomic instructions are defined.
 </div>
 </div>
 
-<div id="outline-container-org7819d6e" class="outline-4">
-<h4 id="org7819d6e">definstruction macro</h4>
-<div class="outline-text-4" id="text-org7819d6e">
+<div id="outline-container-org16f80a0" class="outline-4">
+<h4 id="org16f80a0">definstruction macro</h4>
+<div class="outline-text-4" id="text-org16f80a0">
 <p>
 To make the definition of instructions easy (and allow for more easily named values) I define a simple macro that registers an instruction with the instruction table and pushes and pops values from the stack automatically.
 </p>
@@ -378,9 +378,9 @@ To make the definition of instructions easy (and allow for more easily named val
 </div>
 </div>
 
-<div id="outline-container-org9f9b70e" class="outline-4">
-<h4 id="org9f9b70e">SYMBOL</h4>
-<div class="outline-text-4" id="text-org9f9b70e">
+<div id="outline-container-orgb517efb" class="outline-4">
+<h4 id="orgb517efb">SYMBOL</h4>
+<div class="outline-text-4" id="text-orgb517efb">
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">SYMBOL</span> 0x01<span style="color: #494949;">)</span>
 </pre>
@@ -388,13 +388,13 @@ To make the definition of instructions easy (and allow for more easily named val
 </div>
 </div>
 
-<div id="outline-container-orgf0303ac" class="outline-4">
-<h4 id="orgf0303ac">VHEAD</h4>
+<div id="outline-container-org93431f7" class="outline-4">
+<h4 id="org93431f7">VHEAD</h4>
 </div>
 
-<div id="outline-container-org33f407d" class="outline-4">
-<h4 id="org33f407d">CONS</h4>
-<div class="outline-text-4" id="text-org33f407d">
+<div id="outline-container-orge9de901" class="outline-4">
+<h4 id="orge9de901">CONS</h4>
+<div class="outline-text-4" id="text-orge9de901">
 <div class="org-src-container">
 <pre class="src src-clojure">
 </pre>
@@ -404,26 +404,26 @@ To make the definition of instructions easy (and allow for more easily named val
 </div>
 
 
-<div id="outline-container-org9020897" class="outline-3">
-<h3 id="org9020897">Memory</h3>
-<div class="outline-text-3" id="text-org9020897">
+<div id="outline-container-org2333647" class="outline-3">
+<h3 id="org2333647">Memory</h3>
+<div class="outline-text-3" id="text-org2333647">
 <p>
 Memory is addressed with.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgd3be323" class="outline-3">
-<h3 id="orgd3be323">Process Isolation</h3>
-<div class="outline-text-3" id="text-orgd3be323">
+<div id="outline-container-org3badb42" class="outline-3">
+<h3 id="org3badb42">Process Isolation</h3>
+<div class="outline-text-3" id="text-org3badb42">
 <p>
 Process are not isolated in Emblematics in the usual sense. Rather the system relies upon the properties of the LISP machine processor and language to ensure process isolation. Vectors cannot be addressed out of bounds, 
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgc0920c7" class="outline-3">
-<h3 id="orgc0920c7">Virtual Pages</h3>
+<div id="outline-container-orgab37722" class="outline-3">
+<h3 id="orgab37722">Virtual Pages</h3>
 </div>
 </div>
 </div>

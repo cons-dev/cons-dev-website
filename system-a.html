@@ -3,18 +3,18 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-W04-4 05:11 -->
+<!-- 2022-W11-4 02:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>system/a</title>
 <meta name="author" content="Inanna" />
 <meta name="description" content="A simple memory-to-memory virtual machine implemented in C++. (nonfunctional)" />
 <meta name="generator" content="Org Mode" />
-<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<link href="/site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="/images/website-logo.png" /></a></div>
+<div><a href="/index.html"><img alt="An abstract logo representing a series of three assembly line stamping machines with the words CONS, DEV, and  embalzoned in white on each machine." id="site-logo" src="/images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">system/a
@@ -25,27 +25,27 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org47172aa">Introduction</a></li>
-<li><a href="#org6c7da3a">Source Code</a>
+<li><a href="#org3e79207">Introduction</a></li>
+<li><a href="#org110d859">Source Code</a>
 <ul>
-<li><a href="#org120b445">main.cpp</a></li>
-<li><a href="#org2ae69be">systema.h</a></li>
-<li><a href="#orgc0f27b2">assembler.h</a></li>
-<li><a href="#org0e2cfc0">instructions.h</a></li>
+<li><a href="#orgfecdeb4">main.cpp</a></li>
+<li><a href="#orge5a2cad">systema.h</a></li>
+<li><a href="#org812041e">assembler.h</a></li>
+<li><a href="#org0f73502">instructions.h</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="org4b02113" class="figure">
+<div id="org604bc86" class="figure">
 <p><img src="images/system-a-logo.jpeg" alt="An image showing the system/a logo with the text 'general computing platform' to the right and a core dump of a system/a program below it." />
 </p>
 </div>
 
-<div id="outline-container-org47172aa" class="outline-2">
-<h2 id="org47172aa">Introduction</h2>
-<div class="outline-text-2" id="text-org47172aa">
+<div id="outline-container-org3e79207" class="outline-2">
+<h2 id="org3e79207">Introduction</h2>
+<div class="outline-text-2" id="text-org3e79207">
 <p>
 This was, in essence, the thing that made me realize the beauty of computer science. Yes, it looks incredibly ugly and doesn't work right now, <i>but when it did work</i> it was beyond beautiful. Why? Because in learning how a basic memory-to-memory virtual machine was implemented I realized how elegant and simple computer science is.
 </p>
@@ -65,13 +65,13 @@ Please note that all of this code is terrible and possibly non-functional. I hav
 </div>
 
 
-<div id="outline-container-org6c7da3a" class="outline-2">
-<h2 id="org6c7da3a">Source Code</h2>
-<div class="outline-text-2" id="text-org6c7da3a">
+<div id="outline-container-org110d859" class="outline-2">
+<h2 id="org110d859">Source Code</h2>
+<div class="outline-text-2" id="text-org110d859">
 </div>
-<div id="outline-container-org120b445" class="outline-3">
-<h3 id="org120b445">main.cpp</h3>
-<div class="outline-text-3" id="text-org120b445">
+<div id="outline-container-orgfecdeb4" class="outline-3">
+<h3 id="orgfecdeb4">main.cpp</h3>
+<div class="outline-text-3" id="text-orgfecdeb4">
 <div class="org-src-container">
 <pre class="src src-C++"><span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">iostream</span><span style="color: #494949;">&gt;</span>
 <span style="color: #000; font-weight: bold;">#include</span> <span style="color: #494949;">&lt;</span><span style="color: #494949;">string</span><span style="color: #494949;">&gt;</span>
@@ -99,9 +99,9 @@ Please note that all of this code is terrible and possibly non-functional. I hav
 </div>
 </div>
 </div>
-<div id="outline-container-org2ae69be" class="outline-3">
-<h3 id="org2ae69be">systema.h</h3>
-<div class="outline-text-3" id="text-org2ae69be">
+<div id="outline-container-orge5a2cad" class="outline-3">
+<h3 id="orge5a2cad">systema.h</h3>
+<div class="outline-text-3" id="text-orge5a2cad">
 <div class="org-src-container">
 <pre class="src src-C++"><span style="color: #000; font-weight: bold;">#pragma</span> once
 
@@ -275,9 +275,9 @@ Please note that all of this code is terrible and possibly non-functional. I hav
 </div>
 </div>
 </div>
-<div id="outline-container-orgc0f27b2" class="outline-3">
-<h3 id="orgc0f27b2">assembler.h</h3>
-<div class="outline-text-3" id="text-orgc0f27b2">
+<div id="outline-container-org812041e" class="outline-3">
+<h3 id="org812041e">assembler.h</h3>
+<div class="outline-text-3" id="text-org812041e">
 <div class="org-src-container">
 <pre class="src src-C++"><span style="color: #000; font-weight: bold;">#pragma</span> once
 
@@ -368,9 +368,9 @@ Please note that all of this code is terrible and possibly non-functional. I hav
 </div>
 </div>
 </div>
-<div id="outline-container-org0e2cfc0" class="outline-3">
-<h3 id="org0e2cfc0">instructions.h</h3>
-<div class="outline-text-3" id="text-org0e2cfc0">
+<div id="outline-container-org0f73502" class="outline-3">
+<h3 id="org0f73502">instructions.h</h3>
+<div class="outline-text-3" id="text-org0f73502">
 <div class="org-src-container">
 <pre class="src src-C++">once
 

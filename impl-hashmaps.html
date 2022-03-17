@@ -3,14 +3,14 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-W04-4 05:11 -->
+<!-- 2022-W11-4 02:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Implementing Hash Maps</title>
 <meta name="author" content="Inanna" />
 <meta name="description" content="A short introduction to hash maps, how they work, and a short implementation thereof." />
 <meta name="generator" content="Org Mode" />
-<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<link href="/site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -35,7 +35,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="/images/website-logo.png" /></a></div>
+<div><a href="/index.html"><img alt="An abstract logo representing a series of three assembly line stamping machines with the words CONS, DEV, and  embalzoned in white on each machine." id="site-logo" src="/images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Implementing Hash Maps</h1>
@@ -43,39 +43,39 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org156734a">Introduction</a></li>
-<li><a href="#org6f7288b">Algorithm</a></li>
-<li><a href="#orgab71a7d">Implementation</a>
+<li><a href="#orgbc14afd">Introduction</a></li>
+<li><a href="#orgee609fa">Algorithm</a></li>
+<li><a href="#org079625f">Implementation</a>
 <ul>
-<li><a href="#orgdcc140c">Hash Function</a></li>
-<li><a href="#org8324c67">The Hashmap Constructor</a></li>
-<li><a href="#org031a374">Adding Items</a></li>
-<li><a href="#org2979fd1">Getting Items</a></li>
+<li><a href="#org067bf0a">Hash Function</a></li>
+<li><a href="#org43d0bbd">The Hashmap Constructor</a></li>
+<li><a href="#org0aff215">Adding Items</a></li>
+<li><a href="#org1e27653">Getting Items</a></li>
 </ul>
 </li>
-<li><a href="#org5438dd2">Conclusion</a></li>
+<li><a href="#orgc53612e">Conclusion</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org156734a" class="outline-2">
-<h2 id="org156734a">Introduction</h2>
-<div class="outline-text-2" id="text-org156734a">
+<div id="outline-container-orgbc14afd" class="outline-2">
+<h2 id="orgbc14afd">Introduction</h2>
+<div class="outline-text-2" id="text-orgbc14afd">
 <p>
 A hashmap is a type of key-value store that uses a hash function to index.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org6f7288b" class="outline-2">
-<h2 id="org6f7288b">Algorithm</h2>
-<div class="outline-text-2" id="text-org6f7288b">
+<div id="outline-container-orgee609fa" class="outline-2">
+<h2 id="orgee609fa">Algorithm</h2>
+<div class="outline-text-2" id="text-orgee609fa">
 <p>
 A hashmap is fairly simple, but in essence you have an array of 2-tuples with the first containing a key and the second containing a value. To insert into the array you first hash the key and then take the modulus of the key with respect to the length of the array.
 </p>
 
 
-<div id="org1376552" class="figure">
+<div id="org7b8afc9" class="figure">
 <p><img src="./images/hashmap-adding_c8a4a74c-a139-45d5-a340-c2ed895b2e5a.png" alt="Two items being added to a hashmap." />
 </p>
 </div>
@@ -85,7 +85,7 @@ A hashmap is fairly simple, but in essence you have an array of 2-tuples with th
 However, as you might imagine, there can occasionally be collisions, like this.
 </p>
 
-<div id="orge5a590f" class="figure">
+<div id="orgd7e2efb" class="figure">
 <p><img src="./images/hashmap-collison_58e621d6-4ffd-4fed-87d3-592912398f2b.png" alt="A third item being added to a hash map but experiencing a hash collision." />
 </p>
 </div>
@@ -95,7 +95,7 @@ To solve this you can either resize the array, shove the collided items in a sub
 </p>
 
 
-<div id="org165c775" class="figure">
+<div id="org975c839" class="figure">
 <p><img src="./images/hashmap-resizing_58e621d6-4ffd-4fed-87d3-592912398f2b.png" alt="All three itmes being added again to the newly resized has hmap." />
 </p>
 </div>
@@ -106,7 +106,7 @@ To find items in the array you first find the index of the key just like you did
 
 
 
-<div id="org717273b" class="figure">
+<div id="orgc3bc292" class="figure">
 <p><img src="./images/hashmap-finding-key_251f9892-8648-4230-b99b-f8b50575f140.png" alt="The value of foo being obtained from the hash map." />
 </p>
 </div>
@@ -114,13 +114,13 @@ To find items in the array you first find the index of the key just like you did
 </div>
 
 
-<div id="outline-container-orgab71a7d" class="outline-2">
-<h2 id="orgab71a7d">Implementation</h2>
-<div class="outline-text-2" id="text-orgab71a7d">
+<div id="outline-container-org079625f" class="outline-2">
+<h2 id="org079625f">Implementation</h2>
+<div class="outline-text-2" id="text-org079625f">
 </div>
-<div id="outline-container-orgdcc140c" class="outline-3">
-<h3 id="orgdcc140c">Hash Function</h3>
-<div class="outline-text-3" id="text-orgdcc140c">
+<div id="outline-container-org067bf0a" class="outline-3">
+<h3 id="org067bf0a">Hash Function</h3>
+<div class="outline-text-3" id="text-org067bf0a">
 <p>
 This function simply multiplies the list of numbers together with a pad, creating a somewhat random number. It is the exact same as the one in my <a href="impl-bloom-filters.html#ID-a2a663d2-d5be-4e28-a4df-8fd8e502ce1f">Implementing Bloom Filters</a> tutorial.
 </p>
@@ -138,9 +138,9 @@ This function simply multiplies the list of numbers together with a pad, creatin
 </div>
 
 
-<div id="outline-container-org8324c67" class="outline-3">
-<h3 id="org8324c67">The Hashmap Constructor</h3>
-<div class="outline-text-3" id="text-org8324c67">
+<div id="outline-container-org43d0bbd" class="outline-3">
+<h3 id="org43d0bbd">The Hashmap Constructor</h3>
+<div class="outline-text-3" id="text-org43d0bbd">
 <p>
 To define a hash map we first have to define a simple object for it and a constructor that creates an array of nils of the relevant size.
 </p>
@@ -153,9 +153,9 @@ To define a hash map we first have to define a simple object for it and a constr
 </div>
 </div>
 
-<div id="outline-container-org031a374" class="outline-3">
-<h3 id="org031a374">Adding Items</h3>
-<div class="outline-text-3" id="text-org031a374">
+<div id="outline-container-org0aff215" class="outline-3">
+<h3 id="org0aff215">Adding Items</h3>
+<div class="outline-text-3" id="text-org0aff215">
 <p>
 Now that we can get stuff from the hashmap, let's consider adding stuff to it as well. Here we add a function that takes the map, a key, and a value, and then adds that to the hash map. Should a collision occur it resizes.
 </p>
@@ -242,9 +242,9 @@ And now, as you can see, after adding the last element the hasmap automatically 
 </div>
 </div>
 
-<div id="outline-container-org2979fd1" class="outline-3">
-<h3 id="org2979fd1">Getting Items</h3>
-<div class="outline-text-3" id="text-org2979fd1">
+<div id="outline-container-org1e27653" class="outline-3">
+<h3 id="org1e27653">Getting Items</h3>
+<div class="outline-text-3" id="text-org1e27653">
 <p>
 The <code>get-hash</code> function simply takes the hahmap and a key. Should the key correspond with a value in the map it returns true, else <code>nil</code> or the value provided in <code>not-found</code>, which replicates the functionality of the native <code>get</code> function.
 </p>
@@ -265,9 +265,9 @@ The <code>get-hash</code> function simply takes the hahmap and a key. Should the
 </div>
 
 
-<div id="outline-container-org5438dd2" class="outline-2">
-<h2 id="org5438dd2">Conclusion</h2>
-<div class="outline-text-2" id="text-org5438dd2">
+<div id="outline-container-orgc53612e" class="outline-2">
+<h2 id="orgc53612e">Conclusion</h2>
+<div class="outline-text-2" id="text-orgc53612e">
 <p>
 Hash maps are a great way to store key-value pairs with a constant lookup time. However, due to their limited size-efficiency they can have somewhat non-deterministic insertion times, which can be painful if you are working with very large maps. 
 </p>

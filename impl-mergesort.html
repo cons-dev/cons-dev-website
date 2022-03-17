@@ -3,14 +3,14 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-W04-4 05:11 -->
+<!-- 2022-W11-4 02:12 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Implementing Merge Sort</title>
 <meta name="author" content="Inanna" />
 <meta name="description" content="Implementing merge sort in clojure." />
 <meta name="generator" content="Org Mode" />
-<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<link href="/site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -35,7 +35,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="/images/website-logo.png" /></a></div>
+<div><a href="/index.html"><img alt="An abstract logo representing a series of three assembly line stamping machines with the words CONS, DEV, and  embalzoned in white on each machine." id="site-logo" src="/images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Implementing Merge Sort</h1>
@@ -43,38 +43,38 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org559f867">Introduction</a></li>
-<li><a href="#orgba9aeae">Algorithm</a></li>
-<li><a href="#org5588115">Implementation</a>
+<li><a href="#org6ab24e6">Introduction</a></li>
+<li><a href="#org9b6fe81">Algorithm</a></li>
+<li><a href="#org14432f7">Implementation</a>
 <ul>
-<li><a href="#orgc18e9d1">Merge Function</a></li>
-<li><a href="#org04615aa">Sort function</a></li>
+<li><a href="#org5e1344c">Merge Function</a></li>
+<li><a href="#org889ce29">Sort function</a></li>
 </ul>
 </li>
-<li><a href="#org998c30d">Conclusion</a></li>
+<li><a href="#org8a732dd">Conclusion</a></li>
 </ul>
 </div>
 </div>
 
 
-<div id="outline-container-org559f867" class="outline-2">
-<h2 id="org559f867">Introduction</h2>
-<div class="outline-text-2" id="text-org559f867">
+<div id="outline-container-org6ab24e6" class="outline-2">
+<h2 id="org6ab24e6">Introduction</h2>
+<div class="outline-text-2" id="text-org6ab24e6">
 <p>
 Mergesort is, in my opinion, the most elegant sorting algorithm out there and an early prelude the commonly used <a href="other/pessimal-algorithms-and-simplexity-analysis.pdf">multiply and surrender paradigm</a> which is extremely good at explaining things like the search time for a pair of glasses.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgba9aeae" class="outline-2">
-<h2 id="orgba9aeae">Algorithm</h2>
-<div class="outline-text-2" id="text-orgba9aeae">
+<div id="outline-container-org9b6fe81" class="outline-2">
+<h2 id="org9b6fe81">Algorithm</h2>
+<div class="outline-text-2" id="text-org9b6fe81">
 <p>
 So first let's imagine the easiest sort that we could possibly do, something so trivial even a computer could do it. That would be the case where you have to sort a list of two items, where you just compare one of the items to the other and then swap them if they are not correctly ordered. Therefore, to ensure we can work with this trivial case we simply reduce the entire list into a series of binary lists.
 </p>
 
 
-<div id="org49d28cd" class="figure">
+<div id="org5f38fb4" class="figure">
 <p><img src="./images/msort1_ebc14103-49df-4f80-9cd2-1c203f99932b.png" alt="An image of a list being split in half three times." />
 </p>
 </div>
@@ -86,7 +86,7 @@ From here it is also trivial to merge these lists while keeping them sorted! You
 
 
 
-<div id="org77ac01e" class="figure">
+<div id="org3880016" class="figure">
 <p><img src="./images/msort2_ebc14103-49df-4f80-9cd2-1c203f99932b.png" alt="A list being merged with ordering preserved." />
 </p>
 </div>
@@ -97,16 +97,16 @@ As you may have noticed the tree produced by the execution is similar to a <a hr
 </div>
 </div>
 
-<div id="outline-container-org5588115" class="outline-2">
-<h2 id="org5588115">Implementation</h2>
-<div class="outline-text-2" id="text-org5588115">
+<div id="outline-container-org14432f7" class="outline-2">
+<h2 id="org14432f7">Implementation</h2>
+<div class="outline-text-2" id="text-org14432f7">
 <p>
 Now to implement it in code, in this case in clojure.
 </p>
 </div>
-<div id="outline-container-orgc18e9d1" class="outline-3">
-<h3 id="orgc18e9d1">Merge Function</h3>
-<div class="outline-text-3" id="text-orgc18e9d1">
+<div id="outline-container-org5e1344c" class="outline-3">
+<h3 id="org5e1344c">Merge Function</h3>
+<div class="outline-text-3" id="text-org5e1344c">
 <p>
 Here we define a simple variadic function that either takes the left and right lists (both assumed to be sorted) or takes a predicate that returns true should the first argument be lesser than the second. As you can see list destructuring is used to bind the various portions of the list to variables that can then be used.
 </p>
@@ -126,9 +126,9 @@ Because of how the merge function works, even if the arguments provided are a li
 </div>
 </div>
 
-<div id="outline-container-org04615aa" class="outline-3">
-<h3 id="org04615aa">Sort function</h3>
-<div class="outline-text-3" id="text-org04615aa">
+<div id="outline-container-org889ce29" class="outline-3">
+<h3 id="org889ce29">Sort function</h3>
+<div class="outline-text-3" id="text-org889ce29">
 <p>
 And now we come to the sorting function which, in essence, first recursively partitions the list into two groups until a state is reached in which the length of the list is one or zero, at which point it then returns the sorted list in that case and then merges the lists that it returns.
 </p>
@@ -149,9 +149,9 @@ And now we come to the sorting function which, in essence, first recursively par
 </div>
 
 
-<div id="outline-container-org998c30d" class="outline-2">
-<h2 id="org998c30d">Conclusion</h2>
-<div class="outline-text-2" id="text-org998c30d">
+<div id="outline-container-org8a732dd" class="outline-2">
+<h2 id="org8a732dd">Conclusion</h2>
+<div class="outline-text-2" id="text-org8a732dd">
 <p>
 As you can see, merge sort is a very elegant and simple function that allows you to quickly sort lists. However, unfortunately, due to it's space complexity and inability to effectively sort arrays in place it has been largely relegated to the dustbin of histroy.
 </p>
@@ -162,7 +162,7 @@ As you can see, merge sort is a very elegant and simple function that allows you
 
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2021-W52-2 00:44</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2022-W11-4 01:39</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>

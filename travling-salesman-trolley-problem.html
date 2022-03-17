@@ -3,14 +3,14 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-W04-4 05:11 -->
+<!-- 2022-W11-4 02:12 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>A Possibly Correct Solution to the Travling Salseman Trolly Problem</title>
 <meta name="author" content="Inanna" />
 <meta name="description" content="Backtracking and travling salseman with linear programming." />
 <meta name="generator" content="Org Mode" />
-<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<link href="/site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -35,7 +35,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="/images/website-logo.png" /></a></div>
+<div><a href="/index.html"><img alt="An abstract logo representing a series of three assembly line stamping machines with the words CONS, DEV, and  embalzoned in white on each machine." id="site-logo" src="/images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">A Possibly Correct Solution to the Travling Salseman Trolly Problem</h1>
@@ -43,14 +43,14 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orge929a5a">Introduction</a></li>
-<li><a href="#org2331503">Algorithm Description</a></li>
-<li><a href="#orgabf13e9">Implementation</a>
+<li><a href="#org22c4dcd">Introduction</a></li>
+<li><a href="#org6b30d69">Algorithm Description</a></li>
+<li><a href="#org66e610a">Implementation</a>
 <ul>
-<li><a href="#org0096f86">Defining the Graph</a></li>
-<li><a href="#org016848b">Traversing the Graph</a>
+<li><a href="#org47311bd">Defining the Graph</a></li>
+<li><a href="#orge504c99">Traversing the Graph</a>
 <ul>
-<li><a href="#orgca634f6">Edge Less Than</a></li>
+<li><a href="#org382239d">Edge Less Than</a></li>
 </ul>
 </li>
 </ul>
@@ -59,15 +59,15 @@
 </div>
 </div>
 
-<div id="outline-container-orge929a5a" class="outline-2">
-<h2 id="orge929a5a">Introduction</h2>
-<div class="outline-text-2" id="text-orge929a5a">
+<div id="outline-container-org22c4dcd" class="outline-2">
+<h2 id="org22c4dcd">Introduction</h2>
+<div class="outline-text-2" id="text-org22c4dcd">
 <p>
 While on discord I saw this meme.
 </p>
 
 
-<div id="org895aec2" class="figure">
+<div id="orgb217042" class="figure">
 <p><img src="images/travling-salesman-trolley-problem.png" alt="travling-salesman-trolley-problem.png" />
 </p>
 </div>
@@ -78,9 +78,9 @@ I decided to write an optimal solution for it because I was bored. I also decide
 </div>
 </div>
 
-<div id="outline-container-org2331503" class="outline-2">
-<h2 id="org2331503">Algorithm Description</h2>
-<div class="outline-text-2" id="text-org2331503">
+<div id="outline-container-org6b30d69" class="outline-2">
+<h2 id="org6b30d69">Algorithm Description</h2>
+<div class="outline-text-2" id="text-org6b30d69">
 <p>
 In the case of an undirected graph you first consider a node, obtain the weights of the edges going from it and sort them in a list. Then you traverse along the lowest weighted edge in your list. Once you have reached this new edge you discard the previous edge, get the new edges, discard any edges that go to a visited node in both of your lists, sort them, and then merge them. You then proceed to again choose the lowest weighted edge from your list and visit the node that goes through that edge. You continue this until all nodes have been visited
 </p>
@@ -95,18 +95,18 @@ The proof is trivial and left as an exercise to the reader.<label class="sidenot
 </div>
 </div>
 
-<div id="outline-container-orgabf13e9" class="outline-2">
-<h2 id="orgabf13e9">Implementation</h2>
-<div class="outline-text-2" id="text-orgabf13e9">
+<div id="outline-container-org66e610a" class="outline-2">
+<h2 id="org66e610a">Implementation</h2>
+<div class="outline-text-2" id="text-org66e610a">
 <p>
 So to accompany the above description let's have a quick implementation in Clojure.
 </p>
 </div>
 
 
-<div id="outline-container-org0096f86" class="outline-3">
-<h3 id="org0096f86">Defining the Graph</h3>
-<div class="outline-text-3" id="text-org0096f86">
+<div id="outline-container-org47311bd" class="outline-3">
+<h3 id="org47311bd">Defining the Graph</h3>
+<div class="outline-text-3" id="text-org47311bd">
 <p>
 So to start I use the graph I defined in my <a href="impl-graphs.html#ID-7f4d867c-294d-460d-915b-5363b945662d">implementing graphs</a> tutorial and define the graph using it. So we just import it from the shared library I have in the public section of my wiki.
 </p>
@@ -123,7 +123,7 @@ But before we define the graph we must first look at the problem itself and come
 </p>
 
 
-<div id="org763710d" class="figure">
+<div id="org981097c" class="figure">
 <p><img src="images/travling-salesman-trolley-problem-numbered.png" alt="travling-salesman-trolley-problem-numbered.png" />
 </p>
 </div>
@@ -132,7 +132,7 @@ But before we define the graph we must first look at the problem itself and come
 Below is the code that implements it. As you can see, it's actually pretty long.
 </p>
 <div class="org-src-container">
-<pre class="src src-clojure" id="orgf25e27c"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">tstp-graph</span>
+<pre class="src src-clojure" id="org668217a"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">tstp-graph</span>
   <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> <span style="color: #494949;">(</span>apply graph <span style="color: #bbb;">(</span>range 29<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
       <span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">0</span>
       <span style="color: #494949;">(</span>edge 0 1 10<span style="color: #494949;">)</span>
@@ -212,12 +212,12 @@ Using our DOT code we can also check that our graph is correct visually by obtai
 </p>
 
 <div class="org-src-container">
-<pre class="src src-clojure" id="org47317c4"><span style="color: #494949;">(</span>dot-repr tstp-graph<span style="color: #494949;">)</span>
+<pre class="src src-clojure" id="org6c7277c"><span style="color: #494949;">(</span>dot-repr tstp-graph<span style="color: #494949;">)</span>
 </pre>
 </div>
 
 
-<div id="orgbebcedc" class="figure">
+<div id="orgf2d6ecb" class="figure">
 <p><img src="./images/graph_39d0b492-a701-4d8d-a7de-d854f3eda883.png" alt="graph_39d0b492-a701-4d8d-a7de-d854f3eda883.png" />
 </p>
 </div>
@@ -232,17 +232,17 @@ Given how <i>nice</i> it was to just get a DOT representation of a clojure datas
 </div>
 </div>
 
-<div id="outline-container-org016848b" class="outline-3">
-<h3 id="org016848b">Traversing the Graph</h3>
-<div class="outline-text-3" id="text-org016848b">
+<div id="outline-container-orge504c99" class="outline-3">
+<h3 id="orge504c99">Traversing the Graph</h3>
+<div class="outline-text-3" id="text-orge504c99">
 <p>
 So next we create some functions to traverse this graph and implement our algorithm. First we want an algorithm that, given some set of nodes, will then return the least weighted edge of the set of nodes. Secondarily we want.
 </p>
 </div>
 
-<div id="outline-container-orgca634f6" class="outline-4">
-<h4 id="orgca634f6">Edge Less Than</h4>
-<div class="outline-text-4" id="text-orgca634f6">
+<div id="outline-container-org382239d" class="outline-4">
+<h4 id="org382239d">Edge Less Than</h4>
+<div class="outline-text-4" id="text-org382239d">
 <p>
 So first we want to have a predicate that compares the edges and returns true should the first edge be less than the second, which will be fed into our mergesort function.
 </p>

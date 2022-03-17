@@ -3,14 +3,14 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-W04-4 05:11 -->
+<!-- 2022-W11-4 02:12 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Econf Org Mode</title>
 <meta name="author" content="Inanna" />
 <meta name="description" content="A configuration file for org-mode documents." />
 <meta name="generator" content="Org Mode" />
-<link href="site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+<link href="/site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -35,7 +35,7 @@
 </head>
 <body>
 <div id="preamble" class="status">
-<div><a href="index.html"><img alt="A red logo the left half of which is a gear containing a control diagram and the right half is a rose." id="site-logo" src="/images/website-logo.png" /></a></div>
+<div><a href="/index.html"><img alt="An abstract logo representing a series of three assembly line stamping machines with the words CONS, DEV, and  embalzoned in white on each machine." id="site-logo" src="/images/website-logo.png" /></a></div>
 </div>
 <div id="content" class="content">
 <h1 class="title">Econf Org Mode</h1>
@@ -43,23 +43,23 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org56458f6">Introduction</a></li>
-<li><a href="#org5fbc48e">Dependencies</a></li>
-<li><a href="#org3f4e5ba">Agenda</a></li>
-<li><a href="#org7d4899e">Database Facts</a>
+<li><a href="#org214e664">Introduction</a></li>
+<li><a href="#org76a037f">Dependencies</a></li>
+<li><a href="#org486ad08">Agenda</a></li>
+<li><a href="#orgcf29421">Database Facts</a>
 <ul>
-<li><a href="#org9b7058d">get-dependent-nodes</a></li>
-<li><a href="#orgce39542">add-reference</a></li>
+<li><a href="#org9557822">get-dependent-nodes</a></li>
+<li><a href="#org62fdb75">add-reference</a></li>
 </ul>
 </li>
-<li><a href="#orgfe6af02">Theming</a></li>
-<li><a href="#orga9f5fe7">Org-Fragtog</a></li>
-<li><a href="#org81b6302">org-noter</a></li>
-<li><a href="#org8c21c8a">Org mode</a>
+<li><a href="#org2ea8605">Theming</a></li>
+<li><a href="#orgef18e4e">Org-Fragtog</a></li>
+<li><a href="#org37d7099">org-noter</a></li>
+<li><a href="#org77b9e53">Org mode</a>
 <ul>
-<li><a href="#org5d828ca">Assorted Vars</a></li>
-<li><a href="#org0e5e8a5">Org Babel</a></li>
-<li><a href="#orgda032d4">\(\LaTeX\)</a></li>
+<li><a href="#orgba6c1f9">Assorted Vars</a></li>
+<li><a href="#orgb197c3d">Org Babel</a></li>
+<li><a href="#org6ddd775">\(\LaTeX\)</a></li>
 </ul>
 </li>
 </ul>
@@ -67,19 +67,19 @@
 </div>
 
 
-<div id="outline-container-org56458f6" class="outline-2">
-<h2 id="org56458f6">Introduction</h2>
-<div class="outline-text-2" id="text-org56458f6">
+<div id="outline-container-org214e664" class="outline-2">
+<h2 id="org214e664">Introduction</h2>
+<div class="outline-text-2" id="text-org214e664">
 <p>
 I like org-mode, so this provides a partial configuration for my org-mode setup and "Memex" features.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org5fbc48e" class="outline-2">
-<h2 id="org5fbc48e">Dependencies</h2>
-<div class="outline-text-2" id="text-org5fbc48e">
-<table id="org5923630" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<div id="outline-container-org76a037f" class="outline-2">
+<h2 id="org76a037f">Dependencies</h2>
+<div class="outline-text-2" id="text-org76a037f">
+<table id="orgad57999" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
 <colgroup>
@@ -124,9 +124,9 @@ I like org-mode, so this provides a partial configuration for my org-mode setup 
 </div>
 
 
-<div id="outline-container-org3f4e5ba" class="outline-2">
-<h2 id="org3f4e5ba">Agenda</h2>
-<div class="outline-text-2" id="text-org3f4e5ba">
+<div id="outline-container-org486ad08" class="outline-2">
+<h2 id="org486ad08">Agenda</h2>
+<div class="outline-text-2" id="text-org486ad08">
 <pre class="example">
 
 </pre>
@@ -134,9 +134,9 @@ I like org-mode, so this provides a partial configuration for my org-mode setup 
 </div>
 
 
-<div id="outline-container-org7d4899e" class="outline-2">
-<h2 id="org7d4899e">Database Facts</h2>
-<div class="outline-text-2" id="text-org7d4899e">
+<div id="outline-container-orgcf29421" class="outline-2">
+<h2 id="orgcf29421">Database Facts</h2>
+<div class="outline-text-2" id="text-orgcf29421">
 <p>
 So one thing that I am <i>trying</i> to do is represent my knowledge as facts and provide a structure for taxonomies.
 </p>
@@ -154,9 +154,9 @@ However, I do think that having a set of facts, and then being able to have depe
 </p>
 </div>
 
-<div id="outline-container-org9b7058d" class="outline-3">
-<h3 id="org9b7058d">get-dependent-nodes</h3>
-<div class="outline-text-3" id="text-org9b7058d">
+<div id="outline-container-org9557822" class="outline-3">
+<h3 id="org9557822">get-dependent-nodes</h3>
+<div class="outline-text-3" id="text-org9557822">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defun</span> <span style="font-weight: bold; font-style: italic;">get-dependent-nodes</span> <span style="color: #bbb;">()</span>
  <span style="color: #bbb;">(</span>org-roam-db-query <span style="color: #494949;">[</span><span style="color: #E53935;">:select</span> * <span style="color: #E53935;">:from</span> nodes<span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
@@ -168,15 +168,15 @@ This gets the set of nodes that depend upon the current node.
 </div>
 </div>
 
-<div id="outline-container-orgce39542" class="outline-3">
-<h3 id="orgce39542">add-reference</h3>
+<div id="outline-container-org62fdb75" class="outline-3">
+<h3 id="org62fdb75">add-reference</h3>
 </div>
 </div>
 
 
-<div id="outline-container-orgfe6af02" class="outline-2">
-<h2 id="orgfe6af02">Theming</h2>
-<div class="outline-text-2" id="text-orgfe6af02">
+<div id="outline-container-org2ea8605" class="outline-2">
+<h2 id="org2ea8605">Theming</h2>
+<div class="outline-text-2" id="text-org2ea8605">
 <p>
 So there are a few more things
 </p>
@@ -191,9 +191,9 @@ So there are a few more things
 </div>
 </div>
 
-<div id="outline-container-orga9f5fe7" class="outline-2">
-<h2 id="orga9f5fe7">Org-Fragtog</h2>
-<div class="outline-text-2" id="text-orga9f5fe7">
+<div id="outline-container-orgef18e4e" class="outline-2">
+<h2 id="orgef18e4e">Org-Fragtog</h2>
+<div class="outline-text-2" id="text-orgef18e4e">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">use-package</span> <span style="color: #E53935;">org-fragtog</span>
   <span style="color: #E53935;">:straight</span> nil
@@ -204,9 +204,9 @@ So there are a few more things
 </div>
 
 
-<div id="outline-container-org81b6302" class="outline-2">
-<h2 id="org81b6302">org-noter</h2>
-<div class="outline-text-2" id="text-org81b6302">
+<div id="outline-container-org37d7099" class="outline-2">
+<h2 id="org37d7099">org-noter</h2>
+<div class="outline-text-2" id="text-org37d7099">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">use-package</span> <span style="color: #E53935;">org-noter</span>
   <span style="color: #E53935;">:custom</span>
@@ -216,21 +216,21 @@ So there are a few more things
 </div>
 </div>
 </div>
-<div id="outline-container-org8c21c8a" class="outline-2">
-<h2 id="org8c21c8a">Org mode</h2>
-<div class="outline-text-2" id="text-org8c21c8a">
+<div id="outline-container-org77b9e53" class="outline-2">
+<h2 id="org77b9e53">Org mode</h2>
+<div class="outline-text-2" id="text-org77b9e53">
 </div>
-<div id="outline-container-org5d828ca" class="outline-3">
-<h3 id="org5d828ca">Assorted Vars</h3>
-</div>
-
-<div id="outline-container-org0e5e8a5" class="outline-3">
-<h3 id="org0e5e8a5">Org Babel</h3>
+<div id="outline-container-orgba6c1f9" class="outline-3">
+<h3 id="orgba6c1f9">Assorted Vars</h3>
 </div>
 
-<div id="outline-container-orgda032d4" class="outline-3">
-<h3 id="orgda032d4">\(\LaTeX\)</h3>
-<div class="outline-text-3" id="text-orgda032d4">
+<div id="outline-container-orgb197c3d" class="outline-3">
+<h3 id="orgb197c3d">Org Babel</h3>
+</div>
+
+<div id="outline-container-org6ddd775" class="outline-3">
+<h3 id="org6ddd775">\(\LaTeX\)</h3>
+<div class="outline-text-3" id="text-org6ddd775">
 <div class="org-src-container">
 <pre class="src src-latex"><span style="color: #E53935; font-style: italic;">\usepackage</span><span style="color: #494949;">[</span><span style="font-style: italic;">T1</span><span style="color: #494949;">]{</span><span style="font-weight: bold; font-style: italic;">fontenc</span><span style="color: #494949;">}</span>
 <span style="color: #E53935; font-style: italic;">\usepackage</span><span style="color: #494949;">{</span><span style="font-weight: bold; font-style: italic;">fontspec</span><span style="color: #494949;">}</span>
