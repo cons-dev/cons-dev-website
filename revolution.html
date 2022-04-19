@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-W16-1 21:08 -->
+<!-- 2022-W16-1 21:22 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Revolution</title>
@@ -30,7 +30,7 @@
 <ul>
 <li><a href="#orgb7c0ebd">CLJS</a>
 <ul>
-<li><a href="#org29a3cfc">Namespace</a></li>
+<li><a href="#orgc8bdd92">Namespace</a></li>
 <li><a href="#org94523f2">Core Objects</a></li>
 <li><a href="#orgc41862f">Converting to Hiccup</a></li>
 <li><a href="#orgf206f04">Defining the Global Session</a></li>
@@ -40,7 +40,7 @@
 </li>
 <li><a href="#org19d1172">CLJ</a>
 <ul>
-<li><a href="#orgc8bdd92">Namespace</a></li>
+<li><a href="#orgcd2da72">Namespace</a></li>
 <li><a href="#org47469fd"><code>defact</code>  and <code>defengine</code> Macros</a></li>
 </ul>
 </li>
@@ -71,18 +71,18 @@ Alternatively, I may just tear both clara and reagent from it and make my own en
 <h2 id="org67d15cb">Implementation</h2>
 <div class="outline-text-2" id="text-org67d15cb">
 <p>
-Writing the little experiment was trivial, and honestly it took way less code than I expected, only about 100 lines. Actually finishing the features for a virtual DOM might end up taking perhaps another 100 or so, but not all that much considering.
+Writing the little experiment was trivial, and honestly it took way less code than I expected, only about 100 lines. Actually finishing the features for a virtual DOM might end up taking perhaps another 100 or so, but not all that much considering what's implemented.
 </p>
 </div>
 <div id="outline-container-orgb7c0ebd" class="outline-3">
 <h3 id="orgb7c0ebd">CLJS</h3>
 <div class="outline-text-3" id="text-orgb7c0ebd">
 </div>
-<div id="outline-container-org29a3cfc" class="outline-4">
-<h4 id="org29a3cfc">Namespace</h4>
-<div class="outline-text-4" id="text-org29a3cfc">
+<div id="outline-container-orgc8bdd92" class="outline-4">
+<h4 id="orgc8bdd92">Namespace</h4>
+<div class="outline-text-4" id="text-orgc8bdd92">
 <p>
-As you might imagine, actually defining the main
+As you might imagine, the main namespace depends on reagent and clara-rules.<label class="sidenote-number" for="3"><sup>3</sup></label><input checked="checked" id="3" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 3</span> I generally prefer to use refer stylistically for stuff I use a lot</span>
 </p>
 <div class="org-src-container">
 <pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">revolution.core</span>
@@ -97,7 +97,7 @@ As you might imagine, actually defining the main
 <h4 id="org94523f2">Core Objects</h4>
 <div class="outline-text-4" id="text-org94523f2">
 <p>
-At the core of it we define components and top-level components, which can be trivially converted into HTML.<label class="sidenote-number" for="3"><sup>3</sup></label><input checked="checked" id="3" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 3</span> These are similar to the <a href="https://clojuredocs.org/clojure.xml">clojure.xml</a> objects.</span> However, I may eventually end up replacing this with something like a component protocol which is then reified by specific types like <code>div</code> elements and so on, or alternatively further decouple it from HTML.
+At the core of it we define components and top-level components, which can be trivially converted into HTML.<label class="sidenote-number" for="4"><sup>4</sup></label><input checked="checked" id="4" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 4</span> These are similar to the <a href="https://clojuredocs.org/clojure.xml">clojure.xml</a> objects.</span> However, I may eventually end up replacing this with something like a component protocol which is then reified by specific types like <code>div</code> elements and so on, or alternatively further decouple it from HTML.
 </p>
 <div class="org-src-container">
 <pre class="src src-clojurescript"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">Component</span> <span style="color: #bbb;">[</span>tag attrs content<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
@@ -163,7 +163,7 @@ To actually get the code to display (and for the system to work) we define a glo
 <h4 id="orgf3030ed">Extern Functions</h4>
 <div class="outline-text-4" id="text-orgf3030ed">
 <p>
-We also define a series of extern functions.<label class="sidenote-number" for="4"><sup>4</sup></label><input checked="checked" id="4" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 4</span> I seriously need to have a better name for these.</span> To ensure that redisplays occur on changes, we use a flip-flop value that the extern functions reset.
+We also define a series of extern functions.<label class="sidenote-number" for="5"><sup>5</sup></label><input checked="checked" id="5" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 5</span> I seriously need to have a better name for these.</span> To ensure that redisplays occur on changes, we use a flip-flop value that the extern functions reset.
 </p>
 <div class="org-src-container">
 <pre class="src src-clojurescript"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">reagent-flip-flop</span>
@@ -236,11 +236,11 @@ Mounting our session is also easy, simply setting the session variable in the sy
 <h3 id="org19d1172">CLJ</h3>
 <div class="outline-text-3" id="text-org19d1172">
 </div>
-<div id="outline-container-orgc8bdd92" class="outline-4">
-<h4 id="orgc8bdd92">Namespace</h4>
-<div class="outline-text-4" id="text-orgc8bdd92">
+<div id="outline-container-orgcd2da72" class="outline-4">
+<h4 id="orgcd2da72">Namespace</h4>
+<div class="outline-text-4" id="text-orgcd2da72">
 <p>
-To define our macros we need to add a new file for Clojure code with the same namespace. It will be automatically loaded during the macroexpansion phase. <label class="sidenote-number" for="5"><sup>5</sup></label><input checked="checked" id="5" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 5</span> Which occurs when you use <code>:refer-macros</code>. In essence Clojure has a two-tier importation system</span>
+To define our macros we need to add a new file for Clojure code with the same namespace. It will be automatically loaded during the macroexpansion phase. <label class="sidenote-number" for="6"><sup>6</sup></label><input checked="checked" id="6" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 6</span> Which occurs when you use <code>:refer-macros</code>. In essence Clojure has a two-tier importation system</span>
 </p>
 
 <div class="org-src-container">
@@ -297,15 +297,17 @@ To ge tthis to work, we define an extension to the <code>defsession</code> macro
 
 <div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">I have been working on my own little logic programming language on the side.</p></div></div>
 
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">These are similar to the <a href="https://clojuredocs.org/clojure.xml">clojure.xml</a> objects.</p></div></div>
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">I generally prefer to use refer stylistically for stuff I use a lot</p></div></div>
 
-<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">I seriously need to have a better name for these.</p></div></div>
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">These are similar to the <a href="https://clojuredocs.org/clojure.xml">clojure.xml</a> objects.</p></div></div>
 
-<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Which occurs when you use <code>:refer-macros</code>. In essence Clojure has a two-tier importation system</p></div></div>
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">I seriously need to have a better name for these.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.6" class="footnum" href="#fnr.6" role="doc-backlink">6</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Which occurs when you use <code>:refer-macros</code>. In essence Clojure has a two-tier importation system</p></div></div>
 
  --></div>
 <div id="postamble" class="status">
-<p class="date">Last Modified: 2022-W16-1 21:07</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p class="date">Last Modified: 2022-W16-1 21:22</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </div>
 </body>
 </html>
