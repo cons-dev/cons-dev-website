@@ -1,0 +1,765 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-W16-1 21:08 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Plan</title>
+<meta name="author" content="Inanna" />
+<meta name="generator" content="Org Mode" />
+<link href="/site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="/index.html"><img alt="An abstract logo representing a series of three assembly line stamping machines with the words CONS, DEV, and  embalzoned in white on each machine." id="site-logo" src="/images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">The Plan</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org6d61418">Introduction</a></li>
+<li><a href="#org3b1baca">User Interface</a>
+<ul>
+<li><a href="#orgfc450f7">The Core Operating System</a>
+<ul>
+<li><a href="#org2f45f32">System Clock</a></li>
+<li><a href="#org1d2f3d2">System Clock</a></li>
+<li><a href="#orga5c8b25">Users</a></li>
+<li><a href="#org447e707">System Information</a></li>
+<li><a href="#org13f79fd">Network</a></li>
+<li><a href="#org6290594">Global UI Stuff</a></li>
+</ul>
+</li>
+<li><a href="#orgf05250f">Initial Configuration</a></li>
+<li><a href="#org195428e">The Message Interface</a></li>
+<li><a href="#org162641d">Plannig</a></li>
+</ul>
+</li>
+<li><a href="#org33470b6">Characters</a>
+<ul>
+<li><a href="#orga519daa">Psychology</a></li>
+<li><a href="#org1c0e320">Health</a></li>
+<li><a href="#orgf694f15">Ideology</a></li>
+<li><a href="#org932110a">Knowledge</a></li>
+<li><a href="#orgd470742">The AI</a></li>
+</ul>
+</li>
+<li><a href="#org0957df9">Defining Our Economic Model</a>
+<ul>
+<li><a href="#org0a39f6f">Political Actors</a></li>
+<li><a href="#org0628a95">Fudge Factor Computation</a></li>
+</ul>
+</li>
+<li><a href="#orgfbd24b9">Political Modeling</a>
+<ul>
+<li><a href="#org9d53337">Factions</a>
+<ul>
+<li><a href="#orge82e5d6">Communists</a></li>
+<li><a href="#orgb34ad58">Anarchists</a></li>
+<li><a href="#org0d1c4e1">Social Democrats</a></li>
+<li><a href="#org93ba4fa">Fascists</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgbf2b439">Journal Entries</a>
+<ul>
+<li><a href="#org549d0b2">General</a>
+<ul>
+<li><a href="#org186ac6c">Production Shortfall</a></li>
+<li><a href="#orga8de67a">Goals Exceeded</a></li>
+<li><a href="#orgf00d8db">Mass Desalination Project</a></li>
+<li><a href="#org37b7eab">Predicted Famine</a></li>
+<li><a href="#orgd087331">Predicted Food Shortage</a></li>
+<li><a href="#orgbc6bab6">Food Surplus</a></li>
+<li><a href="#org0db955b">Median Consumer Goods Consumption Exceeds Pre-Disaster</a></li>
+<li><a href="#org9b17bf0">Breeder Reactor Construction</a></li>
+<li><a href="#org5df1023">Large RBMK-Like Reactor Construction</a></li>
+<li><a href="#org5e96761">Mass Produced Reactors</a></li>
+<li><a href="#org474787f">Nuclear Weapons Production Started</a></li>
+<li><a href="#org7f4a8b7">High Stress</a></li>
+<li><a href="#org76e0f8b">High Stress, High Ego</a></li>
+</ul>
+</li>
+<li><a href="#orgf3e326f">Wartime</a>
+<ul>
+<li><a href="#orgb3685a7">Landmine Factory</a></li>
+<li><a href="#orgf06f611">Prison Labor</a></li>
+<li><a href="#org659a886">Seeing the Aftermath of Genocide</a></li>
+<li><a href="#org93a9271">Stress Induced Mental Break (authoritarian)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org6d61418" class="outline-2">
+<h2 id="org6d61418">Introduction</h2>
+<div class="outline-text-2" id="text-org6d61418">
+<p>
+The Plan is a simple, single player economics simulation game set in a world where your goal is to survive a global economic catastrophe and rebuild.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3b1baca" class="outline-2">
+<h2 id="org3b1baca">User Interface</h2>
+<div class="outline-text-2" id="text-org3b1baca">
+<p>
+The user interface of the system is based on a simple rule-engine based system that lays on top of react. Currently this is semi-experimental, but I may make further tweaks to use it in other games.
+</p>
+</div>
+<div id="outline-container-orgfc450f7" class="outline-3">
+<h3 id="orgfc450f7">The Core Operating System</h3>
+<div class="outline-text-3" id="text-orgfc450f7">
+<p>
+At the core of the actual experience is the user interface, which is defined by the rule engine framework above. In essence it creates a simple operating system of sorts that the player uses in the game. The operating system is not defined by a set of individual files, but rather assumes that everything in the operating system is a fact.
+</p>
+
+<p>
+I may eventually end up making a game around this OS thing because it is really interesting, though I think I will do it in the language I am working on.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojurescript"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">os.core</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935;">:require</span> <span style="color: #494949;">[</span>clara.rules
+             <span style="color: #E53935;">:refer</span> <span style="color: #bbb;">[</span>insert! retract!<span style="color: #bbb;">]</span>
+             <span style="color: #E53935;">:refer-macros</span> <span style="color: #bbb;">[</span>defrule<span style="color: #bbb;">]</span><span style="color: #494949;">]</span>
+            <span style="color: #494949;">[</span>revolution.core
+             <span style="color: #E53935;">:refer</span> <span style="color: #bbb;">[</span>alter-extern! insert-extern! retract-extern!<span style="color: #bbb;">]</span>
+             <span style="color: #E53935;">:refer-macros</span> <span style="color: #bbb;">[</span>deffact<span style="color: #bbb;">]</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org2f45f32" class="outline-4">
+<h4 id="org2f45f32">System Clock</h4>
+<div class="outline-text-4" id="text-org2f45f32">
+<p>
+The system also has a clock, which may be consulted for a canonical time during execution. This is separate from the usual time function because I want time to work a bit differently than just in Linux, with the ability to add entire chunks to the clock when you sleep in game.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">system-time</span> <span style="color: #bbb;">[]</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+To do this, I store system time on a separate thread, which will update the system-time entity in the rule engine.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure">
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1d2f3d2" class="outline-4">
+<h4 id="org1d2f3d2">System Clock</h4>
+<div class="outline-text-4" id="text-org1d2f3d2">
+<p>
+The system also has a clock, which may be consulted for a canonical time during execution. This is separate from the usual time function because I want time to work a bit differently than just in Linux, with the ability to add entire chunks to the clock when you sleep in game.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">system-time</span> <span style="color: #bbb;">[]</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga5c8b25" class="outline-4">
+<h4 id="orga5c8b25">Users</h4>
+<div class="outline-text-4" id="text-orga5c8b25">
+<p>
+We also want to add users. Here our user has a simple set of characteristics, an ID, a username, a full name, and pronouns that the apps will refer to them with. <label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> The difference between the name and full name is that the name is basically what the apps will refer to the user as (in the US this might be their first name), whereas the full name is their more formal name.</span>
+</p>
+<div class="org-src-container">
+<pre class="src src-clojurescript"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">User</span>
+    <span style="color: #bbb;">[</span>id                                 <span style="color: #a4a4a4; font-style: italic;">; ID of the user</span>
+     name                               <span style="color: #a4a4a4; font-style: italic;">; The name of the user</span>
+     full-name                          <span style="color: #a4a4a4; font-style: italic;">; The full name of the user</span>
+     pronouns<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>                         <span style="color: #a4a4a4; font-style: italic;">; Pronouns the user uses</span>
+</pre>
+</div>
+
+<p>
+We also define some stuff related to pronouns here. This feature won't really be used in this game since the player character only uses she/her pronouns, but for the sake of completeness I feel the urge to add them.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojurescript"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">Pronouns</span> <span style="color: #bbb;">[</span>subject object dependent-posessive independent-posessive reflexive<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defact</span> <span style="color: #bbb;">(</span>-&gt;Pronouns <span style="color: #494949;">"she"</span> <span style="color: #494949;">"her"</span> <span style="color: #494949;">"her"</span> <span style="color: #494949;">"hers"</span> <span style="color: #494949;">"herself"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defact</span> <span style="color: #bbb;">(</span>-&gt;Pronouns <span style="color: #494949;">"he"</span> <span style="color: #494949;">"him"</span> <span style="color: #494949;">"his"</span> <span style="color: #494949;">"his"</span> <span style="color: #494949;">"himself"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defact</span> <span style="color: #bbb;">(</span>-&gt;Pronouns <span style="color: #494949;">"they"</span> <span style="color: #494949;">"them"</span> <span style="color: #494949;">"their"</span> <span style="color: #494949;">"theirs"</span> <span style="color: #494949;">"thsemself"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org447e707" class="outline-4">
+<h4 id="org447e707">System Information</h4>
+<div class="outline-text-4" id="text-org447e707">
+<p>
+We also have a information for our system
+</p>
+<div class="org-src-container">
+<pre class="src src-clojurescript"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">SystemInformation</span> <span style="color: #bbb;">[</span>os version system-id system-name<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org13f79fd" class="outline-4">
+<h4 id="org13f79fd">Network</h4>
+<div class="outline-text-4" id="text-org13f79fd">
+<p>
+In game it is assumed that networking is done automatically.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org6290594" class="outline-4">
+<h4 id="org6290594">Global UI Stuff</h4>
+<div class="outline-text-4" id="text-org6290594">
+<p>
+Now the actual generation of the UI is a tiling window manager, akin to.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf05250f" class="outline-3">
+<h3 id="orgf05250f">Initial Configuration</h3>
+<div class="outline-text-3" id="text-orgf05250f">
+<p>
+Finally, we reach the basic user configuration, basically what the system starts out with.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojurescript"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">deffact</span> <span style="color: #bbb;">(</span>-&gt;User <span style="color: #494949;">(</span>random-uuid<span style="color: #494949;">)</span>
+                 <span style="color: #494949;">"LNov&#225;k"</span>
+                 <span style="color: #494949;">"Ludmila Nov&#225;k"</span>
+                 <span style="color: #494949;">(</span>-&gt;Pronouns <span style="color: #494949;">"she"</span> <span style="color: #494949;">"her"</span> <span style="color: #494949;">"her"</span> <span style="color: #494949;">"hers"</span> <span style="color: #494949;">"herself"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defact</span> <span style="color: #bbb;">(</span>-&gt;SystemInformation <span style="color: #494949;">"Minerva OS"</span>
+                             <span style="color: #494949;">"47.22.323"</span>
+                             <span style="color: #494949;">(</span>random-uuid<span style="color: #494949;">)</span>
+                             <span style="color: #494949;">"Northeast Office Computer"</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org195428e" class="outline-3">
+<h3 id="org195428e">The Message Interface</h3>
+<div class="outline-text-3" id="text-org195428e">
+<p>
+Messages may be passed between users in the system.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojurescript">
+<span style="color: #a4a4a4; font-style: italic;">;;;; </span><span style="color: #a4a4a4; font-style: italic;">Message Client</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">This is the message client, which is sort of like a cross between email</span>
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">and regular messages.</span>
+
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">An address which may be used by a person.</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">Address</span>
+    <span style="color: #bbb;">[</span>id                                 <span style="color: #a4a4a4; font-style: italic;">; the ID of the user</span>
+     display-name<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>                     <span style="color: #a4a4a4; font-style: italic;">; The display name of the user</span>
+
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">A thread of messages that reply to each other.</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">MessageThread</span>
+    <span style="color: #bbb;">[</span>id                              <span style="color: #a4a4a4; font-style: italic;">; unique ID of the message thread</span>
+     addresses                       <span style="color: #a4a4a4; font-style: italic;">; list of addresses involved</span>
+     name<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>                          <span style="color: #a4a4a4; font-style: italic;">; an optional name for the thread</span>
+
+<span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">A single message in the thread</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">Message</span>
+    <span style="color: #bbb;">[</span>id                    <span style="color: #a4a4a4; font-style: italic;">; unique ID of the message</span>
+     thread                <span style="color: #a4a4a4; font-style: italic;">; the ID of the thread it replies to</span>
+     reply-to              <span style="color: #a4a4a4; font-style: italic;">; the ID of the message it replies to (optional)</span>
+     time                  <span style="color: #a4a4a4; font-style: italic;">; the time the message was sent</span>
+     address               <span style="color: #a4a4a4; font-style: italic;">; the ID of the address sending the message</span>
+     contents<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>            <span style="color: #a4a4a4; font-style: italic;">; the contents of the message</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">MessageDraft</span>
+    <span style="color: #bbb;">[</span>id                                 <span style="color: #a4a4a4; font-style: italic;">; The ID of this draft</span>
+     thread                             <span style="color: #a4a4a4; font-style: italic;">; The thread it replies to</span>
+     reply-to                           <span style="color: #a4a4a4; font-style: italic;">; The specific person it replies to</span>
+     contents<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>                         <span style="color: #a4a4a4; font-style: italic;">; The contents of the message</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrule</span> <span style="font-weight: bold; font-style: italic;">message-disp</span>
+  <span style="color: #bbb;">[</span>Message <span style="color: #494949;">[</span><span style="color: #bbb;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #494949;">[</span>thread reply-to time address contents<span style="color: #494949;">]</span><span style="color: #bbb;">}</span><span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+  =&gt;
+  <span style="color: #bbb;">(</span>insert!
+   <span style="color: #494949;">(</span>com <span style="color: #E53935;">:div</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:class</span>     <span style="color: #494949;">"message"</span>
+              <span style="color: #E53935;">:thread-id</span> thread<span style="color: #bbb;">}</span>
+        <span style="color: #bbb;">(</span>com <span style="color: #E53935;">:div</span> <span style="color: #494949;">{</span><span style="color: #E53935;">:class</span> <span style="color: #494949;">"message-header"</span><span style="color: #494949;">}</span>
+             <span style="color: #494949;">(</span>com <span style="color: #E53935;">:div</span> reply-to<span style="color: #494949;">)</span>
+             <span style="color: #494949;">(</span>com <span style="color: #E53935;">:div</span> time<span style="color: #494949;">)</span>
+             <span style="color: #494949;">(</span>com <span style="color: #E53935;">:div</span> address<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+        <span style="color: #bbb;">(</span>com <span style="color: #E53935;">:div</span> <span style="color: #494949;">{</span><span style="color: #E53935;">:class</span> <span style="color: #494949;">"message-contents"</span><span style="color: #494949;">}</span>
+             contents<span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrule</span> <span style="font-weight: bold; font-style: italic;">message-thread-disp</span>
+  <span style="color: #494949;">"Get a set of messages in a single thread."</span>
+  <span style="color: #bbb;">[</span>Thread <span style="color: #494949;">(</span>= id ?id<span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">[</span>?draft &lt;- MessageDraft <span style="color: #494949;">[</span><span style="color: #bbb;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #494949;">[</span>thread reply-to contents<span style="color: #494949;">]</span><span style="color: #bbb;">}</span><span style="color: #494949;">]</span> <span style="color: #494949;">(</span>= thread ?id<span style="color: #494949;">)</span><span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">[</span>?messages &lt;- <span style="color: #494949;">(</span><span style="color: #E53935;">acc</span>/all<span style="color: #494949;">)</span> <span style="color: #E53935;">:from</span> <span style="color: #494949;">[</span>Component
+                                 <span style="color: #bbb;">(</span>= <span style="color: #494949;">(</span><span style="color: #E53935;">:class</span> attr<span style="color: #494949;">)</span> <span style="color: #494949;">"message"</span><span style="color: #bbb;">)</span>
+                                 <span style="color: #bbb;">(</span>= <span style="color: #494949;">(</span><span style="color: #E53935;">:thread-id</span> attr<span style="color: #494949;">)</span> ?id<span style="color: #bbb;">)</span><span style="color: #494949;">]</span><span style="color: #bbb;">]</span>
+  =&gt;
+  <span style="color: #bbb;">(</span>insert!
+   <span style="color: #494949;">(</span>com
+    <span style="color: #bbb;">(</span>apply com <span style="color: #E53935;">:div</span> <span style="color: #494949;">{</span><span style="color: #E53935;">:class</span> <span style="color: #494949;">"message-history"</span><span style="color: #494949;">}</span>
+           ?messages<span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>com <span style="color: #E53935;">:input</span>
+         <span style="color: #494949;">{</span><span style="color: #E53935;">:class</span>     <span style="color: #494949;">"reply-draft"</span>
+          <span style="color: #E53935;">:type</span>      <span style="color: #494949;">"text"</span>
+          <span style="color: #E53935;">:value</span>     <span style="color: #494949;">""</span>
+          <span style="color: #E53935;">:on-change</span> #<span style="color: #bbb;">(</span>alter-extern! ?draft
+                                     <span style="color: #494949;">(</span>-&gt;MessageDraft ?id thread reply-to <span style="font-style: italic;">%</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">}</span><span style="color: #bbb;">)</span>
+    <span style="color: #bbb;">(</span>com <span style="color: #E53935;">:input</span>
+         <span style="color: #494949;">{</span><span style="color: #E53935;">:class</span>    <span style="color: #494949;">"reply-button"</span>
+          <span style="color: #E53935;">:type</span>     <span style="color: #494949;">"button"</span>
+          <span style="color: #E53935;">:value</span>    <span style="color: #494949;">"Reply"</span>
+          <span style="color: #E53935;">:on-click</span> #<span style="color: #bbb;">(</span>insert-extern! <span style="color: #494949;">(</span>-&gt;Message <span style="color: #bbb;">(</span>random-uuid<span style="color: #bbb;">)</span>
+                                                <span style="color: #bbb;">(</span><span style="color: #E53935;">:id</span> ?user-id<span style="color: #bbb;">)</span>
+                                                <span style="color: #bbb;">()</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">}</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">collect-unread</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrule</span> <span style="font-weight: bold; font-style: italic;">msg-client</span> <span style="color: #bbb;">[]</span>
+  <span style="color: #494949;">"Produce the display for the email client."</span>
+  <span style="color: #bbb;">(</span>?message-thread &lt;- <span style="color: #494949;">(</span><span style="color: #E53935;">acc</span>/all<span style="color: #494949;">)</span> <span style="color: #E53935;">:from</span> <span style="color: #494949;">[</span>MessageThread<span style="color: #494949;">]</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>?new-mail<span style="color: #bbb;">)</span>
+  =&gt;
+  <span style="color: #bbb;">(</span>alter! ?msg-client <span style="color: #494949;">(</span>apply com <span style="color: #E53935;">:div</span> <span style="color: #bbb;">{</span><span style="color: #E53935;">:class</span> <span style="color: #494949;">"msg-client"</span><span style="color: #bbb;">}</span>
+                             new-mail<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org162641d" class="outline-3">
+<h3 id="org162641d">Plannig</h3>
+</div>
+</div>
+
+
+<div id="outline-container-org33470b6" class="outline-2">
+<h2 id="org33470b6">Characters</h2>
+<div class="outline-text-2" id="text-org33470b6">
+</div>
+<div id="outline-container-orga519daa" class="outline-3">
+<h3 id="orga519daa">Psychology</h3>
+<div class="outline-text-3" id="text-orga519daa">
+<p>
+At the core of our system is the psychology of the characters. The psychology of the character contains such traits as ego, stress, and so on.
+</p>
+</div>
+</div>
+<div id="outline-container-org1c0e320" class="outline-3">
+<h3 id="org1c0e320">Health</h3>
+<div class="outline-text-3" id="text-org1c0e320">
+<p>
+The health of the characters can be impacted by various events and of course disasters.
+</p>
+</div>
+</div>
+<div id="outline-container-orgf694f15" class="outline-3">
+<h3 id="orgf694f15">Ideology</h3>
+</div>
+<div id="outline-container-org932110a" class="outline-3">
+<h3 id="org932110a">Knowledge</h3>
+<div class="outline-text-3" id="text-org932110a">
+<p>
+At the core of the game is knowledg.e
+</p>
+</div>
+</div>
+<div id="outline-container-orgd470742" class="outline-3">
+<h3 id="orgd470742">The AI</h3>
+<div class="outline-text-3" id="text-orgd470742">
+<p>
+Finally, we reach the AI, which uses the <code>core.logic</code> unification facilities to produce outcomes in the game based upon a set of fundamental assumptions about the character ideology.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">health</span> <span style="color: #bbb;">[]</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">psyche</span> <span style="color: #bbb;">[</span>ego stress<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">person</span> <span style="color: #bbb;">[</span>health ego<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0957df9" class="outline-2">
+<h2 id="org0957df9">Defining Our Economic Model</h2>
+<div class="outline-text-2" id="text-org0957df9">
+<p>
+So to start out the game start of defining our model. For the model we use a sort of hybrid approach, wherein the model uses agents for certain high-level figures, and rough models for more complex systems such as the whole economy. This is to save computational resources as actually modeling millions of citizens doing things would be expensive (and likely inaccurate).
+</p>
+
+<p>
+However, it should be noted that in this economy we do still have tens of thousands of discrete products, which is partially to make the game feel more alive (just looking into the economy should make you feel slightly dizzy) but also to make it so that you have to delegate many tasks, use markets, or use some complicated algorithmic planning scheme.<label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> Or some byzantine mixture of the above, which is both what you start with and the most likely outcome given the nature of the game.</span>
+</p>
+
+<p>
+By default knowledge about the mechanisms of the economy is incomplete. While the economy does have a definite state in the game, the player will never truly know what the economy is doing at each point, and the actions the player takes can cause them to understand the economy more or less. Likewise, the player can lie about the state of the economy to others, though this may become more or less possible depending on the actions of the player.
+</p>
+
+<p>
+During each round of the game the real state of the economy is computed. This is done in multiple stages, first with the moves of various major economic actors (the agents), followed by the economic simulation itself executing accordingly. Following this, the display is produced using the "fudge-factor" for various industries.
+</p>
+
+<p>
+To compute the economic state, first a series.
+</p>
+
+<p>
+These assumptions are all fairly simplistic, but they exist primarily to ensure that the model can be produced in the first place.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">resource</span> <span style="color: #bbb;">[</span>name <span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">converter</span> <span style="color: #bbb;">[</span>name <span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">firm</span> <span style="color: #bbb;">[]</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org0a39f6f" class="outline-3">
+<h3 id="org0a39f6f">Political Actors</h3>
+<div class="outline-text-3" id="text-org0a39f6f">
+<p>
+Various political actors can be created in game from the actions you choose.
+</p>
+
+<p>
+Should your actions produce large organizations with incentives to lobby for favorable treatment (eg. Chebol), you will tend to see policies supporting them become the only viable ones for you.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0628a95" class="outline-3">
+<h3 id="org0628a95">Fudge Factor Computation</h3>
+<div class="outline-text-3" id="text-org0628a95">
+<p>
+Using more extensive supply chain surveillance will overall make the fudge-factor lower. However, by decreasing the fudge factor the player themselves will have to be more honest about the state of the economy, which they might not want to occur.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfbd24b9" class="outline-2">
+<h2 id="orgfbd24b9">Political Modeling</h2>
+<div class="outline-text-2" id="text-orgfbd24b9">
+<p>
+The political model of the game is largely derived from the economic model of the game. In essence, as economic conditions change, the incentives.
+</p>
+
+<p>
+Should, for example, should poverty begin to increase.
+</p>
+</div>
+
+<div id="outline-container-org9d53337" class="outline-3">
+<h3 id="org9d53337">Factions</h3>
+<div class="outline-text-3" id="text-org9d53337">
+<p>
+There are a number of factions
+</p>
+</div>
+<div id="outline-container-orge82e5d6" class="outline-4">
+<h4 id="orge82e5d6">Communists</h4>
+<div class="outline-text-4" id="text-orge82e5d6">
+<p>
+The communists will generally desire to 
+</p>
+</div>
+</div>
+<div id="outline-container-orgb34ad58" class="outline-4">
+<h4 id="orgb34ad58">Anarchists</h4>
+</div>
+<div id="outline-container-org0d1c4e1" class="outline-4">
+<h4 id="org0d1c4e1">Social Democrats</h4>
+</div>
+<div id="outline-container-org93ba4fa" class="outline-4">
+<h4 id="org93ba4fa">Fascists</h4>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgbf2b439" class="outline-2">
+<h2 id="orgbf2b439">Journal Entries</h2>
+<div class="outline-text-2" id="text-orgbf2b439">
+<p>
+After each round a journal entry is selected based on the current condition of the economy, the psychology of the main character, and world events.
+</p>
+</div>
+
+<div id="outline-container-org549d0b2" class="outline-3">
+<h3 id="org549d0b2">General</h3>
+<div class="outline-text-3" id="text-org549d0b2">
+</div>
+<div id="outline-container-org186ac6c" class="outline-4">
+<h4 id="org186ac6c">Production Shortfall</h4>
+<div class="outline-text-4" id="text-org186ac6c">
+<div class="org-src-container">
+<pre class="src src-org">I can't sleep at night
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orga8de67a" class="outline-4">
+<h4 id="orga8de67a">Goals Exceeded</h4>
+<div class="outline-text-4" id="text-orga8de67a">
+<div class="org-src-container">
+<pre class="src src-org">
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf00d8db" class="outline-4">
+<h4 id="orgf00d8db">Mass Desalination Project</h4>
+<div class="outline-text-4" id="text-orgf00d8db">
+<div class="org-src-container">
+<pre class="src src-org">Water now flows into the $DESERT_NAME. What was once a collection of arid parched desertifying land is now turning, slowly, back into a flourishing valley of farms. The highly saline water from the process is being both dumped back into the ocean and poured into salt drying pools nearby.
+
+After the ceremony I took a car to visit one of the towns. While at the bar one of the farmers went up to me and thanked me, apparently the project had saved his farm. I don't really often get thanked, or, well, not in that sort of sincere, spontaneous way. I almost wished I could stay in that moment forever.
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org37b7eab" class="outline-4">
+<h4 id="org37b7eab">Predicted Famine</h4>
+<div class="outline-text-4" id="text-org37b7eab">
+<div class="org-src-container">
+<pre class="src src-org">Famine is on the horizon once again, even our grain reserves are insufficient to cover our shortfall. We began rationing immediately after that became obvious, cut calories down to enough to survive to the next harvest for the average person, added extra for those doing strenuous work. 
+
+Unfortunately, that won't be enough. The disaster simulations group report that $TOTAL_MINUS_TWENTY_PERCENT will die. $TOTAL_MINUS_TWENTY_PERCENT. It is unbelievable. In some sense I hope I am among them.
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd087331" class="outline-4">
+<h4 id="orgd087331">Predicted Food Shortage</h4>
+<div class="outline-text-4" id="text-orgd087331">
+<div class="org-src-container">
+<pre class="src src-org">Food is growing short, and our predictions indicate there will be shortages. We began rationing immediately after that became obvious. Meat production stopped almost immediately, and the grains that would once be used for finishing cows are now used to make bread. Our reserves are also being opened to buffer against disaster. Given luck this will suffice to hold off famine.
+
+I have decided to, whenever possible, eat less than the average person. While obviously my individual act won't stop the shortages, it is what little I can do to prevent myself from taking up more resources than I need. Also, endless potatoes aren't that bad once you get used to it.
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgbc6bab6" class="outline-4">
+<h4 id="orgbc6bab6">Food Surplus</h4>
+<div class="outline-text-4" id="text-orgbc6bab6">
+<blockquote>
+<p>
+Our !
+</p>
+
+<p>
+Perhaps, someday in the future we could provide food to everyone, to finally end hunger like those in the past century dreamed we would do.
+</p>
+</blockquote>
+</div>
+</div>
+<div id="outline-container-org0db955b" class="outline-4">
+<h4 id="org0db955b">Median Consumer Goods Consumption Exceeds Pre-Disaster</h4>
+<div class="outline-text-4" id="text-org0db955b">
+<blockquote>
+<p>
+If you had told me that we would live better today than we did in the past $YEARS<sub>SINCE</sub><sub>COLLAPSE</sub>, I would simply not believe you. It would be an absurd thing to imagine that today would be a wonderful cornucopia, given that just a few years ago we were staring down famine and a complete collapse of industrial society.
+</p>
+
+<p>
+And yet, somehow, things are better! At least materially. The average person lives a more comfortable life than before, with more convenience and more luxury. I can only imagine what the lives of our children will look like.
+</p>
+</blockquote>
+</div>
+</div>
+<div id="outline-container-org9b17bf0" class="outline-4">
+<h4 id="org9b17bf0">Breeder Reactor Construction</h4>
+<div class="outline-text-4" id="text-org9b17bf0">
+<blockquote>
+<p>
+While I was too busy to visit the first breeder reactor opening, I did manage to visit the tenth. The opening was filled with some minor pomp and circumstance, all that you might expect from a city receiving a grand new source of economic development. As I walked through the reactor hall I couldn't help but imagine how impossible this would have sounded but $YEARS<sub>SINCE</sub><sub>HIRING</sub> years ago.
+</p>
+
+<p>
+But, of course, we won't stop here, we cannot. We can expect to have $TOTAL constructed this year, and even more in the next. Though, I only can think that if only they had done this before, perhaps then perhaps we would have not faced this challenge.
+</p>
+</blockquote>
+</div>
+</div>
+<div id="outline-container-org5df1023" class="outline-4">
+<h4 id="org5df1023">Large RBMK-Like Reactor Construction</h4>
+<div class="outline-text-4" id="text-org5df1023">
+<blockquote>
+<p>
+Our reactor expansion is going swimmingly. While our earlier reactors were primarily pressurized water reactors, these new ones use a horizontal pressure tube design, primarily for cost reasons. Each one can power a city, provide heat, and do all sorts of other things.
+</p>
+
+<p>
+We expect to have $TOTAL completed in this year alone. Though, I only can think that if only they had done this before, perhaps then perhaps we would have not faced this challenge. 
+</p>
+</blockquote>
+</div>
+</div>
+<div id="outline-container-org5e96761" class="outline-4">
+<h4 id="org5e96761">Mass Produced Reactors</h4>
+<div class="outline-text-4" id="text-org5e96761">
+<blockquote>
+<p>
+I toured the first reactor production plant. Tens of small individual pressure vessels were being forged right in front of me, red steel pressed into shape by vast presses and hammers. That day alone five came from the facility. A standard high temperature design for everything from ships to small towns.
+</p>
+
+<p>
+Soon, we will have enough to supply every possible need with them, cheap, dependable, easy to operate. Hopefully this will suffice to meat our goals.
+</p>
+</blockquote>
+</div>
+</div>
+<div id="outline-container-org474787f" class="outline-4">
+<h4 id="org474787f">Nuclear Weapons Production Started</h4>
+<div class="outline-text-4" id="text-org474787f">
+<blockquote>
+<p>
+I visited the $SITE<sub>NAME</sub> facility, a real triumph of our restored industrial and scientific might. There were laboratories, and vast complexes of $ENRICHMENT<sub>TYPE</sub>, factories for producing nuclear bombs, and of course deep underground storage and testing facilities.
+</p>
+
+<p>
+Over all of the pomp and joy was a strange air to it. For after all the facility was to produce the most destructive bombs in the world to ensure that they will never be used. In a sense, the existence of the facility was to make the facility useless, a logic that made me feel as though I was Alice through the looking glass.
+</p>
+</blockquote>
+</div>
+</div>
+<div id="outline-container-org7f4a8b7" class="outline-4">
+<h4 id="org7f4a8b7">High Stress</h4>
+<div class="outline-text-4" id="text-org7f4a8b7">
+<blockquote>
+<p>
+I cannot do this anymore. I just, I do not think any human can do this. Every day is a fire, and in it, more fires that were burning since before I was even here, and have only grown bigger with my actions. Every fight is hopeless and against odds I cannot even hope to imagine. But I must do it, I must go on.
+</p>
+</blockquote>
+</div>
+</div>
+<div id="outline-container-org76e0f8b" class="outline-4">
+<h4 id="org76e0f8b">High Stress, High Ego</h4>
+<div class="outline-text-4" id="text-org76e0f8b">
+<blockquote>
+<p>
+The situation is far worse than I had imagined.
+</p>
+
+<p>
+But I am a god of logistics and economics.
+</p>
+</blockquote>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf3e326f" class="outline-3">
+<h3 id="orgf3e326f">Wartime</h3>
+<div class="outline-text-3" id="text-orgf3e326f">
+</div>
+<div id="outline-container-orgb3685a7" class="outline-4">
+<h4 id="orgb3685a7">Landmine Factory</h4>
+<div class="outline-text-4" id="text-orgb3685a7">
+<blockquote>
+<p>
+I toured a landmine factory today. It used to produce toys. I even remember being there for the opening, but now, in our haste, it has been converted to produce landmines.
+</p>
+
+<p>
+The plastic presses that would once pop out little hollow figurines children would play with have been reconfigured for hollow plastic landmines.
+</p>
+
+<p>
+I remember giving my niece a model train that this factory made. She was overjoyed, since at the time that was what she thought I did. Now, I can only hope that what is produced here doesn't kill her or mangle her limbs.
+</p>
+</blockquote>
+</div>
+</div>
+
+<div id="outline-container-orgf06f611" class="outline-4">
+<h4 id="orgf06f611">Prison Labor</h4>
+<div class="outline-text-4" id="text-orgf06f611">
+<blockquote>
+<p>
+Everything is a trade.
+</p>
+
+<p>
+Thus,
+</p>
+
+<p>
+Everything has a price. To make a choice from one or another is to make a choice.
+</p>
+
+<p>
+I say that to myself every night now. 
+</p>
+</blockquote>
+</div>
+</div>
+<div id="outline-container-org659a886" class="outline-4">
+<h4 id="org659a886">Seeing the Aftermath of Genocide</h4>
+<div class="outline-text-4" id="text-org659a886">
+<blockquote>
+<p>
+When we retook the $CITY, I was there almost immediately to survey the damage and to visit the people working on salvage operations. There wasn't much to salvage.
+</p>
+
+<p>
+Every last industrial site had been sacked. Presses stolen or, in the case that they were too big to steal, broken completely. Everywhere was littered with the stench of death and corpses. Our teams had become a legion of gravediggers, and the dead too numerous to name or effectively.
+</p>
+
+<p>
+I used to think that humanity was fundamentally good at heart. That in spite of all the brutality and horror of the past, all the disaster and ruin, humanity was good. But now I cannot be so sure.
+</p>
+</blockquote>
+</div>
+</div>
+<div id="outline-container-org93a9271" class="outline-4">
+<h4 id="org93a9271">Stress Induced Mental Break (authoritarian)</h4>
+<div class="outline-text-4" id="text-org93a9271">
+<blockquote>
+<p>
+I realized today that I am a servant of god.
+</p>
+
+<p>
+While when Neitzche said god was dead, he was not entirely wrong, it was the state that killed god. Whereas the governments of the past.
+</p>
+
+<p>
+The state is god. Thus, I am a servant of god.
+</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+<!-- Footnotes --><!-- 
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">The difference between the name and full name is that the name is basically what the apps will refer to the user as (in the US this might be their first name), whereas the full name is their more formal name.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Or some byzantine mixture of the above, which is both what you start with and the most likely outcome given the nature of the game.</p></div></div>
+
+ --></div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2022-W16-1 18:53</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>

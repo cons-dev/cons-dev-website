@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-W16-1 21:08 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Revolution</title>
+<meta name="author" content="Inanna" />
+<meta name="description" content="A simple experiment with rule engines to implement a basic UI microframework." />
+<meta name="generator" content="Org Mode" />
+<link href="/site.css" rel="stylesheet" type="text/css" /><link href="images/website-icon.png" rel="icon" />
+</head>
+<body>
+<div id="preamble" class="status">
+<div><a href="/index.html"><img alt="An abstract logo representing a series of three assembly line stamping machines with the words CONS, DEV, and  embalzoned in white on each machine." id="site-logo" src="/images/website-logo.png" /></a></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">Revolution
+<br />
+<span class="subtitle">An Experiment With Rule Engines</span>
+</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org7abc9f1">Introduction</a></li>
+<li><a href="#org67d15cb">Implementation</a>
+<ul>
+<li><a href="#orgb7c0ebd">CLJS</a>
+<ul>
+<li><a href="#org29a3cfc">Namespace</a></li>
+<li><a href="#org94523f2">Core Objects</a></li>
+<li><a href="#orgc41862f">Converting to Hiccup</a></li>
+<li><a href="#orgf206f04">Defining the Global Session</a></li>
+<li><a href="#orgf3030ed">Extern Functions</a></li>
+<li><a href="#org3932812">Displaying and Mounting the Session</a></li>
+</ul>
+</li>
+<li><a href="#org19d1172">CLJ</a>
+<ul>
+<li><a href="#orgc8bdd92">Namespace</a></li>
+<li><a href="#org47469fd"><code>defact</code>  and <code>defengine</code> Macros</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org7abc9f1" class="outline-2">
+<h2 id="org7abc9f1">Introduction</h2>
+<div class="outline-text-2" id="text-org7abc9f1">
+<p>
+I like rule engines. They are a simple way to specify your program and overall I have found them to be pretty great to work with. However, one thing I have been thinking about is how one might make a UI for a rule engine. Throwing objects in it and taking them out is all well and good, but what if we could also define the display as a series of rules that determine the presentation.
+</p>
+
+<p>
+Here, I do exactly that. I think that overall it has been an interesting adventure, currently it is based on <a href="https://www.clara-rules.org/">clara-rules</a> and <a href="https://reagent-project.github.io/">reagent</a>,<label class="sidenote-number" for="1"><sup>1</sup></label><input checked="checked" id="1" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 1</span> Which is based in <a href="https://reactjs.org/">react</a>, hence calling this little thing revolution as a pun on react.</span> however I think it would be entirely reasonable to implement the virtual DOM as a collection of WMEs, with updates to the DOM closely matching updates to the WMEs.
+</p>
+
+<p>
+Alternatively, I may just tear both clara and reagent from it and make my own entirely.<label class="sidenote-number" for="2"><sup>2</sup></label><input checked="checked" id="2" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 2</span> I have been working on my own little logic programming language on the side.</span> However, while I do like the general concept of forwards chaining representing operations on a UI, I do think there needs to be more backwards chaining related stuff for determining the layout, probably obviating CSS entirely.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org67d15cb" class="outline-2">
+<h2 id="org67d15cb">Implementation</h2>
+<div class="outline-text-2" id="text-org67d15cb">
+<p>
+Writing the little experiment was trivial, and honestly it took way less code than I expected, only about 100 lines. Actually finishing the features for a virtual DOM might end up taking perhaps another 100 or so, but not all that much considering.
+</p>
+</div>
+<div id="outline-container-orgb7c0ebd" class="outline-3">
+<h3 id="orgb7c0ebd">CLJS</h3>
+<div class="outline-text-3" id="text-orgb7c0ebd">
+</div>
+<div id="outline-container-org29a3cfc" class="outline-4">
+<h4 id="org29a3cfc">Namespace</h4>
+<div class="outline-text-4" id="text-org29a3cfc">
+<p>
+As you might imagine, actually defining the main
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">revolution.core</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935;">:require</span> <span style="color: #494949;">[</span>reagent.core <span style="color: #E53935;">:as</span> reagent<span style="color: #494949;">]</span>
+            <span style="color: #494949;">[</span>reagent.dom <span style="color: #E53935;">:as</span> dom<span style="color: #494949;">]</span>
+            <span style="color: #494949;">[</span>clara.rules <span style="color: #E53935;">:refer</span> <span style="color: #bbb;">[</span>query retract! insert! retract insert insert-all fire-rules<span style="color: #bbb;">]</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org94523f2" class="outline-4">
+<h4 id="org94523f2">Core Objects</h4>
+<div class="outline-text-4" id="text-org94523f2">
+<p>
+At the core of it we define components and top-level components, which can be trivially converted into HTML.<label class="sidenote-number" for="3"><sup>3</sup></label><input checked="checked" id="3" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 3</span> These are similar to the <a href="https://clojuredocs.org/clojure.xml">clojure.xml</a> objects.</span> However, I may eventually end up replacing this with something like a component protocol which is then reified by specific types like <code>div</code> elements and so on, or alternatively further decouple it from HTML.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojurescript"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">Component</span> <span style="color: #bbb;">[</span>tag attrs content<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defrecord</span> <span style="color: #E53935;">TLComponent</span> <span style="color: #bbb;">[</span>tag attrs content<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+We also, of course, define functions to create these objects with a syntax vaguely reminiscent of hiccup, because I do like the syntax.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojurescript"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">com</span>
+  <span style="color: #a4a4a4; font-style: italic;">"Create a component."</span>
+  <span style="color: #bbb;">[</span>tag &amp; args<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">[</span><span style="color: #bbb;">[</span>attr &amp; content<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if-not</span>  <span style="color: #494949;">(</span>= <span style="color: #bbb;">(</span>type <span style="color: #494949;">(</span>first args<span style="color: #494949;">)</span><span style="color: #bbb;">)</span> <span style="color: #E53935;">cljs.core</span>/PersistentArrayMap<span style="color: #494949;">)</span>
+                           <span style="color: #494949;">(</span>cons <span style="color: #E53935;">nil</span> args<span style="color: #494949;">)</span>
+                           args<span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
+    <span style="color: #494949;">(</span>-&gt;Component tag attr content<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">tlcom</span>
+  <span style="color: #a4a4a4; font-style: italic;">"Create a toplevel component."</span>
+  <span style="color: #bbb;">[</span>tag &amp; args<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">[</span><span style="color: #bbb;">[</span>attr &amp; content<span style="color: #bbb;">]</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if-not</span> <span style="color: #494949;">(</span>= <span style="color: #bbb;">(</span>type <span style="color: #494949;">(</span>first args<span style="color: #494949;">)</span><span style="color: #bbb;">)</span> <span style="color: #E53935;">cljs.core</span>/PersistentArrayMap<span style="color: #494949;">)</span>
+                           <span style="color: #494949;">(</span>cons <span style="color: #E53935;">nil</span> args<span style="color: #494949;">)</span>
+                           args<span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
+    <span style="color: #494949;">(</span>-&gt;TLComponent tag attr content<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc41862f" class="outline-4">
+<h4 id="orgc41862f">Converting to Hiccup</h4>
+<div class="outline-text-4" id="text-orgc41862f">
+<p>
+We, of course, define a simple function to convert it to hiccup syntax. Again, note that with the above changes this might also change considerably.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojurescript"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">repr-&gt;hiccup</span> <span style="color: #bbb;">[</span><span style="color: #494949;">{</span><span style="color: #E53935;">:keys</span> <span style="color: #bbb;">[</span>tag attrs content<span style="color: #bbb;">]</span> <span style="color: #E53935;">:as</span> obj<span style="color: #494949;">}</span><span style="color: #bbb;">]</span>  
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #494949;">(</span>contains? #<span style="color: #bbb;">{</span>Component TLComponent<span style="color: #bbb;">}</span> <span style="color: #bbb;">(</span>type obj<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span>vec <span style="color: #bbb;">(</span>concat <span style="color: #494949;">[</span>tag<span style="color: #494949;">]</span>
+                 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">when</span> attrs <span style="color: #bbb;">[</span>attrs<span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+                 <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">if</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">or</span> <span style="color: #494949;">(</span>vector? content<span style="color: #494949;">)</span> <span style="color: #494949;">(</span>seq? content<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+                   <span style="color: #bbb;">(</span>map repr-&gt;hiccup content<span style="color: #bbb;">)</span>
+                   <span style="color: #bbb;">[</span><span style="color: #494949;">(</span>repr-&gt;hiccup content<span style="color: #494949;">)</span><span style="color: #bbb;">]</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+    obj<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf206f04" class="outline-4">
+<h4 id="orgf206f04">Defining the Global Session</h4>
+<div class="outline-text-4" id="text-orgf206f04">
+<p>
+To actually get the code to display (and for the system to work) we define a global, dynamic session variable which will be set by the system and modified by the <code>extern</code> functions, which are used in <code>on-change</code> functions.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojurescript"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> ^<span style="color: #E53935;">:dynamic</span> <span style="font-style: italic;">*session*</span> <span style="color: #E53935;">nil</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf3030ed" class="outline-4">
+<h4 id="orgf3030ed">Extern Functions</h4>
+<div class="outline-text-4" id="text-orgf3030ed">
+<p>
+We also define a series of extern functions.<label class="sidenote-number" for="4"><sup>4</sup></label><input checked="checked" id="4" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 4</span> I seriously need to have a better name for these.</span> To ensure that redisplays occur on changes, we use a flip-flop value that the extern functions reset.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojurescript"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">def</span> <span style="font-style: italic;">reagent-flip-flop</span>
+  <span style="color: #a4a4a4; font-style: italic;">"A value that is flipped between negative and positive in order</span>
+<span style="color: #a4a4a4; font-style: italic;">  to get reagent to redisplay stuff."</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935;">reagent</span>/atom <span style="color: #E53935;">true</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+The most interesting extern function here is the <code>alter-extern</code> function, as it unconditionally inserts a new fact into the system, which does break truth maintenance. However, since these are all side-effectual I don't think that matters or can be made to really exist coherently.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojurescript"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">alter-extern!</span> <span style="color: #bbb;">[</span>old-fact new-fact<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">doto</span> <span style="font-style: italic;">*session*</span>
+    <span style="color: #494949;">(</span>swap! retract old-fact<span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span>swap! insert new-fact<span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span>swap! fire-rules<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>swap! reagent-flip-flop not<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">insert-extern!</span> <span style="color: #bbb;">[</span>fact<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">doto</span> <span style="font-style: italic;">*session*</span>
+    <span style="color: #494949;">(</span>swap! insert fact<span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span>swap! fire-rules<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>swap! reagent-flip-flop not<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">retract-extern!</span> <span style="color: #bbb;">[</span>fact<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">doto</span> <span style="font-style: italic;">*session*</span>
+    <span style="color: #494949;">(</span>swap! retract fact<span style="color: #494949;">)</span>
+    <span style="color: #494949;">(</span>swap! fire-rules<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>swap! reagent-flip-flop not<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org3932812" class="outline-4">
+<h4 id="org3932812">Displaying and Mounting the Session</h4>
+<div class="outline-text-4" id="text-org3932812">
+<p>
+Finally we want to display the session and do so using this function. Here the <code>reagent-flip-flop</code> value is used to ensure re-rendering happens when a retraction, insertion, or alter function is executed.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojurescript"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">display</span>
+  <span style="color: #a4a4a4; font-style: italic;">"Update the state of the display given the session atom."</span>
+  <span style="color: #bbb;">[</span>session-atom<span style="color: #bbb;">]</span>
+  @reagent-flip-flop
+  <span style="color: #bbb;">[</span><span style="color: #E53935;">:div</span> <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;</span> session-atom <span style="color: #494949;">(</span>swap! fire-rules<span style="color: #494949;">)</span> <span style="color: #494949;">(</span>query <span style="color: #494949;">"revolution.core/all-tlcomponents"</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+             <span style="color: #bbb;">(</span>map <span style="color: #E53935;">:?tl</span><span style="color: #bbb;">)</span>
+             <span style="color: #bbb;">(</span>map repr-&gt;hiccup<span style="color: #bbb;">)</span>
+             <span style="color: #bbb;">(</span>concat <span style="color: #494949;">[</span><span style="color: #E53935;">:div</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span>
+             vec<span style="color: #494949;">)</span><span style="color: #bbb;">]</span><span style="color: #494949;">)</span>
+
+</pre>
+</div>
+
+<p>
+Mounting our session is also easy, simply setting the session variable in the system and making a call to the render function.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojurescript"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defn</span> <span style="font-weight: bold; font-style: italic;">mount-session</span> <span style="color: #bbb;">[</span>session element-id<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">set!</span> <span style="font-style: italic;">*session*</span> <span style="color: #494949;">(</span><span style="color: #E53935;">reagent</span>/atom session<span style="color: #494949;">)</span><span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span>swap! <span style="font-style: italic;">*session*</span> fire-rules<span style="color: #bbb;">)</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935;">dom</span>/render <span style="color: #494949;">[</span>display <span style="font-style: italic;">*session*</span><span style="color: #494949;">]</span> <span style="color: #494949;">(</span>.getElementById <span style="color: #E53935;">js</span>/document element-id<span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org19d1172" class="outline-3">
+<h3 id="org19d1172">CLJ</h3>
+<div class="outline-text-3" id="text-org19d1172">
+</div>
+<div id="outline-container-orgc8bdd92" class="outline-4">
+<h4 id="orgc8bdd92">Namespace</h4>
+<div class="outline-text-4" id="text-orgc8bdd92">
+<p>
+To define our macros we need to add a new file for Clojure code with the same namespace. It will be automatically loaded during the macroexpansion phase. <label class="sidenote-number" for="5"><sup>5</sup></label><input checked="checked" id="5" style="display:none" type="checkbox" /><span class="sidenote"><span class="sidenote-number"> 5</span> Which occurs when you use <code>:refer-macros</code>. In essence Clojure has a two-tier importation system</span>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">ns</span> <span style="color: #E53935;">revolution.core</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935;">:require</span> <span style="color: #494949;">[</span>clara.rules <span style="color: #E53935;">:refer</span> <span style="color: #bbb;">[</span>defsession insert-all<span style="color: #bbb;">]</span><span style="color: #494949;">]</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org47469fd" class="outline-4">
+<h4 id="org47469fd"><code>defact</code>  and <code>defengine</code> Macros</h4>
+<div class="outline-text-4" id="text-org47469fd">
+<p>
+Our first macro is a simple one which defines a fact which is to be inserted into the rule engine at the start of its execution. This is sort of an extension of clara-rules which I have always thought should have been added. 
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #a4a4a4; font-style: italic;">;; </span><span style="color: #a4a4a4; font-style: italic;">adds a base fact to the rule base at engine start</span>
+<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defmacro</span> <span style="font-weight: bold; font-style: italic;">defact</span> <span style="color: #bbb;">[</span>value<span style="color: #bbb;">]</span>
+  `<span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">def</span> ~<span style="color: #494949;">(</span>gensym<span style="color: #494949;">)</span> <span style="color: #494949;">(</span>with-meta ~value <span style="color: #bbb;">{</span><span style="color: #E53935;">:fact</span> <span style="color: #E53935;">true</span><span style="color: #bbb;">}</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+
+<p>
+To ge tthis to work, we define an extension to the <code>defsession</code> macro to create the session which includes the facts we define, called <code>defengine</code>. I may end up renaming this, or even aliasing the defsession macro.
+</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">defmacro</span> <span style="font-weight: bold; font-style: italic;">defengine</span> <span style="color: #bbb;">[</span>name sources-and-options<span style="color: #bbb;">]</span>
+  <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">let</span> <span style="color: #494949;">[</span>session-name <span style="color: #bbb;">(</span>gensym<span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
+    `<span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">do</span> <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">defsession</span> ~session-name
+           <span style="color: #494949;">[</span><span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">quote</span> <span style="color: #494949;">{</span><span style="color: #E53935;">:ns-name</span> revolution.core
+                    <span style="color: #E53935;">:lhs</span>     <span style="color: #bbb;">[</span><span style="color: #494949;">{</span><span style="color: #E53935;">:type</span>         <span style="color: #E53935;">revolution.core</span>/TLComponent
+                               <span style="color: #E53935;">:constraints</span>  <span style="color: #bbb;">[]</span>
+                               <span style="color: #E53935;">:fact-binding</span> <span style="color: #E53935;">:?tl</span><span style="color: #494949;">}</span><span style="color: #bbb;">]</span>
+                    <span style="color: #E53935;">:params</span>  #<span style="color: #bbb;">{}</span>
+                    <span style="color: #E53935;">:name</span>    <span style="color: #494949;">"revolution.core/all-tlcomponents"</span><span style="color: #494949;">}</span><span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
+           ~@sources-and-options<span style="color: #bbb;">)</span>
+         <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">def</span> ~name <span style="color: #494949;">(</span>insert-all ~session-name
+                                <span style="color: #bbb;">(</span><span style="color: #E53935; font-style: italic;">-&gt;&gt;</span> <span style="color: #494949;">[</span>~@<span style="color: #bbb;">(</span>map <span style="color: #494949;">(</span><span style="color: #E53935; font-style: italic;">fn</span> <span style="color: #bbb;">[</span>n<span style="color: #bbb;">]</span> `<span style="color: #bbb;">(</span>ns-publics ~n<span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                                             sources-and-options<span style="color: #bbb;">)</span><span style="color: #494949;">]</span>
+                                     <span style="color: #494949;">(</span>apply merge<span style="color: #494949;">)</span>
+                                     <span style="color: #494949;">(</span>map second<span style="color: #494949;">)</span>
+                                     <span style="color: #494949;">(</span>map #<span style="color: #bbb;">(</span>deref <span style="font-style: italic;">%</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+                                     <span style="color: #494949;">(</span>filter #<span style="color: #bbb;">(</span><span style="color: #E53935;">:fact</span> <span style="color: #494949;">(</span>meta <span style="font-style: italic;">%</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span><span style="color: #bbb;">)</span><span style="color: #494949;">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footnotes --><!-- 
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Which is based in <a href="https://reactjs.org/">react</a>, hence calling this little thing revolution as a pun on react.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">I have been working on my own little logic programming language on the side.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">These are similar to the <a href="https://clojuredocs.org/clojure.xml">clojure.xml</a> objects.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">I seriously need to have a better name for these.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Which occurs when you use <code>:refer-macros</code>. In essence Clojure has a two-tier importation system</p></div></div>
+
+ --></div>
+<div id="postamble" class="status">
+<p class="date">Last Modified: 2022-W16-1 21:07</p><p class="creator">Generated Using: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.2 (<a href="https://orgmode.org">Org</a> mode 9.4.6)</p><p class="license">Except where otherwise noted content on <a href="https://cons.dev">cons.dev</a> is licensed under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</div>
+</body>
+</html>
